@@ -14,6 +14,7 @@
     --lcd-bezel:#2f855a; --lcd-screen:#0f2230; --lcd-pixel:#b9f5d0;
     --dip:#12b886; --dip-slot:#0a6b4f;
     --wireV:#e05d5d; --wireG:#2e9c4a; --wireSig:#d77; --wireNeg:#3b454f;
+    --uno:#2f6aa3; /* NEW: Arduino board color */
   }
   *{box-sizing:border-box}
   body{
@@ -43,7 +44,7 @@
 
     <div class="card" aria-label="Breadboard UI">
       <svg viewBox="0 0 1000 560" role="img" aria-labelledby="ttl">
-        <title id="ttl">Breadboard with linked top/bottom rails, supply, resistors, and LCD text</title>
+        <title id="ttl">Breadboard with linked top/bottom rails, supply, resistors, LCD, and Arduino “driver”</title>
 
         <!-- defs -->
         <defs>
@@ -85,15 +86,13 @@
         </g>
 
         <!-- wires from terminals -->
-        <!-- + terminal to TOP +V rail -->
         <path d="M92 54 C 110 60, 120 76, 130 86 H 170" stroke="var(--wireV)" stroke-width="3.5" fill="none"/>
-        <!-- – terminal to BOTTOM GND rail -->
         <path d="M92 408 C 120 408, 128 392, 140 392  180 392, 200 374, 240 374 H 300"
               stroke="var(--wireNeg)" stroke-width="3.5" fill="none"/>
 
-        <!-- NEW: jumpers that link top and bottom rails -->
-        <path d="M220 86 V 350"  stroke="var(--wireV)" stroke-width="4" />   <!-- +V jumper -->
-        <path d="M240 108 V 374" stroke="var(--wireG)" stroke-width="4" />   <!-- GND jumper -->
+        <!-- jumpers linking top and bottom rails -->
+        <path d="M220 86 V 350"  stroke="var(--wireV)" stroke-width="4" />
+        <path d="M240 108 V 374" stroke="var(--wireG)" stroke-width="4" />
 
         <!-- LCD module -->
         <rect x="120" y="138" width="480" height="144" rx="12" fill="var(--lcd-bezel)" opacity=".95"/>
@@ -176,6 +175,46 @@
         <path d="M752 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
+
+        <!-- ===== Arduino UNO (diagram) — INSIDE the SVG ===== -->
+        <g id="uno" transform="translate(620,420)">
+          <rect x="0" y="0" width="300" height="160" rx="14" fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
+          <text x="20" y="24" fill="#d2ecff" font-weight="700" font-size="16">Arduino UNO</text>
+          <g fill="#e6f3ff" font-size="9" text-anchor="middle">
+            <circle cx="36"  cy="50" r="4"/><text x="36"  y="44">2</text>
+            <circle cx="58"  cy="50" r="4"/><text x="58"  y="44">3</text>
+            <circle cx="80"  cy="50" r="4"/><text x="80"  y="44">4</text>
+            <circle cx="102" cy="50" r="4"/><text x="102" y="44">5</text>
+            <circle cx="124" cy="50" r="4"/><text x="124" y="44">6</text>
+            <circle cx="146" cy="50" r="4"/><text x="146" y="44">7</text>
+            <circle cx="168" cy="50" r="4"/><text x="168" y="44">8</text>
+            <circle cx="190" cy="50" r="4"/><text x="190"  y="44">9</text>
+            <circle cx="212" cy="50" r="4"/><text x="212" y="44">10</text>
+            <circle cx="234" cy="50" r="4"/><text x="234" y="44">11</text>
+            <circle cx="256" cy="50" r="4"/><text x="256" y="44">12</text>
+            <circle cx="278" cy="50" r="4"/><text x="278" y="44">13</text>
+            <circle cx="286" cy="104" r="4"/><text x="286" y="98">5V</text>
+            <circle cx="286" cy="124" r="4"/><text x="286" y="118">G</text>
+          </g>
+        </g>
+
+        <!-- UNO → LCD “logic” wires (visual) -->
+        <path d="M876 470 C 820 470, 760 200, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
+        <path d="M854 470 C 810 460, 746 212, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E=D11 -->
+        <path d="M808 470 C 770 450, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4=D5 -->
+        <path d="M786 470 C 746 446, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5=D4 -->
+        <path d="M764 470 C 726 444, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6=D3 -->
+        <path d="M742 470 C 706 442, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7=D2 -->
+
+        <!-- labels near LCD -->
+        <g font-size="10" fill="#e8f5ff">
+          <text x="448" y="186">RS⇐D12</text>
+          <text x="432" y="198">E⇐D11</text>
+          <text x="414" y="216">D4⇐D5</text>
+          <text x="398" y="224">D5⇐D4</text>
+          <text x="382" y="232">D6⇐D3</text>
+          <text x="366" y="240">D7⇐D2</text>
+        </g>
       </svg>
 
       <a id="visit" class="visit" href="#" style="display:none">Visit page →</a>
