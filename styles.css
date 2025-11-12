@@ -1,34 +1,60 @@
-/* Single-paragraph intro layout */
-.intro-wrap {
-  max-width: 900px;
-  margin: 2.5rem auto 3rem;
-  padding: 0 1rem;
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.intro-text {
-  font-size: 1.25rem;
-  line-height: 1.9;
+/* Body */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #2c3e50, #3498db);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   text-align: center;
-  color: #444;
 }
 
-/* Bold link styling so it looks obviously clickable */
-.boldlink {
-  font-weight: 800;
-  border-bottom: 2px solid rgba(41, 128, 185, 0.25);
-}
-.boldlink:hover {
-  border-bottom-color: #2980b9;
+/* Main content */
+.centered {
+  max-width: 700px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Compact hero for inner pages */
-.hero-compact {
-  padding: 2.5rem 0;
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
 }
-.back-link {
-  display: inline-block;
-  margin-top: 0.5rem;
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #eaf2f8;
+}
+
+/* Bold clickable words */
+a {
   color: #fff;
-  opacity: 0.9;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: 0.2s;
 }
-.back-link:hover { opacity: 1; }
+
+a:hover {
+  border-color: #fff;
+}
+
+/* Footer */
+footer {
+  position: absolute;
+  bottom: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
