@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Monil | Breadboard v2 (linked rails + supply)</title>
+<meta name="description" content="Monil Arora – ECE @ UBC. Projects in DE1-SoC, embedded control, robots, and hardware–software systems, visualized as an interactive breadboard.">
 <style>
   :root{
     --bg1:#1f4a66; --bg2:#2a6ea0;
@@ -14,33 +15,99 @@
     --lcd-bezel:#2f855a; --lcd-screen:#0f2230; --lcd-pixel:#b9f5d0;
     --dip:#12b886; --dip-slot:#0a6b4f;
     --wireV:#e05d5d; --wireG:#2e9c4a; --wireSig:#d77; --wireNeg:#3b454f;
-    --uno:#2f6aa3; /* NEW: Arduino board color */
+    --uno:#2f6aa3; /* Arduino board color */
   }
+
   *{box-sizing:border-box}
+
+  html{
+    scroll-behavior:smooth;
+  }
+
   body{
-    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    margin:0;
+    padding:16px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     background:radial-gradient(1200px 520px at 50% -15%, var(--bg2), var(--bg1));
-    color:var(--text); font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    color:var(--text);
+    font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
     text-align:center;
   }
-  .wrap{ width:min(1060px,96vw) }
+
+  .wrap{ width:min(1060px,96vw); margin:0 auto; }
+
   h1{ margin:.3rem 0 .35rem; font-size:2rem; font-weight:800 }
+
   .note{ margin:0 0 .9rem; opacity:.92 }
-  .card{ background:var(--card); border-radius:16px; padding:18px; backdrop-filter:blur(6px); box-shadow:0 16px 44px rgba(0,0,0,.28) }
+
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    padding:18px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 16px 44px rgba(0,0,0,.28);
+  }
+
   svg{ width:100%; height:auto; display:block; user-select:none }
+
   .dip,.pwrbtn{ cursor:pointer }
+
   .dip .thumb{ transition:transform .12s ease }
+
   .dip[data-on="true"] .thumb{ transform:translateY(10px) }
+
   .led{ transition:fill .12s ease, filter .12s ease }
+
   .glow{ filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
-  .visit{ margin-top:10px; display:inline-block; color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid rgba(255,255,255,.45) }
+
+  .visit{
+    margin-top:10px;
+    display:inline-block;
+    color:#fff;
+    font-weight:700;
+    text-decoration:none;
+    border-bottom:2px solid rgba(255,255,255,.45);
+  }
+
   .visit:hover{ border-bottom-color:#fff }
+
+  /* Sections below the hero card */
+  .section{
+    margin:32px auto 0;
+    width:min(960px,96vw);
+    text-align:left;
+  }
+
+  .section h2{
+    margin:0 0 8px;
+    font-size:1.4rem;
+  }
+
+  .section p{
+    margin:0 0 6px;
+    opacity:.94;
+  }
+
+  .section ul{
+    margin:8px 0 0;
+    padding-left:1.1rem;
+  }
+
+  .section li{
+    margin:4px 0;
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
     <h1>Monil</h1>
-    <p class="note">Toggle <strong>Power</strong>, then close a DIP switch to route <em>+V → resistor → LED → GND</em>. The LCD shows the info.</p>
+    <p class="note">
+      I build hardware–software systems that feel easy to use.<br>
+      Toggle <strong>Power</strong>, then flip a DIP switch to explore.
+    </p>
 
     <div class="card" aria-label="Breadboard UI">
       <svg viewBox="0 0 1000 560" role="img" aria-labelledby="ttl">
@@ -81,7 +148,10 @@
 
         <!-- supply terminals on the left -->
         <g font-family="ui-sans-serif,system-ui" font-weight="700" text-anchor="middle">
-          <circle cx="92" cy="54" r="10" fill="#fff"/><text x="92" y="58" font-size="12" fill="#c00">+</text>
+          <circle id="ledPwr" cx="92" cy="54" r="10" class="led pwrbtn" fill="var(--led-off)"
+                  role="button" tabindex="0" aria-label="Toggle power" aria-pressed="false"/>
+          <text x="92" y="58" font-size="10" fill="#c00">PWR</text>
+
           <circle cx="92" cy="408" r="10" fill="#fff"/><text x="92" y="412" font-size="12" fill="#222">–</text>
         </g>
 
@@ -118,8 +188,8 @@
 
         <!-- LEDs + labels -->
         <g font-size="11" fill="#cfd8df" text-anchor="middle">
-          <circle id="ledPwr" cx="930" cy="180" r="12" class="led pwrbtn" fill="var(--led-off)"/>
-          <text x="930" y="206">Power</text>
+          <!-- Already have PWR circle above; this is just label near it -->
+          <text x="92" y="36">Power</text>
 
           <circle id="ledProj"  cx="720" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="720" y="202">P</text>
           <circle id="ledHob"   cx="752" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="752" y="202">H</text>
@@ -130,19 +200,19 @@
         <!-- DIP block -->
         <g id="dip" transform="translate(735,236)">
           <rect x="-65" y="0" width="200" height="46" rx="6" fill="var(--dip)"/>
-          <g id="d1" class="dip" data-on="false" tabindex="0" role="button" aria-label="Projects">
+          <g id="d1" class="dip" data-on="false" aria-label="Projects">
             <rect x="-50" y="6" width="30" height="34" rx="4" fill="#fff"/>
             <rect class="thumb" x="-50" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
-          <g id="d2" class="dip" data-on="false" tabindex="0" role="button" aria-label="Hobbies">
+          <g id="d2" class="dip" data-on="false" aria-label="Hobbies">
             <rect x="-12" y="6" width="30" height="34" rx="4" fill="#fff"/>
             <rect class="thumb" x="-12" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
-          <g id="d3" class="dip" data-on="false" tabindex="0" role="button" aria-label="Skills">
+          <g id="d3" class="dip" data-on="false" aria-label="Skills">
             <rect x="26" y="6" width="30" height="34" rx="4" fill="#fff"/>
             <rect class="thumb" x="26" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
-          <g id="d4" class="dip" data-on="false" tabindex="0" role="button" aria-label="About">
+          <g id="d4" class="dip" data-on="false" aria-label="About">
             <rect x="64" y="6" width="30" height="34" rx="4" fill="#fff"/>
             <rect class="thumb" x="64" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
@@ -176,7 +246,7 @@
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
 
-        <!-- ===== Arduino UNO (diagram) — INSIDE the SVG ===== -->
+        <!-- Arduino UNO (diagram) -->
         <g id="uno" transform="translate(620,420)">
           <rect x="0" y="0" width="300" height="160" rx="14" fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
           <text x="20" y="24" fill="#d2ecff" font-weight="700" font-size="16">Arduino UNO</text>
@@ -188,7 +258,7 @@
             <circle cx="124" cy="50" r="4"/><text x="124" y="44">6</text>
             <circle cx="146" cy="50" r="4"/><text x="146" y="44">7</text>
             <circle cx="168" cy="50" r="4"/><text x="168" y="44">8</text>
-            <circle cx="190" cy="50" r="4"/><text x="190"  y="44">9</text>
+            <circle cx="190" cy="50" r="4"/><text x="190" y="44">9</text>
             <circle cx="212" cy="50" r="4"/><text x="212" y="44">10</text>
             <circle cx="234" cy="50" r="4"/><text x="234" y="44">11</text>
             <circle cx="256" cy="50" r="4"/><text x="256" y="44">12</text>
@@ -217,9 +287,51 @@
         </g>
       </svg>
 
-      <a id="visit" class="visit" href="#" style="display:none">Visit page →</a>
+      <a id="visit" class="visit" href="#" style="display:none">Visit section →</a>
     </div>
   </div>
+
+  <!-- Content sections that the DIP channels scroll to -->
+  <section id="projects" class="section">
+    <h2>Projects</h2>
+    <p>Some of the hardware–software things I’ve built recently:</p>
+    <ul>
+      <li><strong>DE1-SoC DNN accelerator</strong> – Nios II SoC for MNIST, fixed-point arithmetic, SDRAM, and custom Verilog pipelines.</li>
+      <li><strong>Self-balancing robot</strong> – Arduino-based two-wheel robot with IMU, PID control, BLE remote, and live telemetry.</li>
+      <li><strong>Metal-detecting rover</strong> – STM32 + EFM8 platform with JDY40 Bluetooth link and an LCD that shows metal “strength”.</li>
+    </ul>
+  </section>
+
+  <section id="hobbies" class="section">
+    <h2>Hobbies</h2>
+    <p>Outside labs and Quartus compile times:</p>
+    <ul>
+      <li><strong>Football</strong> – playing, watching, and overanalyzing tactics.</li>
+      <li><strong>Playlists</strong> – different mixes for coding, matches, and late-night debugging.</li>
+      <li><strong>Cooking</strong> – quick college-friendly meals and snacks that aren’t just instant noodles.</li>
+    </ul>
+  </section>
+
+  <section id="skills" class="section">
+    <h2>Skills</h2>
+    <p>Stuff I’m comfortable reaching for when building something:</p>
+    <ul>
+      <li><strong>Languages</strong> – C/C++, Verilog/SystemVerilog, a bit of Python and ARM assembly.</li>
+      <li><strong>Platforms</strong> – DE1-SoC, microcontrollers (Arduino, STM32, 8051-family), basic Linux tooling.</li>
+      <li><strong>Concepts</strong> – control systems, signal processing, embedded firmware, and debugging weird hardware behaviour.</li>
+    </ul>
+  </section>
+
+  <section id="about" class="section">
+    <h2>About</h2>
+    <p>
+      I’m an Electrical Engineering student at UBC who likes projects where hardware and software have to cooperate:
+      sensors, control loops, FPGAs, and microcontrollers driving something you can actually see or touch.
+    </p>
+    <p>
+      If you want to chat about embedded systems, DE1-SoC projects, or potential co-op roles, feel free to reach out.
+    </p>
+  </section>
 
 <script>
   const $ = s => document.querySelector(s);
@@ -231,69 +343,104 @@
   const ledSkill= $('#ledSkill');
   const ledAbout= $('#ledAbout');
   const visit   = $('#visit');
-  const L1 = $('#lcdL1'); const L2 = $('#lcdL2');
+  const L1 = $('#lcdL1');
+  const L2 = $('#lcdL2');
 
-  function lcd(lines){ L1.textContent = lines[0]||''; L2.textContent = lines[1]||''; }
+  function lcd(lines){
+    L1.textContent = lines[0] || '';
+    L2.textContent = lines[1] || '';
+  }
+
   function wrap2(str, w1=34, w2=36){
     if (str.length <= w1) return [str, ''];
     const k = str.lastIndexOf(' ', w1);
-    return [str.slice(0, k>0?k:w1), str.slice((k>0?k+1:w1)).slice(0, w2)];
+    return [
+      str.slice(0, k>0 ? k : w1),
+      str.slice((k>0 ? k+1 : w1)).slice(0, w2)
+    ];
   }
 
   let powered = false;
+
+  const channels = [
+    {dip:'#d1', led:ledProj,  color:css('--proj'),  title:'PROJECTS',
+     text:'DE1-SoC DNN accelerator, self-balancing robot, metal-detecting rover.', link:'#projects'},
+    {dip:'#d2', led:ledHob,   color:css('--hob'),   title:'HOBBIES',
+     text:'Football, playlists, and quick college-friendly cooking experiments.', link:'#hobbies'},
+    {dip:'#d3', led:ledSkill, color:css('--skill'), title:'SKILLS',
+     text:'C/C++, Verilog, DE1-SoC, firmware, control, and debugging weird hardware.', link:'#skills'},
+    {dip:'#d4', led:ledAbout, color:css('--about'), title:'ABOUT',
+     text:'ECE @ UBC — I like turning noisy prototypes into something people can actually use.', link:'#about'}
+  ];
+
+  function resetChannelsUI(){
+    channels.forEach(ch => {
+      const dipEl = $(ch.dip);
+      dipEl.dataset.on = 'false';
+      dipEl.setAttribute('aria-pressed','false');
+      ch.led.setAttribute('fill','var(--led-off)');
+      ch.led.classList.remove('glow');
+    });
+    visit.style.display = 'none';
+  }
+
   function setPowerUI(){
     ledPwr.setAttribute('fill', powered ? 'var(--led-on)' : 'var(--led-off)');
     ledPwr.classList.toggle('glow', powered);
-    if(!powered){
-      [ledProj, ledHob, ledSkill, ledAbout].forEach(e => { e.setAttribute('fill','var(--led-off)'); e.classList.remove('glow'); });
+    ledPwr.setAttribute('aria-pressed', powered ? 'true' : 'false');
+
+    if (!powered){
+      resetChannelsUI();
       lcd(['POWER OFF', 'Flip Power to energize the rails.']);
-      visit.style.display='none';
-      ['#d1','#d2','#d3','#d4'].forEach(id => $(id).dataset.on='false');
     } else {
       lcd(['READY', 'Close a DIP (1–4) to select a channel.']);
     }
   }
-  function togglePower(){ powered=!powered; setPowerUI(); }
+
+  function togglePower(){
+    powered = !powered;
+    setPowerUI();
+  }
+
+  // Power button listeners
   ledPwr.addEventListener('click', togglePower);
-  ledPwr.setAttribute('role','button'); ledPwr.setAttribute('tabindex','0');
-  ledPwr.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); togglePower(); }});
+  ledPwr.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      togglePower();
+    }
+  });
 
-  const channels = [
-    {dip:'#d1', led:ledProj,  color:css('--proj'),  title:'PROJECTS',
-     text:'DE1-SoC DNN accelerator, self-balancing robot, and metal-detecting rover.', link:'projects.html'},
-    {dip:'#d2', led:ledHob,   color:css('--hob'),   title:'HOBBIES',
-     text:'Football, playlists, and quick college-friendly cooking.', link:'hobbies.html'},
-    {dip:'#d3', led:ledSkill, color:css('--skill'), title:'SKILLS',
-     text:'C/C++, Verilog/SystemVerilog, DE1-SoC, firmware, control.', link:'about.html'},
-    {dip:'#d4', led:ledAbout, color:css('--about'), title:'ABOUT',
-     text:'ECE @ UBC — I build hardware–software systems that feel easy.', link:'about.html'}
-  ];
-
+  // Setup DIP channels
   channels.forEach(ch => {
     const dip = $(ch.dip);
-    const act = ()=>{
-      if(!powered) return;
-      channels.forEach(o=>{
-        if(o.dip!==ch.dip){
-          $(o.dip).dataset.on='false';
-          o.led.setAttribute('fill','var(--led-off)');
-          o.led.classList.remove('glow');
-        }
-      });
-      dip.dataset.on = dip.dataset.on==='true' ? 'false' : 'true';
-      if(dip.dataset.on==='true'){
-        ch.led.setAttribute('fill', ch.color); ch.led.style.color = ch.color; ch.led.classList.add('glow');
-        lcd(wrap2(`${ch.title}: ${ch.text}`));
-        visit.href = ch.link; visit.style.display='inline-block';
-      } else {
-        ch.led.setAttribute('fill','var(--led-off)'); ch.led.classList.remove('glow');
-        lcd(['READY', 'Close a DIP (1–4) to select a channel.']);
-        visit.style.display='none';
-      }
+
+    const act = () => {
+      if (!powered) return;
+      resetChannelsUI(); // turn everyone off first
+
+      dip.dataset.on = 'true';
+      dip.setAttribute('aria-pressed','true');
+
+      ch.led.setAttribute('fill', ch.color);
+      ch.led.classList.add('glow');
+
+      lcd(wrap2(`${ch.title}: ${ch.text}`));
+      visit.href = ch.link;
+      visit.style.display = 'inline-block';
     };
+
     dip.addEventListener('click', act);
-    dip.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); }});
-    dip.setAttribute('tabindex','0'); dip.setAttribute('role','button');
+    dip.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        act();
+      }
+    });
+
+    dip.setAttribute('tabindex','0');
+    dip.setAttribute('role','button');
+    dip.setAttribute('aria-pressed','false');
   });
 
   setPowerUI();
