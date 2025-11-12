@@ -2,22 +2,256 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Monil | Electrical Engineer</title>
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monil | Interactive Breadboard</title>
+  <link rel="stylesheet" href="styles.css?v=bb1" />
+  <style>
+    :root{
+      --bg1:#224a67; --bg2:#2d74a3;
+      --board:#e7ecef; --hole:#b9c3cd; --trace:#d9dee3;
+      --card:rgba(255,255,255,.08); --text:#eaf2f8;
+      --led-off:#7f8c8d; --led-on:#35ff95; --led-proj:#8ab4f8; --led-hob:#fbd38d; --led-about:#c084fc; --led-contact:#ffa7c4;
+      --accent:rgba(255,255,255,.45);
+    }
+    /* backdrop */
+    body{
+      margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background: radial-gradient(1200px 500px at 50% -20%, var(--bg2), var(--bg1));
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text); text-align:center;
+    }
+    .wrap{
+      width:min(1000px,92vw);
+    }
+    h1{margin:0 0 .75rem; font-size:2.1rem; font-weight:800; letter-spacing:.3px}
+    .note{opacity:.85; margin:0 0 1rem; font-size:.95rem}
+
+    /* breadboard card */
+    .board{
+      background:var(--card); border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,.25); padding:20px;
+      backdrop-filter: blur(6px);
+    }
+    svg{width:100%; height:auto; user-select:none}
+
+    /* switches */
+    .switch { cursor:pointer }
+    .switch .lever{
+      transition: transform .18s ease;
+      transform-origin: 14px 14px; /* pivot around the hinge circle center */
+    }
+    .switch[data-state="on"] .lever { transform: rotate(-35deg) translateY(-1px); }
+    .switch[data-state="off"] .lever { transform: rotate(35deg) translateY(1px); }
+
+    /* LEDs */
+    .led{ transition: fill .12s ease, filter .12s ease }
+    .glow{ filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
+
+    /* info panel */
+    .panel{
+      margin-top:16px; padding:16px 18px; border-radius:14px; background:rgba(255,255,255,.09);
+      display:grid; gap:.5rem; text-align:left;
+    }
+    .panel h2{margin:0; font-size:1.2rem}
+    .panel p{margin:.1rem 0 .25rem; line-height:1.6}
+    .visit { color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid var(--accent) }
+    .visit:hover{ border-bottom-color:#fff }
+
+    /* compact on small screens */
+    @media (max-width:640px){
+      h1{font-size:1.6rem}
+      .note{font-size:.85rem}
+    }
+  </style>
 </head>
 <body>
-  <main class="centered">
+  <div class="wrap">
     <h1>Monil</h1>
-    <p>
-      Hi, I’m Monil — an Electrical Engineering student at UBC who enjoys embedded systems,
-      hardware–software integration, and signal processing. Have a look at my
-      <a class="boldlink" href="projects.html"><strong>projects</strong></a>,
-      some <a class="boldlink" href="hobbies.html"><strong>hobbies</strong></a>,
-      read more <a class="boldlink" href="about.html"><strong>about</strong></a>,
-      or <a class="boldlink" href="contact.html"><strong>get in touch</strong></a>.
-    </p>
-  </main>
-  <footer><p>&copy; 2025 Monil Arora</p></footer>
+    <p class="note">Flip <strong>Power</strong>, then close a switch to light its LED and show the info.</p>
+
+    <div class="board" aria-label="Breadboard UI">
+      <!-- Simple SVG 'breadboard' with master power and four channels -->
+      <svg viewBox="0 0 1000 450" role="img" aria-labelledby="ttl">
+        <title id="ttl">Interactive breadboard with switches and LEDs</title>
+
+        <!-- board base -->
+        <defs>
+          <pattern id="holes" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="11" cy="11" r="2.6" fill="#b9c3cd"/>
+          </pattern>
+        </defs>
+        <rect x="20" y="20" width="960" height="260" rx="18" fill="url(#holes)" stroke="#dbe2e8"/>
+
+        <!-- power rail -->
+        <rect x="20" y="300" width="960" height="20" fill="#e05d5d" opacity=".85"/>
+        <rect x="20" y="325" width="960" height="20" fill="#6fd36f" opacity=".85"/>
+        <text x="32" y="314" fill="#fff" font-size="14" font-weight="700">+V</text>
+        <text x="32" y="339" fill="#0b3" font-size="14" font-weight="700">GND</text>
+
+        <!-- MASTER POWER SWITCH + LED -->
+        <g class="switch" id="power" data-state="off" tabindex="0" role="button" aria-pressed="false">
+          <!-- hinge -->
+          <circle cx="120" cy="105" r="13" fill="#8fa6b5"/>
+          <!-- lever -->
+          <g class="lever">
+            <rect x="116" y="60" width="8" height="50" rx="4" fill="#2a3540"/>
+            <rect x="109" y="53" width="22" height="12" rx="3" fill="#455463"/>
+          </g>
+          <text x="90" y="150" fill="#fff" font-size="14" font-weight="700">Power</text>
+        </g>
+        <circle id="led-power" cx="175" cy="95" r="10" class="led" fill="var(--led-off)"/>
+
+        <!-- CHANNELS: Projects, Hobbies, About, Contact -->
+        <!-- Each: switch + LED + label -->
+        <!-- Projects -->
+        <g class="switch" id="sw-projects" data-state="off" tabindex="0" role="button" aria-pressed="false">
+          <circle cx="360" cy="120" r="12" fill="#8fa6b5"/>
+          <g class="lever"><rect x="356" y="80" width="8" height="45" rx="4" fill="#2a3540"/></g>
+          <text x="330" y="160" fill="#fff" font-size="14" font-weight="700">Projects</text>
+        </g>
+        <circle id="led-projects" cx="410" cy="110" r="10" class="led" fill="var(--led-off)"/>
+
+        <!-- Hobbies -->
+        <g class="switch" id="sw-hobbies" data-state="off" tabindex="0" role="button" aria-pressed="false">
+          <circle cx="520" cy="120" r="12" fill="#8fa6b5"/>
+          <g class="lever"><rect x="516" y="80" width="8" height="45" rx="4" fill="#2a3540"/></g>
+          <text x="492" y="160" fill="#fff" font-size="14" font-weight="700">Hobbies</text>
+        </g>
+        <circle id="led-hobbies" cx="570" cy="110" r="10" class="led" fill="var(--led-off)"/>
+
+        <!-- About -->
+        <g class="switch" id="sw-about" data-state="off" tabindex="0" role="button" aria-pressed="false">
+          <circle cx="680" cy="120" r="12" fill="#8fa6b5"/>
+          <g class="lever"><rect x="676" y="80" width="8" height="45" rx="4" fill="#2a3540"/></g>
+          <text x="660" y="160" fill="#fff" font-size="14" font-weight="700">About</text>
+        </g>
+        <circle id="led-about" cx="730" cy="110" r="10" class="led" fill="var(--led-off)"/>
+
+        <!-- Contact -->
+        <g class="switch" id="sw-contact" data-state="off" tabindex="0" role="button" aria-pressed="false">
+          <circle cx="840" cy="120" r="12" fill="#8fa6b5"/>
+          <g class="lever"><rect x="836" y="80" width="8" height="45" rx="4" fill="#2a3540"/></g>
+          <text x="812" y="160" fill="#fff" font-size="14" font-weight="700">Contact</text>
+        </g>
+        <circle id="led-contact" cx="890" cy="110" r="10" class="led" fill="var(--led-off)"/>
+      </svg>
+
+      <!-- info panel -->
+      <div id="panel" class="panel" aria-live="polite">
+        <h2>Power: <span id="pwr">OFF</span></h2>
+        <p>Toggle <strong>Power</strong>, then close a switch to display info for that channel.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // simple helper to wire a switch to an LED and info content
+    const power = document.getElementById('power');
+    const ledPower = document.getElementById('led-power');
+    const panel = document.getElementById('panel');
+    const pwrText = document.getElementById('pwr');
+
+    const channels = {
+      projects: {
+        switch: document.getElementById('sw-projects'),
+        led: document.getElementById('led-projects'),
+        color: getComputedStyle(document.documentElement).getPropertyValue('--led-proj') || '#8ab4f8',
+        title: 'Projects',
+        text: 'DE1-SoC DNN accelerator, self-balancing robot, and metal-detecting rover.',
+        link: 'projects.html'
+      },
+      hobbies: {
+        switch: document.getElementById('sw-hobbies'),
+        led: document.getElementById('led-hobbies'),
+        color: getComputedStyle(document.documentElement).getPropertyValue('--led-hob') || '#fbd38d',
+        title: 'Hobbies',
+        text: 'Football, playlists, and quick college-friendly cooking experiments.',
+        link: 'hobbies.html'
+      },
+      about: {
+        switch: document.getElementById('sw-about'),
+        led: document.getElementById('led-about'),
+        color: getComputedStyle(document.documentElement).getPropertyValue('--led-about') || '#c084fc',
+        title: 'About',
+        text: 'ECE @ UBC, blending embedded firmware with hardware design.',
+        link: 'about.html'
+      },
+      contact: {
+        switch: document.getElementById('sw-contact'),
+        led: document.getElementById('led-contact'),
+        color: getComputedStyle(document.documentElement).getPropertyValue('--led-contact') || '#ffa7c4',
+        title: 'Get in touch',
+        text: 'Email and links to GitHub + LinkedIn.',
+        link: 'contact.html'
+      }
+    };
+
+    let powerOn = false;
+
+    function updatePowerUI(){
+      pwrText.textContent = powerOn ? 'ON' : 'OFF';
+      ledPower.setAttribute('fill', powerOn ? '#35ff95' : 'var(--led-off)');
+      ledPower.style.color = powerOn ? '#35ff95' : 'var(--led-off)';
+      ledPower.classList.toggle('glow', powerOn);
+      if (!powerOn) {
+        // cut power: turn off all LEDs and reset panel
+        Object.values(channels).forEach(ch => {
+          ch.switch.dataset.state = 'off';
+          ch.switch.setAttribute('aria-pressed','false');
+          ch.led.setAttribute('fill','var(--led-off)');
+          ch.led.classList.remove('glow');
+        });
+        panel.innerHTML = `<h2>Power: <span id="pwr">OFF</span></h2>
+          <p>Toggle <strong>Power</strong>, then close a switch to display info for that channel.</p>`;
+      }
+    }
+
+    function togglePower(){
+      powerOn = !powerOn;
+      power.dataset.state = powerOn ? 'on' : 'off';
+      power.setAttribute('aria-pressed', powerOn ? 'true' : 'false');
+      updatePowerUI();
+    }
+
+    // attach interactions
+    power.addEventListener('click', togglePower);
+    power.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' ') { e.preventDefault(); togglePower(); }});
+
+    function handleChannelClick(key){
+      if(!powerOn) return; // no power, no light :)
+      const ch = channels[key];
+      const isOn = ch.switch.dataset.state === 'on';
+      // turn all off first (single active channel)
+      Object.values(channels).forEach(c=>{
+        c.switch.dataset.state='off';
+        c.switch.setAttribute('aria-pressed','false');
+        c.led.setAttribute('fill','var(--led-off)');
+        c.led.classList.remove('glow');
+      });
+      // toggle this one to the opposite of previous state
+      const next = !isOn;
+      ch.switch.dataset.state = next ? 'on' : 'off';
+      ch.switch.setAttribute('aria-pressed', next ? 'true' : 'false');
+      if(next){
+        ch.led.setAttribute('fill', ch.color.trim());
+        ch.led.style.color = ch.color.trim();
+        ch.led.classList.add('glow');
+        panel.innerHTML = `
+          <h2>${ch.title}</h2>
+          <p>${ch.text}</p>
+          <p><a class="visit" href="${ch.link}">Visit page →</a></p>`;
+      }else{
+        panel.innerHTML = `<h2>Power: <span>ON</span></h2><p>Select a channel.</p>`;
+      }
+    }
+
+    Object.keys(channels).forEach(key=>{
+      const el = channels[key].switch;
+      el.addEventListener('click', ()=>handleChannelClick(key));
+      el.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' ') { e.preventDefault(); handleChannelClick(key); }});
+    });
+
+    // init
+    updatePowerUI();
+  </script>
 </body>
 </html>
