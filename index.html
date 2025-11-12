@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Monil | Breadboard v2 (clean wiring)</title>
+<title>Monil | Breadboard v2 (LCD text)</title>
 <style>
   :root{
     --bg1:#1f4a66; --bg2:#2a6ea0;
@@ -31,22 +31,8 @@
   .dip[data-on="true"] .thumb{ transform:translateY(10px) } /* down = closed */
   .led{ transition:fill .12s ease, filter .12s ease }
   .glow{ filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
-  .lcd-wrap{ margin-top:12px; display:grid; gap:10px; justify-items:center }
-  .lcd{
-    width:min(820px,92vw); height:132px; border-radius:10px; border:6px solid var(--lcd-bezel);
-    background:radial-gradient(600px 200px at 20% 15%, #18384c, var(--lcd-screen));
-    box-shadow:inset 0 0 30px rgba(0,0,0,.45), 0 6px 18px rgba(0,0,0,.25);
-    display:flex; align-items:center; justify-content:center; padding:10px 16px;
-  }
-  .lcd p{ margin:0; white-space:pre-line; line-height:1.35; color:var(--lcd-pixel);
-          letter-spacing:.45px; font:18px ui-monospace,SFMono-Regular,Consolas,monospace }
-  .visit{ color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid rgba(255,255,255,.45) }
+  .visit{ margin-top:10px; display:inline-block; color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid rgba(255,255,255,.45) }
   .visit:hover{ border-bottom-color:#fff }
-  @media (max-width:680px){
-    h1{font-size:1.6rem}
-    .lcd{height:114px}
-    .lcd p{font-size:16px}
-  }
 </style>
 </head>
 <body>
@@ -56,7 +42,7 @@
 
     <div class="card" aria-label="Breadboard UI">
       <svg viewBox="0 0 1000 520" role="img" aria-labelledby="ttl">
-        <title id="ttl">Clean breadboard: power LED, P/H/S/A LEDs, DIP, realistic resistors, tidy wiring</title>
+        <title id="ttl">Breadboard with LCD text output</title>
 
         <!-- defs -->
         <defs>
@@ -88,6 +74,8 @@
         <!-- LCD module -->
         <rect x="120" y="108" width="480" height="144" rx="12" fill="var(--lcd-bezel)" opacity=".95"/>
         <rect x="150" y="132" width="420" height="96" rx="8" fill="var(--lcd-screen)"/>
+
+        <!-- header pins -->
         <g fill="#d7dce2">
           <rect x="146" y="112" width="8"  height="10"/><rect x="166" y="112" width="8"  height="10"/>
           <rect x="186" y="112" width="8"  height="10"/><rect x="206" y="112" width="8"  height="10"/>
@@ -99,12 +87,17 @@
           <rect x="426" y="112" width="8"  height="10"/><rect x="446" y="112" width="8"  height="10"/>
         </g>
 
+        <!-- LCD TEXT (2 lines) -->
+        <g id="lcdText" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="18" fill="var(--lcd-pixel)">
+          <text id="lcdL1" x="164" y="168">POWER OFF</text>
+          <text id="lcdL2" x="164" y="198">Flip Power to energize the rails.</text>
+        </g>
+
         <!-- LEDs + labels -->
         <g font-size="11" fill="#cfd8df" text-anchor="middle">
           <circle id="ledPwr" cx="930" cy="150" r="12" class="led pwrbtn" fill="var(--led-off)"/>
           <text x="930" y="176">Power</text>
 
-          <!-- Position these in a neat row -->
           <circle id="ledProj"  cx="720" cy="150" r="8"  class="led" fill="var(--led-off)"/><text x="720" y="172">P</text>
           <circle id="ledHob"   cx="752" cy="150" r="8"  class="led" fill="var(--led-off)"/><text x="752" y="172">H</text>
           <circle id="ledSkill" cx="784" cy="150" r="8"  class="led" fill="var(--led-off)"/><text x="784" y="172">S</text>
@@ -134,62 +127,76 @@
         </g>
 
         <!-- tidy wiring -->
-        <!-- +V to DIP common -->
         <path d="M170 330 C170 292, 662 292, 662 282 662 270, 662 252"
               stroke="var(--wireV)" stroke-width="3.2" fill="none"/>
 
-        <!-- DIP outputs → resistor (short), resistor → LED anode (short) -->
-        <!-- Projects -->
+        <!-- DIP outputs → resistor → LED anode -->
         <path d="M686 222 H700" stroke="var(--wireSig)" stroke-width="3"/>
         <use href="#res220" x="700" y="212"/>
         <path d="M780 222 L720 150" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- Hobbies -->
         <path d="M724 222 H738" stroke="var(--wireSig)" stroke-width="3"/>
         <use href="#res220" x="738" y="212"/>
         <path d="M818 222 L752 150" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- Skills -->
         <path d="M762 222 H776" stroke="var(--wireSig)" stroke-width="3"/>
         <use href="#res220" x="776" y="212"/>
         <path d="M856 222 L784 150" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- About -->
         <path d="M800 222 H814" stroke="var(--wireSig)" stroke-width="3"/>
         <use href="#res220" x="814" y="212"/>
         <path d="M894 222 L816 150" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- LED cathodes → GND (straight, aligned) -->
+        <!-- LED cathodes → GND -->
         <path d="M720 158 V354" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M752 158 V354" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M784 158 V354" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 158 V354" stroke="var(--wireG)" stroke-width="3"/>
       </svg>
 
-      <div class="lcd-wrap">
-        <div class="lcd"><p id="lcd">POWER OFF\nFlip Power to energize the rails.</p></div>
-        <div id="visit"></div>
-      </div>
+      <a id="visit" class="visit" href="#" style="display:none">Visit page →</a>
     </div>
   </div>
 
 <script>
+  // Elements
   const $ = s => document.querySelector(s);
   const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-  const lcd = $('#lcd'), visit = $('#visit');
-  const ledPwr = $('#ledPwr'), ledProj = $('#ledProj'), ledHob = $('#ledHob'), ledSkill = $('#ledSkill'), ledAbout = $('#ledAbout');
 
+  const ledPwr  = $('#ledPwr');
+  const ledProj = $('#ledProj');
+  const ledHob  = $('#ledHob');
+  const ledSkill= $('#ledSkill');
+  const ledAbout= $('#ledAbout');
+  const visit   = $('#visit');
+
+  const L1 = $('#lcdL1');
+  const L2 = $('#lcdL2');
+
+  // Helpers
+  function lcd(lines){
+    L1.textContent = lines[0] || '';
+    L2.textContent = lines[1] || '';
+  }
+  function wrap2(str, w1=34, w2=36){
+    // simple two-line wrap for the LCD region
+    if (str.length <= w1) return [str, ''];
+    const k = str.lastIndexOf(' ', w1);
+    return [str.slice(0, k>0?k:w1), str.slice((k>0?k+1:w1)) .slice(0, w2)];
+  }
+
+  // Power toggle (click the power LED)
   let powered = false;
   function setPowerUI(){
     ledPwr.setAttribute('fill', powered ? 'var(--led-on)' : 'var(--led-off)');
     ledPwr.classList.toggle('glow', powered);
     if(!powered){
       [ledProj, ledHob, ledSkill, ledAbout].forEach(e => { e.setAttribute('fill','var(--led-off)'); e.classList.remove('glow'); });
-      lcd.textContent = 'POWER OFF\nFlip Power to energize the rails.';
-      visit.innerHTML = '';
+      lcd(['POWER OFF', 'Flip Power to energize the rails.']);
+      visit.style.display='none';
       ['#d1','#d2','#d3','#d4'].forEach(id => $(id).dataset.on='false');
     } else {
-      lcd.textContent = 'READY\nClose a DIP (1–4) to select a channel.';
+      lcd(['READY', 'Close a DIP (1–4) to select a channel.']);
     }
   }
   function togglePower(){ powered=!powered; setPowerUI(); }
@@ -197,6 +204,7 @@
   ledPwr.setAttribute('role','button'); ledPwr.setAttribute('tabindex','0');
   ledPwr.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); togglePower(); }});
 
+  // Channels
   const channels = [
     {dip:'#d1', led:ledProj,  color:css('--proj'),  title:'PROJECTS',
      text:'DE1-SoC DNN accelerator, self-balancing robot, and metal-detecting rover.', link:'projects.html'},
@@ -208,33 +216,29 @@
      text:'ECE @ UBC — I build hardware–software systems that feel easy.', link:'about.html'}
   ];
 
-  function setLCD(title, body){
-    const s = `${title}: ${body}`;
-    const width = 66; const k = s.length<=width ? -1 : s.lastIndexOf(' ',width);
-    lcd.textContent = k<0 ? s : s.slice(0,k)+'\n'+s.slice(k+1);
-  }
-
   channels.forEach(ch => {
-    const dip = document.querySelector(ch.dip);
+    const dip = $(ch.dip);
     const act = ()=>{
       if(!powered) return;
+      // single-active
       channels.forEach(o=>{
         if(o.dip!==ch.dip){
-          document.querySelector(o.dip).dataset.on='false';
+          $(o.dip).dataset.on='false';
           o.led.setAttribute('fill','var(--led-off)');
           o.led.classList.remove('glow');
         }
       });
-      const now = dip.dataset.on==='true';
-      dip.dataset.on = now ? 'false' : 'true';
+      dip.dataset.on = dip.dataset.on==='true' ? 'false' : 'true';
       if(dip.dataset.on==='true'){
         ch.led.setAttribute('fill', ch.color); ch.led.style.color = ch.color; ch.led.classList.add('glow');
-        setLCD(ch.title, ch.text);
-        visit.innerHTML = `<a class="visit" href="${ch.link}">Visit page →</a>`;
+        const lines = wrap2(`${ch.title}: ${ch.text}`);
+        lcd(lines);
+        visit.href = ch.link;
+        visit.style.display='inline-block';
       } else {
         ch.led.setAttribute('fill','var(--led-off)'); ch.led.classList.remove('glow');
-        lcd.textContent = 'READY\nClose a DIP (1–4) to select a channel.';
-        visit.innerHTML = '';
+        lcd(['READY', 'Close a DIP (1–4) to select a channel.']);
+        visit.style.display='none';
       }
     };
     dip.addEventListener('click', act);
@@ -242,6 +246,7 @@
     dip.setAttribute('tabindex','0'); dip.setAttribute('role','button');
   });
 
+  // init
   setPowerUI();
 </script>
 </body>
