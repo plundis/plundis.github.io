@@ -1,257 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Monil | Breadboard UI</title>
-  <link rel="stylesheet" href="styles.css?v=bb2" />
-  <style>
-    :root{
-      --bg1:#224a67; --bg2:#2d74a3;
-      --card:rgba(255,255,255,.08); --text:#eaf2f8;
-      --led-off:#7f8c8d; --led-on:#35ff95; --proj:#8ab4f8; --hob:#fbd38d; --skill:#7ee787; --about:#c084fc;
-      --bezel:#2f855a; --screen:#0f2230; --screen-text:#b9f5d0;
-    }
-    body{
-      margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-      background: radial-gradient(1200px 500px at 50% -20%, var(--bg2), var(--bg1));
-      color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      text-align:center;
-    }
-    .wrap{ width:min(1100px,96vw) }
-    h1{ margin:.25rem 0 .5rem; font-size:2rem; font-weight:800 }
-    .note{ margin:0 0 1rem; opacity:.9 }
-    .board{
-      background:var(--card); border-radius:18px; padding:18px; box-shadow:0 18px 48px rgba(0,0,0,.28); backdrop-filter: blur(6px);
-    }
-    svg{ width:100%; height:auto; display:block; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Monil | Breadboard UI</title>
+<style>
+  :root{
+    --bg1:#1f4a66; --bg2:#2a6ea0;
+    --text:#eaf2f8; --card:rgba(255,255,255,.08);
+    --railV:#e05d5d; --railG:#63d063; --hole:#b9c3cd; --board:#e6ecef;
+    --led-off:#98a6b3; --on:#35ff95; --proj:#8ab4f8; --hob:#fbd38d; --skill:#7ee787; --about:#c084fc;
+    --lcd-bezel:#2f855a; --lcd-screen:#0f2230; --lcd-pixels:#b9f5d0;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(1200px 520px at 50% -15%, var(--bg2), var(--bg1));
+    color:var(--text); font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    text-align:center;
+  }
+  .wrap{ width:min(1120px,96vw) }
+  h1{ margin:.25rem 0 .5rem; font-size:2rem; font-weight:800 }
+  .note{ margin:0 0 1rem; opacity:.92 }
+  .board{ background:var(--card); border-radius:18px; padding:16px; box-shadow:0 18px 48px rgba(0,0,0,.28); backdrop-filter:blur(6px) }
+  svg{ width:100%; height:auto; display:block; user-select:none }
+  .switch, .dip { cursor:pointer; }
+  .switch .lever{ transition:transform .18s ease; transform-origin:960px 120px }
+  .switch[data-state="on"] .lever{ transform:rotate(-30deg) }
+  .switch[data-state="off"] .lever{ transform:rotate(30deg) }
 
-    /* switches + leds */
-    .switch{ cursor:pointer }
-    .switch .lever{ transition: transform .18s ease; transform-origin: center top; }
-    .switch[data-state="on"] .lever{ transform: rotate(-35deg) translateY(-1px) }
-    .switch[data-state="off"] .lever{ transform: rotate(35deg) translateY(1px) }
+  .dip .thumb{ transition:transform .12s ease }
+  .dip[data-on="true"] .thumb{ transform:translateY(10px) } /* down = closed */
 
-    .dip .thumb{ transition: transform .14s ease }
-    .dip[data-on="true"] .thumb{ transform: translateY(10px) }  /* down = closed */
+  .led{ transition: fill .12s ease, filter .12s ease }
+  .glow{ filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
 
-    .led{ transition: fill .12s ease, filter .12s ease }
-    .glow{ filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
-
-    /* LCD text container under the SVG for easy wrapping on mobile */
-    .lcd-wrap{ margin-top:12px; display:grid; gap:6px; justify-items:center }
-    .lcd{
-      width:min(780px, 90vw); height:120px; border-radius:10px;
-      background: radial-gradient(600px 200px at 20% 10%, #153144, var(--screen));
-      border:6px solid var(--bezel);
-      box-shadow: inset 0 0 30px rgba(0,0,0,.45), 0 6px 18px rgba(0,0,0,.25);
-      color:var(--screen-text); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      display:flex; align-items:center; justify-content:center; text-align:center; padding:10px 14px;
-    }
-    .lcd p{ margin:0; line-height:1.35; letter-spacing:.4px; font-size:18px; white-space:pre-line }
-    .visit{ color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid rgba(255,255,255,.45) }
-    .visit:hover{ border-bottom-color:#fff }
-
-    @media (max-width:640px){
-      h1{ font-size:1.6rem }
-      .lcd{ height:100px }
-      .lcd p{ font-size:16px }
-    }
-  </style>
+  .lcd-wrap{ margin-top:12px; display:grid; gap:8px; justify-items:center }
+  .lcd{
+    width:min(800px,92vw); height:126px; border-radius:10px; border:6px solid var(--lcd-bezel);
+    background:radial-gradient(600px 200px at 20% 15%, #18384c, var(--lcd-screen));
+    box-shadow:inset 0 0 30px rgba(0,0,0,.45), 0 6px 18px rgba(0,0,0,.25);
+    display:flex; align-items:center; justify-content:center; padding:10px 14px;
+  }
+  .lcd p{ margin:0; white-space:pre-line; line-height:1.35; color:var(--lcd-pixels); letter-spacing:.45px; font:18px ui-monospace,SFMono-Regular,Consolas,monospace }
+  .visit{ color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid rgba(255,255,255,.45) }
+  .visit:hover{ border-bottom-color:#fff }
+  @media (max-width:640px){
+    h1{ font-size:1.65rem } .lcd{ height:108px } .lcd p{ font-size:16px }
+  }
+</style>
 </head>
 <body>
   <div class="wrap">
     <h1>Monil</h1>
-    <p class="note">Toggle <strong>Power</strong>, then close a DIP switch to light its LED and show info on the LCD.</p>
+    <p class="note">Flip <strong>Power</strong>. Close a DIP switch to route +V through a <em>series resistor</em> into its LED; the LCD shows the corresponding info.</p>
 
     <div class="board" aria-label="Breadboard UI">
-      <!-- SVG breadboard with LCD module, resistors, DIP and power switch -->
-      <svg viewBox="0 0 1100 420" role="img" aria-labelledby="ttl">
-        <title id="ttl">Breadboard with LCD, 4-way DIP, LEDs and master power</title>
+      <svg viewBox="0 0 1120 480" role="img" aria-labelledby="ttl">
+        <title id="ttl">Breadboard with battery, SPST power switch, resistors, LEDs, DIP switch, and LCD</title>
 
-        <!-- breadboard plate -->
+        <!-- breadboard base + holes -->
         <defs>
           <pattern id="holes" width="24" height="24" patternUnits="userSpaceOnUse">
-            <circle cx="12" cy="12" r="2.4" fill="#b8c3cd"/>
+            <circle cx="12" cy="12" r="2.4" fill="var(--hole)"/>
           </pattern>
+          <!-- zigzag resistor body -->
+          <symbol id="resistor" viewBox="0 0 60 20">
+            <rect x="10" y="2" width="40" height="16" rx="3" fill="#d9a15d" stroke="#b27d3c" />
+            <path d="M0,10 H10 M50,10 H60" stroke="#666" stroke-width="2" fill="none"/>
+          </symbol>
+          <!-- LED symbol (round can + leads) -->
+          <symbol id="ledsym" viewBox="0 0 26 26">
+            <circle cx="13" cy="13" r="8" fill="#fff" opacity=".15"/>
+            <circle cx="13" cy="13" r="6" class="led" fill="var(--led-off)"/>
+            <path d="M13 19 V26 M13 0 V7" stroke="#888" stroke-width="1.6"/>
+          </symbol>
         </defs>
-        <rect x="10" y="10" width="1080" height="260" rx="16" fill="#e6ecef" />
-        <rect x="10" y="10" width="1080" height="260" rx="16" fill="url(#holes)" opacity=".9"/>
 
-        <!-- LCD bezel (visual only) -->
-        <rect x="70" y="40" width="560" height="170" rx="10" fill="#2f855a" opacity=".9" />
-        <rect x="95" y="62" width="510" height="126" rx="8" fill="#0f2230" opacity=".95" />
+        <rect x="10" y="10" width="1100" height="270" rx="16" fill="var(--board)"/>
+        <rect x="10" y="10" width="1100" height="270" rx="16" fill="url(#holes)" opacity=".9"/>
 
         <!-- power rails -->
-        <rect x="10" y="290" width="1080" height="18" fill="#e05d5d" opacity=".9"/>
-        <rect x="10" y="314" width="1080" height="18" fill="#69d069" opacity=".9"/>
-        <text x="20" y="303" fill="#fff" font-size="13" font-weight="700">+V</text>
-        <text x="20" y="327" fill="#0b3" font-size="13" font-weight="700">GND</text>
+        <rect x="10" y="300" width="1100" height="18" fill="var(--railV)" />
+        <rect x="10" y="324" width="1100" height="18" fill="var(--railG)" />
+        <text x="20" y="313" fill="#fff" font-size="13" font-weight="700">+V</text>
+        <text x="20" y="337" fill="#0b3" font-size="13" font-weight="700">GND</text>
 
-        <!-- Master Power Switch -->
+        <!-- 9V battery (visual) -->
+        <rect x="40" y="360" width="70" height="90" rx="8" fill="#1f2a33" stroke="#3a4a58"/>
+        <rect x="48" y="352" width="54" height="18" rx="3" fill="#d7dce2" />
+        <circle cx="62" cy="361" r="4" fill="#a33" />
+        <circle cx="80" cy="361" r="4" fill="#333" />
+        <text x="46" y="455" fill="#ddd" font-size="12">9V</text>
+
+        <!-- wires from battery to SPST and rails -->
+        <path d="M62 365 C62 330, 150 330, 150 300" stroke="#a33" stroke-width="3" fill="none"/>  <!-- + -->
+        <path d="M80 365 C80 340, 160 340, 160 324" stroke="#0b3" stroke-width="3" fill="none"/>  <!-- GND -->
+
+        <!-- SPST power switch (top-right) -->
         <g id="power" class="switch" data-state="off" tabindex="0" role="button" aria-pressed="false">
-          <circle cx="970" cy="85" r="13" fill="#8fa6b5"/>
+          <circle cx="960" cy="120" r="15" fill="#90a6b5"/>
           <g class="lever">
-            <rect x="966" y="45" width="8" height="45" rx="4" fill="#2a3540"/>
-            <rect x="959" y="38" width="22" height="10" rx="3" fill="#455463"/>
+            <rect x="955" y="80" width="10" height="50" rx="4" fill="#2a3540"/>
+            <rect x="947" y="73" width="26" height="12" rx="3" fill="#455463"/>
           </g>
-          <text x="938" y="122" fill="#fff" font-size="14" font-weight="700">Power</text>
+          <text x="940" y="155" fill="#fff" font-size="14" font-weight="700">Power</text>
         </g>
-        <circle id="led-power" cx="1015" cy="75" r="9" class="led" fill="var(--led-off)"/>
+        <use id="led-power" href="#ledsym" x="990" y="104" />
 
-        <!-- 4 LEDs (projects, hobbies, skills, about) -->
-        <circle id="led-proj"   cx="720" cy="85"  r="9" class="led" fill="var(--led-off)"/>
-        <circle id="led-hob"    cx="755" cy="85"  r="9" class="led" fill="var(--led-off)"/>
-        <circle id="led-skill"  cx="790" cy="85"  r="9" class="led" fill="var(--led-off)"/>
-        <circle id="led-about"  cx="825" cy="85"  r="9" class="led" fill="var(--led-off)"/>
-        <text x="706" y="105" fill="#fff" font-size="12">P</text>
-        <text x="742" y="105" fill="#fff" font-size="12">H</text>
-        <text x="777" y="105" fill="#fff" font-size="12">S</text>
-        <text x="814" y="105" fill="#fff" font-size="12">A</text>
+        <!-- jumpers from SPST to rails -->
+        <path id="wire-pwr" d="M970 120 C970 180, 400 180, 400 300" stroke="#e05d5d" stroke-width="3.5" fill="none" opacity=".7"/>
+        <circle cx="400" cy="300" r="3.5" fill="#e05d5d"/>
 
-        <!-- 4-bit DIP switch -->
-        <g id="dip-proj" class="dip" data-on="false" tabindex="0" role="button" aria-label="Projects switch">
-          <rect x="700" y="140" width="40" height="50" rx="4" fill="#0b6" opacity=".9"/>
-          <rect x="706" y="148" width="12" height="34" rx="2" fill="#fff"/>
-          <rect class="thumb" x="706" y="148" width="12" height="15" fill="#1c3a2e"/>
-          <text x="708" y="142" fill="#fff" font-size="10">1</text>
-        </g>
-        <g id="dip-hob" class="dip" data-on="false" tabindex="0" role="button" aria-label="Hobbies switch">
-          <rect x="740" y="140" width="40" height="50" rx="4" fill="#0b6" opacity=".9"/>
-          <rect x="746" y="148" width="12" height="34" rx="2" fill="#fff"/>
-          <rect class="thumb" x="746" y="148" width="12" height="15" fill="#1c3a2e"/>
-          <text x="748" y="142" fill="#fff" font-size="10">2</text>
-        </g>
-        <g id="dip-skill" class="dip" data-on="false" tabindex="0" role="button" aria-label="Skills switch">
-          <rect x="780" y="140" width="40" height="50" rx="4" fill="#0b6" opacity=".9"/>
-          <rect x="786" y="148" width="12" height="34" rx="2" fill="#fff"/>
-          <rect class="thumb" x="786" y="148" width="12" height="15" fill="#1c3a2e"/>
-          <text x="788" y="142" fill="#fff" font-size="10">3</text>
-        </g>
-        <g id="dip-about" class="dip" data-on="false" tabindex="0" role="button" aria-label="About switch">
-          <rect x="820" y="140" width="40" height="50" rx="4" fill="#0b6" opacity=".9"/>
-          <rect x="826" y="148" width="12" height="34" rx="2" fill="#fff"/>
-          <rect class="thumb" x="826" y="148" width="12" height="15" fill="#1c3a2e"/>
-          <text x="828" y="142" fill="#fff" font-size="10">4</text>
+        <!-- LCD module visual (pins + standoffs) -->
+        <rect x="100" y="50" width="560" height="160" rx="10" fill="var(--lcd-bezel)" opacity=".95"/>
+        <rect x="128" y="72" width="504" height="116" rx="8" fill="var(--lcd-screen)" />
+        <circle cx="120" cy="60" r="6" fill="#9ec1a7"/><circle cx="640" cy="60" r="6" fill="#9ec1a7"/>
+        <circle cx="120" cy="200" r="6" fill="#9ec1a7"/><circle cx="640" cy="200" r="6" fill="#9ec1a7"/>
+        <!-- header pins -->
+        <g fill="#d7dce2">
+          <!-- 1x16 row -->
+          <rect x="140" y="52" width="8" height="12"/><rect x="160" y="52" width="8" height="12"/>
+          <rect x="180" y="52" width="8" height="12"/><rect x="200" y="52" width="8" height="12"/>
+          <rect x="220" y="52" width="8" height="12"/><rect x="240" y="52" width="8" height="12"/>
+          <rect x="260" y="52" width="8" height="12"/><rect x="280" y="52" width="8" height="12"/>
+          <rect x="300" y="52" width="8" height="12"/><rect x="320" y="52" width="8" height="12"/>
+          <rect x="340" y="52" width="8" height="12"/><rect x="360" y="52" width="8" height="12"/>
+          <rect x="380" y="52" width="8" height="12"/><rect x="400" y="52" width="8" height="12"/>
+          <rect x="420" y="52" width="8" height="12"/><rect x="440" y="52" width="8" height="12"/>
         </g>
 
-        <!-- labels -->
-        <text x="702" y="210" fill="#fff" font-size="12">DIP (1–4)</text>
+        <!-- Four channels: each has series resistor -> LED to GND -->
+        <!-- R1..R4 from +V bus (top rail) to each LED anode line -->
+        <use href="#resistor" x="720" y="52"/><text x="725" y="48" fill="#666" font-size="11">R1</text>
+        <use href="#resistor" x="720" y="90"/><text x="725" y="86" fill="#666" font-size="11">R2</text>
+        <use href="#resistor" x="720" y="128"/><text x="725" y="124" fill="#666" font-size="11">R3</text>
+        <use href="#resistor" x="720" y="166"/><text x="725" y="162" fill="#666" font-size="11">R4</text>
+
+        <!-- LED cans (anodes fed from resistors, cathodes tied to GND rail) -->
+        <use id="led-proj"  href="#ledsym" x="795" y="42"/>
+        <use id="led-hob"   href="#ledsym" x="795" y="80"/>
+        <use id="led-skill" href="#ledsym" x="795" y="118"/>
+        <use id="led-about" href="#ledsym" x="795" y="156"/>
+
+        <!-- ground wires from LEDs -->
+        <path d="M808 58  L808 324" stroke="#0b3" stroke-width="3" fill="none" />
+        <path d="M808 96  L808 324" stroke="#0b3" stroke-width="3" fill="none" />
+        <path d="M808 134 L808 324" stroke="#0b3" stroke-width="3" fill="none" />
+        <path d="M808 172 L808 324" stroke="#0b3" stroke-width="3" fill="none" />
+
+        <!-- node wires from resistors to LED anodes -->
+        <path d="M780 62  L795 62"  stroke="#d88" stroke-width="3" />
+        <path d="M780 100 L795 100" stroke="#d88" stroke-width="3" />
+        <path d="M780 138 L795 138" stroke="#d88" stroke-width="3" />
+        <path d="M780 176 L795 176" stroke="#d88" stroke-width="3" />
+
+        <!-- DIP switch (routes +V to each resistor when closed) -->
+        <g id="dip1" class="dip" data-on="false" tabindex="0" role="button" aria-label="Projects switch">
+          <rect x="690" y="45" width="20" height="26" rx="3" fill="#0b6" />
+          <rect x="694" y="50" width="12" height="18" rx="2" fill="#fff"/>
+          <rect class="thumb" x="694" y="50" width="12" height="9" fill="#18362b"/>
+          <text x="696" y="42" fill="#fff" font-size="10">1</text>
+        </g>
+        <g id="dip2" class="dip" data-on="false" tabindex="0" role="button" aria-label="Hobbies switch">
+          <rect x="690" y="83" width="20" height="26" rx="3" fill="#0b6" />
+          <rect x="694" y="88" width="12" height="18" rx="2" fill="#fff"/>
+          <rect class="thumb" x="694" y="88" width="12" height="9" fill="#18362b"/>
+          <text x="696" y="80" fill="#fff" font-size="10">2</text>
+        </g>
+        <g id="dip3" class="dip" data-on="false" tabindex="0" role="button" aria-label="Skills switch">
+          <rect x="690" y="121" width="20" height="26" rx="3" fill="#0b6" />
+          <rect x="694" y="126" width="12" height="18" rx="2" fill="#fff"/>
+          <rect class="thumb" x="694" y="126" width="12" height="9" fill="#18362b"/>
+          <text x="696" y="118" fill="#fff" font-size="10">3</text>
+        </g>
+        <g id="dip4" class="dip" data-on="false" tabindex="0" role="button" aria-label="About switch">
+          <rect x="690" y="159" width="20" height="26" rx="3" fill="#0b6" />
+          <rect x="694" y="164" width="12" height="18" rx="2" fill="#fff"/>
+          <rect class="thumb" x="694" y="164" width="12" height="9" fill="#18362b"/>
+          <text x="696" y="156" fill="#fff" font-size="10">4</text>
+        </g>
+
+        <!-- traces from DIP to resistors (simulate routing +V) -->
+        <path id="t1" d="M700 58  L720 60"  stroke="#e05d5d" stroke-width="3" />
+        <path id="t2" d="M700 96  L720 98"  stroke="#e05d5d" stroke-width="3" />
+        <path id="t3" d="M700 134 L720 136" stroke="#e05d5d" stroke-width="3" />
+        <path id="t4" d="M700 172 L720 174" stroke="#e05d5d" stroke-width="3" />
+
+        <!-- +V jumper to DIP common (only live when Power ON) -->
+        <path id="vfeed" d="M400 300 C400 240, 690 240, 700 240 700 230, 700 190" stroke="#e05d5d" stroke-width="3.5" fill="none" opacity=".7"/>
       </svg>
 
-      <!-- LCD content (HTML overlay for easy wrapping) -->
       <div class="lcd-wrap">
-        <div class="lcd"><p id="lcdText">POWER OFF\nFlip Power to enable the board.</p></div>
-        <div id="visitSlot"></div>
+        <div class="lcd"><p id="lcd">POWER OFF\nFlip Power to energize the rails.</p></div>
+        <div id="visit"></div>
       </div>
     </div>
   </div>
 
-  <script>
-    const power = document.getElementById('power');
-    const ledPower = document.getElementById('led-power');
-    const lcdText = document.getElementById('lcdText');
-    const visitSlot = document.getElementById('visitSlot');
+<script>
+  // helpers
+  const $ = sel => document.querySelector(sel);
+  const onCol = s => getComputedStyle(document.documentElement).getPropertyValue(s).trim();
 
-    const channels = {
-      proj:  { dip:'dip-proj',  led:'led-proj',  color:getCSS('--proj'),  title:'PROJECTS',
-               text:'DE1-SoC DNN accelerator, self-balancing robot, and metal-detecting rover.',
-               link:'projects.html' },
-      hob:   { dip:'dip-hob',   led:'led-hob',   color:getCSS('--hob'),   title:'HOBBIES',
-               text:'Football, playlists, and quick college-friendly cooking experiments.',
-               link:'hobbies.html' },
-      skill: { dip:'dip-skill', led:'led-skill', color:getCSS('--skill'), title:'SKILLS',
-               text:'C/C++, Verilog/SystemVerilog, DE1-SoC, embedded firmware, control systems.',
-               link:'about.html' },
-      about: { dip:'dip-about', led:'led-about', color:getCSS('--about'), title:'ABOUT',
-               text:'ECE @ UBC — I build hardware-software systems that feel effortless.',
-               link:'about.html' }
-    };
+  // elements
+  const power = $('#power'), ledP = $('#led-power'), lcd = $('#lcd'), visit = $('#visit');
+  const channels = [
+    {dip:'#dip1', led:'#led-proj',  color:onCol('--proj'),  title:'PROJECTS', text:'DE1-SoC DNN accelerator, self-balancing robot, metal-detecting rover.', link:'projects.html'},
+    {dip:'#dip2', led:'#led-hob',   color:onCol('--hob'),   title:'HOBBIES',  text:'Football, playlists, student-friendly cooking experiments.',       link:'hobbies.html'},
+    {dip:'#dip3', led:'#led-skill', color:onCol('--skill'), title:'SKILLS',   text:'C/C++, Verilog/SystemVerilog, DE1-SoC, firmware, control.',      link:'about.html'},
+    {dip:'#dip4', led:'#led-about', color:onCol('--about'), title:'ABOUT',    text:'ECE @ UBC — I build hardware-software systems that feel easy.', link:'about.html'}
+  ];
+  let powered=false;
 
-    let powered = false;
+  function setLCD(head, body){ lcd.textContent = wrap(`${head}: ${body}`, 54).join('\n'); }
+  function wrap(s,w){ if(s.length<=w) return [s,'']; const cut=s.lastIndexOf(' ',w); return [s.slice(0,cut>0?cut:w), s.slice((cut>0?cut+1:w))]; }
 
-    function getCSS(varName){
-      return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || '#fff';
+  function setPowerUI(){
+    ledP.querySelector('circle:nth-child(2)').setAttribute('fill', powered ? 'var(--on)' : 'var(--led-off)');
+    ledP.style.color = powered ? 'var(--on)' : 'var(--led-off)';
+    ledP.classList.toggle('glow', powered);
+    if(!powered){
+      channels.forEach(c=>{
+        const dip=$(c.dip); dip.dataset.on='false';
+        const led=$(c.led).querySelector('circle:nth-child(2)');
+        led.setAttribute('fill','var(--led-off)');
+        $(c.led).classList.remove('glow');
+      });
+      lcd.textContent='POWER OFF\nFlip Power to energize the rails.';
+      visit.innerHTML='';
+    }else{
+      setLCD('READY','Close a DIP (1–4) to drive a resistor-limited LED line.');
     }
+  }
 
-    function setLCD(title, text){
-      // 2 lines max; wrap gently
-      const wrapped = wrapTwoLines(`${title}: ${text}`, 52);
-      lcdText.textContent = wrapped.join('\n');
-    }
+  function togglePower(){
+    powered=!powered;
+    power.dataset.state= powered?'on':'off';
+    power.setAttribute('aria-pressed', powered?'true':'false');
+    setPowerUI();
+  }
 
-    function wrapTwoLines(s, width){
-      if (s.length <= width) return [s, ''];
-      const cut = s.lastIndexOf(' ', width);
-      return [s.slice(0, cut>0?cut:width), s.slice((cut>0?cut+1:width))];
-    }
+  power.addEventListener('click',togglePower);
+  power.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); togglePower(); }});
 
-    function powerUI(){
-      ledPower.setAttribute('fill', powered ? 'var(--led-on)' : 'var(--led-off)');
-      ledPower.style.color = powered ? 'var(--led-on)' : 'var(--led-off)';
-      ledPower.classList.toggle('glow', powered);
-      if (!powered){
-        Object.values(channels).forEach(c=>{
-          c._dip.dataset.on = 'false';
-          c._led.setAttribute('fill','var(--led-off)');
-          c._led.classList.remove('glow');
-        });
-        lcdText.textContent = 'POWER OFF\nFlip Power to enable the board.';
-        visitSlot.innerHTML = '';
-      }
-    }
-
-    function togglePower(){
-      powered = !powered;
-      power.dataset.state = powered ? 'on' : 'off';
-      power.setAttribute('aria-pressed', powered ? 'true' : 'false');
-      powerUI();
-      if (powered){
-        setLCD('READY', 'Toggle a DIP switch (1–4) to select a channel.');
-      }
-    }
-
-    power.addEventListener('click', togglePower);
-    power.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); togglePower(); }});
-
-    // wire channels
-    Object.entries(channels).forEach(([key,c])=>{
-      c._dip = document.getElementById(c.dip);
-      c._led = document.getElementById(c.led);
-
-      const act = ()=>{
-        if(!powered) return;
-        const on = c._dip.dataset.on === 'true';
-        // turn others off (single active channel)
-        Object.values(channels).forEach(o=>{
-          if(o!==c){
-            o._dip.dataset.on='false';
-            o._led.setAttribute('fill','var(--led-off)');
-            o._led.classList.remove('glow');
-          }
-        });
-        // toggle this one
-        c._dip.dataset.on = on ? 'false' : 'true';
-        if(on){
-          c._led.setAttribute('fill','var(--led-off)');
-          c._led.classList.remove('glow');
-          setLCD('READY', 'Toggle a DIP switch (1–4) to select a channel.');
-          visitSlot.innerHTML = '';
-        }else{
-          c._led.setAttribute('fill', c.color);
-          c._led.style.color = c.color;
-          c._led.classList.add('glow');
-          setLCD(c.title, c.text);
-          visitSlot.innerHTML = `<a class="visit" href="${c.link}">Visit page →</a>`;
+  channels.forEach((c,i)=>{
+    const dip=$(c.dip), ledWrap=$(c.led), led = ledWrap.querySelector('circle:nth-child(2)');
+    function act(){
+      if(!powered) return;
+      // single-active channel: open others
+      channels.forEach(_c=>{
+        if(_c.dip!==c.dip){
+          const d=$(_c.dip); d.dataset.on='false';
+          const lw=$(_c.led); lw.classList.remove('glow');
+          lw.querySelector('circle:nth-child(2)').setAttribute('fill','var(--led-off)');
         }
-      };
+      });
+      const isOn = dip.dataset.on==='true';
+      dip.dataset.on = isOn?'false':'true';
+      if(dip.dataset.on==='true'){
+        led.setAttribute('fill', c.color); ledWrap.style.color=c.color; ledWrap.classList.add('glow');
+        setLCD(c.title, c.text);
+        visit.innerHTML = `<a class="visit" href="${c.link}">Visit page →</a>`;
+      }else{
+        led.setAttribute('fill','var(--led-off)'); ledWrap.classList.remove('glow');
+        setLCD('READY','Close a DIP (1–4) to drive a resistor-limited LED line.');
+        visit.innerHTML='';
+      }
+    }
+    dip.addEventListener('click',act);
+    dip.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); }});
+  });
 
-      c._dip.addEventListener('click', act);
-      c._dip.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); }});
-    });
-
-    // init
-    powerUI();
-  </script>
+  // init
+  setPowerUI();
+</script>
 </body>
 </html>
