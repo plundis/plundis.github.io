@@ -3,445 +3,261 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Monil | Electrical Engineer</title>
+<title>Monil | Breadboard v2 (linked rails + supply)</title>
 <style>
   :root{
-    --bg1:#0f172a; --bg2:#1e293b;
-    --text:#f1f5f9; --card:rgba(255,255,255,.06);
-    --board:#e8ecf0; --hole:#9ca3af;
-    --railV:#dc2626; --railG:#16a34a;
-    --led-off:#64748b; --led-on:#10b981; 
-    --proj:#60a5fa; --hob:#fbbf24; --skill:#34d399; --about:#a78bfa;
-    --lcd-bezel:#1e6f4e; --lcd-screen:#0a1929; --lcd-pixel:#4ade80;
-    --dip:#059669; --dip-slot:#064e3b; --dip-label:#cbd5e1;
-    --wireV:#dc2626; --wireG:#16a34a; --wireSig:#ef4444; --wireNeg:#475569;
+    --bg1:#1f4a66; --bg2:#2a6ea0;
+    --text:#eaf2f8; --card:rgba(255,255,255,.08);
+    --board:#eef2f5; --hole:#b9c3cd;
+    --railV:#e05d5d; --railG:#63d063;
+    --led-off:#a7b2bc; --led-on:#35ff95; --proj:#8ab4f8; --hob:#fbd38d; --skill:#7ee787; --about:#c084fc;
+    --lcd-bezel:#2f855a; --lcd-screen:#0f2230; --lcd-pixel:#b9f5d0;
+    --dip:#12b886; --dip-slot:#0a6b4f;
+    --wireV:#e05d5d; --wireG:#2e9c4a; --wireSig:#d77; --wireNeg:#3b454f;
   }
-  *{box-sizing:border-box; margin:0; padding:0}
+  *{box-sizing:border-box}
   body{
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
-    color:var(--text); font-family:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
-    padding:2rem 1rem;
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(1200px 520px at 50% -15%, var(--bg2), var(--bg1));
+    color:var(--text); font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    text-align:center;
   }
-  .container{ 
-    max-width:1200px; width:100%; 
-    display:flex; flex-direction:column; gap:1.5rem;
-  }
-  
-  .header{ text-align:center }
-  .header h1{ 
-    font-size:3rem; font-weight:900; margin-bottom:0.5rem;
-    background:linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-    -webkit-background-clip:text; background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-  .header p{ 
-    font-size:1.125rem; opacity:0.85; line-height:1.6;
-    max-width:700px; margin:0 auto;
-  }
-  .header p strong{ color:#10b981; font-weight:600 }
-
-  .circuit-card{ 
-    background:var(--card); border-radius:24px; padding:2.5rem;
-    backdrop-filter:blur(12px); 
-    box-shadow:0 20px 60px rgba(0,0,0,.4),
-               inset 0 1px 0 rgba(255,255,255,.1);
-    border:1px solid rgba(255,255,255,.08);
-  }
-
-  svg{ 
-    width:100%; height:auto; display:block; 
-    filter:drop-shadow(0 4px 12px rgba(0,0,0,.2));
-  }
-  
-  .interactive{ cursor:pointer; transition:all .2s ease }
-  .interactive:hover{ opacity:.85 }
-  .interactive:active{ transform:scale(.98) }
-  
-  #ledPwr{ 
-    cursor:pointer; 
-    transition:all .3s cubic-bezier(.4,0,.2,1);
-  }
-  #ledPwr:hover{ transform:scale(1.15) }
-  
-  .dip{ 
-    cursor:pointer; 
-    transition:transform .15s ease;
-  }
-  .dip:hover{ transform:translateY(-2px) }
-  .dip .thumb{ 
-    transition:transform .2s cubic-bezier(.4,0,.2,1);
-  }
+  .wrap{ width:min(1060px,96vw) }
+  h1{ margin:.3rem 0 .35rem; font-size:2rem; font-weight:800 }
+  .note{ margin:0 0 .9rem; opacity:.92 }
+  .card{ background:var(--card); border-radius:16px; padding:18px; backdrop-filter:blur(6px); box-shadow:0 16px 44px rgba(0,0,0,.28) }
+  svg{ width:100%; height:auto; display:block; user-select:none }
+  .dip,.pwrbtn{ cursor:pointer }
+  .dip .thumb{ transition:transform .12s ease }
   .dip[data-on="true"] .thumb{ transform:translateY(10px) }
-  
-  .led{ transition:all .25s ease }
-  .led-glow{ 
-    filter:drop-shadow(0 0 8px currentColor) 
-           drop-shadow(0 0 16px currentColor)
-           drop-shadow(0 0 24px currentColor);
-  }
-
-  .visit-btn{ 
-    display:inline-block; margin-top:1rem;
-    padding:0.875rem 2rem; 
-    background:linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color:#fff; font-weight:700; font-size:1rem;
-    text-decoration:none; border-radius:12px;
-    box-shadow:0 4px 16px rgba(16,185,129,.3);
-    transition:all .2s ease;
-  }
-  .visit-btn:hover{ 
-    transform:translateY(-2px); 
-    box-shadow:0 8px 24px rgba(16,185,129,.4);
-  }
-
-  .component-label{
-    font-size:10px; fill:var(--dip-label); 
-    font-weight:600; letter-spacing:.3px;
-  }
-
-  @media (max-width:768px){
-    .header h1{font-size:2.25rem}
-    .header p{font-size:1rem}
-    .circuit-card{padding:1.5rem}
-  }
-  @media (max-width:480px){
-    .header h1{font-size:1.875rem}
-    body{padding:1rem 0.5rem}
-  }
+  .led{ transition:fill .12s ease, filter .12s ease }
+  .glow{ filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
+  .visit{ margin-top:10px; display:inline-block; color:#fff; font-weight:700; text-decoration:none; border-bottom:2px solid rgba(255,255,255,.45) }
+  .visit:hover{ border-bottom-color:#fff }
 </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Monil Patel</h1>
-      <p>Electrical Engineer — Toggle <strong>Power</strong>, then flip a DIP switch to explore my work</p>
-    </div>
+  <div class="wrap">
+    <h1>Monil</h1>
+    <p class="note">Toggle <strong>Power</strong>, then close a DIP switch to route <em>+V → resistor → LED → GND</em>. The LCD shows the info.</p>
 
-    <div class="circuit-card">
-      <svg viewBox="0 0 1000 560" role="img" aria-label="Interactive breadboard circuit">
+    <div class="card" aria-label="Breadboard UI">
+      <svg viewBox="0 0 1000 560" role="img" aria-labelledby="ttl">
+        <title id="ttl">Breadboard with linked top/bottom rails, supply, resistors, and LCD text</title>
+
+        <!-- defs -->
         <defs>
-          <pattern id="holes" width="20" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="10" cy="10" r="2.2" fill="var(--hole)"/>
+          <pattern id="holes" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="11" cy="11" r="2.3" fill="var(--hole)"/>
           </pattern>
-
-          <symbol id="resistor" viewBox="0 0 70 18">
-            <line x1="0" y1="9" x2="20" y2="9" stroke="#9ca3af" stroke-width="1.5"/>
-            <line x1="50" y1="9" x2="70" y2="9" stroke="#9ca3af" stroke-width="1.5"/>
-            <rect x="20" y="4" width="30" height="10" rx="1.5" fill="#e8d4b8" stroke="#a67c52" stroke-width="0.8"/>
-            <rect x="23" y="4" width="2.5" height="10" fill="#e11d48"/>
-            <rect x="28" y="4" width="2.5" height="10" fill="#e11d48"/>
-            <rect x="36" y="4" width="2.5" height="10" fill="#78350f"/>
-            <rect x="43" y="4" width="2.5" height="10" fill="#fbbf24"/>
+          <!-- resistor: red-red-brown-gold (≈220Ω) -->
+          <symbol id="res220" viewBox="0 0 80 22">
+            <rect x="0"  y="10" width="18" height="2" fill="#bbb"/>
+            <rect x="62" y="10" width="18" height="2" fill="#bbb"/>
+            <rect x="18" y="4" width="44" height="14" rx="4" fill="#d9a15d" stroke="#b27d3c" stroke-width="1"/>
+            <rect x="24" y="4" width="4" height="14" fill="#c62828"/>
+            <rect x="32" y="4" width="4" height="14" fill="#c62828"/>
+            <rect x="44" y="4" width="4" height="14" fill="#6d4c41"/>
+            <rect x="53" y="4" width="4" height="14" fill="#d4af37"/>
           </symbol>
         </defs>
 
-        <!-- Breadboard -->
-        <rect x="60" y="70" width="880" height="280" rx="20" fill="var(--board)" 
-              stroke="rgba(0,0,0,.1)" stroke-width="2"/>
-        <rect x="60" y="70" width="880" height="280" rx="20" fill="url(#holes)" opacity=".85"/>
+        <!-- board -->
+        <rect x="60" y="70" width="880" height="280" rx="16" fill="var(--board)"/>
+        <rect x="60" y="70" width="880" height="280" rx="16" fill="url(#holes)" opacity=".9"/>
 
         <!-- TOP rails -->
-        <g id="topRails">
-          <rect x="80" y="86" width="840" height="16" rx="2" fill="var(--railV)"/>
-          <rect x="80" y="108" width="840" height="16" rx="2" fill="var(--railG)"/>
-          <text x="95" y="98" class="component-label" fill="#fff" font-size="11" font-weight="700">+5V</text>
-          <text x="95" y="120" class="component-label" fill="#fff" font-size="11" font-weight="700">GND</text>
-        </g>
+        <rect x="80" y="86"  width="840" height="16" fill="var(--railV)"/>
+        <rect x="80" y="108" width="840" height="16" fill="var(--railG)"/>
+        <text x="90" y="98"  fill="#fff" font-size="12" font-weight="700">+V</text>
+        <text x="90" y="120" fill="#0b3" font-size="12" font-weight="700">GND</text>
 
         <!-- BOTTOM rails -->
-        <g id="bottomRails">
-          <rect x="80" y="350" width="840" height="18" rx="2" fill="var(--railV)"/>
-          <rect x="80" y="374" width="840" height="18" rx="2" fill="var(--railG)"/>
-          <text x="95" y="363" class="component-label" fill="#fff" font-size="11" font-weight="700">+5V</text>
-          <text x="95" y="387" class="component-label" fill="#fff" font-size="11" font-weight="700">GND</text>
+        <rect x="80" y="350" width="840" height="18" fill="var(--railV)"/>
+        <rect x="80" y="374" width="840" height="18" fill="var(--railG)"/>
+        <text x="90" y="363" fill="#fff" font-size="12" font-weight="700">+V</text>
+        <text x="90" y="387" fill="#0b3" font-size="12" font-weight="700">GND</text>
+
+        <!-- supply terminals on the left -->
+        <g font-family="ui-sans-serif,system-ui" font-weight="700" text-anchor="middle">
+          <circle cx="92" cy="54" r="10" fill="#fff"/><text x="92" y="58" font-size="12" fill="#c00">+</text>
+          <circle cx="92" cy="408" r="10" fill="#fff"/><text x="92" y="412" font-size="12" fill="#222">–</text>
         </g>
 
-        <!-- Power supply terminals -->
-        <g id="terminals">
-          <circle cx="92" cy="54" r="11" fill="#fff" stroke="rgba(0,0,0,.1)" stroke-width="1.5"/>
-          <text x="92" y="59" font-size="14" font-weight="900" fill="#dc2626" text-anchor="middle">+</text>
-          
-          <circle cx="92" cy="408" r="11" fill="#222" stroke="rgba(0,0,0,.2)" stroke-width="1.5"/>
-          <text x="92" y="413" font-size="14" font-weight="900" fill="#fff" text-anchor="middle">−</text>
-        </g>
+        <!-- wires from terminals -->
+        <!-- + terminal to TOP +V rail -->
+        <path d="M92 54 C 110 60, 120 76, 130 86 H 170" stroke="var(--wireV)" stroke-width="3.5" fill="none"/>
+        <!-- – terminal to BOTTOM GND rail -->
+        <path d="M92 408 C 120 408, 128 392, 140 392  180 392, 200 374, 240 374 H 300"
+              stroke="var(--wireNeg)" stroke-width="3.5" fill="none"/>
 
-        <!-- Supply wiring from terminals to rails -->
-        <path d="M 92 54 Q 92 70, 110 80 Q 130 86, 150 86" 
-              stroke="var(--wireV)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M 92 408 Q 110 408, 130 398 Q 150 388, 170 383" 
-              stroke="var(--wireNeg)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-
-        <!-- Rail jumper wires (linking top and bottom) -->
-        <path d="M 220 86 V 350" stroke="var(--wireV)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 240 108 V 374" stroke="var(--wireG)" stroke-width="4" stroke-linecap="round"/>
+        <!-- NEW: jumpers that link top and bottom rails -->
+        <path d="M220 86 V 350"  stroke="var(--wireV)" stroke-width="4" />   <!-- +V jumper -->
+        <path d="M240 108 V 374" stroke="var(--wireG)" stroke-width="4" />   <!-- GND jumper -->
 
         <!-- LCD module -->
-        <g id="lcdModule">
-          <rect x="140" y="138" width="500" height="150" rx="14" fill="var(--lcd-bezel)" 
-                stroke="rgba(0,0,0,.15)" stroke-width="2" opacity=".96"/>
-          <rect x="170" y="165" width="440" height="100" rx="8" fill="var(--lcd-screen)"
-                stroke="rgba(0,0,0,.3)" stroke-width="1"/>
-          
-          <!-- Header pins -->
-          <g fill="#cbd5e1">
-            <rect x="165" y="142" width="8" height="12" rx="1"/>
-            <rect x="185" y="142" width="8" height="12" rx="1"/>
-            <rect x="205" y="142" width="8" height="12" rx="1"/>
-            <rect x="225" y="142" width="8" height="12" rx="1"/>
-            <rect x="245" y="142" width="8" height="12" rx="1"/>
-            <rect x="265" y="142" width="8" height="12" rx="1"/>
-            <rect x="285" y="142" width="8" height="12" rx="1"/>
-            <rect x="305" y="142" width="8" height="12" rx="1"/>
-            <rect x="325" y="142" width="8" height="12" rx="1"/>
-            <rect x="345" y="142" width="8" height="12" rx="1"/>
-            <rect x="365" y="142" width="8" height="12" rx="1"/>
-            <rect x="385" y="142" width="8" height="12" rx="1"/>
-            <rect x="405" y="142" width="8" height="12" rx="1"/>
-            <rect x="425" y="142" width="8" height="12" rx="1"/>
-            <rect x="445" y="142" width="8" height="12" rx="1"/>
-            <rect x="465" y="142" width="8" height="12" rx="1"/>
-          </g>
+        <rect x="120" y="138" width="480" height="144" rx="12" fill="var(--lcd-bezel)" opacity=".95"/>
+        <rect x="150" y="162" width="420" height="96" rx="8" fill="var(--lcd-screen)"/>
 
-          <!-- LCD text -->
-          <g id="lcdTextGroup" font-family="ui-monospace,Courier,monospace" font-size="17" fill="var(--lcd-pixel)">
-            <text id="lcdL1" x="185" y="205">POWER OFF</text>
-            <text id="lcdL2" x="185" y="240">Flip Power to energize the rails.</text>
-          </g>
+        <!-- header pins -->
+        <g fill="#d7dce2">
+          <rect x="146" y="142" width="8"  height="10"/><rect x="166" y="142" width="8"  height="10"/>
+          <rect x="186" y="142" width="8"  height="10"/><rect x="206" y="142" width="8"  height="10"/>
+          <rect x="226" y="142" width="8"  height="10"/><rect x="246" y="142" width="8"  height="10"/>
+          <rect x="266" y="142" width="8"  height="10"/><rect x="286" y="142" width="8"  height="10"/>
+          <rect x="306" y="142" width="8"  height="10"/><rect x="326" y="142" width="8"  height="10"/>
+          <rect x="346" y="142" width="8"  height="10"/><rect x="366" y="142" width="8"  height="10"/>
+          <rect x="386" y="142" width="8"  height="10"/><rect x="406" y="142" width="8"  height="10"/>
+          <rect x="426" y="142" width="8"  height="10"/><rect x="446" y="142" width="8"  height="10"/>
         </g>
 
-        <!-- Power LED -->
-        <g id="powerLed">
-          <circle id="ledPwr" cx="880" cy="190" r="16" fill="var(--led-off)" class="led interactive"/>
-          <circle cx="880" cy="190" r="20" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
-          <text x="880" y="220" class="component-label" text-anchor="middle" font-size="12">POWER</text>
+        <!-- LCD TEXT -->
+        <g id="lcdText" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="18" fill="var(--lcd-pixel)">
+          <text id="lcdL1" x="164" y="198">POWER OFF</text>
+          <text id="lcdL2" x="164" y="228">Flip Power to energize the rails.</text>
         </g>
 
-        <!-- Channel LEDs -->
-        <g id="channelLeds">
-          <g>
-            <circle id="ledProj" cx="700" cy="190" r="10" fill="var(--led-off)" class="led"/>
-            <text x="700" y="215" class="component-label" text-anchor="middle">PROJECTS</text>
-          </g>
-          <g>
-            <circle id="ledHob" cx="740" cy="190" r="10" fill="var(--led-off)" class="led"/>
-            <text x="740" y="215" class="component-label" text-anchor="middle">HOBBIES</text>
-          </g>
-          <g>
-            <circle id="ledSkill" cx="780" cy="190" r="10" fill="var(--led-off)" class="led"/>
-            <text x="780" y="215" class="component-label" text-anchor="middle">SKILLS</text>
-          </g>
-          <g>
-            <circle id="ledAbout" cx="820" cy="190" r="10" fill="var(--led-off)" class="led"/>
-            <text x="820" y="215" class="component-label" text-anchor="middle">ABOUT</text>
-          </g>
+        <!-- LEDs + labels -->
+        <g font-size="11" fill="#cfd8df" text-anchor="middle">
+          <circle id="ledPwr" cx="930" cy="180" r="12" class="led pwrbtn" fill="var(--led-off)"/>
+          <text x="930" y="206">Power</text>
+
+          <circle id="ledProj"  cx="720" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="720" y="202">P</text>
+          <circle id="ledHob"   cx="752" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="752" y="202">H</text>
+          <circle id="ledSkill" cx="784" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="784" y="202">S</text>
+          <circle id="ledAbout" cx="816" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="816" y="202">A</text>
         </g>
 
-        <!-- DIP Switch block -->
-        <g id="dipBlock" transform="translate(680,246)">
-          <rect x="0" y="0" width="190" height="50" rx="8" fill="var(--dip)" 
-                stroke="rgba(0,0,0,.2)" stroke-width="1.5"/>
-          
-          <g id="d1" class="dip interactive" data-on="false" role="button" aria-label="Projects">
-            <rect x="10" y="8" width="34" height="34" rx="4" fill="#fff" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
-            <rect class="thumb" x="10" y="8" width="34" height="14" rx="2" fill="var(--dip-slot)"/>
-            <text x="27" y="65" class="component-label" text-anchor="middle" font-size="9">1</text>
+        <!-- DIP block -->
+        <g id="dip" transform="translate(735,236)">
+          <rect x="-65" y="0" width="200" height="46" rx="6" fill="var(--dip)"/>
+          <g id="d1" class="dip" data-on="false" tabindex="0" role="button" aria-label="Projects">
+            <rect x="-50" y="6" width="30" height="34" rx="4" fill="#fff"/>
+            <rect class="thumb" x="-50" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
-          <g id="d2" class="dip interactive" data-on="false" role="button" aria-label="Hobbies">
-            <rect x="52" y="8" width="34" height="34" rx="4" fill="#fff" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
-            <rect class="thumb" x="52" y="8" width="34" height="14" rx="2" fill="var(--dip-slot)"/>
-            <text x="69" y="65" class="component-label" text-anchor="middle" font-size="9">2</text>
+          <g id="d2" class="dip" data-on="false" tabindex="0" role="button" aria-label="Hobbies">
+            <rect x="-12" y="6" width="30" height="34" rx="4" fill="#fff"/>
+            <rect class="thumb" x="-12" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
-          <g id="d3" class="dip interactive" data-on="false" role="button" aria-label="Skills">
-            <rect x="94" y="8" width="34" height="34" rx="4" fill="#fff" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
-            <rect class="thumb" x="94" y="8" width="34" height="14" rx="2" fill="var(--dip-slot)"/>
-            <text x="111" y="65" class="component-label" text-anchor="middle" font-size="9">3</text>
+          <g id="d3" class="dip" data-on="false" tabindex="0" role="button" aria-label="Skills">
+            <rect x="26" y="6" width="30" height="34" rx="4" fill="#fff"/>
+            <rect class="thumb" x="26" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
-          <g id="d4" class="dip interactive" data-on="false" role="button" aria-label="About">
-            <rect x="136" y="8" width="34" height="34" rx="4" fill="#fff" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
-            <rect class="thumb" x="136" y="8" width="34" height="14" rx="2" fill="var(--dip-slot)"/>
-            <text x="153" y="65" class="component-label" text-anchor="middle" font-size="9">4</text>
+          <g id="d4" class="dip" data-on="false" tabindex="0" role="button" aria-label="About">
+            <rect x="64" y="6" width="30" height="34" rx="4" fill="#fff"/>
+            <rect class="thumb" x="64" y="6" width="30" height="15" fill="var(--dip-slot)"/>
           </g>
+          <text x="50" y="58" fill="#dbe6ee" font-size="11">DIP (1–4)</text>
         </g>
 
-        <!-- Power feed from bottom rail to DIP common -->
-        <path d="M 170 350 Q 170 320, 640 310 Q 655 300, 667 272" 
-              stroke="var(--wireV)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- +V feed to DIP common (from bottom +V rail) -->
+        <path d="M170 350 C170 312, 662 312, 662 302 662 290, 662 272"
+              stroke="var(--wireV)" stroke-width="3.2" fill="none"/>
 
-        <!-- Channel wiring: DIP → Resistor → LED → GND -->
-        <!-- Channel 1 -->
-        <g id="ch1">
-          <path d="M 707 272 L 707 260 L 675 260" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <use href="#resistor" x="605" y="251"/>
-          <path d="M 605 260 L 700 190" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <path d="M 700 200 L 700 374" stroke="var(--wireG)" stroke-width="3" fill="none"/>
-        </g>
+        <!-- DIP outputs → resistor → LED anode -->
+        <path d="M686 252 H700" stroke="var(--wireSig)" stroke-width="3"/>
+        <use href="#res220" x="700" y="242"/>
+        <path d="M780 252 L720 180" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- Channel 2 -->
-        <g id="ch2">
-          <path d="M 749 272 L 749 245 L 715 245" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <use href="#resistor" x="645" y="236"/>
-          <path d="M 645 245 L 740 190" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <path d="M 740 200 L 740 374" stroke="var(--wireG)" stroke-width="3" fill="none"/>
-        </g>
+        <path d="M724 252 H738" stroke="var(--wireSig)" stroke-width="3"/>
+        <use href="#res220" x="738" y="242"/>
+        <path d="M818 252 L752 180" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- Channel 3 -->
-        <g id="ch3">
-          <path d="M 791 272 L 791 230 L 755 230" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <use href="#resistor" x="685" y="221"/>
-          <path d="M 685 230 L 780 190" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <path d="M 780 200 L 780 374" stroke="var(--wireG)" stroke-width="3" fill="none"/>
-        </g>
+        <path d="M762 252 H776" stroke="var(--wireSig)" stroke-width="3"/>
+        <use href="#res220" x="776" y="242"/>
+        <path d="M856 252 L784 180" stroke="var(--wireSig)" stroke-width="3"/>
 
-        <!-- Channel 4 -->
-        <g id="ch4">
-          <path d="M 833 272 L 833 215 L 795 215" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <use href="#resistor" x="725" y="206"/>
-          <path d="M 725 215 L 820 190" stroke="var(--wireSig)" stroke-width="3" fill="none"/>
-          <path d="M 820 200 L 820 374" stroke="var(--wireG)" stroke-width="3" fill="none"/>
-        </g>
+        <path d="M800 252 H814" stroke="var(--wireSig)" stroke-width="3"/>
+        <use href="#res220" x="814" y="242"/>
+        <path d="M894 252 L816 180" stroke="var(--wireSig)" stroke-width="3"/>
+
+        <!-- LED cathodes → bottom GND -->
+        <path d="M720 188 V374" stroke="var(--wireG)" stroke-width="3"/>
+        <path d="M752 188 V374" stroke="var(--wireG)" stroke-width="3"/>
+        <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
+        <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
       </svg>
 
-      <div id="visitContainer" style="margin-top:1.5rem;text-align:center"></div>
+      <a id="visit" class="visit" href="#" style="display:none">Visit page →</a>
     </div>
   </div>
 
 <script>
-const $ = sel => document.querySelector(sel);
-const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const $ = s => document.querySelector(s);
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 
-const visitContainer = $('#visitContainer');
-const ledPwr = $('#ledPwr');
-const L1 = $('#lcdL1');
-const L2 = $('#lcdL2');
-const leds = {
-  proj: $('#ledProj'),
-  hob: $('#ledHob'),
-  skill: $('#ledSkill'),
-  about: $('#ledAbout')
-};
+  const ledPwr  = $('#ledPwr');
+  const ledProj = $('#ledProj');
+  const ledHob  = $('#ledHob');
+  const ledSkill= $('#ledSkill');
+  const ledAbout= $('#ledAbout');
+  const visit   = $('#visit');
+  const L1 = $('#lcdL1'); const L2 = $('#lcdL2');
 
-let powered = false;
-
-const channels = [
-  {
-    id: 'd1',
-    led: 'proj',
-    color: css('--proj'),
-    title: 'PROJECTS',
-    text: 'DE1-SoC DNN accelerator, self-balancing robot, and metal-detecting rover.',
-    link: 'projects.html'
-  },
-  {
-    id: 'd2',
-    led: 'hob',
-    color: css('--hob'),
-    title: 'HOBBIES',
-    text: 'Football, playlists, and quick college-friendly cooking.',
-    link: 'hobbies.html'
-  },
-  {
-    id: 'd3',
-    led: 'skill',
-    color: css('--skill'),
-    title: 'SKILLS',
-    text: 'C/C++, Verilog/SystemVerilog, DE1-SoC, firmware, control.',
-    link: 'skills.html'
-  },
-  {
-    id: 'd4',
-    led: 'about',
-    color: css('--about'),
-    title: 'ABOUT',
-    text: 'ECE @ UBC — I build hardware–software systems that feel easy.',
-    link: 'about.html'
+  function lcd(lines){ L1.textContent = lines[0]||''; L2.textContent = lines[1]||''; }
+  function wrap2(str, w1=34, w2=36){
+    if (str.length <= w1) return [str, ''];
+    const k = str.lastIndexOf(' ', w1);
+    return [str.slice(0, k>0?k:w1), str.slice((k>0?k+1:w1)).slice(0, w2)];
   }
-];
 
-function updateLCD(line1, line2) {
-  L1.textContent = line1;
-  L2.textContent = line2;
-}
-
-function wrapText(str, maxWidth = 34) {
-  if (str.length <= maxWidth) return [str, ''];
-  const spaceIndex = str.lastIndexOf(' ', maxWidth);
-  const breakPoint = spaceIndex > 0 ? spaceIndex : maxWidth;
-  return [str.slice(0, breakPoint), str.slice(breakPoint + 1)];
-}
-
-function togglePower() {
-  powered = !powered;
-  
-  if (powered) {
-    ledPwr.setAttribute('fill', css('--led-on'));
-    ledPwr.classList.add('led-glow');
-    ledPwr.style.color = css('--led-on');
-    updateLCD('READY', 'Close a DIP (1–4) to select a channel.');
-  } else {
-    ledPwr.setAttribute('fill', 'var(--led-off)');
-    ledPwr.classList.remove('led-glow');
-    updateLCD('POWER OFF', 'Flip Power to energize the rails.');
-    visitContainer.innerHTML = '';
-    
-    channels.forEach(ch => {
-      $(`#${ch.id}`).dataset.on = 'false';
-      leds[ch.led].setAttribute('fill', 'var(--led-off)');
-      leds[ch.led].classList.remove('led-glow');
-    });
-  }
-}
-
-ledPwr.addEventListener('click', togglePower);
-ledPwr.addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    togglePower();
-  }
-});
-ledPwr.setAttribute('tabindex', '0');
-ledPwr.setAttribute('role', 'button');
-
-channels.forEach(channel => {
-  const dipSwitch = $(`#${channel.id}`);
-  
-  function selectChannel() {
-    if (!powered) return;
-    
-    const isActive = dipSwitch.dataset.on === 'true';
-    
-    channels.forEach(ch => {
-      $(`#${ch.id}`).dataset.on = 'false';
-      leds[ch.led].setAttribute('fill', 'var(--led-off)');
-      leds[ch.led].classList.remove('led-glow');
-    });
-    
-    if (!isActive) {
-      dipSwitch.dataset.on = 'true';
-      leds[channel.led].setAttribute('fill', channel.color);
-      leds[channel.led].style.color = channel.color;
-      leds[channel.led].classList.add('led-glow');
-      
-      const fullText = `${channel.title}: ${channel.text}`;
-      const [line1, line2] = wrapText(fullText);
-      updateLCD(line1, line2);
-      
-      visitContainer.innerHTML = `<a href="${channel.link}" class="visit-btn">Visit page →</a>`;
+  let powered = false;
+  function setPowerUI(){
+    ledPwr.setAttribute('fill', powered ? 'var(--led-on)' : 'var(--led-off)');
+    ledPwr.classList.toggle('glow', powered);
+    if(!powered){
+      [ledProj, ledHob, ledSkill, ledAbout].forEach(e => { e.setAttribute('fill','var(--led-off)'); e.classList.remove('glow'); });
+      lcd(['POWER OFF', 'Flip Power to energize the rails.']);
+      visit.style.display='none';
+      ['#d1','#d2','#d3','#d4'].forEach(id => $(id).dataset.on='false');
     } else {
-      updateLCD('READY', 'Close a DIP (1–4) to select a channel.');
-      visitContainer.innerHTML = '';
+      lcd(['READY', 'Close a DIP (1–4) to select a channel.']);
     }
   }
-  
-  dipSwitch.addEventListener('click', selectChannel);
-  dipSwitch.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      selectChannel();
-    }
+  function togglePower(){ powered=!powered; setPowerUI(); }
+  ledPwr.addEventListener('click', togglePower);
+  ledPwr.setAttribute('role','button'); ledPwr.setAttribute('tabindex','0');
+  ledPwr.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); togglePower(); }});
+
+  const channels = [
+    {dip:'#d1', led:ledProj,  color:css('--proj'),  title:'PROJECTS',
+     text:'DE1-SoC DNN accelerator, self-balancing robot, and metal-detecting rover.', link:'projects.html'},
+    {dip:'#d2', led:ledHob,   color:css('--hob'),   title:'HOBBIES',
+     text:'Football, playlists, and quick college-friendly cooking.', link:'hobbies.html'},
+    {dip:'#d3', led:ledSkill, color:css('--skill'), title:'SKILLS',
+     text:'C/C++, Verilog/SystemVerilog, DE1-SoC, firmware, control.', link:'about.html'},
+    {dip:'#d4', led:ledAbout, color:css('--about'), title:'ABOUT',
+     text:'ECE @ UBC — I build hardware–software systems that feel easy.', link:'about.html'}
+  ];
+
+  channels.forEach(ch => {
+    const dip = $(ch.dip);
+    const act = ()=>{
+      if(!powered) return;
+      channels.forEach(o=>{
+        if(o.dip!==ch.dip){
+          $(o.dip).dataset.on='false';
+          o.led.setAttribute('fill','var(--led-off)');
+          o.led.classList.remove('glow');
+        }
+      });
+      dip.dataset.on = dip.dataset.on==='true' ? 'false' : 'true';
+      if(dip.dataset.on==='true'){
+        ch.led.setAttribute('fill', ch.color); ch.led.style.color = ch.color; ch.led.classList.add('glow');
+        lcd(wrap2(`${ch.title}: ${ch.text}`));
+        visit.href = ch.link; visit.style.display='inline-block';
+      } else {
+        ch.led.setAttribute('fill','var(--led-off)'); ch.led.classList.remove('glow');
+        lcd(['READY', 'Close a DIP (1–4) to select a channel.']);
+        visit.style.display='none';
+      }
+    };
+    dip.addEventListener('click', act);
+    dip.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); }});
+    dip.setAttribute('tabindex','0'); dip.setAttribute('role','button');
   });
-  dipSwitch.setAttribute('tabindex', '0');
-});
+
+  setPowerUI();
 </script>
 </body>
 </html>
