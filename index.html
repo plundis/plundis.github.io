@@ -246,10 +246,12 @@
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
 
-        <!-- Arduino UNO (diagram) -->
-        <g id="uno" transform="translate(620,420)">
-          <rect x="0" y="0" width="300" height="160" rx="14" fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
+        <!-- ===== Arduino UNO (diagram) — FIXED POSITION ===== -->
+        <g id="uno" transform="translate(620,350)"> <!-- moved UP from 420 to 350 -->
+          <rect x="0" y="0" width="300" height="160" rx="14"
+                fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
           <text x="20" y="24" fill="#d2ecff" font-weight="700" font-size="16">Arduino UNO</text>
+        
           <g fill="#e6f3ff" font-size="9" text-anchor="middle">
             <circle cx="36"  cy="50" r="4"/><text x="36"  y="44">2</text>
             <circle cx="58"  cy="50" r="4"/><text x="58"  y="44">3</text>
@@ -263,10 +265,20 @@
             <circle cx="234" cy="50" r="4"/><text x="234" y="44">11</text>
             <circle cx="256" cy="50" r="4"/><text x="256" y="44">12</text>
             <circle cx="278" cy="50" r="4"/><text x="278" y="44">13</text>
+        
             <circle cx="286" cy="104" r="4"/><text x="286" y="98">5V</text>
             <circle cx="286" cy="124" r="4"/><text x="286" y="118">G</text>
           </g>
         </g>
+        
+        <!-- ===== LCD “logic” wires — FIXED CURVES ===== -->
+        <path d="M876 400 C 820 350, 760 230, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
+        <path d="M854 400 C 810 340, 746 218, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E=D11 -->
+        <path d="M808 400 C 770 330, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4=D5 -->
+        <path d="M786 400 C 746 325, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5=D4 -->
+        <path d="M764 400 C 726 320, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6=D3 -->
+        <path d="M742 400 C 706 315, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7=D2 -->
+
 
         <!-- UNO → LCD “logic” wires (visual) -->
         <path d="M876 470 C 820 470, 760 200, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
@@ -447,3 +459,4 @@
 </script>
 </body>
 </html>
+
