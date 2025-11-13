@@ -15,29 +15,25 @@
     --lcd-bezel:#2f855a; --lcd-screen:#0f2230; --lcd-pixel:#b9f5d0;
     --dip:#12b886; --dip-slot:#0a6b4f;
     --wireV:#e05d5d; --wireG:#2e9c4a; --wireSig:#d77; --wireNeg:#3b454f;
-    --uno:#2f6aa3; /* Arduino board color */
+    --uno:#2f6aa3;
   }
 
   *{box-sizing:border-box}
-
-  html{
-    scroll-behavior:smooth;
-  }
 
   body{
     margin:0;
     padding:16px;
     min-height:100vh;
     display:flex;
-    flex-direction:column;
     align-items:center;
+    justify-content:center;
     background:radial-gradient(1200px 520px at 50% -15%, var(--bg2), var(--bg1));
     color:var(--text);
     font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
     text-align:center;
   }
 
-  .wrap{ width:min(1060px,96vw); margin:0 auto; }
+  .wrap{ width:min(1060px,96vw); }
 
   h1{ margin:.3rem 0 .35rem; font-size:2rem; font-weight:800 }
 
@@ -73,32 +69,6 @@
   }
 
   .visit:hover{ border-bottom-color:#fff }
-
-  /* Sections below the hero card */
-  .section{
-    margin:32px auto 0;
-    width:min(960px,96vw);
-    text-align:left;
-  }
-
-  .section h2{
-    margin:0 0 8px;
-    font-size:1.4rem;
-  }
-
-  .section p{
-    margin:0 0 6px;
-    opacity:.94;
-  }
-
-  .section ul{
-    margin:8px 0 0;
-    padding-left:1.1rem;
-  }
-
-  .section li{
-    margin:4px 0;
-  }
 </style>
 </head>
 <body>
@@ -150,6 +120,7 @@
         <g font-family="ui-sans-serif,system-ui" font-weight="700" text-anchor="middle">
           <circle id="ledPwr" cx="92" cy="54" r="10" class="led pwrbtn" fill="var(--led-off)"
                   role="button" tabindex="0" aria-label="Toggle power" aria-pressed="false"/>
+          <text x="92" y="36" font-size="11" fill="#fff">Power</text>
           <text x="92" y="58" font-size="10" fill="#c00">PWR</text>
 
           <circle cx="92" cy="408" r="10" fill="#fff"/><text x="92" y="412" font-size="12" fill="#222">–</text>
@@ -163,6 +134,14 @@
         <!-- jumpers linking top and bottom rails -->
         <path d="M220 86 V 350"  stroke="var(--wireV)" stroke-width="4" />
         <path d="M240 108 V 374" stroke="var(--wireG)" stroke-width="4" />
+
+        <!-- ===== UNO → LCD “logic” wires (moved BEFORE LCD to sit behind it) ===== -->
+        <path d="M876 400 C 820 350, 760 230, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
+        <path d="M854 400 C 810 340, 746 218, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E=D11 -->
+        <path d="M808 400 C 770 330, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4=D5 -->
+        <path d="M786 400 C 746 325, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5=D4 -->
+        <path d="M764 400 C 726 320, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6=D3 -->
+        <path d="M742 400 C 706 315, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7=D2 -->
 
         <!-- LCD module -->
         <rect x="120" y="138" width="480" height="144" rx="12" fill="var(--lcd-bezel)" opacity=".95"/>
@@ -188,9 +167,6 @@
 
         <!-- LEDs + labels -->
         <g font-size="11" fill="#cfd8df" text-anchor="middle">
-          <!-- Already have PWR circle above; this is just label near it -->
-          <text x="92" y="36">Power</text>
-
           <circle id="ledProj"  cx="720" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="720" y="202">P</text>
           <circle id="ledHob"   cx="752" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="752" y="202">H</text>
           <circle id="ledSkill" cx="784" cy="180" r="8"  class="led" fill="var(--led-off)"/><text x="784" y="202">S</text>
@@ -246,12 +222,10 @@
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
 
-        <!-- ===== Arduino UNO (diagram) — FIXED POSITION ===== -->
-        <g id="uno" transform="translate(620,350)"> <!-- moved UP from 420 to 350 -->
-          <rect x="0" y="0" width="300" height="160" rx="14"
-                fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
+        <!-- Arduino UNO (diagram) -->
+        <g id="uno" transform="translate(620,350)">
+          <rect x="0" y="0" width="300" height="160" rx="14" fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
           <text x="20" y="24" fill="#d2ecff" font-weight="700" font-size="16">Arduino UNO</text>
-        
           <g fill="#e6f3ff" font-size="9" text-anchor="middle">
             <circle cx="36"  cy="50" r="4"/><text x="36"  y="44">2</text>
             <circle cx="58"  cy="50" r="4"/><text x="58"  y="44">3</text>
@@ -265,28 +239,10 @@
             <circle cx="234" cy="50" r="4"/><text x="234" y="44">11</text>
             <circle cx="256" cy="50" r="4"/><text x="256" y="44">12</text>
             <circle cx="278" cy="50" r="4"/><text x="278" y="44">13</text>
-        
             <circle cx="286" cy="104" r="4"/><text x="286" y="98">5V</text>
             <circle cx="286" cy="124" r="4"/><text x="286" y="118">G</text>
           </g>
         </g>
-        
-        <!-- ===== LCD “logic” wires — FIXED CURVES ===== -->
-        <path d="M876 400 C 820 350, 760 230, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
-        <path d="M854 400 C 810 340, 746 218, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E=D11 -->
-        <path d="M808 400 C 770 330, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4=D5 -->
-        <path d="M786 400 C 746 325, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5=D4 -->
-        <path d="M764 400 C 726 320, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6=D3 -->
-        <path d="M742 400 C 706 315, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7=D2 -->
-
-
-        <!-- UNO → LCD “logic” wires (visual) -->
-        <path d="M876 470 C 820 470, 760 200, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
-        <path d="M854 470 C 810 460, 746 212, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E=D11 -->
-        <path d="M808 470 C 770 450, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4=D5 -->
-        <path d="M786 470 C 746 446, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5=D4 -->
-        <path d="M764 470 C 726 444, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6=D3 -->
-        <path d="M742 470 C 706 442, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7=D2 -->
 
         <!-- labels near LCD -->
         <g font-size="10" fill="#e8f5ff">
@@ -299,51 +255,9 @@
         </g>
       </svg>
 
-      <a id="visit" class="visit" href="#" style="display:none">Visit section →</a>
+      <a id="visit" class="visit" href="#" style="display:none">Visit page →</a>
     </div>
   </div>
-
-  <!-- Content sections that the DIP channels scroll to -->
-  <section id="projects" class="section">
-    <h2>Projects</h2>
-    <p>Some of the hardware–software things I’ve built recently:</p>
-    <ul>
-      <li><strong>DE1-SoC DNN accelerator</strong> – Nios II SoC for MNIST, fixed-point arithmetic, SDRAM, and custom Verilog pipelines.</li>
-      <li><strong>Self-balancing robot</strong> – Arduino-based two-wheel robot with IMU, PID control, BLE remote, and live telemetry.</li>
-      <li><strong>Metal-detecting rover</strong> – STM32 + EFM8 platform with JDY40 Bluetooth link and an LCD that shows metal “strength”.</li>
-    </ul>
-  </section>
-
-  <section id="hobbies" class="section">
-    <h2>Hobbies</h2>
-    <p>Outside labs and Quartus compile times:</p>
-    <ul>
-      <li><strong>Football</strong> – playing, watching, and overanalyzing tactics.</li>
-      <li><strong>Playlists</strong> – different mixes for coding, matches, and late-night debugging.</li>
-      <li><strong>Cooking</strong> – quick college-friendly meals and snacks that aren’t just instant noodles.</li>
-    </ul>
-  </section>
-
-  <section id="skills" class="section">
-    <h2>Skills</h2>
-    <p>Stuff I’m comfortable reaching for when building something:</p>
-    <ul>
-      <li><strong>Languages</strong> – C/C++, Verilog/SystemVerilog, a bit of Python and ARM assembly.</li>
-      <li><strong>Platforms</strong> – DE1-SoC, microcontrollers (Arduino, STM32, 8051-family), basic Linux tooling.</li>
-      <li><strong>Concepts</strong> – control systems, signal processing, embedded firmware, and debugging weird hardware behaviour.</li>
-    </ul>
-  </section>
-
-  <section id="about" class="section">
-    <h2>About</h2>
-    <p>
-      I’m an Electrical Engineering student at UBC who likes projects where hardware and software have to cooperate:
-      sensors, control loops, FPGAs, and microcontrollers driving something you can actually see or touch.
-    </p>
-    <p>
-      If you want to chat about embedded systems, DE1-SoC projects, or potential co-op roles, feel free to reach out.
-    </p>
-  </section>
 
 <script>
   const $ = s => document.querySelector(s);
@@ -376,13 +290,13 @@
 
   const channels = [
     {dip:'#d1', led:ledProj,  color:css('--proj'),  title:'PROJECTS',
-     text:'DE1-SoC DNN accelerator, self-balancing robot, metal-detecting rover.', link:'#projects'},
+     text:'DE1-SoC DNN accelerator, self-balancing robot, metal-detecting rover.', link:'projects.html'},
     {dip:'#d2', led:ledHob,   color:css('--hob'),   title:'HOBBIES',
-     text:'Football, playlists, and quick college-friendly cooking experiments.', link:'#hobbies'},
+     text:'Football, playlists, and quick college-friendly cooking experiments.', link:'hobbies.html'},
     {dip:'#d3', led:ledSkill, color:css('--skill'), title:'SKILLS',
-     text:'C/C++, Verilog, DE1-SoC, firmware, control, and debugging weird hardware.', link:'#skills'},
+     text:'C/C++, Verilog, DE1-SoC, firmware, control, and debugging weird hardware.', link:'skills.html'},
     {dip:'#d4', led:ledAbout, color:css('--about'), title:'ABOUT',
-     text:'ECE @ UBC — I like turning noisy prototypes into something people can actually use.', link:'#about'}
+     text:'ECE @ UBC — I like turning noisy prototypes into something people can actually use.', link:'about.html'}
   ];
 
   function resetChannelsUI(){
@@ -459,4 +373,3 @@
 </script>
 </body>
 </html>
-
