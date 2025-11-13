@@ -222,27 +222,16 @@
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
 
-        <!-- Arduino UNO (diagram) -->
-        <g id="uno" transform="translate(620,350)">
-          <rect x="0" y="0" width="300" height="160" rx="14" fill="var(--uno)" stroke="#0c3b64" stroke-width="3"/>
-          <text x="20" y="24" fill="#d2ecff" font-weight="700" font-size="16">Arduino UNO</text>
-          <g fill="#e6f3ff" font-size="9" text-anchor="middle">
-            <circle cx="36"  cy="50" r="4"/><text x="36"  y="44">2</text>
-            <circle cx="58"  cy="50" r="4"/><text x="58"  y="44">3</text>
-            <circle cx="80"  cy="50" r="4"/><text x="80"  y="44">4</text>
-            <circle cx="102" cy="50" r="4"/><text x="102" y="44">5</text>
-            <circle cx="124" cy="50" r="4"/><text x="124" y="44">6</text>
-            <circle cx="146" cy="50" r="4"/><text x="146" y="44">7</text>
-            <circle cx="168" cy="50" r="4"/><text x="168" y="44">8</text>
-            <circle cx="190" cy="50" r="4"/><text x="190" y="44">9</text>
-            <circle cx="212" cy="50" r="4"/><text x="212" y="44">10</text>
-            <circle cx="234" cy="50" r="4"/><text x="234" y="44">11</text>
-            <circle cx="256" cy="50" r="4"/><text x="256" y="44">12</text>
-            <circle cx="278" cy="50" r="4"/><text x="278" y="44">13</text>
-            <circle cx="286" cy="104" r="4"/><text x="286" y="98">5V</text>
-            <circle cx="286" cy="124" r="4"/><text x="286" y="118">G</text>
-          </g>
-        </g>
+               <!-- ===== REAL ARDUINO IMAGE (replaces drawn UNO) ===== -->
+        <image
+          href="arduino.png"
+          x="600"
+          y="360"
+          width="340"
+          height="200"
+          preserveAspectRatio="xMinYMin meet"
+        />
+
 
         <!-- labels near LCD -->
         <g font-size="10" fill="#e8f5ff">
@@ -373,3 +362,4 @@
 </script>
 </body>
 </html>
+
