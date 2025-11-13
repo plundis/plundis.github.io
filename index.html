@@ -15,7 +15,6 @@
     --lcd-bezel:#2f855a; --lcd-screen:#0f2230; --lcd-pixel:#b9f5d0;
     --dip:#12b886; --dip-slot:#0a6b4f;
     --wireV:#e05d5d; --wireG:#2e9c4a; --wireSig:#d77; --wireNeg:#3b454f;
-    --uno:#2f6aa3;
   }
 
   *{box-sizing:border-box}
@@ -135,13 +134,13 @@
         <path d="M220 86 V 350"  stroke="var(--wireV)" stroke-width="4" />
         <path d="M240 108 V 374" stroke="var(--wireG)" stroke-width="4" />
 
-        <!-- ===== UNO → LCD “logic” wires (moved BEFORE LCD to sit behind it) ===== -->
-        <path d="M876 400 C 820 350, 760 230, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS=D12 -->
-        <path d="M854 400 C 810 340, 746 218, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E=D11 -->
-        <path d="M808 400 C 770 330, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4=D5 -->
-        <path d="M786 400 C 746 325, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5=D4 -->
-        <path d="M764 400 C 726 320, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6=D3 -->
-        <path d="M742 400 C 706 315, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7=D2 -->
+        <!-- UNO → LCD “logic” wires (behind LCD/text) -->
+        <path d="M905 400 C 860 350, 770 230, 446 200" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- RS -->
+        <path d="M880 400 C 840 340, 746 218, 430 212" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- E -->
+        <path d="M840 400 C 805 330, 620 230, 412 230" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D4 -->
+        <path d="M820 400 C 780 320, 600 238, 396 238" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D5 -->
+        <path d="M800 400 C 760 315, 586 246, 380 246" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D6 -->
+        <path d="M780 400 C 740 305, 570 254, 364 254" stroke="#6bd1ff" stroke-width="3" fill="none"/> <!-- D7 -->
 
         <!-- LCD module -->
         <rect x="120" y="138" width="480" height="144" rx="12" fill="var(--lcd-bezel)" opacity=".95"/>
@@ -222,16 +221,15 @@
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
 
-               <!-- ===== REAL ARDUINO IMAGE (replaces drawn UNO) ===== -->
+        <!-- REAL ARDUINO IMAGE (embedded base64) -->
         <image
-          href="arduino.png"
-          x="600"
-          y="360"
-          width="340"
-          height="200"
+          x="580"
+          y="340"
+          width="360"
+          height="210"
           preserveAspectRatio="xMinYMin meet"
+          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAvAAAAHWCAIAAAB8KzJtAAAACXBIWXMAAAsTAAALEwEAmpwYAAA7E0lEQVR4nO3dS3LkRxRF0QYf+f+3rLQXoDQ76FcuPH0PgMRneXfWZlmKQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhe0hoy8T6b1k9VWd7Lx5+3Y9ptdO7ZX/vrZbvbvz/jG2bPdY7bXZk3b7b3bfV48+3PaZ3X6nW7d/V+V6tZ3qfV7nW73sbl7p+7e1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwC/0IU42Y7nGkAAAAASUVORK5CYII="
         />
-
 
         <!-- labels near LCD -->
         <g font-size="10" fill="#e8f5ff">
@@ -362,4 +360,3 @@
 </script>
 </body>
 </html>
-
