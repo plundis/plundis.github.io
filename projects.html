@@ -5,34 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects | Monil</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <header class="hero hero-compact">
-    <h1>Projects</h1>
     <a class="back-link" href="index.html">← Back</a>
+    <h1>Projects</h1>
+    <p class="hero-sub">Hardware + software systems I've built</p>
   </header>
 
   <section id="projects">
     <div class="projects-grid">
-      <div class="project-card">
-        <img src="images/project1-placeholder.jpg" alt="Self-Balancing Robot" />
-        <h3>Self-Balancing Robot</h3>
-        <p>Arduino BLE Sense + IMU, encoder feedback, PID loops, BLE remote with LCD, and live telemetry.</p>
-        <a href="#" target="_blank">GitHub Link</a>
+
+      <div class="project-card" style="--accent:#8ab4f8">
+        <h3>DNN Accelerator on DE1-SoC</h3>
+        <p>
+          Designed a hardware neural-network accelerator on the DE1-SoC FPGA using Verilog and a Nios II
+          soft-core processor. Implemented fixed-point matrix multiply, ReLU activation, and SDRAM
+          double-buffering to classify MNIST digits entirely in hardware.
+        </p>
+        <div class="tags">
+          <span class="tag">Verilog</span>
+          <span class="tag">FPGA</span>
+          <span class="tag">Nios II</span>
+          <span class="tag">C</span>
+          <span class="tag">DE1-SoC</span>
+          <span class="tag">Fixed-point</span>
+        </div>
+        <a href="#" target="_blank">GitHub →</a>
       </div>
 
-      <div class="project-card">
-        <img src="images/project2-placeholder.jpg" alt="DNN Accelerator on DE1-SoC" />
-        <h3>DNN Accelerator on DE1-SoC</h3>
-        <p>Nios II SoC, fixed-point arithmetic, SDRAM buffering, and ReLU for MNIST.</p>
-        <a href="#" target="_blank">GitHub Link</a>
+      <div class="project-card" style="--accent:#7ee787">
+        <h3>Self-Balancing Robot</h3>
+        <p>
+          Built a two-wheeled inverted-pendulum robot with an Arduino Nano 33 BLE Sense, MPU-6050 IMU,
+          and dual motor encoders. Tuned cascaded PID loops (angle + velocity), added a BLE remote-control
+          interface, and displayed live telemetry on an I²C LCD.
+        </p>
+        <div class="tags">
+          <span class="tag">Arduino</span>
+          <span class="tag">C++</span>
+          <span class="tag">PID</span>
+          <span class="tag">IMU</span>
+          <span class="tag">BLE</span>
+          <span class="tag">Embedded</span>
+        </div>
+        <a href="#" target="_blank">GitHub →</a>
       </div>
+
+      <div class="project-card" style="--accent:#fbd38d">
+        <h3>Metal-Detecting Rover</h3>
+        <p>
+          Designed and assembled an autonomous RC rover that sweeps terrain for buried metal objects.
+          An inductive proximity sensor feeds an Arduino Mega which drives servo steering and DC motors,
+          with an LCD + buzzer alert when a detection threshold is crossed.
+        </p>
+        <div class="tags">
+          <span class="tag">Arduino</span>
+          <span class="tag">C++</span>
+          <span class="tag">Sensors</span>
+          <span class="tag">PWM</span>
+          <span class="tag">Servo</span>
+          <span class="tag">Autonomous</span>
+        </div>
+        <a href="#" target="_blank">GitHub →</a>
+      </div>
+
     </div>
   </section>
 
   <footer>
-    <p>&copy; 2025 Monil. All rights reserved.</p>
+    <p>&copy; 2025 Monil Arora</p>
   </footer>
 </body>
 </html>

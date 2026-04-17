@@ -56,7 +56,28 @@
 
   .led{ transition:fill .12s ease, filter .12s ease }
 
-  .glow{ filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px currentColor) }
+  @keyframes led-pulse{
+    0%,100%{filter:drop-shadow(0 0 5px currentColor) drop-shadow(0 0 12px currentColor)}
+    50%{filter:drop-shadow(0 0 12px currentColor) drop-shadow(0 0 28px currentColor) drop-shadow(0 0 44px currentColor)}
+  }
+  .glow{animation:led-pulse 1.6s ease-in-out infinite}
+
+  @keyframes breathe{
+    0%,100%{opacity:.5;filter:none}
+    50%{opacity:1;filter:drop-shadow(0 0 10px #ff6060) drop-shadow(0 0 22px #ff4444)}
+  }
+  .led-breathe{animation:breathe 2.2s ease-in-out infinite}
+
+  @keyframes flow{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
+  .sig-wire{
+    stroke-dasharray:10 8;
+    animation:flow .7s linear infinite;
+    opacity:0;
+    transition:opacity .25s ease;
+    pointer-events:none;
+    fill:none;
+  }
+  .sig-wire.active{opacity:.85}
 
   .visit{
     margin-top:10px;
@@ -221,15 +242,120 @@
         <path d="M784 188 V374" stroke="var(--wireG)" stroke-width="3"/>
         <path d="M816 188 V374" stroke="var(--wireG)" stroke-width="3"/>
 
-        <!-- REAL ARDUINO IMAGE (embedded base64) -->
-        <image
-          x="580"
-          y="340"
-          width="360"
-          height="210"
-          preserveAspectRatio="xMinYMin meet"
-          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAvAAAAHWCAIAAAB8KzJtAAAACXBIWXMAAAsTAAALEwEAmpwYAAA7E0lEQVR4nO3dS3LkRxRF0QYf+f+3rLQXoDQ76FcuPH0PgMRneXfWZlmKQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhe0hoy8T6b1k9VWd7Lx5+3Y9ptdO7ZX/vrZbvbvz/jG2bPdY7bXZk3b7b3bfV48+3PaZ3X6nW7d/V+V6tZ3qfV7nW73sbl7p+7e1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7P1n6nVXWv3bX9W7f3t3d73TWd7t+7W9X7PwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwC/0IU42Y7nGkAAAAASUVORK5CYII="
-        />
+        <!-- Arduino UNO (inline SVG) -->
+        <g id="arduino-uno" transform="translate(583,343)">
+          <rect width="352" height="200" rx="8" fill="#0c7a2e" stroke="#084e1c" stroke-width="2"/>
+          <circle cx="14"  cy="14"  r="6" fill="none" stroke="#cde8d0" stroke-width="1.2" opacity=".35"/>
+          <circle cx="338" cy="14"  r="6" fill="none" stroke="#cde8d0" stroke-width="1.2" opacity=".35"/>
+          <circle cx="338" cy="186" r="6" fill="none" stroke="#cde8d0" stroke-width="1.2" opacity=".35"/>
+          <circle cx="28"  cy="186" r="6" fill="none" stroke="#cde8d0" stroke-width="1.2" opacity=".35"/>
+          <!-- USB-B -->
+          <rect x="-5" y="120" width="25" height="38" rx="3" fill="#999" stroke="#777" stroke-width="1"/>
+          <rect x="-1" y="124" width="17" height="30" rx="1" fill="#555"/>
+          <!-- Barrel jack -->
+          <rect x="-5" y="52" width="23" height="28" rx="3" fill="#1a1a1a" stroke="#111" stroke-width="1"/>
+          <circle cx="6" cy="66" r="7" fill="#0a0a0a"/>
+          <circle cx="6" cy="66" r="3.5" fill="#333"/>
+          <!-- Voltage regulator -->
+          <rect x="40" y="82" width="18" height="26" rx="1" fill="#0d0d0d"/>
+          <rect x="42" y="108" width="3" height="8" fill="#bbb"/>
+          <rect x="48" y="108" width="3" height="8" fill="#bbb"/>
+          <rect x="54" y="108" width="3" height="8" fill="#bbb"/>
+          <!-- 16 MHz crystal -->
+          <rect x="128" y="103" width="10" height="22" rx="4" fill="#c8a84b" stroke="#9a7a18" stroke-width="1"/>
+          <!-- ATmega328P -->
+          <rect x="158" y="76" width="86" height="88" rx="2" fill="#0e0e0e" stroke="#252525" stroke-width="1"/>
+          <path d="M158 76 Q201 68 244 76" fill="#0e0e0e"/>
+          <circle cx="164" cy="82" r="2" fill="#252525"/>
+          <g fill="#8aadaa">
+            <rect x="147" y="82"  width="11" height="3" rx=".5"/>
+            <rect x="147" y="91"  width="11" height="3" rx=".5"/>
+            <rect x="147" y="100" width="11" height="3" rx=".5"/>
+            <rect x="147" y="109" width="11" height="3" rx=".5"/>
+            <rect x="147" y="118" width="11" height="3" rx=".5"/>
+            <rect x="147" y="127" width="11" height="3" rx=".5"/>
+            <rect x="147" y="136" width="11" height="3" rx=".5"/>
+            <rect x="147" y="145" width="11" height="3" rx=".5"/>
+            <rect x="244" y="82"  width="11" height="3" rx=".5"/>
+            <rect x="244" y="91"  width="11" height="3" rx=".5"/>
+            <rect x="244" y="100" width="11" height="3" rx=".5"/>
+            <rect x="244" y="109" width="11" height="3" rx=".5"/>
+            <rect x="244" y="118" width="11" height="3" rx=".5"/>
+            <rect x="244" y="127" width="11" height="3" rx=".5"/>
+            <rect x="244" y="136" width="11" height="3" rx=".5"/>
+            <rect x="244" y="145" width="11" height="3" rx=".5"/>
+          </g>
+          <text x="167" y="113" font-size="7" fill="#3a3a3a" font-family="monospace">ATmega328P</text>
+          <text x="176" y="123" font-size="7" fill="#3a3a3a" font-family="monospace">ARDUINO</text>
+          <!-- PWR + L LEDs -->
+          <circle cx="62" cy="36" r="4" fill="#23b547"/>
+          <circle cx="76" cy="36" r="4" fill="#d48a15"/>
+          <text x="55" y="28" font-size="7.5" fill="#cde8d0" opacity=".65">PWR  L</text>
+          <!-- Reset button -->
+          <rect x="92" y="28" width="16" height="12" rx="3" fill="#a01818"/>
+          <circle cx="100" cy="34" r="4" fill="#c82020"/>
+          <text x="90" y="22" font-size="7" fill="#cde8d0" opacity=".65">RST</text>
+          <!-- Power header (6 pins) -->
+          <g fill="#ddd" stroke="#aaa" stroke-width=".5">
+            <rect x="30" y="4" width="7" height="13" rx=".5"/>
+            <rect x="41" y="4" width="7" height="13" rx=".5"/>
+            <rect x="52" y="4" width="7" height="13" rx=".5"/>
+            <rect x="63" y="4" width="7" height="13" rx=".5"/>
+            <rect x="74" y="4" width="7" height="13" rx=".5"/>
+            <rect x="85" y="4" width="7" height="13" rx=".5"/>
+          </g>
+          <!-- Digital header D0-D13 -->
+          <g fill="#ddd" stroke="#aaa" stroke-width=".5">
+            <rect x="143" y="4" width="7" height="13" rx=".5"/>
+            <rect x="155" y="4" width="7" height="13" rx=".5"/>
+            <rect x="167" y="4" width="7" height="13" rx=".5"/>
+            <rect x="179" y="4" width="7" height="13" rx=".5"/>
+            <rect x="191" y="4" width="7" height="13" rx=".5"/>
+            <rect x="203" y="4" width="7" height="13" rx=".5"/>
+            <rect x="215" y="4" width="7" height="13" rx=".5"/>
+            <rect x="227" y="4" width="7" height="13" rx=".5"/>
+            <rect x="251" y="4" width="7" height="13" rx=".5"/>
+            <rect x="263" y="4" width="7" height="13" rx=".5"/>
+            <rect x="275" y="4" width="7" height="13" rx=".5"/>
+            <rect x="287" y="4" width="7" height="13" rx=".5"/>
+            <rect x="299" y="4" width="7" height="13" rx=".5"/>
+            <rect x="311" y="4" width="7" height="13" rx=".5"/>
+          </g>
+          <!-- Analog header A0-A5 (bottom) -->
+          <g fill="#ddd" stroke="#aaa" stroke-width=".5">
+            <rect x="143" y="184" width="7" height="14" rx=".5"/>
+            <rect x="155" y="184" width="7" height="14" rx=".5"/>
+            <rect x="167" y="184" width="7" height="14" rx=".5"/>
+            <rect x="179" y="184" width="7" height="14" rx=".5"/>
+            <rect x="191" y="184" width="7" height="14" rx=".5"/>
+            <rect x="203" y="184" width="7" height="14" rx=".5"/>
+          </g>
+          <!-- ICSP header -->
+          <g fill="#ddd" stroke="#aaa" stroke-width=".5">
+            <rect x="278" y="170" width="7" height="7" rx=".5"/>
+            <rect x="290" y="170" width="7" height="7" rx=".5"/>
+            <rect x="302" y="170" width="7" height="7" rx=".5"/>
+            <rect x="278" y="180" width="7" height="7" rx=".5"/>
+            <rect x="290" y="180" width="7" height="7" rx=".5"/>
+            <rect x="302" y="180" width="7" height="7" rx=".5"/>
+          </g>
+          <!-- PCB traces (silkscreen) -->
+          <g stroke="#1eaa4a" stroke-width="1.2" fill="none" opacity=".4">
+            <path d="M89 17 V36"/>
+            <path d="M200 17 V76"/>
+            <path d="M290 17 V76"/>
+            <path d="M160 165 V184"/>
+          </g>
+          <text x="155" y="167" font-size="10" fill="#1eaa4a" font-family="Arial" font-weight="700" opacity=".6">Arduino</text>
+          <text x="265" y="63"  font-size="20" fill="#1eaa4a" font-family="Arial" font-weight="900" opacity=".45">UNO</text>
+        </g>
+
+        <!-- animated signal wires (shown per active channel) -->
+        <path id="sig1" class="sig-wire" d="M686 252 H780 L720 180" stroke="var(--proj)"  stroke-width="3.5"/>
+        <path id="sig2" class="sig-wire" d="M724 252 H818 L752 180" stroke="var(--hob)"   stroke-width="3.5"/>
+        <path id="sig3" class="sig-wire" d="M762 252 H856 L784 180" stroke="var(--skill)" stroke-width="3.5"/>
+        <path id="sig4" class="sig-wire" d="M800 252 H894 L816 180" stroke="var(--about)" stroke-width="3.5"/>
+        <path id="sig-pwr" class="sig-wire" d="M92 54 C110 60,120 76,130 86 H920" stroke="var(--railV)" stroke-width="3.5"/>
 
         <!-- labels near LCD -->
         <g font-size="10" fill="#e8f5ff">
@@ -287,12 +413,13 @@
   ];
 
   function resetChannelsUI(){
-    channels.forEach(ch => {
+    channels.forEach((ch, i) => {
       const dipEl = $(ch.dip);
       dipEl.dataset.on = 'false';
       dipEl.setAttribute('aria-pressed','false');
       ch.led.setAttribute('fill','var(--led-off)');
       ch.led.classList.remove('glow');
+      document.getElementById('sig'+(i+1)).classList.remove('active');
     });
     visit.style.display = 'none';
   }
@@ -300,7 +427,9 @@
   function setPowerUI(){
     ledPwr.setAttribute('fill', powered ? 'var(--led-on)' : 'var(--led-off)');
     ledPwr.classList.toggle('glow', powered);
+    ledPwr.classList.toggle('led-breathe', !powered);
     ledPwr.setAttribute('aria-pressed', powered ? 'true' : 'false');
+    document.getElementById('sig-pwr').classList.toggle('active', powered);
 
     if (!powered){
       resetChannelsUI();
@@ -325,18 +454,19 @@
   });
 
   // Setup DIP channels
-  channels.forEach(ch => {
+  channels.forEach((ch, i) => {
     const dip = $(ch.dip);
 
     const act = () => {
       if (!powered) return;
-      resetChannelsUI(); // turn everyone off first
+      resetChannelsUI();
 
       dip.dataset.on = 'true';
       dip.setAttribute('aria-pressed','true');
 
       ch.led.setAttribute('fill', ch.color);
       ch.led.classList.add('glow');
+      document.getElementById('sig'+(i+1)).classList.add('active');
 
       lcd(wrap2(`${ch.title}: ${ch.text}`));
       visit.href = ch.link;
