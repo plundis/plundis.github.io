@@ -85,7 +85,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
     <!-- MUX SVG — registers directly attached to MUX, no separate input column -->
     <div class="mux-col">
-      <svg id="dpsvg" viewBox="0 0 320 560" preserveAspectRatio="xMaxYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <svg id="dpsvg" viewBox="0 0 400 560" preserveAspectRatio="xMinYMid meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
             <path d="M2 1L8 5L2 9" fill="none" stroke="#3a2e10" stroke-width="1.5" stroke-linecap="round"/>
@@ -97,105 +97,107 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
         <!-- corner ornaments -->
         <path d="M4,22 L4,6 L20,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
-        <path d="M316,22 L316,6 L300,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
+        <path d="M396,22 L396,6 L380,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
 
         <!-- col headers -->
-        <text x="80" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a3220" font-family="Courier New" letter-spacing="1">REGISTERS → MUX</text>
-        <text x="265" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a3220" font-family="Courier New" letter-spacing="1">OUT_REG</text>
+        <text x="80" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#7a5f28" font-family="Courier New" letter-spacing="1.5">INPUT REGISTERS</text>
+        <text x="230" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#7a5f28" font-family="Courier New" letter-spacing="1.5">MUX</text>
+        <text x="340" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#7a5f28" font-family="Courier New" letter-spacing="1.5">OUT_REG</text>
 
         <!-- Skills [sig 0] -->
         <g id="sig-skills" onclick="muxSel('skills')" style="cursor:pointer">
-          <rect id="sn-skills" x="8" y="30" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-skills" x="67" y="49" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Skills</text>
-          <text x="67" y="66" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[0] · 3'b000</text>
+          <rect id="sn-skills" x="8" y="30" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-skills" x="74" y="52" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Skills</text>
+          <text x="74" y="70" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[0] · 3'b000</text>
         </g>
-        <line id="w-skills" x1="126" y1="52" x2="158" y2="52" stroke="#1a2330" stroke-width="1"/>
-        <text x="128" y="48" font-size="8" fill="#2a2018" font-family="Courier New">SKILL_BUS</text>
-        <circle id="dot-skills" cx="158" cy="52" r="3" fill="#1a2330"/>
+        <line id="w-skills" x1="140" y1="54" x2="222" y2="54" stroke="#1a2330" stroke-width="1"/>
+        <text x="181" y="49" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">SKILLS_BUS</text>
+        <circle id="dot-skills" cx="222" cy="54" r="3" fill="#1a2330"/>
 
         <!-- Experience [sig 1] -->
         <g id="sig-experience" onclick="muxSel('experience')" style="cursor:pointer">
-          <rect id="sn-experience" x="8" y="112" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-experience" x="67" y="131" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Experience</text>
-          <text x="67" y="148" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[1] · 3'b001</text>
+          <rect id="sn-experience" x="8" y="112" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-experience" x="74" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Experience</text>
+          <text x="74" y="152" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[1] · 3'b001</text>
         </g>
-        <line id="w-experience" x1="126" y1="134" x2="158" y2="134" stroke="#1a2330" stroke-width="1"/>
-        <text x="128" y="130" font-size="8" fill="#2a2018" font-family="Courier New">EXP_BUS</text>
-        <circle id="dot-experience" cx="158" cy="134" r="3" fill="#1a2330"/>
+        <line id="w-experience" x1="140" y1="136" x2="222" y2="136" stroke="#1a2330" stroke-width="1"/>
+        <text x="181" y="131" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">EXP_BUS</text>
+        <circle id="dot-experience" cx="222" cy="136" r="3" fill="#1a2330"/>
 
         <!-- Projects [sig 2] -->
         <g id="sig-projects" onclick="muxSel('projects')" style="cursor:pointer">
-          <rect id="sn-projects" x="8" y="194" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-projects" x="67" y="213" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Projects</text>
-          <text x="67" y="230" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[2] · 3'b010</text>
+          <rect id="sn-projects" x="8" y="194" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-projects" x="74" y="216" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Projects</text>
+          <text x="74" y="234" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[2] · 3'b010</text>
         </g>
-        <line id="w-projects" x1="126" y1="216" x2="158" y2="216" stroke="#1a2330" stroke-width="1"/>
-        <text x="128" y="212" font-size="8" fill="#2a2018" font-family="Courier New">PROJ_BUS</text>
-        <circle id="dot-projects" cx="158" cy="216" r="3" fill="#1a2330"/>
+        <line id="w-projects" x1="140" y1="218" x2="222" y2="218" stroke="#1a2330" stroke-width="1"/>
+        <text x="181" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">PROJ_BUS</text>
+        <circle id="dot-projects" cx="222" cy="218" r="3" fill="#1a2330"/>
 
         <!-- Education [sig 3] -->
         <g id="sig-education" onclick="muxSel('education')" style="cursor:pointer">
-          <rect id="sn-education" x="8" y="276" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-education" x="67" y="295" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Education</text>
-          <text x="67" y="312" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[3] · 3'b011</text>
+          <rect id="sn-education" x="8" y="276" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-education" x="74" y="298" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Education</text>
+          <text x="74" y="316" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[3] · 3'b011</text>
         </g>
-        <line id="w-education" x1="126" y1="298" x2="158" y2="298" stroke="#1a2330" stroke-width="1"/>
-        <text x="128" y="294" font-size="8" fill="#2a2018" font-family="Courier New">EDUC_BUS</text>
-        <circle id="dot-education" cx="158" cy="298" r="3" fill="#1a2330"/>
+        <line id="w-education" x1="140" y1="300" x2="222" y2="300" stroke="#1a2330" stroke-width="1"/>
+        <text x="181" y="295" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">EDUC_BUS</text>
+        <circle id="dot-education" cx="222" cy="300" r="3" fill="#1a2330"/>
 
         <!-- Hobbies [sig 4] -->
         <g id="sig-hobbies" onclick="muxSel('hobbies')" style="cursor:pointer">
-          <rect id="sn-hobbies" x="8" y="358" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-hobbies" x="67" y="377" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Hobbies</text>
-          <text x="67" y="394" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[4] · 3'b100</text>
+          <rect id="sn-hobbies" x="8" y="358" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-hobbies" x="74" y="380" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Hobbies</text>
+          <text x="74" y="398" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[4] · 3'b100</text>
         </g>
-        <line id="w-hobbies" x1="126" y1="380" x2="158" y2="380" stroke="#1a2330" stroke-width="1"/>
-        <text x="128" y="376" font-size="8" fill="#2a2018" font-family="Courier New">HOB_BUS</text>
-        <circle id="dot-hobbies" cx="158" cy="380" r="3" fill="#1a2330"/>
+        <line id="w-hobbies" x1="140" y1="382" x2="222" y2="382" stroke="#1a2330" stroke-width="1"/>
+        <text x="181" y="377" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">HOBBY_BUS</text>
+        <circle id="dot-hobbies" cx="222" cy="382" r="3" fill="#1a2330"/>
 
         <!-- Contact [sig 5] -->
         <g id="sig-contact" onclick="muxSel('contact')" style="cursor:pointer">
-          <rect id="sn-contact" x="8" y="440" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-contact" x="67" y="459" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Contact</text>
-          <text x="67" y="476" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[5] · 3'b101</text>
+          <rect id="sn-contact" x="8" y="440" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-contact" x="74" y="462" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Contact</text>
+          <text x="74" y="480" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[5] · 3'b101</text>
         </g>
-        <line id="w-contact" x1="126" y1="462" x2="158" y2="462" stroke="#1a2330" stroke-width="1"/>
-        <text x="128" y="458" font-size="8" fill="#2a2018" font-family="Courier New">CONT_BUS</text>
-        <circle id="dot-contact" cx="158" cy="462" r="3" fill="#1a2330"/>
+        <line id="w-contact" x1="140" y1="464" x2="222" y2="464" stroke="#1a2330" stroke-width="1"/>
+        <text x="181" y="459" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">CONTACT_BUS</text>
+        <circle id="dot-contact" cx="222" cy="464" r="3" fill="#1a2330"/>
 
         <!-- MUX trapezoid body -->
-        <polygon points="158,22 208,36 208,502 158,516" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <line x1="158" y1="22"  x2="208" y2="36"  stroke="#2a2218" stroke-width="1"/>
-        <line x1="158" y1="516" x2="208" y2="502" stroke="#2a2218" stroke-width="1"/>
-        <text x="180" y="269" text-anchor="middle" font-size="10" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="2" transform="rotate(-90,180,269)">6:1 MUX</text>
+        <polygon points="222,22 272,36 272,502 222,516" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <line x1="222" y1="22"  x2="272" y2="36"  stroke="#2a2218" stroke-width="1"/>
+        <line x1="222" y1="516" x2="272" y2="502" stroke="#2a2218" stroke-width="1"/>
+        <text x="244" y="269" text-anchor="middle" font-size="10" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing="2" transform="rotate(-90,244,269)">6:1 MUX</text>
 
         <!-- active energy indicator -->
-        <line id="mux-energy" x1="206" y1="269" x2="206" y2="269" stroke="#3ab8c8" stroke-width="2" stroke-linecap="round" opacity="0"/>
+        <line id="mux-energy" x1="270" y1="269" x2="270" y2="269" stroke="#3ab8c8" stroke-width="2" stroke-linecap="round" opacity="0"/>
 
         <!-- SEL control line -->
-        <line x1="183" y1="516" x2="183" y2="532" stroke="#1a2330" stroke-width="1"/>
-        <rect x="139" y="530" width="88" height="22" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <text x="183" y="544" text-anchor="middle" font-size="9" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="1">SEL[2:0]</text>
-        <text id="sel-disp" x="183" y="528" text-anchor="middle" font-size="9" fill="#6e6450" font-family="Courier New">= 3'b000</text>
+        <line x1="247" y1="516" x2="247" y2="532" stroke="#1a2330" stroke-width="1"/>
+        <rect x="203" y="530" width="88" height="22" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <text x="247" y="544" text-anchor="middle" font-size="9" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="1">SEL[2:0]</text>
+        <text id="sel-disp" x="247" y="528" text-anchor="middle" font-size="9" fill="#6e6450" font-family="Courier New">= 3'b000</text>
 
         <!-- MUX output wire -->
-        <line id="out-wire" x1="208" y1="269" x2="222" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
-        <text x="210" y="264" font-size="8" fill="#2a2018" font-family="Courier New">OUT[7:0]</text>
+        <line id="out-wire" x1="272" y1="269" x2="286" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="279" y="264" text-anchor="middle" font-size="8" fill="#2a2018" font-family="Courier New">OUT</text>
 
-        <!-- OUT_REG -->
-        <rect id="outreg" x="222" y="218" width="94" height="102" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <rect x="222" y="218" width="94" height="16" fill="#0d1016"/>
-        <line x1="222" y1="234" x2="316" y2="234" stroke="#111820" stroke-width="1"/>
-        <text x="269" y="229" text-anchor="middle" font-size="9" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="1">OUT_REG</text>
-        <text id="or-mode" x="269" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#c9a84c" font-family="Courier New" textLength="84" lengthAdjust="spacingAndGlyphs">Skills</text>
-        <text id="or-addr" x="269" y="282" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">0x0000</text>
-        <polygon points="222,294 222,304 230,299" fill="#1a2330"/>
-        <line x1="214" y1="299" x2="222" y2="299" stroke="#1a2330" stroke-width="1"/>
-        <text x="212" y="303" text-anchor="end" font-size="8" fill="#2a2018" font-family="Courier New">CLK</text>
+        <!-- OUT_REG (bigger, wider — no text auto-shrink) -->
+        <rect id="outreg" x="286" y="206" width="108" height="126" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <rect x="286" y="206" width="108" height="18" fill="#0d1016"/>
+        <line x1="286" y1="224" x2="394" y2="224" stroke="#111820" stroke-width="1"/>
+        <text x="340" y="218" text-anchor="middle" font-size="10" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing="1">OUT_REG</text>
+        <text id="or-mode" x="340" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#c9a84c" font-family="Courier New">Skills</text>
+        <text id="or-addr" x="340" y="286" text-anchor="middle" font-size="10" fill="#2a2218" font-family="Courier New">0x0000</text>
+        <text id="or-mode-bits" x="340" y="308" text-anchor="middle" font-size="9" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">[8'hxxxxxxxx]</text>
+        <polygon points="286,306 286,316 294,311" fill="#1a2330"/>
+        <line x1="278" y1="311" x2="286" y2="311" stroke="#1a2330" stroke-width="1"/>
+        <text x="276" y="315" text-anchor="end" font-size="8" fill="#2a2018" font-family="Courier New">CLK</text>
 
         <!-- data wire exits right to display panel border -->
-        <line id="data-wire" x1="316" y1="269" x2="320" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
-        <text x="302" y="264" font-size="8" fill="#2a2018" font-family="Courier New">DATA</text>
+        <line id="data-wire" x1="394" y1="269" x2="400" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="378" y="264" font-size="8" fill="#2a2018" font-family="Courier New">DATA</text>
       </svg>
     </div>
 
@@ -276,7 +278,7 @@ const DATA={
 };
 
 const KEYS=['skills','experience','projects','education','hobbies','contact'];
-const Y={skills:52,experience:134,projects:216,education:298,hobbies:380,contact:462};
+const Y={skills:54,experience:136,projects:218,education:300,hobbies:382,contact:464};
 let cur='skills';
 
 function muxSel(key){
@@ -284,7 +286,7 @@ function muxSel(key){
   const d=DATA[key];
   KEYS.forEach(k=>{
     const on=k===key;
-    document.getElementById('sn-'+k).setAttribute('stroke',on?'#7a5f28':'#1c2530');
+    document.getElementById('sn-'+k).setAttribute('stroke',on?'#c9a84c':'#1c2530');
     document.getElementById('sn-'+k).setAttribute('fill',on?'#0f1318':'#0b0e12');
     document.getElementById('st-'+k).setAttribute('fill',on?'#c9a84c':'#6e6450');
     document.getElementById('w-'+k).setAttribute('stroke',on?'#c9a84c':'#1a2330');
@@ -295,16 +297,13 @@ function muxSel(key){
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
   en.setAttribute('y1',ey);en.setAttribute('y2',ey);
-  en.setAttribute('x1','160');en.setAttribute('x2','206');en.setAttribute('opacity','1');
+  en.setAttribute('x1','224');en.setAttribute('x2','270');en.setAttribute('opacity','1');
   const ow=document.getElementById('out-wire');
   const or=document.getElementById('outreg');
+  const dw=document.getElementById('data-wire');
   ow.setAttribute('stroke','#c9a84c');ow.setAttribute('marker-end','url(#arr-gold)');
-  or.setAttribute('stroke','#7a5f28');
-  setTimeout(()=>{
-    ow.setAttribute('stroke','#1a2330');ow.setAttribute('marker-end','url(#arr)');
-    or.setAttribute('stroke','#1c2530');
-    en.setAttribute('x1','206');en.setAttribute('y1','269');en.setAttribute('y2','269');en.setAttribute('opacity','0');
-  },500);
+  dw.setAttribute('stroke','#c9a84c');dw.setAttribute('marker-end','url(#arr-gold)');
+  or.setAttribute('stroke','#c9a84c');
   document.getElementById('sel-disp').textContent='= '+d.sel;
   document.getElementById('or-mode').textContent=d.label;
   document.getElementById('or-addr').textContent=d.addr;
