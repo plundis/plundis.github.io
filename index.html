@@ -19,49 +19,52 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--m
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
 body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--wire-dim) 1px,transparent 1px),linear-gradient(90deg,var(--wire-dim) 1px,transparent 1px);background-size:48px 48px;opacity:.12;pointer-events:none;z-index:0}
 
-.shell{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;padding:14px 18px 10px;gap:10px}
+.shell{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;padding:16px 20px 12px;gap:12px}
 
-.topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--gold-dark);flex-shrink:0}
-.tb-left{font-size:10px;color:var(--gold-dim);letter-spacing:.12em}
-.tb-left span{color:var(--text3)}
-.tb-right{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--teal-dim)}
-.clkdot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
+/* TOPBAR — bigger name */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--gold-dark);flex-shrink:0}
+.tb-name{font-size:22px;font-weight:700;color:var(--gold);letter-spacing:.08em;line-height:1}
+.tb-sub{font-size:11px;color:var(--gold-dim);letter-spacing:.1em;margin-top:5px}
+.tb-sub span{color:var(--text3)}
+.tb-right{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--teal-dim)}
+.clkdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-.main{flex:1;display:grid;grid-template-columns:320px 1fr;gap:0;min-height:0;border:1px solid var(--border)}
+/* 50/50 split */
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:0;border:1px solid var(--border)}
 
 .mux-col{border-right:1px solid var(--border);background:var(--bg);position:relative;overflow:hidden}
 .mux-col svg{position:absolute;inset:0;width:100%;height:100%}
 
 .disp-col{display:flex;flex-direction:column;background:var(--bg)}
-.disp-header{padding:8px 14px;border-bottom:1px solid var(--border);font-size:8px;color:var(--text3);letter-spacing:.12em;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.disp-header{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.1em;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .disp-teal{height:1px;background:var(--teal-dark);flex-shrink:0}
 .disp-items{flex:1;overflow-y:auto}
 .disp-items::-webkit-scrollbar{width:2px}
 .disp-items::-webkit-scrollbar-thumb{background:var(--gold-dark)}
 
-.disp-item{border-bottom:1px solid var(--wire-dim);padding:13px 16px;cursor:pointer;transition:background .1s;position:relative}
-.disp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--teal-dark);transition:background .12s}
+.disp-item{border-bottom:1px solid var(--wire-dim);padding:16px 20px;cursor:pointer;transition:background .1s;position:relative}
+.disp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--teal-dark);transition:background .12s}
 .disp-item:hover{background:var(--bg3)}
 .disp-item:hover::before,.disp-item.sel::before{background:var(--teal)}
 .disp-item.sel{background:var(--bg3)}
-.di-addr{font-size:8px;color:var(--text3);letter-spacing:.08em;margin-bottom:3px}
-.di-label{font-size:12px;color:var(--text2);letter-spacing:.04em;margin-bottom:6px}
+.di-addr{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em;margin-bottom:4px}
+.di-label{font-size:15px;font-weight:700;color:var(--text2);letter-spacing:.04em;margin-bottom:8px}
 .disp-item.sel .di-label{color:var(--gold)}
-.di-tags{display:flex;flex-wrap:wrap;gap:3px}
-.di-tag{font-size:8px;padding:1px 5px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.04em}
+.di-tags{display:flex;flex-wrap:wrap;gap:4px}
+.di-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.05em}
 
-.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:var(--bg2);min-height:68px;max-height:96px}
-.det-area{padding:10px 16px;display:flex;flex-direction:column;gap:3px;justify-content:center;overflow:hidden}
-.det-placeholder{font-size:9px;color:var(--text3);letter-spacing:.1em}
-.det-addr{font-size:8px;color:var(--text3);letter-spacing:.1em}
-.det-title{font-size:12px;color:var(--gold);letter-spacing:.04em}
-.det-body{font-size:10px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.det-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
-.det-tag{font-size:8px;padding:1px 5px;border:1px solid var(--gold-dark);color:var(--gold-dim);letter-spacing:.04em}
+.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:var(--bg2);min-height:80px;max-height:110px}
+.det-area{padding:12px 20px;display:flex;flex-direction:column;gap:4px;justify-content:center;overflow:hidden}
+.det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
+.det-addr{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em}
+.det-title{font-size:14px;font-weight:700;color:var(--gold);letter-spacing:.04em}
+.det-body{font-size:11px;color:var(--text2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.det-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.det-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--gold-dark);color:var(--gold-dim);letter-spacing:.04em}
 
-.footer-strip{border-left:1px solid var(--border);padding:8px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:6px}
-.flink{font-size:8px;color:var(--gold-dim);text-decoration:none;padding:2px 8px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:block}
+.footer-strip{border-left:1px solid var(--border);padding:10px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:7px}
+.flink{font-size:10px;font-weight:700;color:var(--gold-dim);text-decoration:none;padding:3px 10px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:block}
 .flink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
 </style>
 </head>
@@ -69,7 +72,10 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 <div class="shell">
 
   <div class="topbar">
-    <div class="tb-left">&#9670; MONIL_ARORA.v <span>·</span> UBC EE <span>·</span> BASc 2027 <span>·</span> PORTFOLIO_DATAPATH</div>
+    <div>
+      <div class="tb-name">&#9670; Monil Arora</div>
+      <div class="tb-sub">MONIL_ARORA.v <span>·</span> UBC EE <span>·</span> BASc 2027 <span>·</span> PORTFOLIO_DATAPATH</div>
+    </div>
     <div class="tb-right"><div class="clkdot"></div>&nbsp;CLK · REV 2026</div>
   </div>
 
@@ -88,108 +94,106 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
         </defs>
 
         <!-- corner ornaments -->
-        <path d="M4,20 L4,6 L18,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
-        <path d="M316,20 L316,6 L302,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
+        <path d="M4,22 L4,6 L20,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
+        <path d="M316,22 L316,6 L300,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
 
         <!-- col headers -->
-        <text x="80" y="14" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">REGISTERS → MUX</text>
-        <text x="248" y="14" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">OUT_REG</text>
-
-        <!-- ── Signal register blocks flush against MUX left edge ── -->
+        <text x="80" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a3220" font-family="Courier New" letter-spacing="1">REGISTERS → MUX</text>
+        <text x="265" y="16" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a3220" font-family="Courier New" letter-spacing="1">OUT_REG</text>
 
         <!-- Skills [sig 0] -->
         <g id="sig-skills" onclick="muxSel('skills')" style="cursor:pointer">
-          <rect id="sn-skills" x="8" y="34" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-skills" x="64" y="49" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Skills</text>
-          <text x="64" y="63" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[0] · 3'b000</text>
+          <rect id="sn-skills" x="8" y="30" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-skills" x="67" y="49" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Skills</text>
+          <text x="67" y="66" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[0] · 3'b000</text>
         </g>
-        <line id="w-skills" x1="120" y1="52" x2="152" y2="52" stroke="#1a2330" stroke-width="1"/>
-        <text x="122" y="48" font-size="6" fill="#222018" font-family="Courier New">SKILL_BUS</text>
-        <circle id="dot-skills" cx="152" cy="52" r="2.5" fill="#1a2330"/>
+        <line id="w-skills" x1="126" y1="52" x2="158" y2="52" stroke="#1a2330" stroke-width="1"/>
+        <text x="128" y="48" font-size="8" fill="#2a2018" font-family="Courier New">SKILL_BUS</text>
+        <circle id="dot-skills" cx="158" cy="52" r="3" fill="#1a2330"/>
 
         <!-- Experience [sig 1] -->
         <g id="sig-experience" onclick="muxSel('experience')" style="cursor:pointer">
-          <rect id="sn-experience" x="8" y="110" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-experience" x="64" y="125" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Experience</text>
-          <text x="64" y="139" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[1] · 3'b001</text>
+          <rect id="sn-experience" x="8" y="112" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-experience" x="67" y="131" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Experience</text>
+          <text x="67" y="148" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[1] · 3'b001</text>
         </g>
-        <line id="w-experience" x1="120" y1="128" x2="152" y2="128" stroke="#1a2330" stroke-width="1"/>
-        <text x="122" y="124" font-size="6" fill="#222018" font-family="Courier New">EXP_BUS</text>
-        <circle id="dot-experience" cx="152" cy="128" r="2.5" fill="#1a2330"/>
+        <line id="w-experience" x1="126" y1="134" x2="158" y2="134" stroke="#1a2330" stroke-width="1"/>
+        <text x="128" y="130" font-size="8" fill="#2a2018" font-family="Courier New">EXP_BUS</text>
+        <circle id="dot-experience" cx="158" cy="134" r="3" fill="#1a2330"/>
 
         <!-- Projects [sig 2] -->
         <g id="sig-projects" onclick="muxSel('projects')" style="cursor:pointer">
-          <rect id="sn-projects" x="8" y="186" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-projects" x="64" y="201" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Projects</text>
-          <text x="64" y="215" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[2] · 3'b010</text>
+          <rect id="sn-projects" x="8" y="194" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-projects" x="67" y="213" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Projects</text>
+          <text x="67" y="230" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[2] · 3'b010</text>
         </g>
-        <line id="w-projects" x1="120" y1="204" x2="152" y2="204" stroke="#1a2330" stroke-width="1"/>
-        <text x="122" y="200" font-size="6" fill="#222018" font-family="Courier New">PROJ_BUS</text>
-        <circle id="dot-projects" cx="152" cy="204" r="2.5" fill="#1a2330"/>
+        <line id="w-projects" x1="126" y1="216" x2="158" y2="216" stroke="#1a2330" stroke-width="1"/>
+        <text x="128" y="212" font-size="8" fill="#2a2018" font-family="Courier New">PROJ_BUS</text>
+        <circle id="dot-projects" cx="158" cy="216" r="3" fill="#1a2330"/>
 
         <!-- Education [sig 3] -->
         <g id="sig-education" onclick="muxSel('education')" style="cursor:pointer">
-          <rect id="sn-education" x="8" y="262" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-education" x="64" y="277" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Education</text>
-          <text x="64" y="291" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[3] · 3'b011</text>
+          <rect id="sn-education" x="8" y="276" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-education" x="67" y="295" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Education</text>
+          <text x="67" y="312" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[3] · 3'b011</text>
         </g>
-        <line id="w-education" x1="120" y1="280" x2="152" y2="280" stroke="#1a2330" stroke-width="1"/>
-        <text x="122" y="276" font-size="6" fill="#222018" font-family="Courier New">EDUC_BUS</text>
-        <circle id="dot-education" cx="152" cy="280" r="2.5" fill="#1a2330"/>
+        <line id="w-education" x1="126" y1="298" x2="158" y2="298" stroke="#1a2330" stroke-width="1"/>
+        <text x="128" y="294" font-size="8" fill="#2a2018" font-family="Courier New">EDUC_BUS</text>
+        <circle id="dot-education" cx="158" cy="298" r="3" fill="#1a2330"/>
 
         <!-- Hobbies [sig 4] -->
         <g id="sig-hobbies" onclick="muxSel('hobbies')" style="cursor:pointer">
-          <rect id="sn-hobbies" x="8" y="338" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-hobbies" x="64" y="353" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Hobbies</text>
-          <text x="64" y="367" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[4] · 3'b100</text>
+          <rect id="sn-hobbies" x="8" y="358" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-hobbies" x="67" y="377" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Hobbies</text>
+          <text x="67" y="394" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[4] · 3'b100</text>
         </g>
-        <line id="w-hobbies" x1="120" y1="356" x2="152" y2="356" stroke="#1a2330" stroke-width="1"/>
-        <text x="122" y="352" font-size="6" fill="#222018" font-family="Courier New">HOB_BUS</text>
-        <circle id="dot-hobbies" cx="152" cy="356" r="2.5" fill="#1a2330"/>
+        <line id="w-hobbies" x1="126" y1="380" x2="158" y2="380" stroke="#1a2330" stroke-width="1"/>
+        <text x="128" y="376" font-size="8" fill="#2a2018" font-family="Courier New">HOB_BUS</text>
+        <circle id="dot-hobbies" cx="158" cy="380" r="3" fill="#1a2330"/>
 
         <!-- Contact [sig 5] -->
         <g id="sig-contact" onclick="muxSel('contact')" style="cursor:pointer">
-          <rect id="sn-contact" x="8" y="414" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-contact" x="64" y="429" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Contact</text>
-          <text x="64" y="443" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[5] · 3'b101</text>
+          <rect id="sn-contact" x="8" y="440" width="118" height="44" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-contact" x="67" y="459" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e6450" font-family="Courier New">Contact</text>
+          <text x="67" y="476" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[5] · 3'b101</text>
         </g>
-        <line id="w-contact" x1="120" y1="432" x2="152" y2="432" stroke="#1a2330" stroke-width="1"/>
-        <text x="122" y="428" font-size="6" fill="#222018" font-family="Courier New">CONT_BUS</text>
-        <circle id="dot-contact" cx="152" cy="432" r="2.5" fill="#1a2330"/>
+        <line id="w-contact" x1="126" y1="462" x2="158" y2="462" stroke="#1a2330" stroke-width="1"/>
+        <text x="128" y="458" font-size="8" fill="#2a2018" font-family="Courier New">CONT_BUS</text>
+        <circle id="dot-contact" cx="158" cy="462" r="3" fill="#1a2330"/>
 
         <!-- MUX trapezoid body -->
-        <polygon points="152,20 200,32 200,468 152,480" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <line x1="152" y1="20"  x2="200" y2="32"  stroke="#2a2218" stroke-width="1"/>
-        <line x1="152" y1="480" x2="200" y2="468" stroke="#2a2218" stroke-width="1"/>
-        <text x="172" y="250" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="2" transform="rotate(-90,172,250)">6:1 MUX</text>
+        <polygon points="158,22 208,36 208,502 158,516" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <line x1="158" y1="22"  x2="208" y2="36"  stroke="#2a2218" stroke-width="1"/>
+        <line x1="158" y1="516" x2="208" y2="502" stroke="#2a2218" stroke-width="1"/>
+        <text x="180" y="269" text-anchor="middle" font-size="10" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="2" transform="rotate(-90,180,269)">6:1 MUX</text>
 
-        <!-- active energy line inside MUX -->
-        <line id="mux-energy" x1="198" y1="250" x2="198" y2="250" stroke="#3ab8c8" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+        <!-- active energy indicator -->
+        <line id="mux-energy" x1="206" y1="269" x2="206" y2="269" stroke="#3ab8c8" stroke-width="2" stroke-linecap="round" opacity="0"/>
 
         <!-- SEL control line -->
-        <line x1="176" y1="480" x2="176" y2="492" stroke="#1a2330" stroke-width="1"/>
-        <rect x="136" y="490" width="80" height="18" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <text x="176" y="501" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">SEL[2:0]</text>
-        <text id="sel-disp" x="176" y="489" text-anchor="middle" font-size="7" fill="#6e6450" font-family="Courier New">= 3'b000</text>
+        <line x1="183" y1="516" x2="183" y2="532" stroke="#1a2330" stroke-width="1"/>
+        <rect x="139" y="530" width="88" height="22" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <text x="183" y="544" text-anchor="middle" font-size="9" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="1">SEL[2:0]</text>
+        <text id="sel-disp" x="183" y="528" text-anchor="middle" font-size="9" fill="#6e6450" font-family="Courier New">= 3'b000</text>
 
         <!-- MUX output wire -->
-        <line id="out-wire" x1="200" y1="250" x2="228" y2="250" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
-        <text x="202" y="246" font-size="6" fill="#222018" font-family="Courier New">OUT[7:0]</text>
+        <line id="out-wire" x1="208" y1="269" x2="236" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="210" y="264" font-size="8" fill="#2a2018" font-family="Courier New">OUT[7:0]</text>
 
         <!-- OUT_REG -->
-        <rect id="outreg" x="228" y="206" width="86" height="88" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <rect x="228" y="206" width="86" height="13" fill="#0d1016"/>
-        <line x1="228" y1="219" x2="314" y2="219" stroke="#111820" stroke-width="1"/>
-        <text x="271" y="215" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">OUT_REG</text>
-        <text id="or-mode" x="271" y="240" text-anchor="middle" font-size="13" fill="#c9a84c" font-family="Courier New">Skills</text>
-        <text id="or-addr" x="271" y="256" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">0x0000</text>
-        <polygon points="228,268 228,276 236,272" fill="#1a2330"/>
-        <line x1="220" y1="272" x2="228" y2="272" stroke="#1a2330" stroke-width="1"/>
-        <text x="218" y="276" text-anchor="end" font-size="6" fill="#222018" font-family="Courier New">CLK</text>
+        <rect id="outreg" x="236" y="218" width="76" height="102" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <rect x="236" y="218" width="76" height="16" fill="#0d1016"/>
+        <line x1="236" y1="234" x2="312" y2="234" stroke="#111820" stroke-width="1"/>
+        <text x="274" y="229" text-anchor="middle" font-size="9" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="1">OUT_REG</text>
+        <text id="or-mode" x="274" y="258" text-anchor="middle" font-size="16" font-weight="bold" fill="#c9a84c" font-family="Courier New">Skills</text>
+        <text id="or-addr" x="274" y="278" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">0x0000</text>
+        <polygon points="236,294 236,304 244,299" fill="#1a2330"/>
+        <line x1="228" y1="299" x2="236" y2="299" stroke="#1a2330" stroke-width="1"/>
+        <text x="226" y="303" text-anchor="end" font-size="8" fill="#2a2018" font-family="Courier New">CLK</text>
 
         <!-- data wire exits right -->
-        <line x1="314" y1="250" x2="318" y2="250" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
-        <text x="302" y="246" font-size="6" fill="#222018" font-family="Courier New">DATA</text>
+        <line x1="312" y1="269" x2="318" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="300" y="264" font-size="8" fill="#2a2018" font-family="Courier New">DATA</text>
       </svg>
     </div>
 
@@ -270,7 +274,7 @@ const DATA={
 };
 
 const KEYS=['skills','experience','projects','education','hobbies','contact'];
-const Y={skills:52,experience:128,projects:204,education:280,hobbies:356,contact:432};
+const Y={skills:52,experience:134,projects:216,education:298,hobbies:380,contact:462};
 let cur='skills';
 
 function muxSel(key){
@@ -282,14 +286,14 @@ function muxSel(key){
     document.getElementById('sn-'+k).setAttribute('fill',on?'#0f1318':'#0b0e12');
     document.getElementById('st-'+k).setAttribute('fill',on?'#c9a84c':'#6e6450');
     document.getElementById('w-'+k).setAttribute('stroke',on?'#c9a84c':'#1a2330');
-    document.getElementById('w-'+k).setAttribute('stroke-width',on?'1.5':'1');
+    document.getElementById('w-'+k).setAttribute('stroke-width',on?'2':'1');
     document.getElementById('dot-'+k).setAttribute('fill',on?'#c9a84c':'#1a2330');
-    document.getElementById('dot-'+k).setAttribute('r',on?'3.5':'2.5');
+    document.getElementById('dot-'+k).setAttribute('r',on?'4':'3');
   });
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
   en.setAttribute('y1',ey);en.setAttribute('y2',ey);
-  en.setAttribute('x1','154');en.setAttribute('x2','198');en.setAttribute('opacity','1');
+  en.setAttribute('x1','160');en.setAttribute('x2','206');en.setAttribute('opacity','1');
   const ow=document.getElementById('out-wire');
   const or=document.getElementById('outreg');
   ow.setAttribute('stroke','#c9a84c');ow.setAttribute('marker-end','url(#arr-gold)');
@@ -297,7 +301,7 @@ function muxSel(key){
   setTimeout(()=>{
     ow.setAttribute('stroke','#1a2330');ow.setAttribute('marker-end','url(#arr)');
     or.setAttribute('stroke','#1c2530');
-    en.setAttribute('x1','198');en.setAttribute('y1','250');en.setAttribute('y2','250');en.setAttribute('opacity','0');
+    en.setAttribute('x1','206');en.setAttribute('y1','269');en.setAttribute('y2','269');en.setAttribute('opacity','0');
   },500);
   document.getElementById('sel-disp').textContent='= '+d.sel;
   document.getElementById('or-mode').textContent=d.label;
