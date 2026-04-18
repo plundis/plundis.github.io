@@ -29,7 +29,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .clkdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-.main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:0;border:1px solid var(--border)}
+.main{flex:1;display:grid;grid-template-columns:60% 40%;gap:0;min-height:0;border:1px solid var(--border)}
 
 /* ═══ MUX COLUMN (left) — hybrid HTML + SVG overlay ═══ */
 .mux-col{
@@ -38,7 +38,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:44% 12% 44%;
+  grid-template-columns:32% 28% 40%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -65,7 +65,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   display:flex;
   flex-direction:column;
   justify-content:space-around;
-  padding:12px;
+  padding:12px 0 12px 12px;
   gap:10px;
   position:relative;
   z-index:2;
@@ -109,14 +109,14 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   align-items:center;
   justify-content:center;
   position:relative;
-  padding:12px 16px 12px 24px;
+  padding:12px 16px 12px 0;
 }
 
 .out-reg{
   border:2px solid var(--border);
   background:var(--bg2);
   width:100%;
-  max-width:240px;
+  max-width:200px;
   transition:border-color .15s;
   position:relative;
 }
@@ -269,21 +269,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
             </marker>
           </defs>
 
-          <!-- horizontal wires register → MUX -->
-          <line id="w-skills"     x1="0" y1="40"  x2="30" y2="40"  stroke="#1a2330" stroke-width="1.5"/>
-          <line id="w-experience" x1="0" y1="120" x2="30" y2="120" stroke="#1a2330" stroke-width="1.5"/>
-          <line id="w-projects"   x1="0" y1="200" x2="30" y2="200" stroke="#1a2330" stroke-width="1.5"/>
-          <line id="w-education"  x1="0" y1="280" x2="30" y2="280" stroke="#1a2330" stroke-width="1.5"/>
-          <line id="w-hobbies"    x1="0" y1="360" x2="30" y2="360" stroke="#1a2330" stroke-width="1.5"/>
-          <line id="w-contact"    x1="0" y1="440" x2="30" y2="440" stroke="#1a2330" stroke-width="1.5"/>
-
-          <!-- wire dots -->
-          <circle id="dot-skills"     cx="30" cy="40"  r="3" fill="#1a2330"/>
-          <circle id="dot-experience" cx="30" cy="120" r="3" fill="#1a2330"/>
-          <circle id="dot-projects"   cx="30" cy="200" r="3" fill="#1a2330"/>
-          <circle id="dot-education"  cx="30" cy="280" r="3" fill="#1a2330"/>
-          <circle id="dot-hobbies"    cx="30" cy="360" r="3" fill="#1a2330"/>
-          <circle id="dot-contact"    cx="30" cy="440" r="3" fill="#1a2330"/>
+          <!-- horizontal wires: register → MUX, arrowhead pointing into MUX -->
+          <line id="w-skills"     x1="0" y1="40"  x2="30" y2="40"  stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-experience" x1="0" y1="120" x2="30" y2="120" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-projects"   x1="0" y1="200" x2="30" y2="200" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-education"  x1="0" y1="280" x2="30" y2="280" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-hobbies"    x1="0" y1="360" x2="30" y2="360" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-contact"    x1="0" y1="440" x2="30" y2="440" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
 
           <!-- MUX trapezoid -->
           <polygon points="30,8 70,30 70,470 30,492" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
@@ -296,14 +288,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
           <!-- MUX output wire → OUT_REG (spans right side of this SVG) -->
           <line id="out-wire" x1="70" y1="240" x2="100" y2="240" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
         </svg>
-
-        <!-- bus name labels (absolutely positioned on top of wires) -->
-        <div class="bus-label" data-for="skills"     style="top:4%">SKILLS_BUS</div>
-        <div class="bus-label" data-for="experience" style="top:20%">EXPERIENCE_BUS</div>
-        <div class="bus-label" data-for="projects"   style="top:36%">PROJECTS_BUS</div>
-        <div class="bus-label" data-for="education"  style="top:52%">EDUCATION_BUS</div>
-        <div class="bus-label" data-for="hobbies"    style="top:68%">HOBBIES_BUS</div>
-        <div class="bus-label" data-for="contact"    style="top:84%">CONTACT_BUS</div>
       </div>
 
       <!-- OUT_REG block (HTML, right column) -->
@@ -369,23 +353,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
 </div>
 
-<style>
-.bus-label{
-  position:absolute;
-  left:0;
-  width:100%;
-  text-align:center;
-  font-size:10px;
-  font-weight:700;
-  color:var(--gold-dark);
-  letter-spacing:.04em;
-  transform:translateY(-14px);
-  pointer-events:none;
-  transition:color .15s;
-}
-.bus-label.lit{color:var(--gold)}
-</style>
-
 <script>
 const DATA={
   skills:{sel:"3'b000",addr:"0x0000",label:"Skills",items:[
@@ -444,15 +411,11 @@ function muxSel(key){
   KEYS.forEach(k=>{
     const on=k===key;
     document.getElementById('reg-'+k).classList.toggle('active',on);
-    // SVG wire + dot
+    // SVG wire
     const w=document.getElementById('w-'+k);
-    const dot=document.getElementById('dot-'+k);
     w.setAttribute('stroke',on?'#c9a84c':'#1a2330');
     w.setAttribute('stroke-width',on?'2.5':'1.5');
-    dot.setAttribute('fill',on?'#c9a84c':'#1a2330');
-    dot.setAttribute('r',on?'4':'3');
-    // bus label
-    document.querySelector('.bus-label[data-for="'+k+'"]').classList.toggle('lit',on);
+    w.setAttribute('marker-end',on?'url(#arr-gold)':'url(#arr)');
   });
 
   // MUX energy line
