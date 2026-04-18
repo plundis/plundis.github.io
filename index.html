@@ -3,1113 +3,331 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Monil Arora — EE Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+<title>Monil Arora</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --bg:       #07090b;
-  --bg2:      #0b0e12;
-  --bg3:      #0f1318;
-  --bg4:      #141a22;
-  --panel:    #0c1016;
-  --wire:     #1a2330;
-  --wire-dim: #111820;
-  --border:   #1c2530;
-  --gold:     #c9a84c;
-  --gold-dim: #7a5f28;
-  --gold-dark:#3a2e10;
-  --gold-hi:  #e8c96a;
-  --teal:     #3ab8c8;
-  --teal-dim: #1a5a62;
-  --teal-dark:#0a2a30;
-  --text:     #c8bda0;
-  --text2:    #6e6450;
-  --text3:    #332e1e;
-  --mono:     'Share Tech Mono', 'Courier New', monospace;
-  --serif:    'Cinzel', serif;
-}
-
 *{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090b;--bg2:#0b0e12;--bg3:#0f1318;
+  --wire:#1a2330;--wire-dim:#111820;--border:#1c2530;
+  --gold:#c9a84c;--gold-dim:#7a5f28;--gold-dark:#3a2e10;--gold-hi:#e8c96a;
+  --teal:#3ab8c8;--teal-dim:#1a5a62;--teal-dark:#0a2a30;
+  --text:#c8bda0;--text2:#6e6450;--text3:#332e1e;
+  --mono:'Share Tech Mono','Courier New',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--mono);overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--wire-dim) 1px,transparent 1px),linear-gradient(90deg,var(--wire-dim) 1px,transparent 1px);background-size:48px 48px;opacity:.12;pointer-events:none;z-index:0}
 
-html{scroll-behavior:smooth}
+.shell{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;padding:14px 18px 10px;gap:10px}
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--mono);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--gold-dark);flex-shrink:0}
+.tb-left{font-size:10px;color:var(--gold-dim);letter-spacing:.12em}
+.tb-left span{color:var(--text3)}
+.tb-right{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--teal-dim)}
+.clkdot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-/* ── scanline texture overlay ── */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);
-  pointer-events:none;
-  z-index:999;
-}
+.main{flex:1;display:grid;grid-template-columns:320px 1fr;gap:0;min-height:0;border:1px solid var(--border)}
 
-/* ── circuit trace background pattern ── */
-body::after{
-  content:'';
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(var(--wire-dim) 1px,transparent 1px),
-    linear-gradient(90deg,var(--wire-dim) 1px,transparent 1px);
-  background-size:60px 60px;
-  opacity:.18;
-  pointer-events:none;
-  z-index:0;
-}
+.mux-col{border-right:1px solid var(--border);background:var(--bg);position:relative;overflow:hidden}
+.mux-col svg{position:absolute;inset:0;width:100%;height:100%}
 
-/* ══════════════════════════════════════
-   LAYOUT SHELL
-══════════════════════════════════════ */
-.site{
-  position:relative;
-  z-index:1;
-  max-width:1100px;
-  margin:0 auto;
-  padding:0 32px 80px;
-}
+.disp-col{display:flex;flex-direction:column;background:var(--bg)}
+.disp-header{padding:8px 14px;border-bottom:1px solid var(--border);font-size:8px;color:var(--text3);letter-spacing:.12em;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.disp-teal{height:1px;background:var(--teal-dark);flex-shrink:0}
+.disp-items{flex:1;overflow-y:auto}
+.disp-items::-webkit-scrollbar{width:2px}
+.disp-items::-webkit-scrollbar-thumb{background:var(--gold-dark)}
 
-/* ══════════════════════════════════════
-   HEADER / HERO
-══════════════════════════════════════ */
-header{
-  padding:48px 0 32px;
-  border-bottom:1px solid var(--border);
-  display:grid;
-  grid-template-columns:1fr auto;
-  align-items:end;
-  gap:32px;
-  animation:fadeIn .8s ease both;
-}
+.disp-item{border-bottom:1px solid var(--wire-dim);padding:13px 16px;cursor:pointer;transition:background .1s;position:relative}
+.disp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--teal-dark);transition:background .12s}
+.disp-item:hover{background:var(--bg3)}
+.disp-item:hover::before,.disp-item.sel::before{background:var(--teal)}
+.disp-item.sel{background:var(--bg3)}
+.di-addr{font-size:8px;color:var(--text3);letter-spacing:.08em;margin-bottom:3px}
+.di-label{font-size:12px;color:var(--text2);letter-spacing:.04em;margin-bottom:6px}
+.disp-item.sel .di-label{color:var(--gold)}
+.di-tags{display:flex;flex-wrap:wrap;gap:3px}
+.di-tag{font-size:8px;padding:1px 5px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.04em}
 
-.hero-left{}
+.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:var(--bg2);min-height:68px;max-height:96px}
+.det-area{padding:10px 16px;display:flex;flex-direction:column;gap:3px;justify-content:center;overflow:hidden}
+.det-placeholder{font-size:9px;color:var(--text3);letter-spacing:.1em}
+.det-addr{font-size:8px;color:var(--text3);letter-spacing:.1em}
+.det-title{font-size:12px;color:var(--gold);letter-spacing:.04em}
+.det-body{font-size:10px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.det-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.det-tag{font-size:8px;padding:1px 5px;border:1px solid var(--gold-dark);color:var(--gold-dim);letter-spacing:.04em}
 
-.chip-id{
-  font-size:10px;
-  color:var(--text3);
-  letter-spacing:.2em;
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.chip-id::before{
-  content:'';
-  display:inline-block;
-  width:32px;height:1px;
-  background:var(--gold-dark);
-}
-
-.hero-name{
-  font-family:var(--serif);
-  font-size:clamp(28px,4vw,48px);
-  font-weight:400;
-  color:var(--gold);
-  letter-spacing:.06em;
-  line-height:1.1;
-  margin-bottom:10px;
-}
-
-.hero-sub{
-  font-size:11px;
-  color:var(--text2);
-  letter-spacing:.15em;
-  line-height:1.8;
-}
-
-.hero-right{
-  text-align:right;
-}
-
-.status-row{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  justify-content:flex-end;
-  margin-bottom:6px;
-}
-
-.clkdot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:var(--teal);
-  box-shadow:0 0 6px var(--teal);
-  animation:pulse 1.2s ease-in-out infinite;
-  flex-shrink:0;
-}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.15}}
-
-.status-txt{font-size:9px;color:var(--teal-dim);letter-spacing:.12em}
-
-.hero-links{
-  display:flex;
-  gap:8px;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-}
-
-.hlink{
-  font-size:9px;
-  color:var(--gold-dim);
-  text-decoration:none;
-  padding:4px 10px;
-  border:1px solid var(--gold-dark);
-  letter-spacing:.1em;
-  transition:color .15s,border-color .15s,background .15s;
-}
-.hlink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
-
-/* ══════════════════════════════════════
-   NAV (MUX SIGNAL SELECTOR)
-══════════════════════════════════════ */
-.mux-nav{
-  display:flex;
-  align-items:stretch;
-  margin:28px 0 0;
-  border:1px solid var(--border);
-  background:var(--bg2);
-  animation:fadeIn .9s .1s ease both;
-}
-
-.mux-label{
-  padding:0 16px;
-  font-size:9px;
-  color:var(--text3);
-  letter-spacing:.12em;
-  border-right:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  white-space:nowrap;
-  background:var(--bg);
-}
-
-.mux-inputs{
-  display:flex;
-  flex:1;
-}
-
-.mux-btn{
-  flex:1;
-  padding:12px 8px;
-  font-family:var(--mono);
-  font-size:10px;
-  color:var(--text2);
-  background:transparent;
-  border:none;
-  border-right:1px solid var(--border);
-  cursor:pointer;
-  letter-spacing:.1em;
-  transition:color .15s,background .15s;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-}
-.mux-btn:last-child{border-right:none}
-.mux-btn:hover{background:var(--bg3);color:var(--text)}
-.mux-btn .sig-name{font-size:10px;font-weight:500}
-.mux-btn .sig-id{font-size:8px;color:var(--text3)}
-
-.mux-btn.active{
-  color:var(--gold);
-  background:var(--bg3);
-  border-bottom:2px solid var(--gold);
-}
-.mux-btn.active .sig-id{color:var(--gold-dim)}
-
-.mux-sel-display{
-  padding:0 14px;
-  font-size:9px;
-  color:var(--gold-dim);
-  border-left:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  white-space:nowrap;
-  background:var(--bg);
-  letter-spacing:.06em;
-}
-
-/* ══════════════════════════════════════
-   MAIN DATAPATH CONTENT AREA
-══════════════════════════════════════ */
-.dp-layout{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:0;
-  margin-top:0;
-  border:1px solid var(--border);
-  border-top:none;
-  animation:fadeIn 1s .2s ease both;
-}
-
-/* ── stage labels (left) ── */
-.stage-rail{
-  border-right:1px solid var(--border);
-  background:var(--bg);
-  display:flex;
-  flex-direction:column;
-}
-
-.stage-cell{
-  padding:20px 16px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.stage-cell:last-child{border-bottom:none}
-
-.stage-tag{
-  font-size:9px;
-  color:var(--text3);
-  letter-spacing:.18em;
-}
-
-.stage-name{
-  font-family:var(--serif);
-  font-size:13px;
-  color:var(--gold-dim);
-  letter-spacing:.06em;
-}
-
-.stage-desc{
-  font-size:8px;
-  color:var(--text3);
-  letter-spacing:.06em;
-  line-height:1.5;
-  margin-top:2px;
-}
-
-/* ── output register (right of pipeline) ── */
-.pipeline{
-  display:flex;
-  flex-direction:column;
-}
-
-.pipe-section{
-  border-bottom:1px solid var(--border);
-  padding:0;
-}
-.pipe-section:last-child{border-bottom:none}
-
-/* ══════════════════════════════════════
-   CONTENT PANELS (displayed per mode)
-══════════════════════════════════════ */
-.content-panel{
-  display:none;
-  padding:24px 28px;
-  animation:panelIn .3s ease;
-}
-.content-panel.active{display:block}
-
-@keyframes panelIn{
-  from{opacity:0;transform:translateY(4px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* ══════════════════════════════════════
-   SHARED CARD STYLES
-══════════════════════════════════════ */
-.section-header{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:20px;
-  padding-bottom:10px;
-  border-bottom:1px solid var(--border);
-}
-
-.section-addr{font-size:8px;color:var(--text3);letter-spacing:.1em}
-.section-title{font-family:var(--serif);font-size:14px;color:var(--gold);letter-spacing:.08em}
-
-.card-grid{
-  display:grid;
-  gap:12px;
-}
-.card-grid-2{grid-template-columns:1fr 1fr}
-.card-grid-1{grid-template-columns:1fr}
-
-.card{
-  border:1px solid var(--border);
-  background:var(--bg2);
-  padding:16px 18px;
-  cursor:pointer;
-  transition:border-color .15s,background .15s;
-  position:relative;
-  overflow:hidden;
-}
-.card::before{
-  content:'';
-  position:absolute;
-  left:0;top:0;bottom:0;
-  width:2px;
-  background:var(--teal-dark);
-  transition:background .15s;
-}
-.card:hover{border-color:var(--gold-dark);background:var(--bg3)}
-.card:hover::before{background:var(--teal)}
-.card.selected{border-color:var(--gold-dim);background:var(--bg3)}
-.card.selected::before{background:var(--teal)}
-
-.card-addr{font-size:8px;color:var(--text3);letter-spacing:.1em;margin-bottom:4px}
-.card-title{font-size:13px;color:var(--gold-dim);font-weight:500;margin-bottom:6px;letter-spacing:.04em}
-.card.selected .card-title{color:var(--gold)}
-.card-desc{font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:10px}
-.card-tags{display:flex;flex-wrap:wrap;gap:4px}
-.tag{
-  font-size:8px;
-  padding:2px 6px;
-  border:1px solid var(--gold-dark);
-  color:var(--gold-dim);
-  letter-spacing:.05em;
-  background:var(--bg);
-}
-
-/* ══════════════════════════════════════
-   SKILLS — register-file style
-══════════════════════════════════════ */
-.reg-table{
-  width:100%;
-  border-collapse:collapse;
-}
-.reg-table tr{
-  border-bottom:1px solid var(--wire-dim);
-  cursor:pointer;
-  transition:background .12s;
-}
-.reg-table tr:last-child{border-bottom:none}
-.reg-table tr:hover{background:var(--bg3)}
-.reg-table tr.selected{background:var(--bg3)}
-.reg-table td{padding:12px 14px;font-size:11px;vertical-align:top}
-.reg-addr{width:80px;color:var(--text3);font-size:9px;letter-spacing:.08em;vertical-align:middle!important}
-.reg-name{width:130px;color:var(--gold-dim);font-weight:500;font-size:12px}
-.reg-table tr.selected .reg-name{color:var(--gold)}
-.reg-vals{color:var(--text2);line-height:1.6;font-size:10px}
-.reg-bits{width:90px;text-align:right}
-.reg-bit-tags{display:flex;flex-wrap:wrap;gap:3px;justify-content:flex-end}
-.bit-tag{font-size:7px;padding:1px 5px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.04em}
-
-/* ══════════════════════════════════════
-   PROJECTS — ALU-style cards
-══════════════════════════════════════ */
-.alu-card{
-  border:1px solid var(--border);
-  background:var(--bg2);
-  clip-path:polygon(0 8px,8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%);
-  padding:18px 20px;
-  cursor:pointer;
-  transition:border-color .15s,background .15s;
-  position:relative;
-}
-.alu-card:hover{border-color:var(--gold-dark);background:var(--bg3)}
-.alu-card.selected{border-color:var(--gold-dim);background:var(--bg3)}
-.alu-card-op{font-size:8px;color:var(--text3);letter-spacing:.12em;margin-bottom:4px}
-.alu-card-name{font-size:14px;color:var(--gold-dim);font-weight:500;margin-bottom:8px;letter-spacing:.04em}
-.alu-card.selected .alu-card-name{color:var(--gold)}
-.alu-card-body{font-size:11px;color:var(--text2);line-height:1.65;margin-bottom:12px}
-.alu-card-tags{display:flex;flex-wrap:wrap;gap:4px}
-
-/* ══════════════════════════════════════
-   EXPERIENCE — memory block style
-══════════════════════════════════════ */
-.mem-block{
-  border:1px solid var(--border);
-  background:var(--bg2);
-  margin-bottom:12px;
-}
-.mem-block:last-child{margin-bottom:0}
-.mem-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 14px;
-  border-bottom:1px solid var(--wire-dim);
-  background:var(--bg);
-  cursor:pointer;
-  transition:background .12s;
-}
-.mem-header:hover{background:var(--bg3)}
-.mem-header-left{display:flex;align-items:center;gap:12px}
-.mem-addr{font-size:8px;color:var(--text3);letter-spacing:.1em}
-.mem-title{font-size:13px;color:var(--gold-dim);letter-spacing:.04em}
-.mem-date{font-size:9px;color:var(--text3);letter-spacing:.06em}
-.mem-body{padding:14px 16px;font-size:11px;color:var(--text2);line-height:1.7;display:none}
-.mem-body.open{display:block}
-.mem-body-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
-
-/* ══════════════════════════════════════
-   EDUCATION — register file read
-══════════════════════════════════════ */
-.edu-main{
-  border:1px solid var(--border);
-  background:var(--bg2);
-  padding:20px 22px;
-  margin-bottom:16px;
-}
-.edu-badge{
-  font-size:8px;
-  color:var(--teal-dim);
-  border:1px solid var(--teal-dark);
-  padding:2px 8px;
-  letter-spacing:.1em;
-  display:inline-block;
-  margin-bottom:10px;
-}
-.edu-name{
-  font-family:var(--serif);
-  font-size:20px;
-  color:var(--gold);
-  letter-spacing:.06em;
-  margin-bottom:6px;
-}
-.edu-degree{font-size:11px;color:var(--text2);letter-spacing:.06em;margin-bottom:14px}
-.edu-courses{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  margin-top:14px;
-}
-.edu-course{
-  font-size:10px;
-  color:var(--text2);
-  padding:6px 10px;
-  border-left:2px solid var(--gold-dark);
-  background:var(--bg);
-  letter-spacing:.04em;
-}
-.edu-course strong{color:var(--gold-dim);font-weight:normal}
-
-/* ══════════════════════════════════════
-   HOBBIES — signal decoder style
-══════════════════════════════════════ */
-.hobby-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.hobby-card{
-  border:1px solid var(--border);
-  background:var(--bg2);
-  padding:16px 18px;
-  position:relative;
-  overflow:hidden;
-}
-.hobby-card::after{
-  content:'';
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:1px;
-  background:var(--teal-dark);
-}
-.hobby-icon{font-size:9px;color:var(--teal-dim);letter-spacing:.12em;margin-bottom:8px}
-.hobby-name{font-size:14px;color:var(--gold-dim);margin-bottom:6px;letter-spacing:.04em}
-.hobby-desc{font-size:11px;color:var(--text2);line-height:1.6}
-
-/* ══════════════════════════════════════
-   CONTACT — I/O port style
-══════════════════════════════════════ */
-.contact-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.port-card{
-  border:1px solid var(--border);
-  background:var(--bg2);
-  padding:14px 16px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.port-label{font-size:8px;color:var(--text3);letter-spacing:.14em}
-.port-type{font-size:9px;color:var(--teal-dim);letter-spacing:.1em}
-.port-value{font-size:12px;color:var(--gold-dim);letter-spacing:.04em;word-break:break-all}
-.port-card a{color:var(--gold-dim);text-decoration:none;transition:color .12s}
-.port-card a:hover{color:var(--gold)}
-
-/* ══════════════════════════════════════
-   DETAIL DRAWER (bottom)
-══════════════════════════════════════ */
-.detail-drawer{
-  border:1px solid var(--border);
-  border-top:none;
-  background:var(--bg2);
-  padding:0;
-  max-height:0;
-  overflow:hidden;
-  transition:max-height .3s ease,padding .3s ease;
-}
-.detail-drawer.open{
-  max-height:300px;
-  padding:16px 20px;
-}
-.detail-inner{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:20px;
-  align-items:start;
-}
-.detail-addr{font-size:8px;color:var(--text3);letter-spacing:.1em;margin-bottom:4px}
-.detail-title{font-size:13px;color:var(--gold);letter-spacing:.06em;margin-bottom:8px}
-.detail-body{font-size:11px;color:var(--text2);line-height:1.7}
-.detail-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
-.detail-close{
-  font-size:9px;
-  color:var(--text3);
-  cursor:pointer;
-  padding:4px 8px;
-  border:1px solid var(--border);
-  letter-spacing:.08em;
-  transition:color .12s,border-color .12s;
-  flex-shrink:0;
-}
-.detail-close:hover{color:var(--gold-dim);border-color:var(--gold-dark)}
-
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
-footer{
-  margin-top:40px;
-  padding-top:20px;
-  border-top:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  animation:fadeIn 1.2s .4s ease both;
-}
-.footer-sig{font-size:8px;color:var(--text3);letter-spacing:.12em;line-height:1.8}
-.footer-sig span{color:var(--gold-dark)}
-.footer-corner{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-.footer-corner::before,
-.footer-corner::after{
-  content:'◇';
-  font-size:8px;
-  color:var(--gold-dark);
-}
-
-/* ══════════════════════════════════════
-   WIRE ANIMATION (active signal indicator)
-══════════════════════════════════════ */
-.wire-bar{
-  height:2px;
-  background:var(--bg2);
-  overflow:hidden;
-  position:relative;
-}
-.wire-pulse{
-  position:absolute;
-  left:-100%;
-  height:100%;
-  width:40%;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  animation:wirePulse 2s ease-in-out infinite;
-}
-@keyframes wirePulse{
-  0%{left:-40%}
-  100%{left:140%}
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
-@media(max-width:700px){
-  .site{padding:0 16px 60px}
-  header{grid-template-columns:1fr;gap:16px}
-  .hero-right{text-align:left}
-  .hero-links{justify-content:flex-start}
-  .dp-layout{grid-template-columns:1fr}
-  .stage-rail{display:none}
-  .mux-inputs{flex-wrap:wrap}
-  .mux-btn{min-width:80px;flex:none}
-  .card-grid-2,.hobby-grid,.contact-grid,.edu-courses{grid-template-columns:1fr}
-}
+.footer-strip{border-left:1px solid var(--border);padding:8px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:6px}
+.flink{font-size:8px;color:var(--gold-dim);text-decoration:none;padding:2px 8px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:block}
+.flink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
 </style>
 </head>
 <body>
+<div class="shell">
 
-<div class="site">
-
-  <!-- ── HEADER ── -->
-  <header>
-    <div class="hero-left">
-      <div class="chip-id">&#9670; PORTFOLIO_DATAPATH.v &nbsp;·&nbsp; REV 2026</div>
-      <h1 class="hero-name">Monil Arora</h1>
-      <div class="hero-sub">
-        Electrical Engineering · University of British Columbia · BASc 2027<br>
-        Research Assistant · Laser Zentrum Hannover · Embedded &amp; Hardware Systems
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="status-row">
-        <div class="clkdot"></div>
-        <span class="status-txt">SYSTEM ONLINE · CLK 2026</span>
-      </div>
-      <div class="hero-links">
-        <a class="hlink" href="mailto:monilarora2003@gmail.com">&#9670; Email</a>
-        <a class="hlink" href="https://github.com/plundis" target="_blank">&#9670; GitHub</a>
-        <a class="hlink" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank">&#9670; LinkedIn</a>
-        <a class="hlink" href="tel:+12367775739">&#9670; +1 236 777 5739</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- ── MUX NAV ── -->
-  <nav class="mux-nav">
-    <div class="mux-label">6:1 MUX &nbsp;·&nbsp; SEL[2:0]</div>
-    <div class="mux-inputs">
-      <button class="mux-btn active" id="btn-skills"     onclick="setMode('skills')">
-        <span class="sig-name">SKILLS</span>
-        <span class="sig-id">sig[0] · 3'b000</span>
-      </button>
-      <button class="mux-btn" id="btn-experience" onclick="setMode('experience')">
-        <span class="sig-name">EXP</span>
-        <span class="sig-id">sig[1] · 3'b001</span>
-      </button>
-      <button class="mux-btn" id="btn-projects"   onclick="setMode('projects')">
-        <span class="sig-name">PROJ</span>
-        <span class="sig-id">sig[2] · 3'b010</span>
-      </button>
-      <button class="mux-btn" id="btn-education"  onclick="setMode('education')">
-        <span class="sig-name">EDUC</span>
-        <span class="sig-id">sig[3] · 3'b011</span>
-      </button>
-      <button class="mux-btn" id="btn-hobbies"    onclick="setMode('hobbies')">
-        <span class="sig-name">HOBBY</span>
-        <span class="sig-id">sig[4] · 3'b100</span>
-      </button>
-      <button class="mux-btn" id="btn-contact"    onclick="setMode('contact')">
-        <span class="sig-name">CONTACT</span>
-        <span class="sig-id">sig[5] · 3'b101</span>
-      </button>
-    </div>
-    <div class="mux-sel-display" id="sel-display">OUT_REG = 3'b000</div>
-  </nav>
-
-  <!-- ── WIRE BAR ── -->
-  <div class="wire-bar">
-    <div class="wire-pulse"></div>
+  <div class="topbar">
+    <div class="tb-left">&#9670; MONIL_ARORA.v <span>·</span> UBC EE <span>·</span> BASc 2027 <span>·</span> PORTFOLIO_DATAPATH</div>
+    <div class="tb-right"><div class="clkdot"></div>&nbsp;CLK · REV 2026</div>
   </div>
 
-  <!-- ── MAIN DATAPATH LAYOUT ── -->
-  <div class="dp-layout">
+  <div class="main">
 
-    <!-- Stage rail -->
-    <div class="stage-rail">
-      <div class="stage-cell">
-        <div class="stage-tag">WB &nbsp;·&nbsp; WRITE-BACK</div>
-        <div class="stage-name">Skills</div>
-        <div class="stage-desc">Register file<br>write-back bus</div>
-      </div>
-      <div class="stage-cell">
-        <div class="stage-tag">MEM &nbsp;·&nbsp; MEMORY</div>
-        <div class="stage-name">Experience</div>
-        <div class="stage-desc">Data memory<br>access stage</div>
-      </div>
-      <div class="stage-cell">
-        <div class="stage-tag">EX &nbsp;·&nbsp; EXECUTE</div>
-        <div class="stage-name">Projects</div>
-        <div class="stage-desc">ALU operation<br>execution stage</div>
-      </div>
-      <div class="stage-cell">
-        <div class="stage-tag">ID &nbsp;·&nbsp; DECODE</div>
-        <div class="stage-name">Education</div>
-        <div class="stage-desc">Instruction<br>decode stage</div>
-      </div>
-      <div class="stage-cell">
-        <div class="stage-tag">IF &nbsp;·&nbsp; FETCH</div>
-        <div class="stage-name">About</div>
-        <div class="stage-desc">Hobbies &amp;<br>contact I/O</div>
-      </div>
+    <!-- MUX SVG — registers directly attached to MUX, no separate input column -->
+    <div class="mux-col">
+      <svg id="dpsvg" viewBox="0 0 320 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#3a2e10" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+          <marker id="arr-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+
+        <!-- corner ornaments -->
+        <path d="M4,20 L4,6 L18,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
+        <path d="M316,20 L316,6 L302,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
+
+        <!-- col headers -->
+        <text x="80" y="14" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">REGISTERS → MUX</text>
+        <text x="248" y="14" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">OUT_REG</text>
+
+        <!-- ── Signal register blocks flush against MUX left edge ── -->
+
+        <!-- Skills [sig 0] -->
+        <g id="sig-skills" onclick="muxSel('skills')" style="cursor:pointer">
+          <rect id="sn-skills" x="8" y="34" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-skills" x="64" y="49" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Skills</text>
+          <text x="64" y="63" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[0] · 3'b000</text>
+        </g>
+        <line id="w-skills" x1="120" y1="52" x2="152" y2="52" stroke="#1a2330" stroke-width="1"/>
+        <text x="122" y="48" font-size="6" fill="#222018" font-family="Courier New">SKILL_BUS</text>
+        <circle id="dot-skills" cx="152" cy="52" r="2.5" fill="#1a2330"/>
+
+        <!-- Experience [sig 1] -->
+        <g id="sig-experience" onclick="muxSel('experience')" style="cursor:pointer">
+          <rect id="sn-experience" x="8" y="110" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-experience" x="64" y="125" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Experience</text>
+          <text x="64" y="139" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[1] · 3'b001</text>
+        </g>
+        <line id="w-experience" x1="120" y1="128" x2="152" y2="128" stroke="#1a2330" stroke-width="1"/>
+        <text x="122" y="124" font-size="6" fill="#222018" font-family="Courier New">EXP_BUS</text>
+        <circle id="dot-experience" cx="152" cy="128" r="2.5" fill="#1a2330"/>
+
+        <!-- Projects [sig 2] -->
+        <g id="sig-projects" onclick="muxSel('projects')" style="cursor:pointer">
+          <rect id="sn-projects" x="8" y="186" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-projects" x="64" y="201" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Projects</text>
+          <text x="64" y="215" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[2] · 3'b010</text>
+        </g>
+        <line id="w-projects" x1="120" y1="204" x2="152" y2="204" stroke="#1a2330" stroke-width="1"/>
+        <text x="122" y="200" font-size="6" fill="#222018" font-family="Courier New">PROJ_BUS</text>
+        <circle id="dot-projects" cx="152" cy="204" r="2.5" fill="#1a2330"/>
+
+        <!-- Education [sig 3] -->
+        <g id="sig-education" onclick="muxSel('education')" style="cursor:pointer">
+          <rect id="sn-education" x="8" y="262" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-education" x="64" y="277" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Education</text>
+          <text x="64" y="291" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[3] · 3'b011</text>
+        </g>
+        <line id="w-education" x1="120" y1="280" x2="152" y2="280" stroke="#1a2330" stroke-width="1"/>
+        <text x="122" y="276" font-size="6" fill="#222018" font-family="Courier New">EDUC_BUS</text>
+        <circle id="dot-education" cx="152" cy="280" r="2.5" fill="#1a2330"/>
+
+        <!-- Hobbies [sig 4] -->
+        <g id="sig-hobbies" onclick="muxSel('hobbies')" style="cursor:pointer">
+          <rect id="sn-hobbies" x="8" y="338" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-hobbies" x="64" y="353" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Hobbies</text>
+          <text x="64" y="367" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[4] · 3'b100</text>
+        </g>
+        <line id="w-hobbies" x1="120" y1="356" x2="152" y2="356" stroke="#1a2330" stroke-width="1"/>
+        <text x="122" y="352" font-size="6" fill="#222018" font-family="Courier New">HOB_BUS</text>
+        <circle id="dot-hobbies" cx="152" cy="356" r="2.5" fill="#1a2330"/>
+
+        <!-- Contact [sig 5] -->
+        <g id="sig-contact" onclick="muxSel('contact')" style="cursor:pointer">
+          <rect id="sn-contact" x="8" y="414" width="112" height="36" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+          <text id="st-contact" x="64" y="429" text-anchor="middle" font-size="11" fill="#6e6450" font-family="Courier New">Contact</text>
+          <text x="64" y="443" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">sig[5] · 3'b101</text>
+        </g>
+        <line id="w-contact" x1="120" y1="432" x2="152" y2="432" stroke="#1a2330" stroke-width="1"/>
+        <text x="122" y="428" font-size="6" fill="#222018" font-family="Courier New">CONT_BUS</text>
+        <circle id="dot-contact" cx="152" cy="432" r="2.5" fill="#1a2330"/>
+
+        <!-- MUX trapezoid body -->
+        <polygon points="152,20 200,32 200,468 152,480" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <line x1="152" y1="20"  x2="200" y2="32"  stroke="#2a2218" stroke-width="1"/>
+        <line x1="152" y1="480" x2="200" y2="468" stroke="#2a2218" stroke-width="1"/>
+        <text x="172" y="250" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="2" transform="rotate(-90,172,250)">6:1 MUX</text>
+
+        <!-- active energy line inside MUX -->
+        <line id="mux-energy" x1="198" y1="250" x2="198" y2="250" stroke="#3ab8c8" stroke-width="1.5" stroke-linecap="round" opacity="0"/>
+
+        <!-- SEL control line -->
+        <line x1="176" y1="480" x2="176" y2="492" stroke="#1a2330" stroke-width="1"/>
+        <rect x="136" y="490" width="80" height="18" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <text x="176" y="501" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">SEL[2:0]</text>
+        <text id="sel-disp" x="176" y="489" text-anchor="middle" font-size="7" fill="#6e6450" font-family="Courier New">= 3'b000</text>
+
+        <!-- MUX output wire -->
+        <line id="out-wire" x1="200" y1="250" x2="228" y2="250" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="202" y="246" font-size="6" fill="#222018" font-family="Courier New">OUT[7:0]</text>
+
+        <!-- OUT_REG -->
+        <rect id="outreg" x="228" y="206" width="86" height="88" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
+        <rect x="228" y="206" width="86" height="13" fill="#0d1016"/>
+        <line x1="228" y1="219" x2="314" y2="219" stroke="#111820" stroke-width="1"/>
+        <text x="271" y="215" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New" letter-spacing="1">OUT_REG</text>
+        <text id="or-mode" x="271" y="240" text-anchor="middle" font-size="13" fill="#c9a84c" font-family="Courier New">Skills</text>
+        <text id="or-addr" x="271" y="256" text-anchor="middle" font-size="7" fill="#2a2218" font-family="Courier New">0x0000</text>
+        <polygon points="228,268 228,276 236,272" fill="#1a2330"/>
+        <line x1="220" y1="272" x2="228" y2="272" stroke="#1a2330" stroke-width="1"/>
+        <text x="218" y="276" text-anchor="end" font-size="6" fill="#222018" font-family="Courier New">CLK</text>
+
+        <!-- data wire exits right -->
+        <line x1="314" y1="250" x2="318" y2="250" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="302" y="246" font-size="6" fill="#222018" font-family="Courier New">DATA</text>
+      </svg>
     </div>
 
-    <!-- Pipeline content -->
-    <div class="pipeline">
-
-      <!-- ─── SKILLS PANEL ─── -->
-      <div class="pipe-section">
-        <div class="content-panel active" id="panel-skills">
-          <div class="section-header">
-            <span class="section-addr">WB[sk] ·</span>
-            <span class="section-title">Register File — Skills</span>
-          </div>
-          <table class="reg-table">
-            <tr onclick="selectRow(this,'WB[sk0]','Embedded Systems','STM32, ESP32, EFM8, ARM Cortex-M, FreeRTOS, PlatformIO. Comfortable with bare-metal C/C++, UART/SPI/I2C/CAN bus protocols, real-time task scheduling, interrupt-driven design, and custom bootloaders.','STM32·ESP32·EFM8·FreeRTOS·ARM·C·C++·UART·SPI·I2C·CAN')">
-              <td class="reg-addr">WB[sk0]</td>
-              <td class="reg-name">Embedded Systems</td>
-              <td class="reg-vals">STM32, ESP32, ARM Cortex-M, FreeRTOS, PlatformIO, UART / SPI / I2C / CAN</td>
-              <td class="reg-bits"><div class="reg-bit-tags"><span class="bit-tag">C</span><span class="bit-tag">C++</span><span class="bit-tag">RTOS</span></div></td>
-            </tr>
-            <tr onclick="selectRow(this,'WB[sk1]','HDL / FPGA','Verilog and VHDL design from RTL through synthesis. Experienced with DE1-SoC FPGA, Quartus Prime, and ModelSim. Designed a Deep Neural Network Accelerator (Nios II / MNIST), a full RISC machine datapath, and combinational/sequential logic modules.','Verilog·VHDL·FPGA·Quartus·ModelSim·Nios II·DE1-SoC')">
-              <td class="reg-addr">WB[sk1]</td>
-              <td class="reg-name">HDL / FPGA</td>
-              <td class="reg-vals">Verilog, VHDL, DE1-SoC, Quartus Prime, ModelSim — DNN Accelerator &amp; RISC machine</td>
-              <td class="reg-bits"><div class="reg-bit-tags"><span class="bit-tag">RTL</span><span class="bit-tag">FPGA</span></div></td>
-            </tr>
-            <tr onclick="selectRow(this,'WB[sk2]','Software & Tools','Python, Java, MATLAB, Git, Linux, GStreamer, YAMCS, WinDbg, Maven, PlatformIO. Comfortable across the full toolchain from bare-metal firmware up to host-side data pipeline software.','Python·Java·MATLAB·Git·Linux·GStreamer·YAMCS·WinDbg·Maven')">
-              <td class="reg-addr">WB[sk2]</td>
-              <td class="reg-name">Software &amp; Tools</td>
-              <td class="reg-vals">Python, Java, MATLAB, Git, Linux, GStreamer, YAMCS, WinDbg, Maven</td>
-              <td class="reg-bits"><div class="reg-bit-tags"><span class="bit-tag">Python</span><span class="bit-tag">Java</span></div></td>
-            </tr>
-            <tr onclick="selectRow(this,'WB[sk3]','Protocols & Standards','CCSDS packet structures for space data systems, UART, SPI, I2C, CAN, RTSP video streaming, TCP/IP, JTAG debug, USB. Experience implementing and debugging at the protocol layer in real hardware.','CCSDS·UART·SPI·I2C·CAN·RTSP·TCP·JTAG·USB')">
-              <td class="reg-addr">WB[sk3]</td>
-              <td class="reg-name">Protocols</td>
-              <td class="reg-vals">CCSDS, UART, SPI, I2C, CAN, RTSP, TCP/IP, JTAG, USB</td>
-              <td class="reg-bits"><div class="reg-bit-tags"><span class="bit-tag">CCSDS</span><span class="bit-tag">JTAG</span></div></td>
-            </tr>
-            <tr onclick="selectRow(this,'WB[sk4]','Hardware & Lab','Oscilloscope, logic analyser, signal generator, soldering, PCB bring-up. AD9910 DDS, AD8336 VGA RF chain design, Brainboxes serial/Ethernet, STM32 JTAG debug, multimeter-level hands-on troubleshooting.','Oscilloscope·Logic Analyser·AD9910·DDS·RF·PCB·Soldering')">
-              <td class="reg-addr">WB[sk4]</td>
-              <td class="reg-name">Hardware &amp; Lab</td>
-              <td class="reg-vals">Oscilloscope, logic analyser, AD9910 DDS, RF chain design, PCB bring-up</td>
-              <td class="reg-bits"><div class="reg-bit-tags"><span class="bit-tag">RF</span><span class="bit-tag">PCB</span></div></td>
-            </tr>
-          </table>
-        </div>
+    <!-- Display panel -->
+    <div class="disp-col">
+      <div class="disp-header">
+        <span>DISPLAY_REG[7:0]</span>
+        <span id="disp-mode" style="color:var(--gold-dim)">Skills</span>
       </div>
-
-      <!-- ─── EXPERIENCE PANEL ─── -->
-      <div class="pipe-section">
-        <div class="content-panel" id="panel-experience">
-          <div class="section-header">
-            <span class="section-addr">MEM[0x10–0x20] ·</span>
-            <span class="section-title">Data Memory — Experience</span>
-          </div>
-
-          <div class="mem-block">
-            <div class="mem-header" onclick="toggleMem(this)">
-              <div class="mem-header-left">
-                <span class="mem-addr">MEM[0x10]</span>
-                <span class="mem-title">Research Assistant — Laser Zentrum Hannover</span>
-              </div>
-              <span class="mem-date">Mar 2026 – Jul 2026 · Hannover, DE &nbsp;&#9654;</span>
-            </div>
-            <div class="mem-body">
-              Building a CubeSat / small satellite ground station from scratch at LZH. Developed a YAMCS-based telemetry pipeline with a Java packet preprocessor implementing CCSDS packet structures and a Time Correlation Service (TCO) for OBT-to-UTC timestamp mapping. Integrated FreeRTOS/STM32 firmware with the ground station over serial. Also designed and deployed a 4-camera RTSP surveillance system for the lab using GStreamer on Raspberry Pi, resolving Wayland/GStreamer sink compatibility, PAL 4:3 aspect ratio scaling, and autostart watchdog reliability.
-              <div class="mem-body-tags">
-                <span class="tag">YAMCS</span><span class="tag">CCSDS</span><span class="tag">STM32</span><span class="tag">FreeRTOS</span><span class="tag">Java</span><span class="tag">Python</span><span class="tag">GStreamer</span><span class="tag">Raspberry Pi</span><span class="tag">RTSP</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mem-block">
-            <div class="mem-header" onclick="toggleMem(this)">
-              <div class="mem-header-left">
-                <span class="mem-addr">MEM[0x14]</span>
-                <span class="mem-title">Signal Processing Intern — Sharang Shakti Pvt Ltd</span>
-              </div>
-              <span class="mem-date">2023 · India &nbsp;&#9654;</span>
-            </div>
-            <div class="mem-body">
-              Worked on radar anti-drone signal processing systems. Hands-on with AD9910 Direct Digital Synthesis (DDS) IC for precision frequency generation and AD8336 Variable Gain Amplifier (VGA) for dynamic range control. Contributed to custom RF signal chain design, testing, and characterisation.
-              <div class="mem-body-tags">
-                <span class="tag">AD9910</span><span class="tag">DDS</span><span class="tag">AD8336</span><span class="tag">VGA</span><span class="tag">RF</span><span class="tag">Radar</span><span class="tag">Signal Processing</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mem-block">
-            <div class="mem-header" onclick="toggleMem(this)">
-              <div class="mem-header-left">
-                <span class="mem-addr">MEM[0x18]</span>
-                <span class="mem-title">Staffing Associate — Drake International</span>
-              </div>
-              <span class="mem-date">2022 · Canada &nbsp;&#9654;</span>
-            </div>
-            <div class="mem-body">
-              Non-technical role in staffing and customer service operations. Developed communication, client-facing, and organisational skills.
-              <div class="mem-body-tags">
-                <span class="tag">Operations</span><span class="tag">Customer Service</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── PROJECTS PANEL ─── -->
-      <div class="pipe-section">
-        <div class="content-panel" id="panel-projects">
-          <div class="section-header">
-            <span class="section-addr">ALU[p0–p4] ·</span>
-            <span class="section-title">ALU Execution — Projects</span>
-          </div>
-          <div class="card-grid card-grid-2">
-
-            <div class="alu-card" onclick="selectAlu(this,'ALU[p0]','CubeSat Ground Station','Full YAMCS-based satellite ground station developed at LZH. Features a Java packet preprocessor with CCSDS packet framing, a Time Correlation Service (TCO) for on-board time to UTC mapping, FreeRTOS/STM32 firmware integration over serial, and a collaborative GitHub repo with per-user config templating and CI pipeline.','YAMCS·CCSDS·STM32·FreeRTOS·Java·Python·GitHub')">
-              <div class="alu-card-op">ALU[p0] · EX STAGE</div>
-              <div class="alu-card-name">CubeSat Ground Station</div>
-              <div class="alu-card-body">YAMCS pipeline with CCSDS packet processing, Time Correlation Service, FreeRTOS/STM32 firmware integration. LZH research project.</div>
-              <div class="alu-card-tags"><span class="tag">YAMCS</span><span class="tag">CCSDS</span><span class="tag">STM32</span><span class="tag">Java</span></div>
-            </div>
-
-            <div class="alu-card" onclick="selectAlu(this,'ALU[p1]','4-Camera RTSP Surveillance','Raspberry Pi GStreamer 4-camera live surveillance display deployed in the LZH lab. Resolved PAL 4:3 aspect ratio scaling, Wayland/GStreamer sink compatibility on a headless Pi, and implemented autostart with watchdog for continuous 24/7 operation.','GStreamer·Raspberry Pi·RTSP·Wayland·Linux·Python')">
-              <div class="alu-card-op">ALU[p1] · EX STAGE</div>
-              <div class="alu-card-name">4-Camera RTSP Display</div>
-              <div class="alu-card-body">Raspberry Pi GStreamer surveillance system. Resolved PAL/Wayland issues, autostart watchdog for 24/7 operation.</div>
-              <div class="alu-card-tags"><span class="tag">GStreamer</span><span class="tag">RPi</span><span class="tag">RTSP</span><span class="tag">Linux</span></div>
-            </div>
-
-            <div class="alu-card" onclick="selectAlu(this,'ALU[p2]','Self-Balancing Robot','STM32-based inverted pendulum robot. Custom PID control loop with IMU (MPU-6050) sensor fusion for pitch estimation, custom motor driver firmware under FreeRTOS. Built for UBC ELEC 391 — Real-Time Embedded Systems capstone.','STM32·FreeRTOS·PID·IMU·MPU-6050·C·ELEC 391')">
-              <div class="alu-card-op">ALU[p2] · EX STAGE</div>
-              <div class="alu-card-name">Self-Balancing Robot</div>
-              <div class="alu-card-body">STM32 inverted pendulum with PID control, IMU sensor fusion, custom motor driver. UBC ELEC 391 capstone project.</div>
-              <div class="alu-card-tags"><span class="tag">STM32</span><span class="tag">PID</span><span class="tag">IMU</span><span class="tag">FreeRTOS</span></div>
-            </div>
-
-            <div class="alu-card" onclick="selectAlu(this,'ALU[p3]','DNN Accelerator (FPGA)','Deep Neural Network accelerator on Nios II softcore processor. Implemented matrix multiply and ReLU activation in Verilog, running MNIST digit inference at significantly faster than software baseline. Full RTL design, simulation in ModelSim, synthesis and timing closure in Quartus.','Nios II·MNIST·Verilog·FPGA·Quartus·ModelSim·RTL')">
-              <div class="alu-card-op">ALU[p3] · EX STAGE</div>
-              <div class="alu-card-name">DNN Accelerator</div>
-              <div class="alu-card-body">MNIST inference accelerator on Nios II softcore. Verilog RTL for matrix multiply + ReLU, synthesised on DE1-SoC FPGA.</div>
-              <div class="alu-card-tags"><span class="tag">Nios II</span><span class="tag">Verilog</span><span class="tag">FPGA</span><span class="tag">MNIST</span></div>
-            </div>
-
-            <div class="alu-card" onclick="selectAlu(this,'ALU[p4]','Metal Detector Robot','Autonomous metal-detecting robot. ESP32-based, with BLE telemetry, custom PCB, and servo-driven scanning arm. Sensor fusion from inductive proximity sensor and IMU for localisation and mapping.','ESP32·BLE·PCB·C++·IMU·Servo')">
-              <div class="alu-card-op">ALU[p4] · EX STAGE</div>
-              <div class="alu-card-name">Metal Detector Robot</div>
-              <div class="alu-card-body">ESP32 autonomous robot with BLE telemetry, custom PCB, servo scanning arm, and inductive proximity sensing.</div>
-              <div class="alu-card-tags"><span class="tag">ESP32</span><span class="tag">BLE</span><span class="tag">PCB</span><span class="tag">C++</span></div>
-            </div>
-
-            <div class="alu-card" onclick="selectAlu(this,'ALU[p5]','Reflow Oven Controller','PID-controlled reflow oven for PCB soldering. EFM8 microcontroller, thermocouple ADC, SSR switching, and a custom LCD UI displaying real-time temperature profile vs. target curve. Fine-tuned PID for ramp, soak, and reflow zones.','EFM8·PID·Thermocouple·SSR·C·LCD')">
-              <div class="alu-card-op">ALU[p5] · EX STAGE</div>
-              <div class="alu-card-name">Reflow Oven Controller</div>
-              <div class="alu-card-body">EFM8 PID-controlled reflow oven. Thermocouple ADC, SSR switching, LCD UI with live temperature vs. target curve.</div>
-              <div class="alu-card-tags"><span class="tag">EFM8</span><span class="tag">PID</span><span class="tag">SSR</span><span class="tag">C</span></div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── EDUCATION PANEL ─── -->
-      <div class="pipe-section">
-        <div class="content-panel" id="panel-education">
-          <div class="section-header">
-            <span class="section-addr">REG[r0–r1] ·</span>
-            <span class="section-title">Decode Stage — Education</span>
-          </div>
-
-          <div class="edu-main">
-            <div class="edu-badge">&#9670; ACTIVE ENROLLMENT · BASc TRACK</div>
-            <div class="edu-name">University of British Columbia</div>
-            <div class="edu-degree">Bachelor of Applied Science — Electrical Engineering &nbsp;·&nbsp; Expected 2027 &nbsp;·&nbsp; Vancouver, BC</div>
-
-            <div class="edu-courses">
-              <div class="edu-course"><strong>CPEN 311</strong> — Digital Systems Design (FPGA / HDL)</div>
-              <div class="edu-course"><strong>CPEN 211</strong> — Computer Architecture (RISC / Datapath)</div>
-              <div class="edu-course"><strong>ELEC 391</strong> — Embedded &amp; Real-Time Systems</div>
-              <div class="edu-course"><strong>ELEC 301</strong> — Digital Signal Processing</div>
-              <div class="edu-course"><strong>ELEC 311</strong> — Control Systems</div>
-              <div class="edu-course"><strong>ELEC 201</strong> — Circuit Analysis II</div>
-              <div class="edu-course"><strong>APSC 210</strong> — Engineering Co-op</div>
-              <div class="edu-course"><strong>MATH 307</strong> — Applied Linear Algebra</div>
-            </div>
-          </div>
-
-          <div class="card-grid card-grid-2" style="margin-top:12px">
-            <div class="card" onclick="selectCard(this,'IMM[r1]','Key Academic Projects','DNN Accelerator on Nios II/MNIST, RISC machine datapath (full 5-stage pipeline), Metal Detector Robot, Reflow Oven Controller. Hands-on with HDL simulation, FPGA synthesis and timing closure, embedded C firmware, and PID control loops.','Nios II·RISC·FPGA·Verilog·PID·STM32·EFM8')">
-              <div class="card-addr">IMM[r1]</div>
-              <div class="card-title">Academic Projects</div>
-              <div class="card-desc">DNN Accelerator, RISC machine, Metal Detector Robot, Reflow Oven Controller — spanning RTL, firmware, and control systems.</div>
-              <div class="card-tags"><span class="tag">Nios II</span><span class="tag">RISC</span><span class="tag">RTL</span></div>
-            </div>
-            <div class="card" onclick="selectCard(this,'REG[r2]','Co-op & Professional Development','Active UBC Engineering co-op participant (APSC 210 / DES 442). Currently on international co-op placement at LZH, Germany. LinkedIn and resume maintained for industry roles in embedded / hardware engineering post-graduation.','APSC 210·Co-op·LinkedIn·EE Industry')">
-              <div class="card-addr">REG[r2]</div>
-              <div class="card-title">Co-op &amp; Professional Dev</div>
-              <div class="card-desc">UBC Engineering co-op participant. Current international placement at LZH. Targeting embedded / hardware roles post-graduation.</div>
-              <div class="card-tags"><span class="tag">Co-op</span><span class="tag">LZH</span><span class="tag">Industry</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── HOBBIES PANEL ─── -->
-      <div class="pipe-section">
-        <div class="content-panel" id="panel-hobbies">
-          <div class="section-header">
-            <span class="section-addr">HOB[h0–h3] ·</span>
-            <span class="section-title">Signal Decoder — Hobbies</span>
-          </div>
-          <div class="hobby-grid">
-            <div class="hobby-card">
-              <div class="hobby-icon">HOB[h0] · SPORT</div>
-              <div class="hobby-name">Football</div>
-              <div class="hobby-desc">Avid football fan. Follows matches closely and plays recreationally. Enjoying the sport both as a spectator and on the pitch.</div>
-            </div>
-            <div class="hobby-card">
-              <div class="hobby-icon">HOB[h1] · GAMING</div>
-              <div class="hobby-name">Video Games</div>
-              <div class="hobby-desc">Resident Evil series (survival horror) and Yakuza / Like a Dragon (narrative RPG). Drawn to games with strong world-building and mechanical depth.</div>
-            </div>
-            <div class="hobby-card">
-              <div class="hobby-icon">HOB[h2] · MEDIA</div>
-              <div class="hobby-name">Anime</div>
-              <div class="hobby-desc">Regular viewer. Enjoys story-driven and action series. Appreciates strong character writing and well-directed visual storytelling.</div>
-            </div>
-            <div class="hobby-card">
-              <div class="hobby-icon">HOB[h3] · TRAVEL</div>
-              <div class="hobby-name">European Travel</div>
-              <div class="hobby-desc">Exploring Europe during the LZH internship. Hamburg day trips, Copenhagen, Helsingborg, and more. Making the most of time on the continent.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── CONTACT PANEL ─── -->
-      <div class="pipe-section">
-        <div class="content-panel" id="panel-contact">
-          <div class="section-header">
-            <span class="section-addr">I/O[0x00–0x0F] ·</span>
-            <span class="section-title">I/O Port Map — Contact</span>
-          </div>
-          <div class="contact-grid">
-            <div class="port-card">
-              <div class="port-label">PORT[0x00] · PRIMARY</div>
-              <div class="port-type">EMAIL_TX</div>
-              <div class="port-value"><a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a></div>
-            </div>
-            <div class="port-card">
-              <div class="port-label">PORT[0x01] · VOICE</div>
-              <div class="port-type">PHONE_RX</div>
-              <div class="port-value"><a href="tel:+12367775739">+1 236 777 5739</a></div>
-            </div>
-            <div class="port-card">
-              <div class="port-label">PORT[0x02] · CODE</div>
-              <div class="port-type">GITHUB_BUS</div>
-              <div class="port-value"><a href="https://github.com/plundis" target="_blank">github.com/plundis</a></div>
-            </div>
-            <div class="port-card">
-              <div class="port-label">PORT[0x03] · PROFESSIONAL</div>
-              <div class="port-type">LINKEDIN_BUS</div>
-              <div class="port-value"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank">monil-arora-a26851290</a></div>
-            </div>
-            <div class="port-card">
-              <div class="port-label">PORT[0x04] · PERMANENT</div>
-              <div class="port-type">ADDR_BC</div>
-              <div class="port-value">2205 Lower Mall, Vancouver, BC</div>
-            </div>
-            <div class="port-card">
-              <div class="port-label">PORT[0x05] · CURRENT</div>
-              <div class="port-type">ADDR_DE</div>
-              <div class="port-value">Albertstraße 12, 30451 Hannover, DE</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div class="disp-teal"></div>
+      <div class="disp-items" id="disp-items"></div>
     </div>
+
   </div>
 
-  <!-- ── DETAIL DRAWER ── -->
-  <div class="detail-drawer" id="detail-drawer">
-    <div class="detail-inner">
-      <div>
-        <div class="detail-addr" id="d-addr"></div>
-        <div class="detail-title" id="d-title"></div>
-        <div class="detail-body" id="d-body"></div>
-        <div class="detail-tags" id="d-tags"></div>
+  <div class="bottom">
+    <div class="det-area">
+      <div class="det-placeholder" id="det-ph">// click any entry to inspect</div>
+      <div id="det-inner" style="display:none;flex-direction:column;gap:3px">
+        <div class="det-addr" id="det-addr"></div>
+        <div class="det-title" id="det-title"></div>
+        <div class="det-body" id="det-body"></div>
+        <div class="det-tags" id="det-tags"></div>
       </div>
-      <div class="detail-close" onclick="closeDetail()">&#10005; CLOSE</div>
+    </div>
+    <div class="footer-strip">
+      <a class="flink" href="mailto:monilarora2003@gmail.com">&#9670; Email</a>
+      <a class="flink" href="https://github.com/plundis" target="_blank">&#9670; GitHub</a>
+      <a class="flink" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank">&#9670; LinkedIn</a>
     </div>
   </div>
-
-  <!-- ── FOOTER ── -->
-  <footer>
-    <div class="footer-sig">
-      <span>MONIL_ARORA.v &nbsp;·&nbsp; PORTFOLIO_DATAPATH</span><br>
-      <span>UBC EE · BASc 2027 · Embedded Systems · Hardware Design</span><br>
-      <span style="color:var(--gold-dark)">&#9670; Built with: HTML · CSS · JS · Imperium Obsidian</span>
-    </div>
-    <div class="footer-corner">&#9670;</div>
-  </footer>
 
 </div>
-
 <script>
-const MODES = ['skills','experience','projects','education','hobbies','contact'];
-const SEL_MAP = {
-  skills:"3'b000", experience:"3'b001", projects:"3'b010",
-  education:"3'b011", hobbies:"3'b100", contact:"3'b101"
+const DATA={
+  skills:{sel:"3'b000",addr:"0x0000",label:"Skills",items:[
+    {l:"Embedded Systems",d:"STM32, ESP32, EFM8, ARM Cortex-M, FreeRTOS, PlatformIO, UART/SPI/I2C/CAN, bare-metal C/C++. Real-time scheduling, interrupt-driven design, custom bootloaders.",t:"STM32·ESP32·FreeRTOS·ARM·C·C++·UART·SPI·I2C·CAN"},
+    {l:"HDL / FPGA",d:"Verilog, VHDL, DE1-SoC, Quartus Prime, ModelSim. DNN Accelerator on Nios II/MNIST, RISC machine datapath, combinational and sequential logic.",t:"Verilog·VHDL·FPGA·Quartus·ModelSim·Nios II"},
+    {l:"Software & Tools",d:"Python, Java, MATLAB, Git, Linux, GStreamer, YAMCS, WinDbg, Maven, PlatformIO. Full toolchain from firmware to host-side pipelines.",t:"Python·Java·MATLAB·Git·Linux·GStreamer·YAMCS"},
+    {l:"Protocols",d:"CCSDS, UART, SPI, I2C, CAN, RTSP, TCP/IP, JTAG, USB. Implementation and debugging at the protocol layer on real hardware.",t:"CCSDS·UART·SPI·I2C·CAN·RTSP·JTAG·USB"},
+    {l:"Hardware & Lab",d:"Oscilloscope, logic analyser, signal generator, soldering, PCB bring-up. AD9910 DDS, AD8336 VGA RF chain design, STM32 JTAG debug.",t:"Oscilloscope·Logic Analyser·AD9910·DDS·RF·PCB"}
+  ]},
+  experience:{sel:"3'b001",addr:"0x0001",label:"Experience",items:[
+    {l:"LZH — Research Assistant",d:"Laser Zentrum Hannover, Germany. Mar–Jul 2026. CubeSat ground station: YAMCS pipeline, Java CCSDS preprocessor, TCO for OBT-to-UTC, FreeRTOS/STM32 firmware. Also built 4-camera RTSP surveillance system.",t:"LZH·YAMCS·CCSDS·STM32·FreeRTOS·Java·GStreamer"},
+    {l:"Sharang Shakti — Intern",d:"Signal processing internship. Radar anti-drone systems: AD9910 DDS, AD8336 VGA, custom RF signal chain design and characterisation.",t:"AD9910·DDS·AD8336·VGA·RF·Radar"},
+    {l:"Drake International",d:"Staffing and customer service operations. Communication and organisational skills.",t:"Operations·Customer Service"}
+  ]},
+  projects:{sel:"3'b010",addr:"0x0002",label:"Projects",items:[
+    {l:"CubeSat Ground Station",d:"Full YAMCS ground station at LZH. Java packet preprocessor with CCSDS framing, TCO for OBT-to-UTC, FreeRTOS/STM32 firmware integration, GitHub CI pipeline.",t:"YAMCS·CCSDS·STM32·FreeRTOS·Java·Python"},
+    {l:"4-Camera RTSP Display",d:"Raspberry Pi GStreamer 4-camera surveillance display for LZH lab. Resolved PAL 4:3, Wayland/GStreamer sink, autostart watchdog for 24/7 reliability.",t:"GStreamer·Raspberry Pi·RTSP·Wayland·Linux"},
+    {l:"Self-Balancing Robot",d:"STM32 inverted pendulum robot. Custom PID control loop, MPU-6050 IMU sensor fusion, custom motor driver firmware under FreeRTOS. UBC ELEC 391 capstone.",t:"STM32·FreeRTOS·PID·IMU·C·ELEC 391"},
+    {l:"DNN Accelerator",d:"Deep Neural Network accelerator on Nios II softcore. Matrix multiply and ReLU in Verilog, MNIST inference. Full RTL, ModelSim sim, Quartus synthesis.",t:"Nios II·MNIST·Verilog·FPGA·Quartus"},
+    {l:"Metal Detector Robot",d:"ESP32 autonomous robot with BLE telemetry, custom PCB, servo scanning arm, and inductive proximity sensor for localisation.",t:"ESP32·BLE·PCB·C++·IMU·Servo"},
+    {l:"Reflow Oven Controller",d:"PID-controlled reflow oven on EFM8. Thermocouple ADC, SSR switching, LCD UI displaying live temperature vs. target curve.",t:"EFM8·PID·Thermocouple·SSR·LCD·C"}
+  ]},
+  education:{sel:"3'b011",addr:"0x0003",label:"Education",items:[
+    {l:"UBC — BASc Electrical Engineering",d:"University of British Columbia, Vancouver. Bachelor of Applied Science — Electrical Engineering. Expected 2027.",t:"UBC·BASc·EE·2027·Vancouver"},
+    {l:"CPEN 311 — FPGA / HDL",d:"Digital Systems Design. Verilog, VHDL, DE1-SoC, Quartus Prime, ModelSim. Combinational and sequential logic through synthesis.",t:"CPEN 311·Verilog·VHDL·FPGA·Quartus"},
+    {l:"CPEN 211 — Computer Architecture",d:"RISC machine datapath, 5-stage pipeline, cache, memory hierarchy, hazard detection and forwarding.",t:"CPEN 211·RISC·Pipeline·Cache"},
+    {l:"ELEC 391 — Embedded & Real-Time",d:"FreeRTOS, STM32, motor control, sensor fusion, PID. Capstone: Self-Balancing Robot.",t:"ELEC 391·FreeRTOS·STM32·PID"},
+    {l:"ELEC 301 — Digital Signal Processing",d:"FIR/IIR filter design, Z-transform, DFT/FFT, sampling theory.",t:"ELEC 301·DSP·FIR·IIR·FFT"},
+    {l:"ELEC 311 — Control Systems",d:"Feedback control, PID tuning, root locus, Bode plots, stability analysis.",t:"ELEC 311·Control·PID·Bode"}
+  ]},
+  hobbies:{sel:"3'b100",addr:"0x0004",label:"Hobbies",items:[
+    {l:"Football",d:"Avid football fan. Follows matches closely and plays recreationally.",t:"Football·Sport"},
+    {l:"Video Games",d:"Resident Evil series and Yakuza / Like a Dragon. Drawn to games with strong world-building and mechanical depth.",t:"Resident Evil·Yakuza·Gaming·RPG"},
+    {l:"Anime",d:"Regular viewer. Enjoys story-driven and action series.",t:"Anime·Media·Japan"},
+    {l:"European Travel",d:"Exploring Europe during the LZH internship — Hamburg, Copenhagen, Helsingborg, and more.",t:"Travel·Europe·Hamburg·Copenhagen"}
+  ]},
+  contact:{sel:"3'b101",addr:"0x0005",label:"Contact",items:[
+    {l:"Email",d:"monilarora2003@gmail.com",t:"Email·Primary"},
+    {l:"Phone",d:"+1 236 777 5739",t:"Canada·Mobile"},
+    {l:"GitHub",d:"github.com/plundis",t:"GitHub·Code"},
+    {l:"LinkedIn",d:"linkedin.com/in/monil-arora-a26851290",t:"LinkedIn"},
+    {l:"Location — Current",d:"Albertstraße 12, 30451 Hannover, Germany (Mar–Jul 2026)",t:"Hannover·Germany"},
+    {l:"Location — Permanent",d:"2205 Lower Mall, Vancouver, BC, Canada",t:"Vancouver·BC·Canada"}
+  ]}
 };
 
-let curMode = 'skills';
+const KEYS=['skills','experience','projects','education','hobbies','contact'];
+const Y={skills:52,experience:128,projects:204,education:280,hobbies:356,contact:432};
+let cur='skills';
 
-function setMode(mode){
-  MODES.forEach(m=>{
-    document.getElementById('panel-'+m).classList.toggle('active', m===mode);
-    document.getElementById('btn-'+m).classList.toggle('active', m===mode);
+function muxSel(key){
+  cur=key;
+  const d=DATA[key];
+  KEYS.forEach(k=>{
+    const on=k===key;
+    document.getElementById('sn-'+k).setAttribute('stroke',on?'#7a5f28':'#1c2530');
+    document.getElementById('sn-'+k).setAttribute('fill',on?'#0f1318':'#0b0e12');
+    document.getElementById('st-'+k).setAttribute('fill',on?'#c9a84c':'#6e6450');
+    document.getElementById('w-'+k).setAttribute('stroke',on?'#c9a84c':'#1a2330');
+    document.getElementById('w-'+k).setAttribute('stroke-width',on?'1.5':'1');
+    document.getElementById('dot-'+k).setAttribute('fill',on?'#c9a84c':'#1a2330');
+    document.getElementById('dot-'+k).setAttribute('r',on?'3.5':'2.5');
   });
-  document.getElementById('sel-display').textContent = 'OUT_REG = '+SEL_MAP[mode];
-  curMode = mode;
-  closeDetail();
-}
-
-/* ── experience accordion ── */
-function toggleMem(header){
-  const body = header.nextElementSibling;
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.mem-body').forEach(b=>b.classList.remove('open'));
-  if(!isOpen) body.classList.add('open');
-}
-
-/* ── skills table row select ── */
-function selectRow(tr, addr, title, body, tags){
-  document.querySelectorAll('.reg-table tr').forEach(r=>r.classList.remove('selected'));
-  tr.classList.add('selected');
-  showDetail(addr, title, body, tags);
-}
-
-/* ── project ALU card select ── */
-function selectAlu(card, addr, title, body, tags){
-  document.querySelectorAll('.alu-card').forEach(c=>c.classList.remove('selected'));
-  card.classList.add('selected');
-  showDetail(addr, title, body, tags);
-}
-
-/* ── generic card select ── */
-function selectCard(card, addr, title, body, tags){
-  const siblings = card.parentElement.querySelectorAll('.card');
-  siblings.forEach(c=>c.classList.remove('selected'));
-  card.classList.add('selected');
-  showDetail(addr, title, body, tags);
-}
-
-function showDetail(addr, title, body, tags){
-  document.getElementById('d-addr').textContent = addr + ' //';
-  document.getElementById('d-title').textContent = title;
-  document.getElementById('d-body').textContent = body;
-  const tc = document.getElementById('d-tags');
-  tc.innerHTML = '';
-  tags.split('·').forEach(t=>{
-    const s = document.createElement('span');
-    s.className = 'tag';
-    s.textContent = t.trim();
-    tc.appendChild(s);
+  const en=document.getElementById('mux-energy');
+  const ey=Y[key];
+  en.setAttribute('y1',ey);en.setAttribute('y2',ey);
+  en.setAttribute('x1','154');en.setAttribute('x2','198');en.setAttribute('opacity','1');
+  const ow=document.getElementById('out-wire');
+  const or=document.getElementById('outreg');
+  ow.setAttribute('stroke','#c9a84c');ow.setAttribute('marker-end','url(#arr-gold)');
+  or.setAttribute('stroke','#7a5f28');
+  setTimeout(()=>{
+    ow.setAttribute('stroke','#1a2330');ow.setAttribute('marker-end','url(#arr)');
+    or.setAttribute('stroke','#1c2530');
+    en.setAttribute('x1','198');en.setAttribute('y1','250');en.setAttribute('y2','250');en.setAttribute('opacity','0');
+  },500);
+  document.getElementById('sel-disp').textContent='= '+d.sel;
+  document.getElementById('or-mode').textContent=d.label;
+  document.getElementById('or-addr').textContent=d.addr;
+  document.getElementById('disp-mode').textContent=d.label;
+  const c=document.getElementById('disp-items');
+  c.innerHTML='';
+  d.items.forEach((it,i)=>{
+    const el=document.createElement('div');
+    el.className='disp-item';
+    el.innerHTML=`<div class="di-addr">[${String(i).padStart(2,'0')}]</div><div class="di-label">${it.l}</div><div class="di-tags">${it.t.split('·').slice(0,4).map(t=>`<span class="di-tag">${t.trim()}</span>`).join('')}</div>`;
+    el.onclick=()=>{
+      document.querySelectorAll('.disp-item').forEach(e=>e.classList.remove('sel'));
+      el.classList.add('sel');
+      document.getElementById('det-ph').style.display='none';
+      const di=document.getElementById('det-inner');
+      di.style.display='flex';di.style.flexDirection='column';di.style.gap='3px';
+      document.getElementById('det-addr').textContent=`[${String(i).padStart(2,'0')}] ${d.label} //`;
+      document.getElementById('det-title').textContent=it.l;
+      document.getElementById('det-body').textContent=it.d;
+      const tc=document.getElementById('det-tags');tc.innerHTML='';
+      it.t.split('·').forEach(t=>{const s=document.createElement('span');s.className='det-tag';s.textContent=t.trim();tc.appendChild(s)});
+    };
+    c.appendChild(el);
   });
-  document.getElementById('detail-drawer').classList.add('open');
+  document.getElementById('det-ph').style.display='block';
+  document.getElementById('det-inner').style.display='none';
 }
 
-function closeDetail(){
-  document.getElementById('detail-drawer').classList.remove('open');
-  document.querySelectorAll('.reg-table tr').forEach(r=>r.classList.remove('selected'));
-  document.querySelectorAll('.alu-card,.card').forEach(c=>c.classList.remove('selected'));
-}
+muxSel('skills');
 </script>
 </body>
 </html>
