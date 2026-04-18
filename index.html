@@ -21,7 +21,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
 .shell{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;padding:16px 20px 12px;gap:12px}
 
-/* TOPBAR — bigger name */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--gold-dark);flex-shrink:0}
 .tb-name{font-size:22px;font-weight:700;color:var(--gold);letter-spacing:.08em;line-height:1}
 .tb-sub{font-size:11px;color:var(--gold-dim);letter-spacing:.1em;margin-top:5px}
@@ -30,12 +29,151 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .clkdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-/* 50/50 split */
 .main{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:0;border:1px solid var(--border)}
 
-.mux-col{border-right:1px solid var(--border);background:var(--bg);position:relative;overflow:hidden}
-.mux-col svg{position:absolute;inset:0;width:100%;height:100%}
+/* ═══ MUX COLUMN (left) — hybrid HTML + SVG overlay ═══ */
+.mux-col{
+  border-right:1px solid var(--border);
+  background:var(--bg);
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:44% 12% 44%;
+  grid-template-rows:auto 1fr auto;
+  padding:14px 0 8px;
+}
 
+/* column headers */
+.col-hdr{
+  font-size:10px;
+  font-weight:700;
+  color:var(--gold-dim);
+  letter-spacing:.15em;
+  text-align:center;
+  padding-bottom:10px;
+  border-bottom:1px dashed var(--gold-dark);
+  margin:0 12px;
+}
+.col-hdr.left{grid-column:1}
+.col-hdr.mid{grid-column:2}
+.col-hdr.right{grid-column:3}
+
+/* registers column */
+.reg-col{
+  grid-column:1;
+  grid-row:2;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-around;
+  padding:12px;
+  gap:10px;
+  position:relative;
+  z-index:2;
+}
+
+.reg{
+  border:1px solid var(--border);
+  background:var(--bg2);
+  padding:10px 12px;
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
+  text-align:center;
+  position:relative;
+}
+.reg:hover{border-color:var(--gold-dark);background:var(--bg3)}
+.reg.active{border-color:var(--gold);background:var(--bg3)}
+.reg-name{font-size:15px;font-weight:700;color:var(--text2);letter-spacing:.04em;line-height:1.2}
+.reg.active .reg-name{color:var(--gold)}
+.reg-meta{font-size:10px;font-weight:400;color:var(--text3);letter-spacing:.06em;margin-top:4px}
+.reg.active .reg-meta{color:var(--gold-dim)}
+
+/* MUX wire+trapezoid column (middle SVG) */
+.mux-wires{
+  grid-column:2;
+  grid-row:2;
+  position:relative;
+}
+.mux-wires svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+
+/* OUT_REG column (right) */
+.out-col{
+  grid-column:3;
+  grid-row:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  padding:12px 16px 12px 24px;
+}
+
+.out-reg{
+  border:2px solid var(--border);
+  background:var(--bg2);
+  width:100%;
+  max-width:240px;
+  transition:border-color .15s;
+  position:relative;
+}
+.out-reg.lit{border-color:var(--gold)}
+.or-header{
+  font-size:10px;
+  font-weight:700;
+  color:var(--gold-dim);
+  letter-spacing:.15em;
+  padding:8px 0;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+.or-body{padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.or-mode-text{
+  font-size:20px;
+  font-weight:700;
+  color:var(--gold);
+  letter-spacing:.04em;
+  line-height:1;
+}
+.or-addr-text{font-size:11px;color:var(--text3);letter-spacing:.08em}
+.or-bits{font-size:10px;color:var(--gold-dark);letter-spacing:.08em;margin-top:2px}
+
+/* DATA wire exiting right (SVG overlay on out-col right edge) */
+.data-wire{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:24px;
+  height:2px;
+}
+
+/* SEL row */
+.sel-row{
+  grid-column:2;
+  grid-row:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  padding-top:8px;
+}
+.sel-val{font-size:10px;color:var(--gold-dim);letter-spacing:.1em}
+.sel-box{
+  border:1px solid var(--border);
+  background:var(--bg2);
+  padding:4px 14px;
+  font-size:10px;
+  font-weight:700;
+  color:var(--text2);
+  letter-spacing:.12em;
+}
+
+/* ═══ DISPLAY COLUMN (right) ═══ */
 .disp-col{display:flex;flex-direction:column;background:var(--bg);min-height:0;overflow:hidden}
 .disp-header{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.1em;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .disp-teal{height:1px;background:var(--teal-dark);flex-shrink:0}
@@ -56,6 +194,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .di-tags{display:flex;flex-wrap:wrap;gap:4px}
 .di-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.05em}
 
+/* ═══ BOTTOM DETAIL STRIP ═══ */
 .bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:var(--bg2);height:110px}
 .det-area{padding:12px 20px;display:flex;flex-direction:column;gap:4px;justify-content:center;overflow:hidden;min-width:0}
 .det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
@@ -83,125 +222,123 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
   <div class="main">
 
-    <!-- MUX SVG — registers directly attached to MUX, no separate input column -->
+    <!-- MUX column (left): registers + SVG wires + OUT_REG -->
     <div class="mux-col">
-      <svg id="dpsvg" viewBox="0 0 400 560" preserveAspectRatio="xMinYMid meet" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-            <path d="M2 1L8 5L2 9" fill="none" stroke="#3a2e10" stroke-width="1.5" stroke-linecap="round"/>
-          </marker>
-          <marker id="arr-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-            <path d="M2 1L8 5L2 9" fill="none" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
-          </marker>
-        </defs>
 
-        <!-- corner ornaments -->
-        <path d="M4,22 L4,6 L20,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
-        <path d="M396,22 L396,6 L380,6" fill="none" stroke="#3a2e10" stroke-width="1"/>
+      <div class="col-hdr left">INPUT REGISTERS</div>
+      <div class="col-hdr mid">6:1 MUX</div>
+      <div class="col-hdr right">OUT_REG</div>
 
-        <!-- col headers -->
-        <text x="80" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#7a5f28" font-family="Courier New" letter-spacing="1.5">INPUT REGISTERS</text>
-        <text x="230" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#7a5f28" font-family="Courier New" letter-spacing="1.5">MUX</text>
-        <text x="340" y="16" text-anchor="middle" font-size="10" font-weight="bold" fill="#7a5f28" font-family="Courier New" letter-spacing="1.5">OUT_REG</text>
+      <!-- Register blocks -->
+      <div class="reg-col">
+        <div class="reg active" id="reg-skills" onclick="muxSel('skills')">
+          <div class="reg-name">Skills</div>
+          <div class="reg-meta">sig[0] &middot; 3'b000</div>
+        </div>
+        <div class="reg" id="reg-experience" onclick="muxSel('experience')">
+          <div class="reg-name">Experience</div>
+          <div class="reg-meta">sig[1] &middot; 3'b001</div>
+        </div>
+        <div class="reg" id="reg-projects" onclick="muxSel('projects')">
+          <div class="reg-name">Projects</div>
+          <div class="reg-meta">sig[2] &middot; 3'b010</div>
+        </div>
+        <div class="reg" id="reg-education" onclick="muxSel('education')">
+          <div class="reg-name">Education</div>
+          <div class="reg-meta">sig[3] &middot; 3'b011</div>
+        </div>
+        <div class="reg" id="reg-hobbies" onclick="muxSel('hobbies')">
+          <div class="reg-name">Hobbies</div>
+          <div class="reg-meta">sig[4] &middot; 3'b100</div>
+        </div>
+        <div class="reg" id="reg-contact" onclick="muxSel('contact')">
+          <div class="reg-name">Contact</div>
+          <div class="reg-meta">sig[5] &middot; 3'b101</div>
+        </div>
+      </div>
 
-        <!-- Skills [sig 0] -->
-        <g id="sig-skills" onclick="muxSel('skills')" style="cursor:pointer">
-          <rect id="sn-skills" x="8" y="30" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-skills" x="74" y="52" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Skills</text>
-          <text x="74" y="70" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[0] · 3'b000</text>
-        </g>
-        <line id="w-skills" x1="140" y1="54" x2="222" y2="54" stroke="#1a2330" stroke-width="1"/>
-        <text x="181" y="49" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">SKILLS_BUS</text>
-        <circle id="dot-skills" cx="222" cy="54" r="3" fill="#1a2330"/>
+      <!-- SVG: wires + MUX trapezoid -->
+      <div class="mux-wires">
+        <svg id="muxsvg" viewBox="0 0 100 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#3a2e10" stroke-width="2" stroke-linecap="round"/>
+            </marker>
+            <marker id="arr-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+            </marker>
+          </defs>
 
-        <!-- Experience [sig 1] -->
-        <g id="sig-experience" onclick="muxSel('experience')" style="cursor:pointer">
-          <rect id="sn-experience" x="8" y="112" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-experience" x="74" y="134" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Experience</text>
-          <text x="74" y="152" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[1] · 3'b001</text>
-        </g>
-        <line id="w-experience" x1="140" y1="136" x2="222" y2="136" stroke="#1a2330" stroke-width="1"/>
-        <text x="181" y="131" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">EXP_BUS</text>
-        <circle id="dot-experience" cx="222" cy="136" r="3" fill="#1a2330"/>
+          <!-- horizontal wires register → MUX -->
+          <line id="w-skills"     x1="0" y1="40"  x2="30" y2="40"  stroke="#1a2330" stroke-width="1.5"/>
+          <line id="w-experience" x1="0" y1="120" x2="30" y2="120" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="w-projects"   x1="0" y1="200" x2="30" y2="200" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="w-education"  x1="0" y1="280" x2="30" y2="280" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="w-hobbies"    x1="0" y1="360" x2="30" y2="360" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="w-contact"    x1="0" y1="440" x2="30" y2="440" stroke="#1a2330" stroke-width="1.5"/>
 
-        <!-- Projects [sig 2] -->
-        <g id="sig-projects" onclick="muxSel('projects')" style="cursor:pointer">
-          <rect id="sn-projects" x="8" y="194" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-projects" x="74" y="216" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Projects</text>
-          <text x="74" y="234" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[2] · 3'b010</text>
-        </g>
-        <line id="w-projects" x1="140" y1="218" x2="222" y2="218" stroke="#1a2330" stroke-width="1"/>
-        <text x="181" y="213" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">PROJ_BUS</text>
-        <circle id="dot-projects" cx="222" cy="218" r="3" fill="#1a2330"/>
+          <!-- wire dots -->
+          <circle id="dot-skills"     cx="30" cy="40"  r="3" fill="#1a2330"/>
+          <circle id="dot-experience" cx="30" cy="120" r="3" fill="#1a2330"/>
+          <circle id="dot-projects"   cx="30" cy="200" r="3" fill="#1a2330"/>
+          <circle id="dot-education"  cx="30" cy="280" r="3" fill="#1a2330"/>
+          <circle id="dot-hobbies"    cx="30" cy="360" r="3" fill="#1a2330"/>
+          <circle id="dot-contact"    cx="30" cy="440" r="3" fill="#1a2330"/>
 
-        <!-- Education [sig 3] -->
-        <g id="sig-education" onclick="muxSel('education')" style="cursor:pointer">
-          <rect id="sn-education" x="8" y="276" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-education" x="74" y="298" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Education</text>
-          <text x="74" y="316" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[3] · 3'b011</text>
-        </g>
-        <line id="w-education" x1="140" y1="300" x2="222" y2="300" stroke="#1a2330" stroke-width="1"/>
-        <text x="181" y="295" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">EDUC_BUS</text>
-        <circle id="dot-education" cx="222" cy="300" r="3" fill="#1a2330"/>
+          <!-- MUX trapezoid -->
+          <polygon points="30,8 70,30 70,470 30,492" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
+          <line x1="30" y1="8"   x2="70" y2="30"  stroke="#2a2218" stroke-width="1"/>
+          <line x1="30" y1="492" x2="70" y2="470" stroke="#2a2218" stroke-width="1"/>
 
-        <!-- Hobbies [sig 4] -->
-        <g id="sig-hobbies" onclick="muxSel('hobbies')" style="cursor:pointer">
-          <rect id="sn-hobbies" x="8" y="358" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-hobbies" x="74" y="380" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Hobbies</text>
-          <text x="74" y="398" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[4] · 3'b100</text>
-        </g>
-        <line id="w-hobbies" x1="140" y1="382" x2="222" y2="382" stroke="#1a2330" stroke-width="1"/>
-        <text x="181" y="377" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">HOBBY_BUS</text>
-        <circle id="dot-hobbies" cx="222" cy="382" r="3" fill="#1a2330"/>
+          <!-- active energy line inside MUX -->
+          <line id="mux-energy" x1="68" y1="240" x2="68" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
 
-        <!-- Contact [sig 5] -->
-        <g id="sig-contact" onclick="muxSel('contact')" style="cursor:pointer">
-          <rect id="sn-contact" x="8" y="440" width="132" height="48" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-          <text id="st-contact" x="74" y="462" text-anchor="middle" font-size="15" font-weight="bold" fill="#6e6450" font-family="Courier New">Contact</text>
-          <text x="74" y="480" text-anchor="middle" font-size="9" fill="#2a2218" font-family="Courier New">sig[5] · 3'b101</text>
-        </g>
-        <line id="w-contact" x1="140" y1="464" x2="222" y2="464" stroke="#1a2330" stroke-width="1"/>
-        <text x="181" y="459" text-anchor="middle" font-size="9" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">CONTACT_BUS</text>
-        <circle id="dot-contact" cx="222" cy="464" r="3" fill="#1a2330"/>
+          <!-- MUX output wire → OUT_REG (spans right side of this SVG) -->
+          <line id="out-wire" x1="70" y1="240" x2="100" y2="240" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+        </svg>
 
-        <!-- MUX trapezoid body -->
-        <polygon points="222,22 272,36 272,502 222,516" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <line x1="222" y1="22"  x2="272" y2="36"  stroke="#2a2218" stroke-width="1"/>
-        <line x1="222" y1="516" x2="272" y2="502" stroke="#2a2218" stroke-width="1"/>
-        <text x="244" y="269" text-anchor="middle" font-size="10" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing="2" transform="rotate(-90,244,269)">6:1 MUX</text>
+        <!-- bus name labels (absolutely positioned on top of wires) -->
+        <div class="bus-label" data-for="skills"     style="top:4%">SKILLS_BUS</div>
+        <div class="bus-label" data-for="experience" style="top:20%">EXPERIENCE_BUS</div>
+        <div class="bus-label" data-for="projects"   style="top:36%">PROJECTS_BUS</div>
+        <div class="bus-label" data-for="education"  style="top:52%">EDUCATION_BUS</div>
+        <div class="bus-label" data-for="hobbies"    style="top:68%">HOBBIES_BUS</div>
+        <div class="bus-label" data-for="contact"    style="top:84%">CONTACT_BUS</div>
+      </div>
 
-        <!-- active energy indicator -->
-        <line id="mux-energy" x1="270" y1="269" x2="270" y2="269" stroke="#3ab8c8" stroke-width="2" stroke-linecap="round" opacity="0"/>
+      <!-- OUT_REG block (HTML, right column) -->
+      <div class="out-col">
+        <div class="out-reg" id="outreg">
+          <div class="or-header">OUT_REG</div>
+          <div class="or-body">
+            <div class="or-mode-text" id="or-mode">Skills</div>
+            <div class="or-addr-text" id="or-addr">0x0000</div>
+            <div class="or-bits">[8'hxxxxxxxx]</div>
+          </div>
+        </div>
+        <!-- DATA wire exits right edge of out-col → touches display panel border -->
+        <svg class="data-wire" id="data-wire" viewBox="0 0 24 10" preserveAspectRatio="none">
+          <line id="data-line" x1="0" y1="5" x2="22" y2="5" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr2)"/>
+          <defs>
+            <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#3a2e10" stroke-width="2" stroke-linecap="round"/>
+            </marker>
+            <marker id="arr2-gold" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
 
-        <!-- SEL control line -->
-        <line x1="247" y1="516" x2="247" y2="532" stroke="#1a2330" stroke-width="1"/>
-        <rect x="203" y="530" width="88" height="22" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <text x="247" y="544" text-anchor="middle" font-size="9" font-weight="bold" fill="#2a2218" font-family="Courier New" letter-spacing="1">SEL[2:0]</text>
-        <text id="sel-disp" x="247" y="528" text-anchor="middle" font-size="9" fill="#6e6450" font-family="Courier New">= 3'b000</text>
+      <!-- SEL control display -->
+      <div class="sel-row">
+        <div class="sel-val" id="sel-val">= 3'b000</div>
+        <div class="sel-box">SEL[2:0]</div>
+      </div>
 
-        <!-- MUX output wire -->
-        <line id="out-wire" x1="272" y1="269" x2="286" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
-        <text x="279" y="264" text-anchor="middle" font-size="8" fill="#2a2018" font-family="Courier New">OUT</text>
-
-        <!-- OUT_REG (bigger, wider — no text auto-shrink) -->
-        <rect id="outreg" x="286" y="206" width="108" height="126" rx="1" fill="#0b0e12" stroke="#1c2530" stroke-width="1"/>
-        <rect x="286" y="206" width="108" height="18" fill="#0d1016"/>
-        <line x1="286" y1="224" x2="394" y2="224" stroke="#111820" stroke-width="1"/>
-        <text x="340" y="218" text-anchor="middle" font-size="10" font-weight="bold" fill="#3a2e10" font-family="Courier New" letter-spacing="1">OUT_REG</text>
-        <text id="or-mode" x="340" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#c9a84c" font-family="Courier New">Skills</text>
-        <text id="or-addr" x="340" y="286" text-anchor="middle" font-size="10" fill="#2a2218" font-family="Courier New">0x0000</text>
-        <text id="or-mode-bits" x="340" y="308" text-anchor="middle" font-size="9" fill="#3a2e10" font-family="Courier New" letter-spacing=".5">[8'hxxxxxxxx]</text>
-        <polygon points="286,306 286,316 294,311" fill="#1a2330"/>
-        <line x1="278" y1="311" x2="286" y2="311" stroke="#1a2330" stroke-width="1"/>
-        <text x="276" y="315" text-anchor="end" font-size="8" fill="#2a2018" font-family="Courier New">CLK</text>
-
-        <!-- data wire exits right to display panel border -->
-        <line id="data-wire" x1="394" y1="269" x2="400" y2="269" stroke="#1a2330" stroke-width="1" marker-end="url(#arr)"/>
-        <text x="378" y="264" font-size="8" fill="#2a2018" font-family="Courier New">DATA</text>
-      </svg>
     </div>
 
-    <!-- Display panel -->
+    <!-- Display panel (right) -->
     <div class="disp-col">
       <div class="disp-header">
         <span>DISPLAY_REG[7:0]</span>
@@ -231,6 +368,24 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   </div>
 
 </div>
+
+<style>
+.bus-label{
+  position:absolute;
+  left:0;
+  width:100%;
+  text-align:center;
+  font-size:10px;
+  font-weight:700;
+  color:var(--gold-dark);
+  letter-spacing:.04em;
+  transform:translateY(-14px);
+  pointer-events:none;
+  transition:color .15s;
+}
+.bus-label.lit{color:var(--gold)}
+</style>
+
 <script>
 const DATA={
   skills:{sel:"3'b000",addr:"0x0000",label:"Skills",items:[
@@ -278,36 +433,57 @@ const DATA={
 };
 
 const KEYS=['skills','experience','projects','education','hobbies','contact'];
-const Y={skills:54,experience:136,projects:218,education:300,hobbies:382,contact:464};
+const Y={skills:40,experience:120,projects:200,education:280,hobbies:360,contact:440};
 let cur='skills';
 
 function muxSel(key){
   cur=key;
   const d=DATA[key];
+
+  // Register blocks
   KEYS.forEach(k=>{
     const on=k===key;
-    document.getElementById('sn-'+k).setAttribute('stroke',on?'#c9a84c':'#1c2530');
-    document.getElementById('sn-'+k).setAttribute('fill',on?'#0f1318':'#0b0e12');
-    document.getElementById('st-'+k).setAttribute('fill',on?'#c9a84c':'#6e6450');
-    document.getElementById('w-'+k).setAttribute('stroke',on?'#c9a84c':'#1a2330');
-    document.getElementById('w-'+k).setAttribute('stroke-width',on?'2':'1');
-    document.getElementById('dot-'+k).setAttribute('fill',on?'#c9a84c':'#1a2330');
-    document.getElementById('dot-'+k).setAttribute('r',on?'4':'3');
+    document.getElementById('reg-'+k).classList.toggle('active',on);
+    // SVG wire + dot
+    const w=document.getElementById('w-'+k);
+    const dot=document.getElementById('dot-'+k);
+    w.setAttribute('stroke',on?'#c9a84c':'#1a2330');
+    w.setAttribute('stroke-width',on?'2.5':'1.5');
+    dot.setAttribute('fill',on?'#c9a84c':'#1a2330');
+    dot.setAttribute('r',on?'4':'3');
+    // bus label
+    document.querySelector('.bus-label[data-for="'+k+'"]').classList.toggle('lit',on);
   });
+
+  // MUX energy line
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
-  en.setAttribute('y1',ey);en.setAttribute('y2',ey);
-  en.setAttribute('x1','224');en.setAttribute('x2','270');en.setAttribute('opacity','1');
+  en.setAttribute('y1',ey);
+  en.setAttribute('y2',ey);
+  en.setAttribute('x1','30');
+  en.setAttribute('x2','70');
+  en.setAttribute('opacity','1');
+
+  // OUT wire (SVG)
   const ow=document.getElementById('out-wire');
-  const or=document.getElementById('outreg');
-  const dw=document.getElementById('data-wire');
-  ow.setAttribute('stroke','#c9a84c');ow.setAttribute('marker-end','url(#arr-gold)');
-  dw.setAttribute('stroke','#c9a84c');dw.setAttribute('marker-end','url(#arr-gold)');
-  or.setAttribute('stroke','#c9a84c');
-  document.getElementById('sel-disp').textContent='= '+d.sel;
+  ow.setAttribute('stroke','#c9a84c');
+  ow.setAttribute('stroke-width','2.5');
+  ow.setAttribute('marker-end','url(#arr-gold)');
+
+  // DATA wire (separate SVG)
+  const dl=document.getElementById('data-line');
+  dl.setAttribute('stroke','#c9a84c');
+  dl.setAttribute('stroke-width','2.5');
+  dl.setAttribute('marker-end','url(#arr2-gold)');
+
+  // OUT_REG block
+  document.getElementById('outreg').classList.add('lit');
   document.getElementById('or-mode').textContent=d.label;
   document.getElementById('or-addr').textContent=d.addr;
+  document.getElementById('sel-val').textContent='= '+d.sel;
   document.getElementById('disp-mode').textContent=d.label;
+
+  // Display items
   const c=document.getElementById('disp-items');
   c.innerHTML='';
   d.items.forEach((it,i)=>{
@@ -319,15 +495,17 @@ function muxSel(key){
       el.classList.add('sel');
       document.getElementById('det-ph').style.display='none';
       const di=document.getElementById('det-inner');
-      di.style.display='flex';di.style.flexDirection='column';di.style.gap='3px';
+      di.style.display='flex';
       document.getElementById('det-addr').textContent=`[${String(i).padStart(2,'0')}] ${d.label} //`;
       document.getElementById('det-title').textContent=it.l;
       document.getElementById('det-body').textContent=it.d;
-      const tc=document.getElementById('det-tags');tc.innerHTML='';
+      const tc=document.getElementById('det-tags');
+      tc.innerHTML='';
       it.t.split('·').forEach(t=>{const s=document.createElement('span');s.className='det-tag';s.textContent=t.trim();tc.appendChild(s)});
     };
     c.appendChild(el);
   });
+
   document.getElementById('det-ph').style.display='block';
   document.getElementById('det-inner').style.display='none';
 }
