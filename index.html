@@ -14,10 +14,41 @@
   --teal:#3ab8c8;--teal-dim:#1a5a62;--teal-dark:#0a2a30;
   --text:#c8bda0;--text2:#6e6450;--text3:#332e1e;
   --mono:'Share Tech Mono','Courier New',monospace;
+
+  /* sketch-paper tones */
+  --paper-line:rgba(201,168,76,.055);
+  --paper-line-strong:rgba(201,168,76,.085);
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--mono);overflow:hidden}
+
+/* CRT scanlines (kept) */
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
-body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--wire-dim) 1px,transparent 1px),linear-gradient(90deg,var(--wire-dim) 1px,transparent 1px);background-size:48px 48px;opacity:.12;pointer-events:none;z-index:0}
+
+/* Fine sketch / graph paper base layer:
+   - 8px fine grid
+   - 40px bolder grid (every 5 cells) — classic engineering paper
+   - subtle vignette for "real paper" feel
+*/
+body::after{
+  content:'';
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    /* bolder every-5 grid */
+    linear-gradient(var(--paper-line-strong) 1px,transparent 1px),
+    linear-gradient(90deg,var(--paper-line-strong) 1px,transparent 1px),
+    /* fine grid */
+    linear-gradient(var(--paper-line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--paper-line) 1px,transparent 1px),
+    /* soft corner vignette */
+    radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35) 100%);
+  background-size:
+    40px 40px,
+    40px 40px,
+    8px 8px,
+    8px 8px,
+    100% 100%;
+  opacity:.9;
+}
 
 .shell{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;padding:16px 20px 12px;gap:12px}
 
@@ -29,16 +60,19 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .clkdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-.main{flex:1;display:grid;grid-template-columns:64% 36%;gap:0;min-height:0;border:1px solid var(--border)}
+/* Display panel shrinks to content; MUX column fills remaining space */
+.main{flex:1;display:grid;grid-template-columns:1fr auto;gap:0;min-height:0;border:1px solid var(--border)}
 
 /* ═══ MUX COLUMN (left) — hybrid HTML + SVG overlay ═══ */
+/* Widened middle (MUX) column and narrowed right (OUT_REG) column
+   so the MUX visually shifts right and the out-wire is shorter. */
 .mux-col{
   border-right:1px solid var(--border);
   background:var(--bg);
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:18% 10% 26% 46%;
+  grid-template-columns:18% 10% 42% 30%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -107,15 +141,17 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   grid-row:2;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   position:relative;
   padding:12px 16px 12px 0;
 }
 
+/* OUT_REG: slightly wider than input registers (input regs sit inside an 18% column
+   with 12px left padding; making OUT_REG a fixed width tuned to be a touch wider) */
 .out-reg{
   border:2px solid var(--border);
   background:var(--bg2);
-  width:40%;
+  width:145px;
   transition:border-color .15s;
   position:relative;
 }
@@ -130,9 +166,9 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   border-bottom:1px solid var(--border);
   background:var(--bg3);
 }
-.or-body{padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.or-body{padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:8px}
 .or-mode-text{
-  font-size:20px;
+  font-size:18px;
   font-weight:700;
   color:var(--gold);
   letter-spacing:.04em;
@@ -166,7 +202,12 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 }
 
 /* ═══ DISPLAY COLUMN (right) ═══ */
-.disp-col{display:flex;flex-direction:column;background:var(--bg);min-height:0;overflow:hidden}
+/* Width tuned so longest tag rows (e.g. AD9910·DDS·RF·PCB) fit without overflow
+   but the panel does not dominate the layout. */
+.disp-col{
+  display:flex;flex-direction:column;background:var(--bg);min-height:0;overflow:hidden;
+  width:340px;
+}
 .disp-header{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.1em;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .disp-teal{height:1px;background:var(--teal-dark);flex-shrink:0}
 .disp-items{flex:1 1 0;overflow-y:auto;overflow-x:hidden;min-height:0}
@@ -175,13 +216,13 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .disp-items::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:2px}
 .disp-items::-webkit-scrollbar-thumb:hover{background:var(--gold-dim)}
 
-.disp-item{border-bottom:1px solid var(--wire-dim);padding:16px 20px;cursor:pointer;transition:background .1s;position:relative}
+.disp-item{border-bottom:1px solid var(--wire-dim);padding:14px 18px;cursor:pointer;transition:background .1s;position:relative}
 .disp-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--teal-dark);transition:background .12s}
 .disp-item:hover{background:var(--bg3)}
 .disp-item:hover::before,.disp-item.sel::before{background:var(--teal)}
 .disp-item.sel{background:var(--bg3)}
 .di-addr{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em;margin-bottom:4px}
-.di-label{font-size:15px;font-weight:700;color:var(--text2);letter-spacing:.04em;margin-bottom:8px}
+.di-label{font-size:14px;font-weight:700;color:var(--text2);letter-spacing:.04em;margin-bottom:8px}
 .disp-item.sel .di-label{color:var(--gold)}
 .di-tags{display:flex;flex-wrap:wrap;gap:4px}
 .di-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.05em}
@@ -261,16 +302,16 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
             </marker>
           </defs>
 
-          <!-- MUX trapezoid -->
-          <polygon points="40,10 58,30 58,470 40,490" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
-          <line x1="40" y1="10"  x2="58" y2="30"  stroke="#2a2218" stroke-width="1"/>
-          <line x1="40" y1="490" x2="58" y2="470" stroke="#2a2218" stroke-width="1"/>
+          <!-- MUX trapezoid — shifted right within the widened middle column -->
+          <polygon points="70,10 88,30 88,470 70,490" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
+          <line x1="70" y1="10"  x2="88" y2="30"  stroke="#2a2218" stroke-width="1"/>
+          <line x1="70" y1="490" x2="88" y2="470" stroke="#2a2218" stroke-width="1"/>
 
           <!-- active energy line inside MUX -->
-          <line id="mux-energy" x1="56" y1="240" x2="56" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+          <line id="mux-energy" x1="86" y1="240" x2="86" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
 
           <!-- MUX output stub (short, no arrowhead; overlay continues to OUT_REG) -->
-          <line id="out-wire" x1="58" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="out-wire" x1="88" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
         </svg>
       </div>
 
@@ -404,13 +445,13 @@ function muxSel(key){
     document.getElementById('reg-'+k).classList.toggle('active',k===key);
   });
 
-  // MUX energy line
+  // MUX energy line (x-coords updated to match new trapezoid position)
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
   en.setAttribute('y1',ey);
   en.setAttribute('y2',ey);
-  en.setAttribute('x1','40');
-  en.setAttribute('x2','58');
+  en.setAttribute('x1','70');
+  en.setAttribute('x2','88');
   en.setAttribute('opacity','1');
 
   // OUT wire stub
@@ -466,14 +507,16 @@ function positionWires(active){
   const mw = muxWires.getBoundingClientRect();
   const or = outRegEl.getBoundingClientRect();
 
+  // MUX trapezoid right edge sits at ~88/100 of the mux-wires SVG width
   const mwLeftX  = mw.left  - mc.left;
-  const mwRightX = mw.right - mc.left;
+  const mwRightX = (mw.left - mc.left) + mw.width * 0.88;
   const mwOutY   = mw.top - mc.top + 0.5*mw.height;
   const orLeftX  = or.left  - mc.left;
   const orRightX = or.right - mc.left;
   const orCenterY= or.top - mc.top + or.height/2;
 
-  // Input wires: reg box right → MUX left edge
+  // Input wires: reg box right → MUX left edge (trapezoid left side at ~70/100)
+  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.70;
   KEYS.forEach(k=>{
     const line = document.getElementById('iw-'+k);
     const reg  = document.getElementById('reg-'+k);
@@ -483,7 +526,7 @@ function positionWires(active){
     const ry = rr.top - mc.top + rr.height/2;
     const isActive = k===cur;
     line.setAttribute('x1', rx);  line.setAttribute('y1', ry);
-    line.setAttribute('x2', mwLeftX); line.setAttribute('y2', ry);
+    line.setAttribute('x2', mwMuxLeftX); line.setAttribute('y2', ry);
     line.setAttribute('stroke', isActive ? '#c9a84c' : '#1a2330');
     line.setAttribute('stroke-width', isActive ? '2.5' : '1.5');
     line.setAttribute('marker-end', isActive ? 'url(#arr-ov)' : 'url(#arr-ov-dim)');
