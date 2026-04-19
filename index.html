@@ -15,31 +15,21 @@
   --text:#c8bda0;--text2:#6e6450;--text3:#332e1e;
   --mono:'Share Tech Mono','Courier New',monospace;
 
-  /* sketch-paper tones */
   --paper-line:rgba(201,168,76,.055);
   --paper-line-strong:rgba(201,168,76,.085);
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--mono);overflow:hidden}
 
-/* CRT scanlines (kept) */
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
 
-/* Fine sketch / graph paper base layer:
-   - 8px fine grid
-   - 40px bolder grid (every 5 cells) — classic engineering paper
-   - subtle vignette for "real paper" feel
-*/
 body::after{
   content:'';
   position:fixed;inset:0;pointer-events:none;z-index:0;
   background-image:
-    /* bolder every-5 grid */
     linear-gradient(var(--paper-line-strong) 1px,transparent 1px),
     linear-gradient(90deg,var(--paper-line-strong) 1px,transparent 1px),
-    /* fine grid */
     linear-gradient(var(--paper-line) 1px,transparent 1px),
     linear-gradient(90deg,var(--paper-line) 1px,transparent 1px),
-    /* soft corner vignette */
     radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35) 100%);
   background-size:
     40px 40px,
@@ -63,24 +53,24 @@ body::after{
 .flink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-/* Display panel shrinks to content; MUX column fills remaining space */
 .main{flex:1;display:grid;grid-template-columns:1fr auto;gap:0;min-height:0;border:1px solid var(--border);background:transparent}
 
-/* ═══ MUX COLUMN (left) — hybrid HTML + SVG overlay ═══ */
-/* Balanced middle (MUX) column with OUT_REG column so the MUX sits centered
-   between the input registers and OUT_REG. */
+/* ─── MUX COLUMN ───
+   Columns: [INPUT_REGS 18%] [gap 6%] [MUX+WIRES 46%] [OUT_REG 22%] [buffer 8%]
+   OUT_REG column is wider (22% vs 18%) so it sits noticeably further left from
+   the display panel. The buffer (8%) gives the exit arrow visible run length.
+*/
 .mux-col{
   border-right:1px solid var(--border);
   background:transparent;
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:18% 6% 52% 18% 6%;
+  grid-template-columns:18% 6% 46% 22% 8%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
 
-/* column headers */
 .col-hdr{
   font-size:10px;
   font-weight:700;
@@ -95,7 +85,6 @@ body::after{
 .col-hdr.mid{grid-column:3}
 .col-hdr.right{grid-column:4/6}
 
-/* registers column */
 .reg-col{
   grid-column:1;
   grid-row:2;
@@ -124,7 +113,6 @@ body::after{
 .reg-meta{font-size:10px;font-weight:400;color:var(--text3);letter-spacing:.06em;margin-top:4px}
 .reg.active .reg-meta{color:var(--gold-dim)}
 
-/* MUX wire+trapezoid column (middle SVG) */
 .mux-wires{
   grid-column:3;
   grid-row:2;
@@ -138,8 +126,7 @@ body::after{
   pointer-events:none;
 }
 
-/* OUT_REG column (right) — mirrors the input register column exactly:
-   same width (18%), same padding (right-aligned 12px inside the grid). */
+/* OUT_REG: 22% column, left-aligned with 12px right-pad clearance */
 .out-col{
   grid-column:4;
   grid-row:2;
@@ -150,8 +137,6 @@ body::after{
   padding:12px 12px 12px 0;
 }
 
-/* OUT_REG: exact same geometry as input registers — 100% width of its 18% column
-   (minus the 12px right-padding). Visually identical "chip". */
 .out-reg{
   border:1px solid var(--border);
   background:var(--bg2);
@@ -173,10 +158,8 @@ body::after{
 .or-addr-text{font-size:10px;color:var(--text3);letter-spacing:.06em;margin-top:4px}
 .out-reg.lit .or-addr-text{color:var(--gold-dim)}
 
-/* Full-column wire overlay */
 .conn-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible}
 
-/* SEL row */
 .sel-row{
   grid-column:3;
   grid-row:3;
@@ -197,9 +180,7 @@ body::after{
   letter-spacing:.12em;
 }
 
-/* ═══ DISPLAY COLUMN (right) ═══ */
-/* Width tuned so longest tag rows (e.g. AD9910·DDS·RF·PCB) fit without overflow
-   but the panel does not dominate the layout. */
+/* ─── DISPLAY COLUMN ─── */
 .disp-col{
   display:flex;flex-direction:column;background:transparent;min-height:0;overflow:hidden;
   width:380px;
@@ -223,7 +204,6 @@ body::after{
 .di-tags{display:flex;flex-wrap:wrap;gap:4px}
 .di-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.05em}
 
-/* V1: inline body that appears on selection — replaces the bottom strip */
 .di-body{
   display:none;
   margin-top:10px;
@@ -258,14 +238,12 @@ body::after{
 
   <div class="main">
 
-    <!-- MUX column (left): registers + SVG wires + OUT_REG -->
     <div class="mux-col">
 
       <div class="col-hdr left">INPUT REGISTERS</div>
       <div class="col-hdr mid">6:1 MUX</div>
       <div class="col-hdr right">OUT_REG</div>
 
-      <!-- Register blocks -->
       <div class="reg-col">
         <div class="reg active" id="reg-skills" onclick="muxSel('skills')">
           <div class="reg-name">Skills</div>
@@ -293,7 +271,6 @@ body::after{
         </div>
       </div>
 
-      <!-- SVG: wires + MUX trapezoid -->
       <div class="mux-wires">
         <svg id="muxsvg" viewBox="0 0 100 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -304,15 +281,10 @@ body::after{
               <path d="M2 1L8 5L2 9" fill="none" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
             </marker>
           </defs>
-
-          <!-- MUX trapezoid — centered between input regs (right edge at 18% of mux-col)
-               and OUT_REG (left edge at ~82% of mux-col). Middle column spans 24-82%,
-               so midpoint is at 50% of mux-col = 45% along this SVG. Trapezoid width 18. -->
           <polygon points="36,10 54,30 54,470 36,490" fill="none" stroke="#1c2530" stroke-width="1"/>
         </svg>
       </div>
 
-      <!-- OUT_REG block (HTML, right column) — compact, matching input register shape -->
       <div class="out-col">
         <div class="out-reg" id="outreg">
           <div class="or-mode-text" id="or-mode">Skills</div>
@@ -320,7 +292,7 @@ body::after{
         </div>
       </div>
 
-      <!-- Full-column wire overlay: draws MUX→OUT_REG and OUT_REG→panel arrows precisely -->
+      <!-- Wire overlay — no mux-marker polygon -->
       <svg class="conn-overlay" id="conn-overlay" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="arr-ov" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -338,12 +310,8 @@ body::after{
         <line id="iw-contact"    x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
         <line id="out-conn"  x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
         <line id="data-conn" x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
-        <!-- MUX selection marker: small gold triangle at the trapezoid's left edge,
-             positioned at the Y of the currently selected input wire. -->
-        <polygon id="mux-marker" points="0,0 0,0 0,0" fill="#c9a84c" stroke="none"/>
       </svg>
 
-      <!-- SEL control display -->
       <div class="sel-row">
         <div class="sel-val" id="sel-val">= 3'b000</div>
         <div class="sel-box">SEL[2:0]</div>
@@ -351,7 +319,6 @@ body::after{
 
     </div>
 
-    <!-- Display panel (right) -->
     <div class="disp-col">
       <div class="disp-header">
         <span>DISPLAY_REG[7:0]</span>
@@ -418,21 +385,18 @@ function muxSel(key){
   cur=key;
   const d=DATA[key];
 
-  // Register blocks
   KEYS.forEach(k=>{
     document.getElementById('reg-'+k).classList.toggle('active',k===key);
   });
 
   positionWires(true);
 
-  // OUT_REG block
   document.getElementById('outreg').classList.add('lit');
   document.getElementById('or-mode').textContent=d.label;
   document.getElementById('or-addr').textContent='OUT \u00b7 '+d.addr;
   document.getElementById('sel-val').textContent='= '+d.sel;
   document.getElementById('disp-mode').textContent=d.label;
 
-  // Display items
   const c=document.getElementById('disp-items');
   c.innerHTML='';
   d.items.forEach((it,i)=>{
@@ -455,24 +419,20 @@ function positionWires(active){
   const outRegEl= document.getElementById('outreg');
   const outConn = document.getElementById('out-conn');
   const dataConn= document.getElementById('data-conn');
-  const muxMark = document.getElementById('mux-marker');
   if(!muxCol||!muxWires||!outRegEl||!outConn||!dataConn) return;
 
   const mc = muxCol.getBoundingClientRect();
   const mw = muxWires.getBoundingClientRect();
   const or = outRegEl.getBoundingClientRect();
 
-  // MUX trapezoid right edge sits at ~54/100 of the mux-wires SVG width
-  const mwLeftX  = mw.left  - mc.left;
   const mwRightX = (mw.left - mc.left) + mw.width * 0.54;
   const mwOutY   = mw.top - mc.top + 0.5*mw.height;
   const orLeftX  = or.left  - mc.left;
   const orRightX = or.right - mc.left;
   const orCenterY= or.top - mc.top + or.height/2;
 
-  // Input wires: reg box right → MUX left edge (trapezoid left side at ~36/100)
   const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.36;
-  let activeY = null;
+
   KEYS.forEach(k=>{
     const line = document.getElementById('iw-'+k);
     const reg  = document.getElementById('reg-'+k);
@@ -481,24 +441,12 @@ function positionWires(active){
     const rx = rr.right  - mc.left;
     const ry = rr.top - mc.top + rr.height/2;
     const isActive = k===cur;
-    if(isActive) activeY = ry;
     line.setAttribute('x1', rx);  line.setAttribute('y1', ry);
     line.setAttribute('x2', mwMuxLeftX); line.setAttribute('y2', ry);
     line.setAttribute('stroke', isActive ? '#c9a84c' : '#1a2330');
     line.setAttribute('stroke-width', isActive ? '2.5' : '1.5');
     line.setAttribute('marker-end', isActive ? 'url(#arr-ov)' : 'url(#arr-ov-dim)');
   });
-
-  // MUX selection marker: small gold filled triangle pointing right, positioned
-  // just inside the trapezoid's left edge at the active input's Y.
-  if(muxMark && activeY !== null){
-    const tipX  = mwMuxLeftX + 12;
-    const baseX = mwMuxLeftX + 2;
-    const half  = 5;
-    muxMark.setAttribute('points',
-      `${baseX},${activeY-half} ${baseX},${activeY+half} ${tipX},${activeY}`);
-    muxMark.setAttribute('opacity', '1');
-  }
 
   const stroke = active ? '#c9a84c' : '#1a2330';
   const sw     = active ? '2.5'     : '1.5';
