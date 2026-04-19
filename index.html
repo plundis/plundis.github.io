@@ -72,7 +72,7 @@ body::after{
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:18% 6% 46% 30%;
+  grid-template-columns:18% 6% 58% 18%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -135,24 +135,25 @@ body::after{
   pointer-events:none;
 }
 
-/* OUT_REG column (right) */
+/* OUT_REG column (right) — left-aligned so it sits close to the MUX output
+   (and therefore further from the display panel on the right). */
 .out-col{
   grid-column:4;
   grid-row:2;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   position:relative;
-  padding:12px 16px;
+  padding:12px 12px 12px 0;
 }
 
-/* OUT_REG: same compact shape as input registers (short wide box, 1px border,
-   centered text). Acts as a "register" visually — not a tall labeled block. */
+/* OUT_REG: exact same geometry as input registers — 100% width of an 18% column
+   with 1px border and matching padding. Visually identical "chip" size. */
 .out-reg{
   border:1px solid var(--border);
   background:var(--bg2);
-  width:145px;
-  padding:10px 10px;
+  width:100%;
+  padding:8px 10px;
   transition:border-color .15s;
   position:relative;
   text-align:center;
@@ -198,7 +199,7 @@ body::after{
    but the panel does not dominate the layout. */
 .disp-col{
   display:flex;flex-direction:column;background:transparent;min-height:0;overflow:hidden;
-  width:340px;
+  width:380px;
 }
 .disp-header{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.1em;background:transparent;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .disp-teal{height:1px;background:var(--teal-dark);flex-shrink:0}
@@ -219,19 +220,32 @@ body::after{
 .di-tags{display:flex;flex-wrap:wrap;gap:4px}
 .di-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.05em}
 
+/* V1: inline body that appears on selection — replaces the bottom strip */
+.di-body{
+  display:none;
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px dashed var(--gold-dark);
+  border-left:2px solid var(--gold);
+  background:rgba(201,168,76,.04);
+  font-size:11px;
+  color:var(--text);
+  line-height:1.6;
+  letter-spacing:.02em;
+}
+.disp-item.sel .di-body{display:block}
+.disp-item.sel .di-tags{margin-top:8px}
+
 /* ═══ BOTTOM DETAIL STRIP ═══ */
-.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:transparent;height:110px}
+.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:transparent;height:54px}
 .det-area{padding:12px 20px;display:flex;flex-direction:column;gap:4px;justify-content:center;overflow:hidden;min-width:0}
 .det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
-.det-addr{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em}
-.det-title{font-size:14px;font-weight:700;color:var(--gold);letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.det-body{font-size:11px;color:var(--text2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.det-tags{display:flex;flex-wrap:nowrap;gap:4px;margin-top:4px;overflow:hidden}
-.det-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--gold-dark);color:var(--gold-dim);letter-spacing:.04em;white-space:nowrap;flex-shrink:0}
 
-.footer-strip{border-left:1px solid var(--border);padding:10px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:7px}
-.flink{font-size:10px;font-weight:700;color:var(--gold-dim);text-decoration:none;padding:3px 10px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:block}
+.footer-strip{border-left:1px solid var(--border);padding:0 16px;display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:8px}
+.flink{font-size:10px;font-weight:700;color:var(--gold-dim);text-decoration:none;padding:4px 12px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:inline-block}
 .flink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
+.det-area{padding:0 20px;display:flex;align-items:center;min-width:0}
+.det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
 </style>
 </head>
 <body>
@@ -294,16 +308,16 @@ body::after{
             </marker>
           </defs>
 
-          <!-- MUX trapezoid — centered horizontally inside the middle column;
-               vertical edges use 1px to match input register border weight;
-               fill is transparent so the sketch-paper grid passes through -->
-          <polygon points="40,10 58,30 58,470 40,490" fill="none" stroke="#1c2530" stroke-width="1"/>
+          <!-- MUX trapezoid — shifted right within the wider middle column so
+               the out-wire is short and OUT_REG sits close to the MUX (and
+               therefore far from the display panel). -->
+          <polygon points="70,10 88,30 88,470 70,490" fill="none" stroke="#1c2530" stroke-width="1"/>
 
           <!-- active energy line inside MUX -->
-          <line id="mux-energy" x1="56" y1="240" x2="56" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+          <line id="mux-energy" x1="86" y1="240" x2="86" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
 
           <!-- MUX output stub (short, no arrowhead; overlay continues to OUT_REG) -->
-          <line id="out-wire" x1="58" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="out-wire" x1="88" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
         </svg>
       </div>
 
@@ -357,13 +371,7 @@ body::after{
 
   <div class="bottom">
     <div class="det-area">
-      <div class="det-placeholder" id="det-ph">// click any entry to inspect</div>
-      <div id="det-inner" style="display:none;flex-direction:column;gap:3px">
-        <div class="det-addr" id="det-addr"></div>
-        <div class="det-title" id="det-title"></div>
-        <div class="det-body" id="det-body"></div>
-        <div class="det-tags" id="det-tags"></div>
-      </div>
+      <div class="det-placeholder">// click any entry in the display register to expand its details inline</div>
     </div>
     <div class="footer-strip">
       <a class="flink" href="mailto:monilarora2003@gmail.com">&#9670; Email</a>
@@ -433,13 +441,13 @@ function muxSel(key){
     document.getElementById('reg-'+k).classList.toggle('active',k===key);
   });
 
-  // MUX energy line (x-coords match centered trapezoid: 40 → 58)
+  // MUX energy line (x-coords match right-shifted trapezoid: 70 → 88)
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
   en.setAttribute('y1',ey);
   en.setAttribute('y2',ey);
-  en.setAttribute('x1','40');
-  en.setAttribute('x2','58');
+  en.setAttribute('x1','70');
+  en.setAttribute('x2','88');
   en.setAttribute('opacity','1');
 
   // OUT wire stub
@@ -462,25 +470,15 @@ function muxSel(key){
   d.items.forEach((it,i)=>{
     const el=document.createElement('div');
     el.className='disp-item';
-    el.innerHTML=`<div class="di-addr">[${String(i).padStart(2,'0')}]</div><div class="di-label">${it.l}</div><div class="di-tags">${it.t.split('·').slice(0,4).map(t=>`<span class="di-tag">${t.trim()}</span>`).join('')}</div>`;
+    const allTags=it.t.split('·').map(t=>`<span class="di-tag">${t.trim()}</span>`).join('');
+    el.innerHTML=`<div class="di-addr">[${String(i).padStart(2,'0')}]</div><div class="di-label">${it.l}</div><div class="di-body">${it.d}</div><div class="di-tags">${allTags}</div>`;
     el.onclick=()=>{
+      const wasSel=el.classList.contains('sel');
       document.querySelectorAll('.disp-item').forEach(e=>e.classList.remove('sel'));
-      el.classList.add('sel');
-      document.getElementById('det-ph').style.display='none';
-      const di=document.getElementById('det-inner');
-      di.style.display='flex';
-      document.getElementById('det-addr').textContent=`[${String(i).padStart(2,'0')}] ${d.label} //`;
-      document.getElementById('det-title').textContent=it.l;
-      document.getElementById('det-body').textContent=it.d;
-      const tc=document.getElementById('det-tags');
-      tc.innerHTML='';
-      it.t.split('·').forEach(t=>{const s=document.createElement('span');s.className='det-tag';s.textContent=t.trim();tc.appendChild(s)});
+      if(!wasSel) el.classList.add('sel');
     };
     c.appendChild(el);
   });
-
-  document.getElementById('det-ph').style.display='block';
-  document.getElementById('det-inner').style.display='none';
 }
 
 function positionWires(active){
@@ -495,16 +493,16 @@ function positionWires(active){
   const mw = muxWires.getBoundingClientRect();
   const or = outRegEl.getBoundingClientRect();
 
-  // MUX trapezoid right edge sits at ~58/100 of the mux-wires SVG width
+  // MUX trapezoid right edge sits at ~88/100 of the mux-wires SVG width
   const mwLeftX  = mw.left  - mc.left;
-  const mwRightX = (mw.left - mc.left) + mw.width * 0.58;
+  const mwRightX = (mw.left - mc.left) + mw.width * 0.88;
   const mwOutY   = mw.top - mc.top + 0.5*mw.height;
   const orLeftX  = or.left  - mc.left;
   const orRightX = or.right - mc.left;
   const orCenterY= or.top - mc.top + or.height/2;
 
-  // Input wires: reg box right → MUX left edge (trapezoid left side at ~40/100)
-  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.40;
+  // Input wires: reg box right → MUX left edge (trapezoid left side at ~70/100)
+  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.70;
   KEYS.forEach(k=>{
     const line = document.getElementById('iw-'+k);
     const reg  = document.getElementById('reg-'+k);
