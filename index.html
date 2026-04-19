@@ -38,7 +38,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:18% 26% 56%;
+  grid-template-columns:18% 10% 26% 46%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -55,8 +55,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   margin:0 12px;
 }
 .col-hdr.left{grid-column:1}
-.col-hdr.mid{grid-column:2}
-.col-hdr.right{grid-column:3}
+.col-hdr.mid{grid-column:3}
+.col-hdr.right{grid-column:4}
 
 /* registers column */
 .reg-col{
@@ -89,7 +89,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
 /* MUX wire+trapezoid column (middle SVG) */
 .mux-wires{
-  grid-column:2;
+  grid-column:3;
   grid-row:2;
   position:relative;
 }
@@ -103,7 +103,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
 /* OUT_REG column (right) */
 .out-col{
-  grid-column:3;
+  grid-column:4;
   grid-row:2;
   display:flex;
   align-items:center;
@@ -115,7 +115,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .out-reg{
   border:2px solid var(--border);
   background:var(--bg2);
-  width:62%;
+  width:40%;
   transition:border-color .15s;
   position:relative;
 }
@@ -146,7 +146,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 
 /* SEL row */
 .sel-row{
-  grid-column:2;
+  grid-column:3;
   grid-row:3;
   display:flex;
   flex-direction:column;
@@ -261,14 +261,6 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
             </marker>
           </defs>
 
-          <!-- horizontal wires: register → MUX, arrowhead pointing into MUX -->
-          <line id="w-skills"     x1="0" y1="40"  x2="40" y2="40"  stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-experience" x1="0" y1="120" x2="40" y2="120" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-projects"   x1="0" y1="200" x2="40" y2="200" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-education"  x1="0" y1="280" x2="40" y2="280" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-hobbies"    x1="0" y1="360" x2="40" y2="360" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-contact"    x1="0" y1="440" x2="40" y2="440" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-
           <!-- MUX trapezoid -->
           <polygon points="40,10 58,30 58,470 40,490" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
           <line x1="40" y1="10"  x2="58" y2="30"  stroke="#2a2218" stroke-width="1"/>
@@ -304,6 +296,12 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
             <path d="M2 1L8 5L2 9" fill="none" stroke="#3a2e10" stroke-width="2" stroke-linecap="round"/>
           </marker>
         </defs>
+        <line id="iw-skills"     x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
+        <line id="iw-experience" x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
+        <line id="iw-projects"   x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
+        <line id="iw-education"  x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
+        <line id="iw-hobbies"    x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
+        <line id="iw-contact"    x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
         <line id="out-conn"  x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
         <line id="data-conn" x1="0" y1="0" x2="0" y2="0" stroke="#1a2330" stroke-width="1.5"/>
       </svg>
@@ -403,13 +401,7 @@ function muxSel(key){
 
   // Register blocks
   KEYS.forEach(k=>{
-    const on=k===key;
-    document.getElementById('reg-'+k).classList.toggle('active',on);
-    // SVG wire
-    const w=document.getElementById('w-'+k);
-    w.setAttribute('stroke',on?'#c9a84c':'#1a2330');
-    w.setAttribute('stroke-width',on?'2.5':'1.5');
-    w.setAttribute('marker-end',on?'url(#arr-gold)':'url(#arr)');
+    document.getElementById('reg-'+k).classList.toggle('active',k===key);
   });
 
   // MUX energy line
@@ -474,33 +466,41 @@ function positionWires(active){
   const mw = muxWires.getBoundingClientRect();
   const or = outRegEl.getBoundingClientRect();
 
-  // MUX output exits at x=100 in SVG (right edge of mux-wires div), at y=250/500 = 0.5 of height
-  const mwRightX = mw.right  - mc.left;
+  const mwLeftX  = mw.left  - mc.left;
+  const mwRightX = mw.right - mc.left;
   const mwOutY   = mw.top - mc.top + 0.5*mw.height;
-
-  // OUT_REG left edge center
-  const orLeftX  = or.left   - mc.left;
-  const orRightX = or.right  - mc.left;
+  const orLeftX  = or.left  - mc.left;
+  const orRightX = or.right - mc.left;
   const orCenterY= or.top - mc.top + or.height/2;
+
+  // Input wires: reg box right → MUX left edge
+  KEYS.forEach(k=>{
+    const line = document.getElementById('iw-'+k);
+    const reg  = document.getElementById('reg-'+k);
+    if(!line||!reg) return;
+    const rr = reg.getBoundingClientRect();
+    const rx = rr.right  - mc.left;
+    const ry = rr.top - mc.top + rr.height/2;
+    const isActive = k===cur;
+    line.setAttribute('x1', rx);  line.setAttribute('y1', ry);
+    line.setAttribute('x2', mwLeftX); line.setAttribute('y2', ry);
+    line.setAttribute('stroke', isActive ? '#c9a84c' : '#1a2330');
+    line.setAttribute('stroke-width', isActive ? '2.5' : '1.5');
+    line.setAttribute('marker-end', isActive ? 'url(#arr-ov)' : 'url(#arr-ov-dim)');
+  });
 
   const stroke = active ? '#c9a84c' : '#1a2330';
   const sw     = active ? '2.5'     : '1.5';
   const marker = active ? 'url(#arr-ov)' : 'url(#arr-ov-dim)';
 
-  outConn.setAttribute('x1', mwRightX);
-  outConn.setAttribute('y1', mwOutY);
-  outConn.setAttribute('x2', orLeftX - 1);
-  outConn.setAttribute('y2', orCenterY);
-  outConn.setAttribute('stroke', stroke);
-  outConn.setAttribute('stroke-width', sw);
+  outConn.setAttribute('x1', mwRightX);  outConn.setAttribute('y1', mwOutY);
+  outConn.setAttribute('x2', orLeftX-1); outConn.setAttribute('y2', orCenterY);
+  outConn.setAttribute('stroke', stroke); outConn.setAttribute('stroke-width', sw);
   outConn.setAttribute('marker-end', marker);
 
-  dataConn.setAttribute('x1', orRightX + 1);
-  dataConn.setAttribute('y1', orCenterY);
-  dataConn.setAttribute('x2', mc.width);
-  dataConn.setAttribute('y2', orCenterY);
-  dataConn.setAttribute('stroke', stroke);
-  dataConn.setAttribute('stroke-width', sw);
+  dataConn.setAttribute('x1', orRightX+1); dataConn.setAttribute('y1', orCenterY);
+  dataConn.setAttribute('x2', mc.width);   dataConn.setAttribute('y2', orCenterY);
+  dataConn.setAttribute('stroke', stroke);  dataConn.setAttribute('stroke-width', sw);
   dataConn.setAttribute('marker-end', marker);
 }
 
