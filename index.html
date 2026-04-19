@@ -56,8 +56,11 @@ body::after{
 .tb-name{font-size:22px;font-weight:700;color:var(--gold);letter-spacing:.08em;line-height:1}
 .tb-sub{font-size:11px;color:var(--gold-dim);letter-spacing:.1em;margin-top:5px}
 .tb-sub span{color:var(--text3)}
-.tb-right{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--teal-dim)}
+.tb-right{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--teal-dim)}
+.tb-clk{display:flex;align-items:center;gap:6px;padding-left:6px;margin-left:4px;border-left:1px solid var(--gold-dark);padding:4px 0 4px 12px}
 .clkdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
+.flink{font-size:10px;font-weight:700;color:var(--gold-dim);text-decoration:none;padding:5px 12px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:inline-block}
+.flink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
 /* Display panel shrinks to content; MUX column fills remaining space */
@@ -235,17 +238,6 @@ body::after{
 }
 .disp-item.sel .di-body{display:block}
 .disp-item.sel .di-tags{margin-top:8px}
-
-/* ═══ BOTTOM DETAIL STRIP ═══ */
-.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:transparent;height:54px}
-.det-area{padding:12px 20px;display:flex;flex-direction:column;gap:4px;justify-content:center;overflow:hidden;min-width:0}
-.det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
-
-.footer-strip{border-left:1px solid var(--border);padding:0 16px;display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:8px}
-.flink{font-size:10px;font-weight:700;color:var(--gold-dim);text-decoration:none;padding:4px 12px;border:1px solid var(--gold-dark);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;text-align:center;display:inline-block}
-.flink:hover{color:var(--gold-hi);border-color:var(--gold);background:var(--bg3)}
-.det-area{padding:0 20px;display:flex;align-items:center;min-width:0}
-.det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
 </style>
 </head>
 <body>
@@ -256,7 +248,12 @@ body::after{
       <div class="tb-name">&#9670; Monil Arora</div>
       <div class="tb-sub">MONIL_ARORA.v <span>·</span> UBC EE <span>·</span> BASc 2027 <span>·</span> PORTFOLIO_DATAPATH</div>
     </div>
-    <div class="tb-right"><div class="clkdot"></div>&nbsp;CLK · REV 2026</div>
+    <div class="tb-right">
+      <a class="flink" href="mailto:monilarora2003@gmail.com">&#9670; Email</a>
+      <a class="flink" href="https://github.com/plundis" target="_blank">&#9670; GitHub</a>
+      <a class="flink" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank">&#9670; LinkedIn</a>
+      <div class="tb-clk"><div class="clkdot"></div>&nbsp;CLK · REV 2026</div>
+    </div>
   </div>
 
   <div class="main">
@@ -308,16 +305,16 @@ body::after{
             </marker>
           </defs>
 
-          <!-- MUX trapezoid — shifted right within the wider middle column so
-               the out-wire is short and OUT_REG sits close to the MUX (and
-               therefore far from the display panel). -->
-          <polygon points="70,10 88,30 88,470 70,490" fill="none" stroke="#1c2530" stroke-width="1"/>
+          <!-- MUX trapezoid — centered between input regs (right edge at 18% of mux-col)
+               and OUT_REG (left edge at ~82% of mux-col). Middle column spans 24-82%,
+               so midpoint is at 50% of mux-col = 45% along this SVG. Trapezoid width 18. -->
+          <polygon points="36,10 54,30 54,470 36,490" fill="none" stroke="#1c2530" stroke-width="1"/>
 
           <!-- active energy line inside MUX -->
-          <line id="mux-energy" x1="86" y1="240" x2="86" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+          <line id="mux-energy" x1="52" y1="240" x2="52" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
 
           <!-- MUX output stub (short, no arrowhead; overlay continues to OUT_REG) -->
-          <line id="out-wire" x1="88" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="out-wire" x1="54" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
         </svg>
       </div>
 
@@ -367,17 +364,6 @@ body::after{
       <div class="disp-items" id="disp-items"></div>
     </div>
 
-  </div>
-
-  <div class="bottom">
-    <div class="det-area">
-      <div class="det-placeholder">// click any entry in the display register to expand its details inline</div>
-    </div>
-    <div class="footer-strip">
-      <a class="flink" href="mailto:monilarora2003@gmail.com">&#9670; Email</a>
-      <a class="flink" href="https://github.com/plundis" target="_blank">&#9670; GitHub</a>
-      <a class="flink" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank">&#9670; LinkedIn</a>
-    </div>
   </div>
 
 </div>
@@ -441,13 +427,13 @@ function muxSel(key){
     document.getElementById('reg-'+k).classList.toggle('active',k===key);
   });
 
-  // MUX energy line (x-coords match right-shifted trapezoid: 70 → 88)
+  // MUX energy line (x-coords match centered trapezoid: 36 → 54)
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
   en.setAttribute('y1',ey);
   en.setAttribute('y2',ey);
-  en.setAttribute('x1','70');
-  en.setAttribute('x2','88');
+  en.setAttribute('x1','36');
+  en.setAttribute('x2','54');
   en.setAttribute('opacity','1');
 
   // OUT wire stub
@@ -493,16 +479,16 @@ function positionWires(active){
   const mw = muxWires.getBoundingClientRect();
   const or = outRegEl.getBoundingClientRect();
 
-  // MUX trapezoid right edge sits at ~88/100 of the mux-wires SVG width
+  // MUX trapezoid right edge sits at ~54/100 of the mux-wires SVG width
   const mwLeftX  = mw.left  - mc.left;
-  const mwRightX = (mw.left - mc.left) + mw.width * 0.88;
+  const mwRightX = (mw.left - mc.left) + mw.width * 0.54;
   const mwOutY   = mw.top - mc.top + 0.5*mw.height;
   const orLeftX  = or.left  - mc.left;
   const orRightX = or.right - mc.left;
   const orCenterY= or.top - mc.top + or.height/2;
 
-  // Input wires: reg box right → MUX left edge (trapezoid left side at ~70/100)
-  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.70;
+  // Input wires: reg box right → MUX left edge (trapezoid left side at ~36/100)
+  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.36;
   KEYS.forEach(k=>{
     const line = document.getElementById('iw-'+k);
     const reg  = document.getElementById('reg-'+k);
