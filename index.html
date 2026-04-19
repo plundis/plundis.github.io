@@ -29,7 +29,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .clkdot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 1.2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
-.main{flex:1;display:grid;grid-template-columns:58% 42%;gap:0;min-height:0;border:1px solid var(--border)}
+.main{flex:1;display:grid;grid-template-columns:64% 36%;gap:0;min-height:0;border:1px solid var(--border)}
 
 /* ═══ MUX COLUMN (left) — hybrid HTML + SVG overlay ═══ */
 .mux-col{
@@ -38,7 +38,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:55% 11% 34%;
+  grid-template-columns:28% 26% 46%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -65,8 +65,8 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   display:flex;
   flex-direction:column;
   justify-content:space-around;
-  padding:12px 0 12px 12px;
-  gap:10px;
+  padding:8px 0 8px 12px;
+  gap:18px;
   position:relative;
   z-index:2;
 }
@@ -74,7 +74,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
 .reg{
   border:1px solid var(--border);
   background:var(--bg2);
-  padding:10px 12px;
+  padding:8px 10px;
   cursor:pointer;
   transition:border-color .15s,background .15s;
   text-align:center;
