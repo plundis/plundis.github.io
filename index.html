@@ -61,18 +61,18 @@ body::after{
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.12}}
 
 /* Display panel shrinks to content; MUX column fills remaining space */
-.main{flex:1;display:grid;grid-template-columns:1fr auto;gap:0;min-height:0;border:1px solid var(--border)}
+.main{flex:1;display:grid;grid-template-columns:1fr auto;gap:0;min-height:0;border:1px solid var(--border);background:transparent}
 
 /* ═══ MUX COLUMN (left) — hybrid HTML + SVG overlay ═══ */
-/* Widened middle (MUX) column and narrowed right (OUT_REG) column
-   so the MUX visually shifts right and the out-wire is shorter. */
+/* Balanced middle (MUX) column with OUT_REG column so the MUX sits centered
+   between the input registers and OUT_REG. */
 .mux-col{
   border-right:1px solid var(--border);
-  background:var(--bg);
+  background:transparent;
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:18% 10% 42% 30%;
+  grid-template-columns:18% 6% 46% 30%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -141,41 +141,33 @@ body::after{
   grid-row:2;
   display:flex;
   align-items:center;
-  justify-content:flex-start;
+  justify-content:center;
   position:relative;
-  padding:12px 16px 12px 0;
+  padding:12px 16px;
 }
 
-/* OUT_REG: slightly wider than input registers (input regs sit inside an 18% column
-   with 12px left padding; making OUT_REG a fixed width tuned to be a touch wider) */
+/* OUT_REG: same compact shape as input registers (short wide box, 1px border,
+   centered text). Acts as a "register" visually — not a tall labeled block. */
 .out-reg{
-  border:2px solid var(--border);
+  border:1px solid var(--border);
   background:var(--bg2);
   width:145px;
+  padding:10px 10px;
   transition:border-color .15s;
   position:relative;
+  text-align:center;
 }
 .out-reg.lit{border-color:var(--gold)}
-.or-header{
-  font-size:10px;
-  font-weight:700;
-  color:var(--gold-dim);
-  letter-spacing:.15em;
-  padding:8px 0;
-  text-align:center;
-  border-bottom:1px solid var(--border);
-  background:var(--bg3);
-}
-.or-body{padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:8px}
 .or-mode-text{
-  font-size:18px;
+  font-size:15px;
   font-weight:700;
-  color:var(--gold);
+  color:var(--text2);
   letter-spacing:.04em;
-  line-height:1;
+  line-height:1.2;
 }
-.or-addr-text{font-size:11px;color:var(--text3);letter-spacing:.08em}
-.or-bits{font-size:10px;color:var(--gold-dark);letter-spacing:.08em;margin-top:2px}
+.out-reg.lit .or-mode-text{color:var(--gold)}
+.or-addr-text{font-size:10px;color:var(--text3);letter-spacing:.06em;margin-top:4px}
+.out-reg.lit .or-addr-text{color:var(--gold-dim)}
 
 /* Full-column wire overlay */
 .conn-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:visible}
@@ -205,10 +197,10 @@ body::after{
 /* Width tuned so longest tag rows (e.g. AD9910·DDS·RF·PCB) fit without overflow
    but the panel does not dominate the layout. */
 .disp-col{
-  display:flex;flex-direction:column;background:var(--bg);min-height:0;overflow:hidden;
+  display:flex;flex-direction:column;background:transparent;min-height:0;overflow:hidden;
   width:340px;
 }
-.disp-header{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.1em;background:var(--bg2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.disp-header{padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.1em;background:transparent;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .disp-teal{height:1px;background:var(--teal-dark);flex-shrink:0}
 .disp-items{flex:1 1 0;overflow-y:auto;overflow-x:hidden;min-height:0}
 .disp-items::-webkit-scrollbar{width:4px}
@@ -228,7 +220,7 @@ body::after{
 .di-tag{font-size:10px;font-weight:700;padding:2px 7px;border:1px solid var(--teal-dark);color:var(--teal-dim);letter-spacing:.05em}
 
 /* ═══ BOTTOM DETAIL STRIP ═══ */
-.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:var(--bg2);height:110px}
+.bottom{flex-shrink:0;border:1px solid var(--border);border-top:none;display:grid;grid-template-columns:1fr auto;background:transparent;height:110px}
 .det-area{padding:12px 20px;display:flex;flex-direction:column;gap:4px;justify-content:center;overflow:hidden;min-width:0}
 .det-placeholder{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em}
 .det-addr{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em}
@@ -302,28 +294,24 @@ body::after{
             </marker>
           </defs>
 
-          <!-- MUX trapezoid — shifted right within the widened middle column -->
-          <polygon points="70,10 88,30 88,470 70,490" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
-          <line x1="70" y1="10"  x2="88" y2="30"  stroke="#2a2218" stroke-width="1"/>
-          <line x1="70" y1="490" x2="88" y2="470" stroke="#2a2218" stroke-width="1"/>
+          <!-- MUX trapezoid — centered horizontally inside the middle column;
+               vertical edges use 1px to match input register border weight;
+               fill is transparent so the sketch-paper grid passes through -->
+          <polygon points="40,10 58,30 58,470 40,490" fill="none" stroke="#1c2530" stroke-width="1"/>
 
           <!-- active energy line inside MUX -->
-          <line id="mux-energy" x1="86" y1="240" x2="86" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+          <line id="mux-energy" x1="56" y1="240" x2="56" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
 
           <!-- MUX output stub (short, no arrowhead; overlay continues to OUT_REG) -->
-          <line id="out-wire" x1="88" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="out-wire" x1="58" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
         </svg>
       </div>
 
-      <!-- OUT_REG block (HTML, right column) -->
+      <!-- OUT_REG block (HTML, right column) — compact, matching input register shape -->
       <div class="out-col">
         <div class="out-reg" id="outreg">
-          <div class="or-header">OUT_REG</div>
-          <div class="or-body">
-            <div class="or-mode-text" id="or-mode">Skills</div>
-            <div class="or-addr-text" id="or-addr">0x0000</div>
-            <div class="or-bits">[8'hxxxxxxxx]</div>
-          </div>
+          <div class="or-mode-text" id="or-mode">Skills</div>
+          <div class="or-addr-text" id="or-addr">OUT &middot; 0x0000</div>
         </div>
       </div>
 
@@ -445,13 +433,13 @@ function muxSel(key){
     document.getElementById('reg-'+k).classList.toggle('active',k===key);
   });
 
-  // MUX energy line (x-coords updated to match new trapezoid position)
+  // MUX energy line (x-coords match centered trapezoid: 40 → 58)
   const en=document.getElementById('mux-energy');
   const ey=Y[key];
   en.setAttribute('y1',ey);
   en.setAttribute('y2',ey);
-  en.setAttribute('x1','70');
-  en.setAttribute('x2','88');
+  en.setAttribute('x1','40');
+  en.setAttribute('x2','58');
   en.setAttribute('opacity','1');
 
   // OUT wire stub
@@ -464,7 +452,7 @@ function muxSel(key){
   // OUT_REG block
   document.getElementById('outreg').classList.add('lit');
   document.getElementById('or-mode').textContent=d.label;
-  document.getElementById('or-addr').textContent=d.addr;
+  document.getElementById('or-addr').textContent='OUT \u00b7 '+d.addr;
   document.getElementById('sel-val').textContent='= '+d.sel;
   document.getElementById('disp-mode').textContent=d.label;
 
@@ -507,16 +495,16 @@ function positionWires(active){
   const mw = muxWires.getBoundingClientRect();
   const or = outRegEl.getBoundingClientRect();
 
-  // MUX trapezoid right edge sits at ~88/100 of the mux-wires SVG width
+  // MUX trapezoid right edge sits at ~58/100 of the mux-wires SVG width
   const mwLeftX  = mw.left  - mc.left;
-  const mwRightX = (mw.left - mc.left) + mw.width * 0.88;
+  const mwRightX = (mw.left - mc.left) + mw.width * 0.58;
   const mwOutY   = mw.top - mc.top + 0.5*mw.height;
   const orLeftX  = or.left  - mc.left;
   const orRightX = or.right - mc.left;
   const orCenterY= or.top - mc.top + or.height/2;
 
-  // Input wires: reg box right → MUX left edge (trapezoid left side at ~70/100)
-  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.70;
+  // Input wires: reg box right → MUX left edge (trapezoid left side at ~40/100)
+  const mwMuxLeftX = (mw.left - mc.left) + mw.width * 0.40;
   KEYS.forEach(k=>{
     const line = document.getElementById('iw-'+k);
     const reg  = document.getElementById('reg-'+k);
