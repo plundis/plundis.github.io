@@ -38,7 +38,7 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
   position:relative;
   overflow:hidden;
   display:grid;
-  grid-template-columns:28% 28% 44%;
+  grid-template-columns:18% 26% 56%;
   grid-template-rows:auto 1fr auto;
   padding:14px 0 8px;
 }
@@ -262,23 +262,23 @@ body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(v
           </defs>
 
           <!-- horizontal wires: register → MUX, arrowhead pointing into MUX -->
-          <line id="w-skills"     x1="0" y1="40"  x2="30" y2="40"  stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-experience" x1="0" y1="120" x2="30" y2="120" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-projects"   x1="0" y1="200" x2="30" y2="200" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-education"  x1="0" y1="280" x2="30" y2="280" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-hobbies"    x1="0" y1="360" x2="30" y2="360" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
-          <line id="w-contact"    x1="0" y1="440" x2="30" y2="440" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-skills"     x1="0" y1="40"  x2="40" y2="40"  stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-experience" x1="0" y1="120" x2="40" y2="120" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-projects"   x1="0" y1="200" x2="40" y2="200" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-education"  x1="0" y1="280" x2="40" y2="280" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-hobbies"    x1="0" y1="360" x2="40" y2="360" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
+          <line id="w-contact"    x1="0" y1="440" x2="40" y2="440" stroke="#1a2330" stroke-width="1.5" marker-end="url(#arr)"/>
 
           <!-- MUX trapezoid -->
-          <polygon points="30,8 70,30 70,470 30,492" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
-          <line x1="30" y1="8"   x2="70" y2="30"  stroke="#2a2218" stroke-width="1"/>
-          <line x1="30" y1="492" x2="70" y2="470" stroke="#2a2218" stroke-width="1"/>
+          <polygon points="40,10 58,30 58,470 40,490" fill="#0b0e12" stroke="#1c2530" stroke-width="1.5"/>
+          <line x1="40" y1="10"  x2="58" y2="30"  stroke="#2a2218" stroke-width="1"/>
+          <line x1="40" y1="490" x2="58" y2="470" stroke="#2a2218" stroke-width="1"/>
 
           <!-- active energy line inside MUX -->
-          <line id="mux-energy" x1="68" y1="240" x2="68" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+          <line id="mux-energy" x1="56" y1="240" x2="56" y2="240" stroke="#3ab8c8" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
 
           <!-- MUX output stub (short, no arrowhead; overlay continues to OUT_REG) -->
-          <line id="out-wire" x1="70" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
+          <line id="out-wire" x1="58" y1="250" x2="100" y2="250" stroke="#1a2330" stroke-width="1.5"/>
         </svg>
       </div>
 
@@ -417,8 +417,8 @@ function muxSel(key){
   const ey=Y[key];
   en.setAttribute('y1',ey);
   en.setAttribute('y2',ey);
-  en.setAttribute('x1','30');
-  en.setAttribute('x2','70');
+  en.setAttribute('x1','40');
+  en.setAttribute('x2','58');
   en.setAttribute('opacity','1');
 
   // OUT wire stub
