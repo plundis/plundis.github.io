@@ -280,13 +280,12 @@
   /* header decode (.header section) */
   .bio{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
   .avatar{
-    width:76px;height:76px;flex-shrink:0;
-    background:
-      repeating-linear-gradient(45deg,#c9bfa4 0 8px,#d7ceb5 8px 16px);
-    border:1px solid rgba(0,0,0,.15);
-    display:grid;place-items:center;
-    font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.06em;text-align:center;
+    width:86px;height:86px;flex-shrink:0;
+    border:1px solid rgba(0,0,0,.25);
+    overflow:hidden;background:#ddd;
+    filter:grayscale(.08) contrast(1.02);
   }
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
   .bio .who{flex:1;min-width:0}
   .bio .who .n{font-family:var(--sans);font-weight:700;font-size:28px;line-height:1;letter-spacing:-.01em;color:#0e0f10}
   .bio .who .t{font-family:var(--mono);font-size:12px;color:#3a3933;margin-top:8px;letter-spacing:.04em;line-height:1.55;font-weight:500}
@@ -377,7 +376,7 @@
       </div>
     </div>
     <div class="tb-right">
-      <a class="tb-link" href="/cdn-cgi/l/email-protection#771a18191e1b16051805164547474437101a161e1b5914181a">◆ email</a>
+      <a class="tb-link" href="/cdn-cgi/l/email-protection#7f12101116131e0d100d1e4d4f4f4c3f18121e1613511c1012">◆ email</a>
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">◆ github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">◆ linkedin</a>
       <a class="tb-link" href="#" id="open-resume">◆ resume.pdf</a>
@@ -420,7 +419,7 @@
       <div class="term-hist" id="term-hist"></div>
 
       <div class="cmdbar">
-        <span class="prompt">monil@hannover:~/bin $</span>
+        <span class="prompt">monil@cortex-m4:~/bin $</span>
         <input id="cmd" type="text" spellcheck="false" autocomplete="off" placeholder="try:  help  ·  ls  ·  cat .projects  ·  open resume" />
         <span class="hint">↑↓ regions · ENTER run · TAB complete</span>
       </div>
@@ -669,7 +668,7 @@ function renderDecode(key){
     body.innerHTML = `
       <div class="dc-section">
         <div class="bio">
-          <div class="avatar">[ photo<br/>placeholder ]</div>
+          <div class="avatar"><img src="photo.jpg" alt="Monil Arora"/></div>
           <div class="who">
             <div class="n">${d.name}</div>
             <div class="t">${d.tagline}</div>
