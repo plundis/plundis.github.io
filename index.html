@@ -1312,7 +1312,6 @@ function renderDecode(key){
         <div class="etop"><h3>${e.h}</h3>${e.when?`<span class="when">${e.when}</span>`:''}</div>
         <div class="role">${e.role}</div><p>${e.p}</p>
         <div class="chips">${e.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
-        <div class="open-hint">▸ click to open in hex panel</div>
       </div>`).join('');
     body.querySelectorAll('.entry[data-id]').forEach(el=>el.addEventListener('click',()=>handleEntryClick(el,key)));
     return;
@@ -1322,7 +1321,6 @@ function renderDecode(key){
       d.map(p=>`<div class="proj" data-id="${p.id}" data-section="${key}">
         <div class="pt"><h3>${p.h}</h3><span class="tag">${p.tag}</span></div>
         <p>${p.p}</p>
-        <div class="open-hint">▸ click to open in hex panel</div>
       </div>`).join('');
     body.querySelectorAll('.proj[data-id]').forEach(el=>el.addEventListener('click',()=>handleEntryClick(el,key)));
     return;
