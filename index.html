@@ -47,7 +47,7 @@
   .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
 
   /* main — original 3-column */
-  .main{display:grid;grid-template-columns:minmax(240px,280px) 1fr minmax(360px,460px);gap:10px;min-height:0;}
+  .main{display:grid;grid-template-columns:minmax(240px,280px) 1fr minmax(420px,520px);gap:10px;min-height:0;}
 
   /* left: regions */
   .regions{border:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;min-height:0;}
@@ -323,9 +323,9 @@
   @keyframes boot-in{to{opacity:1}}
 
   @media(min-width:1800px){.shell{padding:10px 20px}}
-  @media(max-width:1400px){.main{grid-template-columns:minmax(220px,260px) 1fr minmax(340px,420px)}}
-  @media(max-width:1200px){.main{grid-template-columns:220px 1fr 360px}}
-  @media(max-width:1050px){.main{grid-template-columns:200px 1fr 320px}.hex-row{grid-template-columns:60px 1fr 140px;gap:10px}}
+  @media(max-width:1400px){.main{grid-template-columns:minmax(220px,260px) 1fr minmax(400px,480px)}}
+  @media(max-width:1200px){.main{grid-template-columns:220px 1fr 400px}}
+  @media(max-width:1050px){.main{grid-template-columns:200px 1fr 360px}.hex-row{grid-template-columns:60px 1fr 140px;gap:10px}}
   @media(max-width:900px){
     body{overflow:auto;font-size:12px}
     .shell{height:auto;min-height:100vh;grid-template-rows:auto auto auto;padding:8px;gap:8px;}
@@ -521,7 +521,7 @@
       <div class="tb-logo">◆</div>
       <div>
         <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.04</small></div>
-        <div class="tb-meta">8192 bytes &nbsp;·&nbsp; crc32: DE&nbsp;AD&nbsp;BE&nbsp;EF &nbsp;·&nbsp; target: cortex-m4 &nbsp;·&nbsp; <span id="compiled-date"></span></div>
+        <div class="tb-meta">8192 bytes &nbsp;·&nbsp; crc32: DE&nbsp;AD&nbsp;BE&nbsp;EF &nbsp;·&nbsp; target: cortex-m4 &nbsp;·&nbsp; compiled <span id="compiled-date"></span></div>
       </div>
     </div>
     <div class="tb-right">
