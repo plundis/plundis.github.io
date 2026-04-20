@@ -204,20 +204,116 @@
   .reg.flash{animation:regflash .5s ease-out}
   @keyframes regflash{0%{box-shadow:0 0 0 2px var(--phos),inset 0 0 20px rgba(124,245,138,.4)}100%{box-shadow:none}}
 
-  /* konami / plain */
+  /* ── recruiter mode ── */
   body.plain::before,body.plain::after{display:none}
   body.plain .shell{display:none}
-  .plain-view{display:none;position:fixed;inset:0;z-index:50000;overflow:auto;background:#fdfaf0;color:#17191a;font-family:var(--sans);padding:56px 8vw 80px;}
+  body.plain .actled{display:none}
+
+  .plain-view{
+    display:none;position:fixed;inset:0;z-index:50000;
+    overflow:auto;background:#f9f6f0;color:#17191a;
+    font-family:var(--sans);
+  }
   body.plain .plain-view{display:block}
-  .plain-view .ptop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:32px;border-bottom:2px solid #17191a;padding-bottom:10px}
-  .plain-view h1{font-size:32px;font-weight:700;letter-spacing:-.01em}
-  .plain-view .back{font-family:var(--mono);font-size:12px;color:#17191a;text-decoration:underline;cursor:pointer;background:none;border:none;padding:0}
-  .plain-view h2{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:28px 0 10px;border-bottom:1px solid rgba(0,0,0,.25);padding-bottom:4px}
-  .plain-view .pe{margin-bottom:14px}
-  .plain-view .pe .ph{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:15px}
-  .plain-view .pe p{font-size:14px;line-height:1.55;text-wrap:pretty;max-width:70ch}
-  .plain-view .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;font-size:13.5px;font-family:var(--mono)}
-  .plain-view .pfoot{margin-top:40px;font-family:var(--mono);font-size:11px;color:#4a4937}
+
+  /* recruiter mode top bar */
+  .rv-topbar{
+    position:sticky;top:0;z-index:10;
+    background:#f9f6f0;border-bottom:2px solid #17191a;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 8vw;
+  }
+  .rv-topbar .rv-name{font-family:var(--sans);font-size:22px;font-weight:700;letter-spacing:-.01em;color:#17191a}
+  .rv-topbar .rv-links{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .rv-topbar .rv-link{
+    font-family:var(--mono);font-size:11px;color:#17191a;
+    text-decoration:none;border:1px solid rgba(0,0,0,.35);
+    padding:5px 11px;letter-spacing:.06em;
+    transition:background .1s;font-weight:500;
+  }
+  .rv-topbar .rv-link:hover{background:rgba(0,0,0,.06)}
+  .rv-topbar .rv-link.pri{background:#17191a;color:#f9f6f0;}
+  .rv-topbar .rv-link.pri:hover{background:#000}
+  .rv-back{
+    font-family:var(--mono);font-size:11px;color:#17191a;
+    background:none;border:1px solid rgba(0,0,0,.3);
+    padding:5px 11px;cursor:pointer;letter-spacing:.08em;
+    transition:background .1s;
+  }
+  .rv-back:hover{background:rgba(0,0,0,.06)}
+
+  /* recruiter mode body */
+  .rv-body{max-width:860px;margin:0 auto;padding:48px 8vw 80px;}
+
+  .rv-hero{margin-bottom:48px;}
+  .rv-hero h1{font-size:42px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:10px;}
+  .rv-hero .rv-tagline{font-family:var(--mono);font-size:13px;color:#4a4937;letter-spacing:.04em;line-height:1.6;margin-bottom:18px;}
+  .rv-hero .rv-blurb{font-size:16px;line-height:1.65;color:#2b2d2e;max-width:62ch;text-wrap:pretty;}
+  .rv-skill-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px;}
+  .rv-skill-chip{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.4);padding:4px 10px;font-weight:600;letter-spacing:.04em;}
+
+  .rv-section{margin-bottom:44px;}
+  .rv-section-title{
+    font-family:var(--mono);font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;
+    color:#17191a;border-bottom:2px solid #17191a;
+    padding-bottom:6px;margin-bottom:20px;
+  }
+
+  /* experience + education cards */
+  .rv-card{padding:18px 0;border-bottom:1px solid rgba(0,0,0,.12);}
+  .rv-card:last-child{border-bottom:none}
+  .rv-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;}
+  .rv-card h3{font-size:17px;font-weight:700;color:#17191a;letter-spacing:-.01em;}
+  .rv-card .rv-when{font-family:var(--mono);font-size:11px;color:#6b6459;white-space:nowrap;font-weight:500;}
+  .rv-card .rv-role{font-family:var(--mono);font-size:12px;color:#6b6459;margin-bottom:8px;font-weight:500;}
+  .rv-card p{font-size:14.5px;line-height:1.65;color:#2b2d2e;text-wrap:pretty;margin-bottom:10px;}
+  .rv-chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .rv-chip{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;}
+
+  /* project grid */
+  .rv-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .rv-proj{border:1px solid rgba(0,0,0,.18);padding:18px;background:#fff;}
+  .rv-proj h3{font-size:15px;font-weight:700;color:#17191a;margin-bottom:4px;}
+  .rv-proj .rv-tag{font-family:var(--mono);font-size:10px;color:#6b6459;letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
+  .rv-proj p{font-size:13.5px;line-height:1.6;color:#2b2d2e;text-wrap:pretty;}
+
+  /* skills grid */
+  .rv-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;}
+  .rv-skbucket h4{font-size:13px;font-weight:700;color:#17191a;margin-bottom:8px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;}
+  .rv-sk-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .rv-sk{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
+
+  /* firmware mode button */
+  .rv-fw-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11px;color:var(--phos);
+    background:var(--bg2);border:1px solid var(--phos-dim);
+    padding:5px 12px;letter-spacing:.08em;cursor:pointer;
+    transition:background .12s,border-color .12s;
+  }
+  .rv-fw-btn:hover{background:var(--bg3);border-color:var(--phos)}
+  .rv-fw-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--phos);box-shadow:0 0 6px var(--phos);animation:pulse 1.3s ease-in-out infinite;}
+
+  /* mode toggle button in fw topbar */
+  .tb-mode{
+    font-family:var(--mono);font-size:11px;
+    color:#17191a;background:#f9f6f0;
+    border:1px solid rgba(249,246,240,.6);
+    padding:5px 12px;letter-spacing:.08em;cursor:pointer;
+    transition:background .12s,border-color .12s,color .12s;
+    display:inline-flex;align-items:center;gap:7px;
+  }
+  .tb-mode:hover{background:#fff;border-color:#fff}
+  .tb-mode .dot{width:6px;height:6px;border-radius:50%;background:#17191a;}
+
+  @media(max-width:700px){
+    .rv-proj-grid{grid-template-columns:1fr}
+    .rv-skills-grid{grid-template-columns:1fr}
+    .rv-topbar{flex-direction:column;gap:12px;align-items:flex-start;padding:14px 6vw;}
+    .rv-body{padding:32px 6vw 60px;}
+    .rv-hero h1{font-size:30px}
+  }
 
   /* boot */
   .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;}
@@ -268,30 +364,153 @@
 </div>
 
 <div class="plain-view" id="plain-view" aria-hidden="true">
-  <div class="ptop"><h1>Monil Arora</h1><button class="back" id="plain-back">← back to firmware dump</button></div>
-  <div style="font-family:var(--mono);font-size:13px;color:#4a4937;margin-bottom:8px">
-    Electrical Engineering · UBC BASc (expected 2027) · embedded firmware &amp; systems<br/>
-    monilarora2003@gmail.com · <a href="https://github.com/plundis" style="color:#17191a">github.com/plundis</a> · <a href="https://linkedin.com/in/monil-arora-a26851290" style="color:#17191a">linkedin</a> · +1 236 777 5739
+
+  <!-- sticky top bar -->
+  <div class="rv-topbar">
+    <div class="rv-name">Monil Arora</div>
+    <div class="rv-links">
+      <a class="rv-link pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
+      <a class="rv-link" href="mailto:monilarora2003@gmail.com">email</a>
+      <a class="rv-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+      <a class="rv-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+      <button class="rv-back" id="plain-back">◆ firmware mode</button>
+    </div>
   </div>
-  <h2>Experience</h2>
-  <div class="pe"><div class="ph"><span>LZH — Research Assistant · Hannover, DE</span><span>Mar–Jul 2026</span></div><p>CubeSat ground station: YAMCS, CCSDS preprocessor, TCO OBT→UTC, STM32/FreeRTOS, GStreamer 4-camera RTSP rig.</p></div>
-  <div class="pe"><div class="ph"><span>Sharang Shakti — RF Intern · Delhi, IN</span><span>Summer 2023</span></div><p>Anti-drone radar signal chain. AD9910 DDS + AD8336 VGA, bench characterisation, firmware port.</p></div>
-  <div class="pe"><div class="ph"><span>Drake International — Operations</span><span>2022</span></div><p>Customer-facing ops and scheduling.</p></div>
-  <h2>Selected Projects</h2>
-  <div class="pe"><div class="ph"><span>CubeSat Ground Station</span><span>YAMCS · STM32</span></div><p>Full YAMCS stack, Java CCSDS preprocessor, TCO, FreeRTOS firmware, CI pipeline.</p></div>
-  <div class="pe"><div class="ph"><span>Self-Balancing Robot</span><span>STM32 · PID</span></div><p>ELEC 391 capstone. Cascaded PID, MPU-6050 fusion, FreeRTOS.</p></div>
-  <div class="pe"><div class="ph"><span>DNN Accelerator</span><span>Verilog · Nios II</span></div><p>DE1-SoC hardware DNN. Fixed-point matmul + ReLU, SDRAM double-buffering, MNIST.</p></div>
-  <div class="pe"><div class="ph"><span>Reflow Oven Controller</span><span>EFM8 · PID</span></div><p>PID reflow oven, MAX31855, SSR switching, LCD temperature plot.</p></div>
-  <h2>Skills</h2>
-  <div class="pgrid">
-    <div>Firmware · C/C++, FreeRTOS, STM32 HAL/LL, ESP-IDF, bare-metal ARM</div>
-    <div>HDL · Verilog, VHDL, Quartus, ModelSim, Nios II</div>
-    <div>Protocols · UART, SPI, I²C, CAN, CCSDS, RTSP, JTAG, SWD</div>
-    <div>Tools · Python, Java, MATLAB, Linux, Git, YAMCS, GStreamer</div>
+
+  <div class="rv-body">
+
+    <!-- hero -->
+    <div class="rv-hero">
+      <h1>Electrical Engineer</h1>
+      <div class="rv-tagline">UBC BASc · Expected 2027 · Embedded firmware &amp; systems</div>
+      <p class="rv-blurb">Currently at Laser Zentrum Hannover building a CubeSat ground station — YAMCS pipeline, STM32/FreeRTOS firmware, Java CCSDS preprocessor. Back at UBC in the fall. Open to embedded and hardware engineering roles.</p>
+      <div class="rv-skill-chips">
+        <span class="rv-skill-chip">C / C++</span>
+        <span class="rv-skill-chip">STM32 / FreeRTOS</span>
+        <span class="rv-skill-chip">Verilog / FPGA</span>
+        <span class="rv-skill-chip">YAMCS · CCSDS</span>
+        <span class="rv-skill-chip">Linux / Git</span>
+        <span class="rv-skill-chip">UART · SPI · I²C</span>
+        <span class="rv-skill-chip">Python</span>
+        <span class="rv-skill-chip">GStreamer</span>
+      </div>
+    </div>
+
+    <!-- experience -->
+    <div class="rv-section">
+      <div class="rv-section-title">Experience</div>
+
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>LZH — Research Assistant</h3><span class="rv-when">Mar–Jul 2026</span></div>
+        <div class="rv-role">Laser Zentrum Hannover · Hannover, Germany</div>
+        <p>Built a CubeSat ground station end-to-end: YAMCS server stack, Java CCSDS packet preprocessor, Time Correlation Service for OBT→UTC sync, STM32/FreeRTOS firmware integration. Also deployed a 4-camera RTSP surveillance rig on Raspberry Pi + GStreamer for the lab.</p>
+        <div class="rv-chips">
+          <span class="rv-chip">YAMCS</span><span class="rv-chip">CCSDS</span><span class="rv-chip">STM32</span><span class="rv-chip">FreeRTOS</span><span class="rv-chip">Java</span><span class="rv-chip">GStreamer</span><span class="rv-chip">Linux</span>
+        </div>
+      </div>
+
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>Sharang Shakti — RF Intern</h3><span class="rv-when">Summer 2023</span></div>
+        <div class="rv-role">Signal Processing · Delhi, India</div>
+        <p>Anti-drone radar signal chain design. Characterised AD9910 DDS and AD8336 VGA front end, bench-tested on oscilloscope and logic analyser, helped port the SPI driver firmware.</p>
+        <div class="rv-chips">
+          <span class="rv-chip">AD9910 DDS</span><span class="rv-chip">AD8336 VGA</span><span class="rv-chip">RF Design</span><span class="rv-chip">MATLAB</span>
+        </div>
+      </div>
+
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>Drake International — Operations</h3><span class="rv-when">2022</span></div>
+        <div class="rv-role">Customer-facing ops and scheduling</div>
+        <p>Scheduling, customer communication, and operations. Developed clear communication skills under time pressure — useful in hardware debug sessions.</p>
+      </div>
+    </div>
+
+    <!-- projects -->
+    <div class="rv-section">
+      <div class="rv-section-title">Selected Projects</div>
+      <div class="rv-proj-grid">
+
+        <div class="rv-proj">
+          <h3>CubeSat Ground Station</h3>
+          <div class="rv-tag">YAMCS · STM32 · FreeRTOS · CCSDS</div>
+          <p>Full YAMCS stack with Java CCSDS packet preprocessor, OBT→UTC time correlation, STM32 firmware integration, and CI pipeline. Active at LZH.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>Self-Balancing Robot</h3>
+          <div class="rv-tag">STM32 · FreeRTOS · PID · MPU-6050</div>
+          <p>UBC ELEC 391 capstone. Inverted pendulum with cascaded PID, MPU-6050 sensor fusion, FreeRTOS task structure.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>DNN Accelerator</h3>
+          <div class="rv-tag">Verilog · Nios II · DE1-SoC · FPGA</div>
+          <p>Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II softcore.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>4-Camera RTSP Display</h3>
+          <div class="rv-tag">GStreamer · Raspberry Pi · Wayland</div>
+          <p>24/7 surveillance wall for LZH lab. Four IP cameras, Wayland/GStreamer pipeline, PAL 4:3 handling, systemd watchdog.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>Metal-Detecting Rover</h3>
+          <div class="rv-tag">ESP32 · BLE · KiCad · ESP-IDF</div>
+          <p>Autonomous rover with BLE telemetry, custom PCB, servo-swept LDC1614 inductive sensor, occupancy grid navigation.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>Reflow Oven Controller</h3>
+          <div class="rv-tag">EFM8 · PID · MAX31855 · SSR</div>
+          <p>PID-controlled reflow oven. K-type thermocouple via MAX31855, SSR switching, LCD UI plotting live temperature vs target curve.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- skills -->
+    <div class="rv-section">
+      <div class="rv-section-title">Skills</div>
+      <div class="rv-skills-grid">
+        <div class="rv-skbucket">
+          <h4>Firmware / RTOS</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">C / C++</span><span class="rv-sk">STM32 HAL/LL</span><span class="rv-sk">FreeRTOS</span><span class="rv-sk">Bare-metal ARM</span><span class="rv-sk">ESP-IDF</span>
+          </div>
+        </div>
+        <div class="rv-skbucket">
+          <h4>HDL / FPGA</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">Verilog</span><span class="rv-sk">VHDL</span><span class="rv-sk">Quartus</span><span class="rv-sk">ModelSim</span><span class="rv-sk">Nios II</span>
+          </div>
+        </div>
+        <div class="rv-skbucket">
+          <h4>Protocols</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">UART · SPI · I²C · CAN</span><span class="rv-sk">JTAG · SWD</span><span class="rv-sk">CCSDS</span><span class="rv-sk">RTSP · TCP/IP</span>
+          </div>
+        </div>
+        <div class="rv-skbucket">
+          <h4>Tools</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">Linux · Git</span><span class="rv-sk">Python</span><span class="rv-sk">YAMCS</span><span class="rv-sk">GStreamer</span><span class="rv-sk">Java</span><span class="rv-sk">MATLAB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- education -->
+    <div class="rv-section">
+      <div class="rv-section-title">Education</div>
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>UBC — BASc Electrical Engineering</h3><span class="rv-when">Expected 2027</span></div>
+        <div class="rv-role">University of British Columbia · Vancouver, BC</div>
+        <p>Relevant coursework: CPEN 311 (Digital Systems / FPGA), CPEN 211 (Computer Architecture), ELEC 391 (Embedded Capstone), ELEC 301 (DSP), ELEC 311 (Control Systems).</p>
+      </div>
+    </div>
+
   </div>
-  <h2>Education</h2>
-  <div class="pe"><div class="ph"><span>UBC — BASc Electrical Engineering</span><span>Expected 2027</span></div><p>CPEN 311 · CPEN 211 · ELEC 391 · ELEC 301 · ELEC 311</p></div>
-  <div class="pfoot">plain-text view · press ESC to return · or the konami code again</div>
 </div>
 
 <div class="actled" id="actled"><i></i><span id="actled-lbl">RX 0 B/s</span></div>
@@ -302,7 +521,7 @@
       <div class="tb-logo">◆</div>
       <div>
         <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.04</small></div>
-        <div class="tb-meta">8192 bytes &nbsp;·&nbsp; crc32: DE&nbsp;AD&nbsp;BE&nbsp;EF &nbsp;·&nbsp; target: cortex-m4 &nbsp;·&nbsp; compiled 2026-04-19</div>
+        <div class="tb-meta">8192 bytes &nbsp;·&nbsp; crc32: DE&nbsp;AD&nbsp;BE&nbsp;EF &nbsp;·&nbsp; target: cortex-m4 &nbsp;·&nbsp; <span id="compiled-date"></span></div>
       </div>
     </div>
     <div class="tb-right">
@@ -310,6 +529,7 @@
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">◆ github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">◆ linkedin</a>
       <a class="tb-link" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
+      <button class="tb-mode" id="mode-btn"><span class="dot"></span>recruiter mode</button>
     </div>
   </header>
 
@@ -1231,7 +1451,7 @@ let ledAcc=0,ledTO=null;
 document.addEventListener('mousemove',()=>{ledAcc+=2;led.classList.add('hot');clearTimeout(ledTO);ledTO=setTimeout(()=>led.classList.remove('hot'),120);});
 setInterval(()=>{const b=Math.min(9999,Math.round(ledAcc*2));ledLbl.textContent=`RX ${b.toString().padStart(4,' ')} B/s`;ledAcc*=0.4;},250);
 
-/* ── konami ── */
+/* ── mode toggle ── */
 const K=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let kb=[];
 document.addEventListener('keydown',(e)=>{
@@ -1239,9 +1459,25 @@ document.addEventListener('keydown',(e)=>{
   kb.push(k);if(kb.length>K.length)kb.shift();
   if(kb.length===K.length&&kb.every((x,i)=>x===K[i])){togglePlain();kb=[];}
 });
-function togglePlain(){document.body.classList.toggle('plain');document.getElementById('plain-view').setAttribute('aria-hidden',document.body.classList.contains('plain')?'false':'true');}
+function togglePlain(){
+  document.body.classList.toggle('plain');
+  const on=document.body.classList.contains('plain');
+  document.getElementById('plain-view').setAttribute('aria-hidden',on?'false':'true');
+  // scroll recruiter view back to top each time it opens
+  if(on) document.getElementById('plain-view').scrollTop=0;
+}
 document.getElementById('plain-back').addEventListener('click',togglePlain);
+document.getElementById('mode-btn').addEventListener('click',togglePlain);
 document.addEventListener('keydown',(e)=>{if(document.body.classList.contains('plain')&&e.key==='Escape')togglePlain();});
+
+/* ── compiled date ── */
+(function(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const d = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} @ ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const el = document.getElementById('compiled-date');
+  if(el) el.textContent = d;
+})();
 
 /* ── boot ── */
 (function(){
