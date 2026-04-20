@@ -122,7 +122,13 @@
   .term-hist .line{white-space:pre-wrap}.term-hist .line .em{color:var(--amber)}.term-hist .line .dim{color:var(--phos-dim)}
 
   /* right: decode panel */
-  .decode{background:#f6f0dd;color:#0e0f10;border:1px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;isolation:isolate;z-index:10000;}
+  .decode{background:#f8f2e0;color:#0e0f10;border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;isolation:isolate;z-index:10000;}
+  .decode.pulse{animation:decodepulse 1.8s ease-out forwards;}
+  @keyframes decodepulse{
+    0%{border-color:var(--amber);box-shadow:0 0 0 3px rgba(240,182,74,.35),inset 0 0 30px rgba(240,182,74,.06)}
+    60%{border-color:var(--amber);box-shadow:0 0 0 1px rgba(240,182,74,.15)}
+    100%{border-color:var(--line);box-shadow:none}
+  }
   .dc-hd{padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.18);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#3a3933;background:#e8dfc6;flex-shrink:0;}
   .dc-hd b{color:#0e0f10;font-weight:700}
   .dc-body{flex:1;overflow:auto;padding:18px 20px}
@@ -142,7 +148,7 @@
   .entry .when{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.06em;white-space:nowrap;font-weight:500}
   .entry .role{font-family:var(--mono);font-size:12px;color:#4a4937;letter-spacing:.04em;margin-bottom:6px;font-weight:500}
   .entry p{font-size:14px;line-height:1.6;color:#15161a;margin-bottom:8px;text-wrap:pretty;}
-  .entry .open-hint{font-family:var(--mono);font-size:10px;color:#9a9080;letter-spacing:.08em;margin-top:2px}
+  .entry .open-hint{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.08em;margin-top:2px}
   .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
   .chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#1a1a1a;border:1px solid rgba(0,0,0,.35);padding:3px 8px;background:rgba(0,0,0,.04);font-weight:500;}
 
@@ -154,7 +160,7 @@
   .proj h3{font-family:var(--sans);font-weight:700;font-size:16px;color:#0e0f10}
   .proj .tag{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.06em;white-space:nowrap;font-weight:500}
   .proj p{font-size:14px;line-height:1.6;color:#15161a;margin:6px 0;text-wrap:pretty}
-  .proj .open-hint{font-family:var(--mono);font-size:10px;color:#9a9080;letter-spacing:.08em;margin-top:2px}
+  .proj .open-hint{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.08em;margin-top:2px}
 
   /* header decode */
   .bio{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
@@ -255,6 +261,7 @@
   <div class="bl"><span class="warn">[WARN]</span>empty region 0x4400–0xFFFF ……… <span class="dim">unprogrammed</span></div>
   <div class="bl"><span class="ok">[ OK ]</span>decoder  paper_v1  ………………………… <span class="dim">ok</span></div>
   <div class="bl" style="margin-top:12px;color:var(--amber)">$ ./monil_arora.bin --dump</div>
+  <div class="bl" style="color:var(--phos-dim);font-size:11px;margin-top:4px">[ → ] DECODED panel on the right · click any entry to inspect it in HEX</div>
 </div>
 
 <div class="plain-view" id="plain-view" aria-hidden="true">
@@ -745,22 +752,54 @@ function genHex(region){
 function hp(n,w){return n.toString(16).toUpperCase().padStart(w,'0')}
 function ao(b){return(b>=0x20&&b<0x7f)?String.fromCharCode(b):'·'}
 
+function randByte(){return Math.floor(Math.random()*256);}
+function randHexRow(addr){
+  const bytes=Array.from({length:16},()=>randByte());
+  const bs=bytes.map((b,ci)=>{
+    const sp=(ci===3||ci===11)?'  ':(ci===7?'   ':' ');
+    return `${hp(b,2)}${ci===15?'':sp}`;
+  }).join('');
+  const asc=bytes.map(b=>ao(b)).join('');
+  return `<div class="hex-row" style="opacity:.38"><span class="off">${hp(addr,4)}</span><span class="bytes">${bs}</span><span class="ascii">${asc}</span></div>`;
+}
+
 function renderHex(region){
   const body=document.getElementById('hex-body');
-  body.innerHTML='<div class="hex-row hd"><span class="off">OFFSET</span><span class="bytes">00 01 02 03  04 05 06 07   08 09 0A 0B  0C 0D 0E 0F</span><span class="ascii">ASCII</span></div>';
-  genHex(region).forEach((row,i)=>{
-    const bs=row.bytes.map((b,ci)=>{
-      const s=hp(b,2);
-      const cls=row.header&&ci<14?'byte-hi':row.terminator&&ci>=12?'byte-mag':'';
-      const sp=(ci===3||ci===11)?'  ':(ci===7?'   ':' ');
-      return `<span class="${cls}">${s}</span>${ci===15?'':sp}`;
-    }).join('');
-    const asc=row.bytes.map(b=>ao(b)).join('');
-    const el=document.createElement('div');
-    el.className='hex-row';el.style.opacity='0';
-    el.innerHTML=`<span class="off">${hp(row.off,4)}</span><span class="bytes">${bs}</span><span class="ascii">${asc}</span>`;
-    body.appendChild(el);
-    setTimeout(()=>{el.style.transition='opacity .1s';el.style.opacity='1';},20+i*18);
+
+  // Build: prompt block first, then scrolling random rows below
+  const promptLines=[
+    {text:'// SELECT AN ENTRY',       color:'var(--phos-dim)'},
+    {text:'// ───────────────',        color:'var(--phos-deep)'},
+    {text:'//'},
+    {text:'// click any project or experience',color:'var(--phos-dim)'},
+    {text:'// in the DECODED panel →',         color:'var(--phos-dim)'},
+    {text:'// to inspect its full writeup here',color:'var(--phos-dim)'},
+    {text:'//'},
+    {text:'// ▸ .projects   → 6 entries',  color:'var(--amber)'},
+    {text:'// ▸ .experience → 3 entries',  color:'var(--amber)'},
+    {text:'//'},
+  ];
+
+  let html='<div class="hex-row hd"><span class="off">OFFSET</span><span class="bytes">00 01 02 03  04 05 06 07   08 09 0A 0B  0C 0D 0E 0F</span><span class="ascii">ASCII</span></div>';
+
+  // prompt block — spans full width, no column grid
+  html+=`<div style="padding:10px 0 4px;font-family:var(--mono);font-size:12px;line-height:1.8;border-bottom:1px dashed var(--phos-deep);margin-bottom:8px">`;
+  promptLines.forEach(l=>{
+    html+=`<div style="color:${l.color||'var(--phos-deep)'};">${l.text}</div>`;
+  });
+  html+=`</div>`;
+
+  // random hex rows below — 20 rows, low opacity
+  const base=region.addr[0];
+  for(let i=0;i<20;i++) html+=randHexRow(base+i*16);
+
+  body.innerHTML=html;
+
+  // fade in the random rows one by one
+  const rows=body.querySelectorAll('.hex-row:not(.hd)');
+  rows.forEach((el,i)=>{
+    el.style.opacity='0';
+    setTimeout(()=>{el.style.transition='opacity .15s';el.style.opacity='.32';},30+i*22);
   });
 }
 
@@ -919,6 +958,13 @@ function select(key,opts){
   document.getElementById('sb-sym').textContent=r.name;
   clearDetail();
   renderRegions();renderHex(r);renderDecode(key);
+  // auto-open first entry for clickable sections
+  if(key==='projects'||key==='experience'){
+    setTimeout(()=>{
+      const firstEl=document.querySelector('.proj[data-id],.entry[data-id]');
+      if(firstEl) handleEntryClick(firstEl,key);
+    },320);
+  }
   if(opts&&opts.flash){
     const el=document.querySelector(`.reg[data-key="${key}"]`);
     if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');el.scrollIntoView({block:'nearest'});}
@@ -1018,6 +1064,21 @@ document.getElementById('dc-struct').textContent=ir.struct;
 document.getElementById('sb-cursor').textContent=`0x${hp(ir.addr[0],4)}`;
 document.getElementById('sb-sym').textContent=ir.name;
 renderHex(ir);renderDecode(current);
+
+// pulse the decode panel to draw the eye on load
+const decodeEl=document.querySelector('.decode');
+setTimeout(()=>{
+  decodeEl.classList.add('pulse');
+  decodeEl.addEventListener('animationend',()=>decodeEl.classList.remove('pulse'),{once:true});
+},800);
+
+// auto-open first entry if landing on projects or experience
+if(current==='projects'||current==='experience'){
+  setTimeout(()=>{
+    const firstEl=document.querySelector('.proj[data-id],.entry[data-id]');
+    if(firstEl) handleEntryClick(firstEl,current);
+  },1200);
+}
 </script>
 </body>
 </html>
