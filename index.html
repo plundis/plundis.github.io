@@ -28,11 +28,12 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
+  html{background:var(--bg)}
   body{background:var(--bg);color:var(--phos);font-family:var(--mono);font-size:13px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased;}
   body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.22) 2px,rgba(0,0,0,.22) 3px);mix-blend-mode:multiply;}
   body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);}
 
-  .shell{height:100vh;display:grid;grid-template-rows:auto 1fr auto;padding:10px 14px;gap:10px;}
+  .shell{height:100vh;display:grid;grid-template-rows:auto 1fr auto;padding:10px 14px;gap:10px;max-width:1800px;margin:0 auto;width:100%;}
 
   /* top bar */
   .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;}
@@ -46,7 +47,7 @@
   .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
 
   /* main — original 3-column */
-  .main{display:grid;grid-template-columns:280px 1fr 420px;gap:10px;min-height:0;}
+  .main{display:grid;grid-template-columns:minmax(240px,280px) 1fr minmax(360px,460px);gap:10px;min-height:0;}
 
   /* left: regions */
   .regions{border:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;min-height:0;}
@@ -225,8 +226,10 @@
   .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
   @keyframes boot-in{to{opacity:1}}
 
-  @media(max-width:1200px){.main{grid-template-columns:240px 1fr 380px}}
-  @media(max-width:1050px){.main{grid-template-columns:220px 1fr 340px}.hex-row{grid-template-columns:60px 1fr 140px;gap:10px}}
+  @media(min-width:1800px){.shell{padding:10px 20px}}
+  @media(max-width:1400px){.main{grid-template-columns:minmax(220px,260px) 1fr minmax(340px,420px)}}
+  @media(max-width:1200px){.main{grid-template-columns:220px 1fr 360px}}
+  @media(max-width:1050px){.main{grid-template-columns:200px 1fr 320px}.hex-row{grid-template-columns:60px 1fr 140px;gap:10px}}
   @media(max-width:900px){
     body{overflow:auto;font-size:12px}
     .shell{height:auto;min-height:100vh;grid-template-rows:auto auto auto;padding:8px;gap:8px;}
@@ -752,54 +755,255 @@ function genHex(region){
 function hp(n,w){return n.toString(16).toUpperCase().padStart(w,'0')}
 function ao(b){return(b>=0x20&&b<0x7f)?String.fromCharCode(b):'·'}
 
-function randByte(){return Math.floor(Math.random()*256);}
-function randHexRow(addr){
-  const bytes=Array.from({length:16},()=>randByte());
-  const bs=bytes.map((b,ci)=>{
-    const sp=(ci===3||ci===11)?'  ':(ci===7?'   ':' ');
-    return `${hp(b,2)}${ci===15?'':sp}`;
-  }).join('');
-  const asc=bytes.map(b=>ao(b)).join('');
-  return `<div class="hex-row" style="opacity:.38"><span class="off">${hp(addr,4)}</span><span class="bytes">${bs}</span><span class="ascii">${asc}</span></div>`;
+/* ── C struct renderer ──
+   Two colors only: dim green for comments, bright green for code.
+   Amber only for section header comments. Clean, readable, consistent.
+*/
+const STRUCT_CONTENT = {
+
+  header(reg){
+    return S('/* about_me.c @ 0x0000 */','cmt') +
+      S('') +
+      S('const about_me_t about_me = {') +
+      S('') +
+      S('  .name      = "Monil Arora",','str') +
+      S('  .degree    = "BASc Electrical Engineering",','str') +
+      S('  .school    = "University of British Columbia",','str') +
+      S('  .grad      = 2027,') +
+      S('  .location  = "Hannover, DE  →  Vancouver, BC",','str') +
+      S('') +
+      S('  .role      = EMBEDDED_FIRMWARE_ENGINEER,') +
+      S('  .status    = OPEN_TO_OFFERS,') +
+      S('') +
+      S('  .email     = "monilarora2003@gmail.com",','str') +
+      S('  .github    = "github.com/plundis",','str') +
+      S('  .linkedin  = "in/monil-arora-a26851290",','str') +
+      S('') +
+      S('  .skills    = {') +
+      S('    C_CPP, STM32, FREERTOS, VERILOG,') +
+      S('    YAMCS, CCSDS, LINUX, PYTHON,') +
+      S('    UART_SPI_I2C, GSTREAMER,') +
+      S('  },') +
+      S('') +
+      S('};');
+  },
+
+  experience(reg){
+    return S('/* experience.c @ 0x0200 */','cmt') +
+      S('') +
+      S('const role_t roles[] = {') +
+      S('') +
+      S('  /* Laser Zentrum Hannover — Mar–Jul 2026 */','cmt') +
+      S('  {') +
+      S('    .title    = "Research Assistant",','str') +
+      S('    .location = "Hannover, DE",','str') +
+      S('    .stack    = { YAMCS, CCSDS, STM32,') +
+      S('                  FREERTOS, JAVA, GSTREAMER },') +
+      S('  },') +
+      S('') +
+      S('  /* Sharang Shakti — Summer 2023 */','cmt') +
+      S('  {') +
+      S('    .title    = "RF / Signal Processing Intern",','str') +
+      S('    .location = "Delhi, IN",','str') +
+      S('    .stack    = { AD9910_DDS, AD8336_VGA,') +
+      S('                  RF_DESIGN, MATLAB },') +
+      S('  },') +
+      S('') +
+      S('  /* Drake International — 2022 */','cmt') +
+      S('  {') +
+      S('    .title    = "Operations",','str') +
+      S('    .stack    = { COMMS, SCHEDULING },') +
+      S('  },') +
+      S('') +
+      S('};') +
+      S('') +
+      S('/* ▸ click any entry for full writeup */','cmt');
+  },
+
+  projects(reg){
+    return S('/* projects.c @ 0x1000 */','cmt') +
+      S('') +
+      S('const project_t projects[] = {') +
+      S('') +
+      S('  /* 0x1000 — CubeSat Ground Station */','cmt') +
+      S('  { .stack  = { YAMCS, CCSDS, STM32, FREERTOS },') +
+      S('    .status = ACTIVE,') +
+      S('    .repo   = "github.com/plundis/cubesat-gs" },','str') +
+      S('') +
+      S('  /* 0x1400 — Self-Balancing Robot */','cmt') +
+      S('  { .stack  = { STM32, FREERTOS, PID, MPU6050 },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('  /* 0x1800 — DNN Accelerator */','cmt') +
+      S('  { .stack  = { VERILOG, NIOS2, FPGA, SDRAM },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('  /* 0x1C00 — 4-Camera RTSP Display */','cmt') +
+      S('  { .stack  = { GSTREAMER, RPI4, WAYLAND },') +
+      S('    .status = DEPLOYED },') +
+      S('') +
+      S('  /* 0x2000 — Metal-Detecting Rover */','cmt') +
+      S('  { .stack  = { ESP32, BLE, KICAD, ESP_IDF },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('  /* 0x2400 — Reflow Oven Controller */','cmt') +
+      S('  { .stack  = { EFM8, PID, MAX31855, SSR },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('};') +
+      S('') +
+      S('/* ▸ click any entry for full writeup */','cmt');
+  },
+
+  skills(reg){
+    return S('/* skills.h @ 0x3000 */','cmt') +
+      S('') +
+      S('#pragma once') +
+      S('') +
+      S('/* --- Firmware / RTOS --- */','cmt') +
+      S('static const char *fw[] = {') +
+      S('  "C / C++ (embedded)",','str') +
+      S('  "STM32 HAL / LL",','str') +
+      S('  "FreeRTOS",','str') +
+      S('  "Bare-metal ARM",','str') +
+      S('  "ESP-IDF",','str') +
+      S('};') +
+      S('') +
+      S('/* --- HDL / FPGA --- */','cmt') +
+      S('static const char *hdl[] = {') +
+      S('  "Verilog",','str') +
+      S('  "VHDL",','str') +
+      S('  "Quartus / ModelSim",','str') +
+      S('  "Nios II softcore",','str') +
+      S('};') +
+      S('') +
+      S('/* --- Protocols --- */','cmt') +
+      S('static const char *proto[] = {') +
+      S('  "UART / SPI / I2C / CAN",','str') +
+      S('  "JTAG / SWD",','str') +
+      S('  "CCSDS",','str') +
+      S('  "RTSP / TCP-IP",','str') +
+      S('};') +
+      S('') +
+      S('/* --- Tools --- */','cmt') +
+      S('static const char *tools[] = {') +
+      S('  "Linux / Git",','str') +
+      S('  "Python",','str') +
+      S('  "YAMCS / GStreamer",','str') +
+      S('  "Java / MATLAB",','str') +
+      S('};');
+  },
+
+  education(reg){
+    return S('/* education.c @ 0x3800 */','cmt') +
+      S('') +
+      S('const degree_t degree = {') +
+      S('  .name   = "BASc Electrical Engineering",','str') +
+      S('  .school = "University of British Columbia",','str') +
+      S('  .grad   = 2027,') +
+      S('};') +
+      S('') +
+      S('const course_t courses[] = {') +
+      S('') +
+      S('  /* CPEN 311 — Digital Systems Design */','cmt') +
+      S('  { .skills = { VERILOG, VHDL, FPGA, DE1_SOC } },') +
+      S('') +
+      S('  /* CPEN 211 — Computer Architecture */','cmt') +
+      S('  { .skills = { RISC_PIPELINE, CACHE, HAZARD } },') +
+      S('') +
+      S('  /* ELEC 391 — Embedded Capstone */','cmt') +
+      S('  { .skills  = { STM32, FREERTOS, PID },') +
+      S('    .output  = &projects[SELF_BALANCING_ROBOT] },') +
+      S('') +
+      S('  /* ELEC 301 — DSP */','cmt') +
+      S('  { .skills = { FIR_IIR, FFT, Z_TRANSFORM } },') +
+      S('') +
+      S('  /* ELEC 311 — Control Systems */','cmt') +
+      S('  { .skills = { PID, ROOT_LOCUS, BODE } },') +
+      S('') +
+      S('};');
+  },
+
+  contact(reg){
+    return S('/* contact.c @ 0x4000 */','cmt') +
+      S('') +
+      S('const contact_t contact = {') +
+      S('') +
+      S('  .email    = "monilarora2003@gmail.com",','str') +
+      S('  .phone    = "+1 236 777 5739",','str') +
+      S('  .github   = "github.com/plundis",','str') +
+      S('  .linkedin = "in/monil-arora-a26851290",','str') +
+      S('') +
+      S('  .loc_now  = "Hannover, DE",','str') +
+      S('  .loc_home = "Vancouver, BC, CA",','str') +
+      S('') +
+      S('  .status   = OPEN_TO_OFFERS,') +
+      S('  .type     = EMBEDDED | FIRMWARE | HW,') +
+      S('  .start    = SEP_2026,') +
+      S('  .relocate = true,') +
+      S('') +
+      S('};') +
+      S('') +
+      S('/* preferred contact: email or linkedin */','cmt');
+  },
+
+  resume(reg){
+    return S('/* resume.c @ 0x4200 */','cmt') +
+      S('') +
+      S('const pdf_ref_t resume = {') +
+      S('  .file   = "monil_arora_resume.pdf",','str') +
+      S('  .rev    = "2026.04",','str') +
+      S('  .pages  = 1,') +
+      S('  .format = SINGLE_PAGE | ATS_COMPATIBLE,') +
+      S('};') +
+      S('') +
+      S('/* open via top-right button  ↑ */','cmt');
+  },
+
+  empty(reg){
+    return S('/* .empty @ 0x4400 */','cmt') +
+      S('/* 47 KB — unprogrammed flash */','cmt') +
+      S('') +
+      S('#ifdef FUTURE') +
+      S('') +
+      S('typedef struct {') +
+      S('  project_t  pcb_design;    /* in progress */','cmt') +
+      S('  project_t  rf_frontend;   /* planned     */','cmt') +
+      S('  char       next_role[64]; /* TBD         */','cmt') +
+      S('} future_t;') +
+      S('') +
+      S('#endif');
+  },
+};
+
+/*
+  S(text, type) — two color system:
+    'cmt'  → dim green  (comments)
+    'str'  → amber      (string literals only)
+    everything else → bright green
+*/
+function S(text, type){
+  const color = type==='cmt'  ? 'var(--phos-dim)'
+              : type==='str'  ? 'var(--amber)'
+              : 'var(--phos)';
+  return `<div style="color:${color};font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${text||' '}</div>`;
 }
 
 function renderHex(region){
-  const body=document.getElementById('hex-body');
+  const body = document.getElementById('hex-body');
+  const renderer = STRUCT_CONTENT[region.key] || STRUCT_CONTENT.empty;
 
-  // Build: prompt block first, then scrolling random rows below
-  const promptLines=[
-    {text:'// SELECT AN ENTRY',       color:'var(--phos-dim)'},
-    {text:'// ───────────────',        color:'var(--phos-deep)'},
-    {text:'//'},
-    {text:'// click any project or experience',color:'var(--phos-dim)'},
-    {text:'// in the DECODED panel →',         color:'var(--phos-dim)'},
-    {text:'// to inspect its full writeup here',color:'var(--phos-dim)'},
-    {text:'//'},
-    {text:'// ▸ .projects   → 6 entries',  color:'var(--amber)'},
-    {text:'// ▸ .experience → 3 entries',  color:'var(--amber)'},
-    {text:'//'},
-  ];
+  // clean title line instead of the misleading hex column header
+  const reg = region;
+  body.innerHTML =
+    `<div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--phos-dim);padding:8px 0 10px;border-bottom:1px dashed var(--phos-deep);margin-bottom:4px">` +
+    `${reg.name} &nbsp;·&nbsp; ${reg.struct} &nbsp;·&nbsp; 0x${hp(reg.addr[0],4)}–0x${hp(reg.addr[1],4)}</div>` +
+    `<div id="hex-content">${renderer(region)}</div>`;
 
-  let html='<div class="hex-row hd"><span class="off">OFFSET</span><span class="bytes">00 01 02 03  04 05 06 07   08 09 0A 0B  0C 0D 0E 0F</span><span class="ascii">ASCII</span></div>';
-
-  // prompt block — spans full width, no column grid
-  html+=`<div style="padding:10px 0 4px;font-family:var(--mono);font-size:12px;line-height:1.8;border-bottom:1px dashed var(--phos-deep);margin-bottom:8px">`;
-  promptLines.forEach(l=>{
-    html+=`<div style="color:${l.color||'var(--phos-deep)'};">${l.text}</div>`;
-  });
-  html+=`</div>`;
-
-  // random hex rows below — 20 rows, low opacity
-  const base=region.addr[0];
-  for(let i=0;i<20;i++) html+=randHexRow(base+i*16);
-
-  body.innerHTML=html;
-
-  // fade in the random rows one by one
-  const rows=body.querySelectorAll('.hex-row:not(.hd)');
-  rows.forEach((el,i)=>{
+  // stream in lines
+  body.querySelectorAll('#hex-content > div').forEach((el,i)=>{
     el.style.opacity='0';
-    setTimeout(()=>{el.style.transition='opacity .15s';el.style.opacity='.32';},30+i*22);
+    setTimeout(()=>{ el.style.transition='opacity .06s'; el.style.opacity='1'; }, i*10);
   });
 }
 
@@ -958,13 +1162,6 @@ function select(key,opts){
   document.getElementById('sb-sym').textContent=r.name;
   clearDetail();
   renderRegions();renderHex(r);renderDecode(key);
-  // auto-open first entry for clickable sections
-  if(key==='projects'||key==='experience'){
-    setTimeout(()=>{
-      const firstEl=document.querySelector('.proj[data-id],.entry[data-id]');
-      if(firstEl) handleEntryClick(firstEl,key);
-    },320);
-  }
   if(opts&&opts.flash){
     const el=document.querySelector(`.reg[data-key="${key}"]`);
     if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');el.scrollIntoView({block:'nearest'});}
@@ -1071,14 +1268,6 @@ setTimeout(()=>{
   decodeEl.classList.add('pulse');
   decodeEl.addEventListener('animationend',()=>decodeEl.classList.remove('pulse'),{once:true});
 },800);
-
-// auto-open first entry if landing on projects or experience
-if(current==='projects'||current==='experience'){
-  setTimeout(()=>{
-    const firstEl=document.querySelector('.proj[data-id],.entry[data-id]');
-    if(firstEl) handleEntryClick(firstEl,current);
-  },1200);
-}
 </script>
 </body>
 </html>
