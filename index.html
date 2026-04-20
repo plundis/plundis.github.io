@@ -1485,7 +1485,7 @@ document.addEventListener('keydown',(e)=>{if(document.body.classList.contains('p
 })();
 
 /* ── init ── */
-try{const s=localStorage.getItem('fw.sect');if(s&&REGIONS.find(r=>r.key===s))current=s;}catch(e){}
+/* always open on .about_me — localStorage intentionally not restored on init */
 renderRegions();
 const ir=REGIONS.find(r=>r.key===current);
 document.getElementById('hex-region').textContent=ir.name;
