@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>monil_arora.bin — Firmware Dump</title>
+<meta name="description" content="Monil Arora — Electrical Engineering @ UBC · embedded firmware, STM32/FreeRTOS, Verilog, ground-station software."/>
+<meta name="theme-color" content="#07090a"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="monil_arora.bin — Firmware Dump"/>
+<meta property="og:description" content="Portfolio of Monil Arora — EE @ UBC, embedded firmware, STM32/FreeRTOS, Verilog."/>
+<meta property="og:url" content="https://plundis.github.io/"/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-size='22' fill='%23f0b64a'%3E%E2%97%86%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#07090a;--bg2:#0c1012;--bg3:#11161a;
+    --line:#1a2328;--line2:#2a3740;
+    --paper:#ece4d0;--paper2:#ded5bf;--paper-ink:#17191a;--paper-dim:#5b5a53;
+    --phos:#7cf58a;--phos-dim:#3b7a46;--phos-deep:#1d3a24;
+    --amber:#f0b64a;--amber-dim:#6b5020;
+    --magenta:#ff5aa8;--cyan:#5ad1ff;
+    --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --sans:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  html{background:var(--bg)}
+  body{background:var(--bg);color:var(--phos);font-family:var(--mono);font-size:13px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.22) 2px,rgba(0,0,0,.22) 3px);mix-blend-mode:multiply;}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);}
+
+  .shell{height:100vh;display:grid;grid-template-rows:auto 1fr auto;padding:10px 14px;gap:10px;max-width:1800px;margin:0 auto;width:100%;}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;}
+  .tb-left{display:flex;align-items:center;gap:14px;min-width:0}
+  .tb-logo{width:28px;height:28px;flex-shrink:0;border:1px solid var(--phos-dim);display:grid;place-items:center;color:var(--phos);font-weight:700;font-size:13px;box-shadow:inset 0 0 8px rgba(124,245,138,.15);}
+  .tb-title{font-family:var(--sans);font-weight:700;font-size:15px;color:var(--paper);letter-spacing:.01em}
+  .tb-title small{color:var(--phos-dim);font-weight:500;font-family:var(--mono);font-size:11px;margin-left:8px;letter-spacing:.08em}
+  .tb-meta{color:var(--phos-dim);font-size:11px;letter-spacing:.06em}
+  .tb-right{display:flex;align-items:center;gap:10px;font-size:11px}
+  .tb-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;padding:5px 10px;border:1px solid var(--amber-dim);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;}
+  .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
+
+  /* main — original 3-column */
+  .main{display:grid;grid-template-columns:minmax(240px,280px) 1fr minmax(420px,520px);gap:10px;min-height:0;}
+
+  /* left: regions */
+  .regions{border:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;min-height:0;}
+  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos-dim);}
+  .reg-hd .sz{color:var(--paper-dim)}
+  .reg-list{flex:1;overflow:auto;padding:6px}
+  .reg-list::-webkit-scrollbar{width:6px}
+  .reg-list::-webkit-scrollbar-track{background:var(--bg2)}
+  .reg-list::-webkit-scrollbar-thumb{background:var(--line2)}
+  .reg{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 12px;border:1px solid transparent;cursor:pointer;transition:border-color .1s,background .1s,color .1s;margin-bottom:4px;position:relative;}
+  .reg:hover{background:var(--bg3);border-color:var(--line2)}
+  .reg .addr{grid-column:1;font-size:10px;color:var(--paper-dim);letter-spacing:.08em;}
+  .reg .nm{grid-column:1;font-family:var(--sans);font-weight:600;font-size:14px;color:var(--paper2);letter-spacing:0;line-height:1.1;margin-top:1px;}
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:10px;color:var(--paper-dim);letter-spacing:.06em;}
+  .reg.on{background:var(--phos-deep);border-color:var(--phos-dim);}
+  .reg.on .addr{color:var(--phos)}.reg.on .nm{color:var(--phos)}.reg.on .sz{color:var(--phos)}
+  .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
+  .reg.empty{opacity:.45}.reg.empty .nm{color:var(--paper-dim)}
+  .memmap{border-top:1px solid var(--line);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
+  .memmap .bar{display:flex;height:12px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
+  .memmap .seg{height:100%;transition:filter .15s;border-right:1px solid rgba(0,0,0,.4);}
+  .memmap .seg:last-child{border-right:none}.memmap .seg.on{filter:brightness(1.5)}
+  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--paper-dim);font-size:9px}
+
+  /* middle: hex panel */
+  .hexpanel{border:1px solid var(--line);background:#05080a;display:flex;flex-direction:column;min-height:0;position:relative;overflow:hidden;}
+  .hexpanel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.3) 2px,rgba(0,0,0,.3) 3px);}
+  .hex-hd{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos-dim);background:var(--bg2);position:relative;z-index:1;flex-shrink:0;}
+  .hex-hd b{color:var(--phos)}
+  .hex-hd .hint{font-size:9px;color:var(--phos-dim);letter-spacing:.06em;font-style:italic}
+
+  /* idle hex rows */
+  .hex-body{flex:1;overflow:auto;padding:12px 14px 14px;position:relative;z-index:1;font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--phos);letter-spacing:.02em;}
+  .hex-body::-webkit-scrollbar{width:6px}
+  .hex-body::-webkit-scrollbar-track{background:#05080a}
+  .hex-body::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .hex-row{display:grid;grid-template-columns:70px 1fr 180px;gap:16px;white-space:pre}
+  .hex-row .off{color:var(--phos-dim)}.hex-row .bytes{color:var(--phos)}.hex-row .ascii{color:var(--paper2);opacity:.85}
+  .hex-row.hd{color:var(--amber);border-bottom:1px dashed var(--phos-deep);padding-bottom:6px;margin-bottom:6px;font-size:11px;letter-spacing:.1em}
+  .hex-row.hd .off,.hex-row.hd .bytes,.hex-row.hd .ascii{color:var(--amber)}
+  .byte-hi{color:var(--amber);background:rgba(240,182,74,.1)}.byte-mag{color:var(--magenta)}
+  .hex-body.hidden{display:none}
+
+  /* DETAIL VIEW */
+  .detail-view{flex:1;overflow:auto;padding:16px 18px;position:relative;z-index:1;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--phos);letter-spacing:.02em;display:none;}
+  .detail-view::-webkit-scrollbar{width:6px}
+  .detail-view::-webkit-scrollbar-track{background:#05080a}
+  .detail-view::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .detail-view.on{display:block}
+
+  .dv-back{display:inline-flex;align-items:center;gap:6px;color:var(--amber);font-size:10px;letter-spacing:.12em;cursor:pointer;margin-bottom:14px;border:1px solid var(--amber-dim);padding:3px 9px;transition:background .1s,border-color .1s;text-transform:uppercase;}
+  .dv-back:hover{background:rgba(240,182,74,.08);border-color:var(--amber)}
+  .dv-struct-line{color:var(--phos-dim);font-size:10px;letter-spacing:.1em;margin-bottom:12px;border-bottom:1px dashed var(--phos-deep);padding-bottom:8px;}
+  .dv-struct-line b{color:var(--amber)}
+  .dv-divider{border:none;border-top:1px dashed var(--phos-deep);margin:12px 0;}
+  .dv-field{margin-bottom:10px}
+  .dv-field .dv-key{color:var(--amber);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+  .dv-field .dv-val{color:var(--phos);font-size:12px;line-height:1.6;word-break:break-word}
+  .dv-blog{color:var(--phos);font-size:11.5px;line-height:1.85;white-space:pre-wrap;word-break:break-word;border-left:2px solid var(--phos-deep);padding-left:14px;margin-top:4px;font-family:var(--mono);}
+  .dv-cursor{display:inline-block;width:7px;height:13px;background:var(--phos);vertical-align:-2px;animation:blink 1s steps(2) infinite;margin-left:2px}
+  @keyframes blink{50%{opacity:0}}
+
+  /* cmd bar */
+  .cmdbar{border-top:1px solid var(--line);background:var(--bg2);padding:8px 14px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;font-family:var(--mono);font-size:12px;flex-shrink:0;}
+  .cmdbar .prompt{color:var(--amber);flex-shrink:0}
+  .cmdbar input{flex:1;background:transparent;border:none;outline:none;color:var(--phos);font-family:var(--mono);font-size:12px;caret-color:var(--phos);}
+  .cmdbar input::placeholder{color:var(--phos-dim)}
+  .cmdbar .hint{color:var(--phos-dim);font-size:10px;letter-spacing:.08em;flex-shrink:0}
+
+  /* term hist */
+  .term-hist{position:absolute;left:14px;right:14px;bottom:48px;z-index:2;max-height:200px;overflow:auto;padding:8px 12px;background:rgba(5,8,10,.95);border:1px solid var(--line2);font-size:11px;color:var(--phos);line-height:1.5;display:none;}
+  .term-hist.on{display:block}
+  .term-hist .line{white-space:pre-wrap}.term-hist .line .em{color:var(--amber)}.term-hist .line .dim{color:var(--phos-dim)}
+
+  /* right: decode panel */
+  .decode{background:#f8f2e0;color:#0e0f10;border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;isolation:isolate;z-index:10000;}
+  .decode.pulse{animation:decodepulse 1.8s ease-out forwards;}
+  @keyframes decodepulse{
+    0%{border-color:var(--amber);box-shadow:0 0 0 3px rgba(240,182,74,.35),inset 0 0 30px rgba(240,182,74,.06)}
+    60%{border-color:var(--amber);box-shadow:0 0 0 1px rgba(240,182,74,.15)}
+    100%{border-color:var(--line);box-shadow:none}
+  }
+  .dc-hd{padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.18);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#3a3933;background:#e8dfc6;flex-shrink:0;}
+  .dc-hd b{color:#0e0f10;font-weight:700}
+  .dc-body{flex:1;overflow:auto;padding:18px 20px}
+  .dc-body::-webkit-scrollbar{width:6px}
+  .dc-body::-webkit-scrollbar-track{background:var(--paper2)}
+  .dc-body::-webkit-scrollbar-thumb{background:#b4ac97}
+  .dc-section h1{font-family:var(--sans);font-weight:700;font-size:24px;letter-spacing:-.01em;line-height:1.1;margin-bottom:6px;color:#0e0f10;}
+  .dc-section .subh{font-family:var(--mono);font-size:12px;color:#4a4937;letter-spacing:.08em;margin-bottom:20px;}
+
+  /* clickable entries */
+  .entry{padding:14px 8px;border-top:1px solid rgba(0,0,0,.18);cursor:pointer;transition:background .1s;margin-left:-8px;margin-right:-8px;}
+  .entry:first-of-type{border-top:none;padding-top:0}
+  .entry:hover{background:rgba(0,0,0,.04)}
+  .entry.active{background:rgba(0,0,0,.06);border-left:3px solid #0e0f10;padding-left:12px;}
+  .entry .etop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+  .entry h3{font-family:var(--sans);font-weight:700;font-size:17px;color:#0e0f10}
+  .entry .when{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.06em;white-space:nowrap;font-weight:500}
+  .entry .role{font-family:var(--mono);font-size:12px;color:#4a4937;letter-spacing:.04em;margin-bottom:6px;font-weight:500}
+  .entry p{font-size:14px;line-height:1.6;color:#15161a;margin-bottom:8px;text-wrap:pretty;}
+  .entry .open-hint{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.08em;margin-top:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#1a1a1a;border:1px solid rgba(0,0,0,.35);padding:3px 8px;background:rgba(0,0,0,.04);font-weight:500;}
+
+  .proj{padding:14px 8px;border-top:1px solid rgba(0,0,0,.18);cursor:pointer;transition:background .1s;margin-left:-8px;margin-right:-8px;}
+  .proj:first-of-type{border-top:none;padding-top:0}
+  .proj:hover{background:rgba(0,0,0,.04)}
+  .proj.active{background:rgba(0,0,0,.06);border-left:3px solid #0e0f10;padding-left:12px;}
+  .proj .pt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .proj h3{font-family:var(--sans);font-weight:700;font-size:16px;color:#0e0f10}
+  .proj .tag{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.06em;white-space:nowrap;font-weight:500}
+  .proj p{font-size:14px;line-height:1.6;color:#15161a;margin:6px 0;text-wrap:pretty}
+  .proj .open-hint{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.08em;margin-top:2px}
+
+  /* header decode */
+  .bio{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+  .avatar{width:86px;height:86px;flex-shrink:0;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .bio .who{flex:1;min-width:0}
+  .bio .who .n{font-family:var(--sans);font-weight:700;font-size:28px;line-height:1;letter-spacing:-.01em;color:#0e0f10}
+  .bio .who .t{font-family:var(--mono);font-size:12px;color:#3a3933;margin-top:8px;letter-spacing:.04em;line-height:1.55;font-weight:500}
+  .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .links a{font-family:var(--mono);font-size:12px;color:#0e0f10;text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .links a:hover{background:rgba(0,0,0,.06)}
+  .links a.pri{background:var(--paper-ink);color:var(--paper)}
+  .links a.pri:hover{background:#000}
+  .skill-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+  .skill-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#1a1a1a;border:1px solid rgba(0,0,0,.35);padding:4px 9px;background:rgba(0,0,0,.04);font-weight:600;}
+
+  /* skills */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+  .skbucket h4{font-family:var(--sans);font-weight:700;font-size:14px;margin-bottom:8px;color:#0e0f10}
+  .skbucket .sk-list{display:flex;flex-wrap:wrap;gap:5px}
+  .skbucket .sk-tag{font-family:var(--mono);font-size:11px;color:#1a1a1a;border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;}
+
+  /* contact */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ccard{border:1px solid rgba(0,0,0,.3);padding:14px;background:rgba(0,0,0,.02);}
+  .ccard .k{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.08em;margin-bottom:6px;font-weight:600;text-transform:uppercase}
+  .ccard .v{font-family:var(--sans);font-weight:700;font-size:14px;line-height:1.35;word-break:break-word;color:#0e0f10}
+
+  /* status bar */
+  .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;}
+  .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
+  .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+  .statusbar .kbd{border:1px solid var(--line2);padding:1px 5px;color:var(--paper2);font-family:var(--mono);font-size:9px;letter-spacing:.06em;}
+
+  /* activity LED */
+  .actled{position:fixed;left:10px;bottom:8px;z-index:20;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--phos-dim);pointer-events:none;}
+  .actled i{width:7px;height:7px;border-radius:50%;background:var(--phos-deep);transition:background .08s,box-shadow .12s;}
+  .actled.hot i{background:var(--phos);box-shadow:0 0 8px var(--phos)}
+
+  .reg.flash{animation:regflash .5s ease-out}
+  @keyframes regflash{0%{box-shadow:0 0 0 2px var(--phos),inset 0 0 20px rgba(124,245,138,.4)}100%{box-shadow:none}}
+
+  /* konami / plain */
+  body.plain::before,body.plain::after{display:none}
+  body.plain .shell{display:none}
+  .plain-view{display:none;position:fixed;inset:0;z-index:50000;overflow:auto;background:#fdfaf0;color:#17191a;font-family:var(--sans);padding:56px 8vw 80px;}
+  body.plain .plain-view{display:block}
+  .plain-view .ptop{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:32px;border-bottom:2px solid #17191a;padding-bottom:10px}
+  .plain-view h1{font-size:32px;font-weight:700;letter-spacing:-.01em}
+  .plain-view .back{font-family:var(--mono);font-size:12px;color:#17191a;text-decoration:underline;cursor:pointer;background:none;border:none;padding:0}
+  .plain-view h2{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:28px 0 10px;border-bottom:1px solid rgba(0,0,0,.25);padding-bottom:4px}
+  .plain-view .pe{margin-bottom:14px}
+  .plain-view .pe .ph{display:flex;justify-content:space-between;gap:12px;font-weight:700;font-size:15px}
+  .plain-view .pe p{font-size:14px;line-height:1.55;text-wrap:pretty;max-width:70ch}
+  .plain-view .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;font-size:13.5px;font-family:var(--mono)}
+  .plain-view .pfoot{margin-top:40px;font-family:var(--mono);font-size:11px;color:#4a4937}
+
+  /* boot */
+  .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;}
+  .boot.done{opacity:0;pointer-events:none}
+  .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
+  .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
+  @keyframes boot-in{to{opacity:1}}
+
+  @media(min-width:1800px){.shell{padding:10px 20px}}
+  @media(max-width:1400px){.main{grid-template-columns:minmax(220px,260px) 1fr minmax(400px,480px)}}
+  @media(max-width:1200px){.main{grid-template-columns:220px 1fr 400px}}
+  @media(max-width:1050px){.main{grid-template-columns:200px 1fr 360px}.hex-row{grid-template-columns:60px 1fr 140px;gap:10px}}
+  @media(max-width:900px){
+    body{overflow:auto;font-size:12px}
+    .shell{height:auto;min-height:100vh;grid-template-rows:auto auto auto;padding:8px;gap:8px;}
+    .topbar{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
+    .tb-right{flex-wrap:wrap;gap:6px}
+    .main{display:flex;flex-direction:column;gap:8px;min-height:0;}
+    .regions{flex-shrink:0}
+    .reg-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px;gap:6px;scroll-snap-type:x mandatory;}
+    .reg{flex-shrink:0;min-width:140px;margin-bottom:0;scroll-snap-align:start;padding:8px 10px;grid-template-columns:1fr;}
+    .reg .sz{grid-column:1;grid-row:auto;align-self:auto;margin-top:2px}
+    .reg.on::before{left:4px;top:8px;transform:none}
+    .hexpanel{min-height:340px}
+    .hex-row{grid-template-columns:46px 1fr 110px;gap:8px;font-size:10px;}
+    .decode{min-height:520px}.dc-body{padding:14px}
+    .dc-section h1{font-size:20px}
+    .bio{flex-direction:column;gap:12px}
+    .skills-grid{grid-template-columns:1fr;gap:14px}
+    .cgrid{grid-template-columns:1fr}
+    .statusbar .right{display:none}
+    .cmdbar .hint{display:none}
+  }
+  @media(max-width:480px){.tb-meta{display:none}.hex-row{grid-template-columns:40px 1fr 80px;font-size:9.5px}}
+</style>
+</head>
+<body>
+
+<div class="boot" id="boot">
+  <div class="bl"><span class="ok">[ OK ]</span>power on self test …………………… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>crc32 verify  0x<b>DEADBEEF</b> ……… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>mmap  8192 B · 7 regions ……………… <span class="dim">mounted</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>uart@115200  link up ………………………… <span class="dim">ready</span></div>
+  <div class="bl"><span class="warn">[WARN]</span>empty region 0x4400–0xFFFF ……… <span class="dim">unprogrammed</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>decoder  paper_v1  ………………………… <span class="dim">ok</span></div>
+  <div class="bl" style="margin-top:12px;color:var(--amber)">$ ./monil_arora.bin --dump</div>
+  <div class="bl" style="color:var(--phos-dim);font-size:11px;margin-top:4px">[ → ] DECODED panel on the right · click any entry to inspect it in HEX</div>
+</div>
+
+<div class="plain-view" id="plain-view" aria-hidden="true">
+  <div class="ptop"><h1>Monil Arora</h1><button class="back" id="plain-back">← back to firmware dump</button></div>
+  <div style="font-family:var(--mono);font-size:13px;color:#4a4937;margin-bottom:8px">
+    Electrical Engineering · UBC BASc (expected 2027) · embedded firmware &amp; systems<br/>
+    monilarora2003@gmail.com · <a href="https://github.com/plundis" style="color:#17191a">github.com/plundis</a> · <a href="https://linkedin.com/in/monil-arora-a26851290" style="color:#17191a">linkedin</a> · +1 236 777 5739
+  </div>
+  <h2>Experience</h2>
+  <div class="pe"><div class="ph"><span>LZH — Research Assistant · Hannover, DE</span><span>Mar–Jul 2026</span></div><p>CubeSat ground station: YAMCS, CCSDS preprocessor, TCO OBT→UTC, STM32/FreeRTOS, GStreamer 4-camera RTSP rig.</p></div>
+  <div class="pe"><div class="ph"><span>Sharang Shakti — RF Intern · Delhi, IN</span><span>Summer 2023</span></div><p>Anti-drone radar signal chain. AD9910 DDS + AD8336 VGA, bench characterisation, firmware port.</p></div>
+  <div class="pe"><div class="ph"><span>Drake International — Operations</span><span>2022</span></div><p>Customer-facing ops and scheduling.</p></div>
+  <h2>Selected Projects</h2>
+  <div class="pe"><div class="ph"><span>CubeSat Ground Station</span><span>YAMCS · STM32</span></div><p>Full YAMCS stack, Java CCSDS preprocessor, TCO, FreeRTOS firmware, CI pipeline.</p></div>
+  <div class="pe"><div class="ph"><span>Self-Balancing Robot</span><span>STM32 · PID</span></div><p>ELEC 391 capstone. Cascaded PID, MPU-6050 fusion, FreeRTOS.</p></div>
+  <div class="pe"><div class="ph"><span>DNN Accelerator</span><span>Verilog · Nios II</span></div><p>DE1-SoC hardware DNN. Fixed-point matmul + ReLU, SDRAM double-buffering, MNIST.</p></div>
+  <div class="pe"><div class="ph"><span>Reflow Oven Controller</span><span>EFM8 · PID</span></div><p>PID reflow oven, MAX31855, SSR switching, LCD temperature plot.</p></div>
+  <h2>Skills</h2>
+  <div class="pgrid">
+    <div>Firmware · C/C++, FreeRTOS, STM32 HAL/LL, ESP-IDF, bare-metal ARM</div>
+    <div>HDL · Verilog, VHDL, Quartus, ModelSim, Nios II</div>
+    <div>Protocols · UART, SPI, I²C, CAN, CCSDS, RTSP, JTAG, SWD</div>
+    <div>Tools · Python, Java, MATLAB, Linux, Git, YAMCS, GStreamer</div>
+  </div>
+  <h2>Education</h2>
+  <div class="pe"><div class="ph"><span>UBC — BASc Electrical Engineering</span><span>Expected 2027</span></div><p>CPEN 311 · CPEN 211 · ELEC 391 · ELEC 301 · ELEC 311</p></div>
+  <div class="pfoot">plain-text view · press ESC to return · or the konami code again</div>
+</div>
+
+<div class="actled" id="actled"><i></i><span id="actled-lbl">RX 0 B/s</span></div>
+
+<div class="shell">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="tb-logo">◆</div>
+      <div>
+        <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.04</small></div>
+        <div class="tb-meta">8192 bytes &nbsp;·&nbsp; crc32: DE&nbsp;AD&nbsp;BE&nbsp;EF &nbsp;·&nbsp; target: cortex-m4 &nbsp;·&nbsp; compiled <span id="compiled-date"></span></div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <a class="tb-link" href="mailto:monilarora2003@gmail.com">◆ email</a>
+      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">◆ github</a>
+      <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">◆ linkedin</a>
+      <a class="tb-link" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <aside class="regions">
+      <div class="reg-hd"><span>REGIONS &nbsp; [7]</span><span class="sz">8192 B</span></div>
+      <div class="reg-list" id="reg-list"></div>
+      <div class="memmap">
+        <div>MEM MAP</div>
+        <div class="bar" id="memmap-bar"></div>
+        <div class="lg"><span>0x0000</span><span>0xFFFF</span></div>
+      </div>
+    </aside>
+
+    <section class="hexpanel">
+      <div class="hex-hd">
+        <div>HEX · <b id="hex-region">.about_me</b> &nbsp;<span id="hex-range">0x0000–0x01FF</span></div>
+        <div id="hex-hd-hint" class="hint">click an entry to inspect →</div>
+      </div>
+      <div class="hex-body" id="hex-body">
+        <div class="hex-row hd"><span class="off">OFFSET</span><span class="bytes">00 01 02 03  04 05 06 07   08 09 0A 0B  0C 0D 0E 0F</span><span class="ascii">ASCII</span></div>
+      </div>
+      <div class="detail-view" id="detail-view"></div>
+      <div class="term-hist" id="term-hist"></div>
+      <div class="cmdbar">
+        <span class="prompt">monil@cortex-m4:~/bin $</span>
+        <input id="cmd" type="text" spellcheck="false" autocomplete="off" placeholder="try:  help  ·  ls  ·  cat .projects  ·  open resume"/>
+        <span class="hint">↑↓ regions · ENTER run · TAB complete</span>
+      </div>
+    </section>
+
+    <aside class="decode">
+      <div class="dc-hd">
+        <span>DECODED &nbsp;·&nbsp; <b id="dc-region">.about_me</b></span>
+        <span>struct <span id="dc-struct">about_me_t</span></span>
+      </div>
+      <div class="dc-body" id="dc-body"></div>
+    </aside>
+  </main>
+
+  <footer class="statusbar">
+    <span>MODE <b>READ-ONLY</b></span><span class="sep">│</span>
+    <span>LE · 32-bit</span><span class="sep">│</span>
+    <span>CURSOR <b id="sb-cursor">0x0000</b></span><span class="sep">│</span>
+    <span>SYM <b id="sb-sym">.about_me</b></span><span class="sep">│</span>
+    <span>DECODE <b>paper_v1</b></span>
+    <div class="right">
+      <span><span class="kbd">?</span> help</span>
+      <span><span class="kbd">↑</span><span class="kbd">↓</span> nav</span>
+      <span><span class="kbd">ESC</span> close detail</span>
+      <span>built w/ <b>love + verilog</b></span>
+      <span>© 2026 monil arora</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const REGIONS=[
+  {key:'header',    name:'.about_me',   addr:[0x0000,0x01FF],size:'512 B', color:'#5ad1ff',struct:'about_me_t',  note:'bio · links'},
+  {key:'experience',name:'.experience', addr:[0x0200,0x0FFF],size:'3.5 KB',color:'#f0b64a',struct:'role_t[3]',   note:'3 entries'},
+  {key:'projects',  name:'.projects',   addr:[0x1000,0x2FFF],size:'8.0 KB',color:'#7cf58a',struct:'project_t[6]',note:'6 binaries'},
+  {key:'skills',    name:'.skills',     addr:[0x3000,0x37FF],size:'2.0 KB',color:'#b0a7ff',struct:'skillset_t',  note:'symbol table'},
+  {key:'education', name:'.education',  addr:[0x3800,0x3FFF],size:'2.0 KB',color:'#ff5aa8',struct:'course_t[6]', note:'UBC EE · 2027'},
+  {key:'contact',   name:'.contact',    addr:[0x4000,0x41FF],size:'512 B', color:'#ffc04a',struct:'contact_t',   note:'email · phone'},
+  {key:'resume',    name:'.resume',     addr:[0x4200,0x43FF],size:'512 B', color:'#5ad1ff',struct:'pdf_ref_t',   note:'download link'},
+  {key:'empty',     name:'.empty',      addr:[0x4400,0xFFFF],size:'47 KB', color:'#1a2328',struct:'/* 0xFF */',  note:'unprogrammed',empty:true},
+];
+
+const DATA={
+  header:{
+    name:'Monil Arora',
+    tagline:'Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS · UBC EE 2027',
+    blurb:'Currently at LZH Hannover shipping a CubeSat ground station (YAMCS + CCSDS + STM32). Back at UBC in the fall. Open to embedded / hardware roles.',
+    links:[
+      {k:'email',   v:'monilarora2003@gmail.com',              href:'mailto:monilarora2003@gmail.com',pri:true},
+      {k:'resume',  v:'resume.pdf',                            href:'resume.pdf',pri:true},
+      {k:'github',  v:'github.com/plundis',                    href:'https://github.com/plundis'},
+      {k:'linkedin',v:'linkedin.com/in/monil-arora-a26851290', href:'https://linkedin.com/in/monil-arora-a26851290'},
+    ],
+    topSkills:['C / C++','STM32 / FreeRTOS','Verilog / FPGA','YAMCS · CCSDS','Linux / Git','UART · SPI · I²C','Python','GStreamer'],
+  },
+  experience:[
+    {id:'lzh',h:'LZH — Research Assistant',role:'Laser Zentrum Hannover · DE',when:'Mar–Jul 2026',
+     p:'CubeSat ground station end-to-end: YAMCS pipeline, Java CCSDS preprocessor, TCO OBT→UTC sync, STM32/FreeRTOS firmware. Shipped a 4-camera RTSP surveillance rig on RPi + GStreamer.',
+     c:['YAMCS','CCSDS','STM32','FreeRTOS','Java','GStreamer','Linux'],
+     detail:{addr:0x0200,struct:'role_t',
+      fields:[
+        {k:'company',  v:'Laser Zentrum Hannover e.V. (LZH)'},
+        {k:'title',    v:'Research Assistant — CubeSat Ground Station'},
+        {k:'location', v:'Hannover, Germany'},
+        {k:'duration', v:'Mar 22 – Jul 11, 2026'},
+        {k:'stack',    v:'YAMCS · Java · CCSDS · STM32 · FreeRTOS · GStreamer · Python · Linux'},
+      ],
+      blog:`// LZH — CubeSat Ground Station internship
+// ──────────────────────────────────────────
+
+[YAMCS PIPELINE]
+Built the YAMCS server stack from scratch:
+- Mission database in XTCE XML
+- Custom Java packet preprocessor (MyPacketPreprocessor.java)
+  strips CCSDS primary header before YAMCS ingestion
+- Time Correlation Service (TCO): maps OBT → UTC
+  Confirmed via generation_time vs reception_time divergence
+  in YAMCS web UI
+
+[STM32 / FREERTOS]
+- CCSDS packet framing with boot_counter + OBT fields
+- UART serial debug via #define DDEBUG
+- Python Tkinter payload simulator for injection testing
+- Multi-user repo config: per-person YAML gitignored,
+  shared server code committed
+
+[4-CAMERA RTSP RIG — SIDE PROJECT]
+- Raspberry Pi 4, four IP cameras, GStreamer pipelines
+- Wayland sink, PAL 4:3 aspect ratio fix
+- systemd autostart + watchdog for 24/7 uptime
+- Fought LZH SSL certs: -Dmaven.wagon.http.ssl.insecure=true
+
+[REPO]
+github.com/plundis/cubesat-groundstation`
+     }
+    },
+    {id:'sharang',h:'Sharang Shakti — RF Intern',role:'Signal processing · Delhi, IN',when:'Summer 2023',
+     p:'Anti-drone radar signal-chain design. Characterised AD9910 DDS + AD8336 VGA front end, bench-tested on scope/logic analyzer, helped port driver firmware.',
+     c:['AD9910','AD8336','RF','Radar','DDS','MATLAB'],
+     detail:{addr:0x0600,struct:'role_t',
+      fields:[
+        {k:'company',  v:'Sharang Shakti Pvt Ltd'},
+        {k:'title',    v:'RF / Signal Processing Intern'},
+        {k:'location', v:'Delhi, India'},
+        {k:'duration', v:'Summer 2023'},
+        {k:'stack',    v:'AD9910 DDS · AD8336 VGA · MATLAB · Oscilloscope · Logic Analyzer'},
+      ],
+      blog:`// Sharang Shakti — RF internship
+// ─────────────────────────────────
+
+[SIGNAL CHAIN]
+Anti-drone radar front end:
+- AD9910 DDS: swept frequency output, measured phase noise,
+  documented output spectrum vs register config
+- AD8336 VGA: receive path gain control,
+  characterised gain vs control voltage curve
+
+[BENCH WORK]
+- Scope probing, logic analyser captures on SPI bus
+- MATLAB post-processing of captured waveforms
+- Good reps reading RF datasheets and translating
+  to working hardware configs
+
+[FIRMWARE]
+- Helped port SPI driver for AD9910
+- Register map is dense — worked through it
+  systematically with scope verification
+
+First real exposure to RF systems. Noise floor
+matters in ways that don't bite you in pure
+digital design.`
+     }
+    },
+    {id:'drake',h:'Drake International — Operations',role:'Staffing / customer ops',when:'2022',
+     p:'Customer-facing ops and scheduling.',
+     c:['Operations','Comms'],
+     detail:{addr:0x0A00,struct:'role_t',
+      fields:[
+        {k:'company',  v:'Drake International'},
+        {k:'title',    v:'Operations'},
+        {k:'duration', v:'2022'},
+      ],
+      blog:`// Drake International
+// ───────────────────
+
+Non-engineering role, but transferable skills:
+- Clear communication under time pressure
+- Managing expectations
+- Staying calm when things go sideways
+
+All applicable to a hardware debug session
+at 2am before a 9am demo.`
+     }
+    },
+  ],
+  projects:[
+    {id:'cubesat',h:'CubeSat Ground Station',tag:'YAMCS · STM32',
+     p:'Full YAMCS stack with Java CCSDS preprocessor, TCO OBT-to-UTC, FreeRTOS/STM32 firmware integration, CI pipeline.',
+     detail:{addr:0x1000,struct:'project_t',
+      fields:[
+        {k:'name',   v:'CubeSat Ground Station (Moonrise_LZH)'},
+        {k:'stack',  v:'YAMCS · Java · CCSDS · STM32F4 · FreeRTOS · Python · Linux'},
+        {k:'repo',   v:'github.com/plundis/cubesat-groundstation'},
+        {k:'status', v:'ACTIVE — LZH internship, Mar–Jul 2026'},
+      ],
+      blog:`// CubeSat Ground Station — architecture
+// ──────────────────────────────────────
+
+[BLOCK DIAGRAM]
+  STM32/FreeRTOS  ──UART──►  RPi gateway
+                                  │ TCP
+                             YAMCS server
+                             (Java stack)
+                                  │
+                              Web UI / MCS
+
+[YAMCS STACK]
+- XTCE XML mission database (TM/TC definitions)
+- MyPacketPreprocessor.java: strips CCSDS primary
+  header before YAMCS frame ingestion
+- TCO: OBT counter → UTC via sync packets
+- Data links: UDP + serial, config per hardware
+
+[STM32 FIRMWARE]
+- CCSDS primary header + boot_counter + OBT
+- FreeRTOS task structure (sensor, comms, debug)
+- UART debug: #define DDEBUG strips in release
+
+[TOOLING]
+- Python Tkinter simulator for packet injection
+- Maven build, CI catches regressions
+- Multi-user repo: per-hardware YAML gitignored`
+     }
+    },
+    {id:'robot',h:'Self-Balancing Robot',tag:'STM32 · PID',
+     p:'UBC ELEC 391 capstone. Cascaded PID (angle + velocity), MPU-6050 fusion, FreeRTOS.',
+     detail:{addr:0x1400,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Self-Balancing Robot'},
+        {k:'course', v:'UBC ELEC 391 — Embedded Capstone'},
+        {k:'stack',  v:'STM32F4 · FreeRTOS · MPU-6050 · Cascaded PID · Custom PCB'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// Self-Balancing Robot — ELEC 391
+// ─────────────────────────────────
+
+[CONTROL — CASCADED PID]
+  angle_error  → PID_outer → velocity_setpoint
+  vel_error    → PID_inner → motor_pwm
+
+Tuned with Ziegler-Nichols as starting point,
+manual refinement while watching it crash.
+
+[SENSOR FUSION — MPU-6050]
+Complementary filter (gyro drifts, accel noisy):
+  angle = 0.98*(angle + gyro*dt) + 0.02*accel_angle
+Sample rate: 500 Hz
+
+[FREERTOS TASKS]
+  SensorTask  @ 500 Hz  — IMU read
+  ControlTask @ 250 Hz  — PID compute
+  MotorTask             — PWM output
+  DebugTask             — UART telemetry
+
+[RESULT]
+Balances. Push recovery ~0.5s.
+Good enough for a capstone demo.`
+     }
+    },
+    {id:'dnn',h:'DNN Accelerator',tag:'Verilog · Nios II',
+     p:'Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II.',
+     detail:{addr:0x1800,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Deep Neural Network Accelerator'},
+        {k:'stack',  v:'Verilog · Nios II · DE1-SoC · Quartus Prime · SDRAM · Q8.8 fixed-point'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// DNN Accelerator — DE1-SoC FPGA
+// ──────────────────────────────────
+
+[ARCHITECTURE]
+  Nios II softcore
+    ├─► weight SRAM (preloaded at boot)
+    ├─► activation buffer (SDRAM, double-buffered)
+    └─► matmul accelerator (custom Verilog)
+              └─► ReLU → next layer
+
+[MATMUL CORE]
+Pipelined MAC array. Q8.8 fixed-point arithmetic.
+Saturating overflow. Latency: N cycles for N-wide
+dot product. Throughput: 1 result/cycle after fill.
+
+[SDRAM DOUBLE BUFFERING]
+While accelerator computes layer N,
+Nios II loads layer N+1 weights into buffer B.
+Hides SDRAM latency. Keeps MAC fed.
+
+[RESULT]
+~94% accuracy on MNIST test set.
+~2ms inference per image @ 50 MHz.`
+     }
+    },
+    {id:'rtsp',h:'4-Camera RTSP Display',tag:'GStreamer · RPi',
+     p:'Raspberry Pi surveillance wall for LZH lab. Wayland/GStreamer, PAL 4:3, autostart + watchdog.',
+     detail:{addr:0x1C00,struct:'project_t',
+      fields:[
+        {k:'name',   v:'4-Camera RTSP Surveillance Display'},
+        {k:'stack',  v:'Raspberry Pi 4 · GStreamer · RTSP · H.264 · Wayland · systemd'},
+        {k:'status', v:'DEPLOYED — LZH lab, 24/7'},
+      ],
+      blog:`// 4-Camera RTSP Display — LZH lab
+// ─────────────────────────────────
+
+[GSTREAMER PIPELINE (per camera)]
+rtspsrc → rtph264depay → h264parse
+  → avdec_h264 → videoconvert
+  → videoscale → compositor → waylandsink
+
+[WAYLAND]
+RPi OS uses Wayland by default (no X11).
+Must export WAYLAND_DISPLAY + XDG_RUNTIME_DIR
+or waylandsink fails silently.
+
+[PAL 4:3 QUIRK]
+Cameras: PAL 4:3 native. Display: 16:9.
+Force videoscale to 4:3, compositor adds
+letterbox bars. Otherwise: stretched faces.
+
+[WATCHDOG]
+systemd Restart=always for pipeline crashes.
+Script checks for frozen frames (same PTS
+>30s → kill + restart). Zero manual restarts
+since deployment.`
+     }
+    },
+    {id:'rover',h:'Metal-Detecting Rover',tag:'ESP32 · BLE',
+     p:'Autonomous ESP32 rover with BLE telemetry, custom PCB, servo-swept inductive sensor, occupancy grid.',
+     detail:{addr:0x2000,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Metal-Detecting Autonomous Rover'},
+        {k:'stack',  v:'ESP32 · BLE · LDC1614 · DRV8833 · KiCad · ESP-IDF'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// Metal-Detecting Rover
+// ──────────────────────
+
+[HARDWARE]
+- ESP32 dual-core (BLE + control loop)
+- Custom PCB: DRV8833 motor driver, 5V reg,
+  JST connectors (KiCad, 2-layer, JLCPCB)
+- LDC1614 inductive proximity sensor
+  on servo mount (sweeps ±45°)
+- Differential drive + encoders
+
+[NAVIGATION]
+- Encoder odometry → dead-reckoning pose
+- 50×50 occupancy grid, 5cm/cell
+- Metal hit → mark cell, flag for revisit
+- Ultrasonic obstacle avoidance
+
+[BLE TELEMETRY]
+GATT server, custom service UUID.
+Streams: pose (x,y,θ), grid updates,
+battery voltage, hit events.
+Python client renders live map.
+
+[PCB]
+First board from JLCPCB that worked
+first try. Mostly.`
+     }
+    },
+    {id:'reflow',h:'Reflow Oven Controller',tag:'EFM8 · PID',
+     p:'PID reflow oven on EFM8. MAX31855 thermocouple, SSR switching, LCD temperature plot.',
+     detail:{addr:0x2400,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Reflow Oven Controller'},
+        {k:'stack',  v:'EFM8 · MAX31855 · SSR · SPI · PID · 16×2 LCD · C'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// Reflow Oven Controller
+// ──────────────────────
+
+[REFLOW PROFILE — Sn63/Pb37]
+  Preheat:  25°C → 150°C  @ 2°C/s
+  Soak:     150°C, hold 60–90s
+  Reflow:   150°C → 220°C @ 3°C/s
+  Peak:     220°C, hold 10–20s
+  Cooldown: passive, >6°C/s target
+
+[PID]
+Discrete PID with anti-windup.
+SSR PWM'd at ~1 Hz (oven thermal τ ≈ 10s).
+  output = Kp*e + Ki*∫e + Kd*(de/dt)
+  integral clamp: [-50, 50]
+
+[THERMOCOUPLE]
+MAX31855 via SPI. Reads cold-junction
+compensated temp. Fault detection on open/short.
+
+[LCD UI]
+Scrolling bargraph: each char = 2°C.
+Shows: current temp, target, phase label.
+
+[RESULT]
+Boards come out clean. Good enough
+for hobby SMD work.`
+     }
+    },
+  ],
+  skills:{
+    buckets:[
+      {h:'Firmware / RTOS',  items:['C / C++ (embedded)','FreeRTOS','STM32 HAL / LL','ESP-IDF','Bare-metal ARM']},
+      {h:'HDL / FPGA',       items:['Verilog','VHDL','Quartus · ModelSim','Nios II softcore']},
+      {h:'Protocols',        items:['UART · SPI · I²C · CAN','CCSDS','RTSP · TCP/IP','JTAG · SWD']},
+      {h:'Tools / Software', items:['Python','Java','MATLAB','Linux · Git','YAMCS · GStreamer']},
+    ]
+  },
+  education:[
+    {h:'UBC — BASc Electrical Engineering',role:'Vancouver, BC',when:'Expected 2027',p:'Bachelor of Applied Science. Leaning into embedded and digital systems.'},
+    {h:'CPEN 311 — Digital Systems Design',role:'FPGA · HDL',when:'',p:'Verilog, VHDL, DE1-SoC, Quartus, ModelSim.',c:['Verilog','VHDL','FPGA']},
+    {h:'CPEN 211 — Computer Architecture',role:'RISC datapath',when:'',p:'RISC pipeline, caches, hazard detection, forwarding.',c:['RISC','Pipeline','Cache']},
+    {h:'ELEC 391 — Embedded Capstone',role:'FreeRTOS · STM32',when:'',p:'Real-time control, motor control, PID. Self-balancing robot.',c:['FreeRTOS','STM32','PID']},
+    {h:'ELEC 301 — DSP',role:'Signal processing',when:'',p:'FIR/IIR filters, Z-transform, DFT/FFT, sampling theory.',c:['DSP','FIR','FFT']},
+    {h:'ELEC 311 — Control Systems',role:'Feedback control',when:'',p:'PID tuning, root locus, Bode plots, stability.',c:['Control','PID','Bode']},
+  ],
+  contact:[
+    {k:'email',          v:'monilarora2003@gmail.com'},
+    {k:'phone',          v:'+1 236 777 5739'},
+    {k:'github',         v:'github.com/plundis'},
+    {k:'linkedin',       v:'in/monil-arora-a26851290'},
+    {k:'location · now', v:'Albertstraße 12, 30451 Hannover, DE'},
+    {k:'location · home',v:'2205 Lower Mall, Vancouver, BC, CA'},
+  ],
+  resume:{p:'Single-page PDF. Updated April 2026.'},
+};
+
+/* ── hex utils ── */
+function bytesFromString(s,padTo){const b=[];for(let i=0;i<s.length;i++)b.push(s.charCodeAt(i)&0xff);while(padTo&&b.length<padTo)b.push(0);return b;}
+function genHex(region){
+  const lines=[],label=region.name.toUpperCase().replace('.','')+'  '+region.struct.toUpperCase();
+  const lb=bytesFromString(label),s0=region.addr[0];
+  for(let r=0;r<16;r++){
+    const off=s0+r*16,bytes=[];
+    for(let c=0;c<16;c++){
+      const idx=r*16+c;
+      let b;
+      if(r<2&&idx<lb.length) b=lb[idx];
+      else if(r===15&&c>=12){const t=[0xDE,0xAD,0xBE,0xEF];b=t[c-12];}
+      else if(region.empty) b=0xFF;
+      else{const seed=(off+c*31+region.key.charCodeAt(0)*7)&0xff;b=(seed^(seed>>3)^0x5a)&0xff;if(c%3===0)b=0x20+(b&0x3f);}
+      bytes.push(b);
+    }
+    lines.push({off,bytes,header:r<2,terminator:r===15});
+  }
+  return lines;
+}
+function hp(n,w){return n.toString(16).toUpperCase().padStart(w,'0')}
+function ao(b){return(b>=0x20&&b<0x7f)?String.fromCharCode(b):'·'}
+
+/* ── C struct renderer ──
+   Two colors only: dim green for comments, bright green for code.
+   Amber only for section header comments. Clean, readable, consistent.
+*/
+const STRUCT_CONTENT = {
+
+  header(reg){
+    return S('/* about_me.c @ 0x0000 */','cmt') +
+      S('') +
+      S('const about_me_t about_me = {') +
+      S('') +
+      S('  .name      = "Monil Arora",','str') +
+      S('  .degree    = "BASc Electrical Engineering",','str') +
+      S('  .school    = "University of British Columbia",','str') +
+      S('  .grad      = 2027,') +
+      S('  .location  = "Hannover, DE  →  Vancouver, BC",','str') +
+      S('') +
+      S('  .role      = EMBEDDED_FIRMWARE_ENGINEER,') +
+      S('  .status    = OPEN_TO_OFFERS,') +
+      S('') +
+      S('  .email     = "monilarora2003@gmail.com",','str') +
+      S('  .github    = "github.com/plundis",','str') +
+      S('  .linkedin  = "in/monil-arora-a26851290",','str') +
+      S('') +
+      S('  .skills    = {') +
+      S('    C_CPP, STM32, FREERTOS, VERILOG,') +
+      S('    YAMCS, CCSDS, LINUX, PYTHON,') +
+      S('    UART_SPI_I2C, GSTREAMER,') +
+      S('  },') +
+      S('') +
+      S('};');
+  },
+
+  experience(reg){
+    return S('/* experience.c @ 0x0200 */','cmt') +
+      S('') +
+      S('const role_t roles[] = {') +
+      S('') +
+      S('  /* Laser Zentrum Hannover — Mar–Jul 2026 */','cmt') +
+      S('  {') +
+      S('    .title    = "Research Assistant",','str') +
+      S('    .location = "Hannover, DE",','str') +
+      S('    .stack    = { YAMCS, CCSDS, STM32,') +
+      S('                  FREERTOS, JAVA, GSTREAMER },') +
+      S('  },') +
+      S('') +
+      S('  /* Sharang Shakti — Summer 2023 */','cmt') +
+      S('  {') +
+      S('    .title    = "RF / Signal Processing Intern",','str') +
+      S('    .location = "Delhi, IN",','str') +
+      S('    .stack    = { AD9910_DDS, AD8336_VGA,') +
+      S('                  RF_DESIGN, MATLAB },') +
+      S('  },') +
+      S('') +
+      S('  /* Drake International — 2022 */','cmt') +
+      S('  {') +
+      S('    .title    = "Operations",','str') +
+      S('    .stack    = { COMMS, SCHEDULING },') +
+      S('  },') +
+      S('') +
+      S('};') +
+      S('') +
+      S('/* ▸ click any entry for full writeup */','cmt');
+  },
+
+  projects(reg){
+    return S('/* projects.c @ 0x1000 */','cmt') +
+      S('') +
+      S('const project_t projects[] = {') +
+      S('') +
+      S('  /* 0x1000 — CubeSat Ground Station */','cmt') +
+      S('  { .stack  = { YAMCS, CCSDS, STM32, FREERTOS },') +
+      S('    .status = ACTIVE,') +
+      S('    .repo   = "github.com/plundis/cubesat-gs" },','str') +
+      S('') +
+      S('  /* 0x1400 — Self-Balancing Robot */','cmt') +
+      S('  { .stack  = { STM32, FREERTOS, PID, MPU6050 },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('  /* 0x1800 — DNN Accelerator */','cmt') +
+      S('  { .stack  = { VERILOG, NIOS2, FPGA, SDRAM },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('  /* 0x1C00 — 4-Camera RTSP Display */','cmt') +
+      S('  { .stack  = { GSTREAMER, RPI4, WAYLAND },') +
+      S('    .status = DEPLOYED },') +
+      S('') +
+      S('  /* 0x2000 — Metal-Detecting Rover */','cmt') +
+      S('  { .stack  = { ESP32, BLE, KICAD, ESP_IDF },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('  /* 0x2400 — Reflow Oven Controller */','cmt') +
+      S('  { .stack  = { EFM8, PID, MAX31855, SSR },') +
+      S('    .status = COMPLETE },') +
+      S('') +
+      S('};') +
+      S('') +
+      S('/* ▸ click any entry for full writeup */','cmt');
+  },
+
+  skills(reg){
+    return S('/* skills.h @ 0x3000 */','cmt') +
+      S('') +
+      S('#pragma once') +
+      S('') +
+      S('/* --- Firmware / RTOS --- */','cmt') +
+      S('static const char *fw[] = {') +
+      S('  "C / C++ (embedded)",','str') +
+      S('  "STM32 HAL / LL",','str') +
+      S('  "FreeRTOS",','str') +
+      S('  "Bare-metal ARM",','str') +
+      S('  "ESP-IDF",','str') +
+      S('};') +
+      S('') +
+      S('/* --- HDL / FPGA --- */','cmt') +
+      S('static const char *hdl[] = {') +
+      S('  "Verilog",','str') +
+      S('  "VHDL",','str') +
+      S('  "Quartus / ModelSim",','str') +
+      S('  "Nios II softcore",','str') +
+      S('};') +
+      S('') +
+      S('/* --- Protocols --- */','cmt') +
+      S('static const char *proto[] = {') +
+      S('  "UART / SPI / I2C / CAN",','str') +
+      S('  "JTAG / SWD",','str') +
+      S('  "CCSDS",','str') +
+      S('  "RTSP / TCP-IP",','str') +
+      S('};') +
+      S('') +
+      S('/* --- Tools --- */','cmt') +
+      S('static const char *tools[] = {') +
+      S('  "Linux / Git",','str') +
+      S('  "Python",','str') +
+      S('  "YAMCS / GStreamer",','str') +
+      S('  "Java / MATLAB",','str') +
+      S('};');
+  },
+
+  education(reg){
+    return S('/* education.c @ 0x3800 */','cmt') +
+      S('') +
+      S('const degree_t degree = {') +
+      S('  .name   = "BASc Electrical Engineering",','str') +
+      S('  .school = "University of British Columbia",','str') +
+      S('  .grad   = 2027,') +
+      S('};') +
+      S('') +
+      S('const course_t courses[] = {') +
+      S('') +
+      S('  /* CPEN 311 — Digital Systems Design */','cmt') +
+      S('  { .skills = { VERILOG, VHDL, FPGA, DE1_SOC } },') +
+      S('') +
+      S('  /* CPEN 211 — Computer Architecture */','cmt') +
+      S('  { .skills = { RISC_PIPELINE, CACHE, HAZARD } },') +
+      S('') +
+      S('  /* ELEC 391 — Embedded Capstone */','cmt') +
+      S('  { .skills  = { STM32, FREERTOS, PID },') +
+      S('    .output  = &projects[SELF_BALANCING_ROBOT] },') +
+      S('') +
+      S('  /* ELEC 301 — DSP */','cmt') +
+      S('  { .skills = { FIR_IIR, FFT, Z_TRANSFORM } },') +
+      S('') +
+      S('  /* ELEC 311 — Control Systems */','cmt') +
+      S('  { .skills = { PID, ROOT_LOCUS, BODE } },') +
+      S('') +
+      S('};');
+  },
+
+  contact(reg){
+    return S('/* contact.c @ 0x4000 */','cmt') +
+      S('') +
+      S('const contact_t contact = {') +
+      S('') +
+      S('  .email    = "monilarora2003@gmail.com",','str') +
+      S('  .phone    = "+1 236 777 5739",','str') +
+      S('  .github   = "github.com/plundis",','str') +
+      S('  .linkedin = "in/monil-arora-a26851290",','str') +
+      S('') +
+      S('  .loc_now  = "Hannover, DE",','str') +
+      S('  .loc_home = "Vancouver, BC, CA",','str') +
+      S('') +
+      S('  .status   = OPEN_TO_OFFERS,') +
+      S('  .type     = EMBEDDED | FIRMWARE | HW,') +
+      S('  .start    = SEP_2026,') +
+      S('  .relocate = true,') +
+      S('') +
+      S('};') +
+      S('') +
+      S('/* preferred contact: email or linkedin */','cmt');
+  },
+
+  resume(reg){
+    return S('/* resume.c @ 0x4200 */','cmt') +
+      S('') +
+      S('const pdf_ref_t resume = {') +
+      S('  .file   = "monil_arora_resume.pdf",','str') +
+      S('  .rev    = "2026.04",','str') +
+      S('  .pages  = 1,') +
+      S('  .format = SINGLE_PAGE | ATS_COMPATIBLE,') +
+      S('};') +
+      S('') +
+      S('/* open via top-right button  ↑ */','cmt');
+  },
+
+  empty(reg){
+    return S('/* .empty @ 0x4400 */','cmt') +
+      S('/* 47 KB — unprogrammed flash */','cmt') +
+      S('') +
+      S('#ifdef FUTURE') +
+      S('') +
+      S('typedef struct {') +
+      S('  project_t  pcb_design;    /* in progress */','cmt') +
+      S('  project_t  rf_frontend;   /* planned     */','cmt') +
+      S('  char       next_role[64]; /* TBD         */','cmt') +
+      S('} future_t;') +
+      S('') +
+      S('#endif');
+  },
+};
+
+/*
+  S(text, type) — two color system:
+    'cmt'  → dim green  (comments)
+    'str'  → amber      (string literals only)
+    everything else → bright green
+*/
+function S(text, type){
+  const color = type==='cmt'  ? 'var(--phos-dim)'
+              : type==='str'  ? 'var(--amber)'
+              : 'var(--phos)';
+  return `<div style="color:${color};font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${text||' '}</div>`;
+}
+
+function renderHex(region){
+  const body = document.getElementById('hex-body');
+  const renderer = STRUCT_CONTENT[region.key] || STRUCT_CONTENT.empty;
+
+  // clean title line instead of the misleading hex column header
+  const reg = region;
+  body.innerHTML =
+    `<div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--phos-dim);padding:8px 0 10px;border-bottom:1px dashed var(--phos-deep);margin-bottom:4px">` +
+    `${reg.name} &nbsp;·&nbsp; ${reg.struct} &nbsp;·&nbsp; 0x${hp(reg.addr[0],4)}–0x${hp(reg.addr[1],4)}</div>` +
+    `<div id="hex-content">${renderer(region)}</div>`;
+
+  // stream in lines
+  body.querySelectorAll('#hex-content > div').forEach((el,i)=>{
+    el.style.opacity='0';
+    setTimeout(()=>{ el.style.transition='opacity .06s'; el.style.opacity='1'; }, i*10);
+  });
+}
+
+/* ── detail view ── */
+let activeEntry=null;
+
+function renderDetail(detail,title){
+  const dv=document.getElementById('detail-view');
+  const hb=document.getElementById('hex-body');
+  const hh=document.getElementById('hex-hd-hint');
+
+  const fieldsHtml=detail.fields.map(f=>`<div class="dv-field"><div class="dv-key">${f.k}</div><div class="dv-val">${f.v}</div></div>`).join('');
+
+  // syntax highlight blog text
+  const blogHtml=detail.blog.split('\n').map(line=>{
+    if(line.startsWith('//')) return `<span style="color:var(--phos-dim)">${line}</span>`;
+    if(/^\[.+\]$/.test(line.trim())) return `<span style="color:var(--amber);font-weight:700">${line}</span>`;
+    if(line.includes('→')||line.includes('►')) return `<span style="color:var(--cyan)">${line}</span>`;
+    if(line.trim().startsWith('-')) return `<span style="color:var(--phos)">${line}</span>`;
+    return `<span style="color:var(--phos)">${line}</span>`;
+  }).join('\n');
+
+  dv.innerHTML=`
+    <div class="dv-back" id="dv-back">◄ ESC / back</div>
+    <div class="dv-struct-line"><b>${title}</b> &nbsp;·&nbsp; ${detail.struct} &nbsp;·&nbsp; 0x${hp(detail.addr,4)}</div>
+    ${fieldsHtml}
+    <hr class="dv-divider"/>
+    <div class="dv-field">
+      <div class="dv-key">// writeup</div>
+      <div class="dv-blog">${blogHtml}<span class="dv-cursor"></span></div>
+    </div>`;
+
+  hb.classList.add('hidden');
+  dv.classList.add('on');
+  hh.textContent=title+' · detail';
+  dv.scrollTop=0;
+
+  document.getElementById('dv-back').addEventListener('click',clearDetail);
+}
+
+function clearDetail(){
+  document.getElementById('detail-view').classList.remove('on');
+  document.getElementById('hex-body').classList.remove('hidden');
+  document.getElementById('hex-hd-hint').textContent='click an entry to inspect →';
+  activeEntry=null;
+  document.querySelectorAll('.entry.active,.proj.active').forEach(e=>e.classList.remove('active'));
+}
+
+function handleEntryClick(el,sectionKey){
+  const id=el.dataset.id;
+  const entry=DATA[sectionKey].find(e=>e.id===id);
+  if(!entry||!entry.detail)return;
+  document.querySelectorAll('.entry.active,.proj.active').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  activeEntry=id;
+  const reg=REGIONS.find(r=>r.key===sectionKey);
+  document.getElementById('hex-region').textContent=reg.name;
+  document.getElementById('hex-range').textContent=`0x${hp(entry.detail.addr,4)}`;
+  renderDetail(entry.detail,entry.h);
+}
+
+/* ── decode renderer ── */
+function renderDecode(key){
+  const body=document.getElementById('dc-body');
+  body.innerHTML='';
+  const d=DATA[key];
+  const reg=REGIONS.find(r=>r.key===key);
+
+  if(!d){
+    body.innerHTML=`<div class="dc-section"><h1 style="font-family:var(--mono);font-size:18px">${reg.name} · empty</h1><div class="subh">0xFF · ${reg.size} unprogrammed</div><p style="font-family:var(--sans);font-size:13px;line-height:1.55;color:#2b2d2e">Room to grow.</p></div>`;
+    return;
+  }
+  if(key==='header'){
+    body.innerHTML=`<div class="dc-section">
+      <div class="bio"><div class="avatar"><img src="photo.jpg" alt="Monil Arora"/></div>
+      <div class="who"><div class="n">${d.name}</div><div class="t">${d.tagline}</div></div></div>
+      <p style="font-size:14px;line-height:1.55;color:#2b2d2e;text-wrap:pretty;margin-bottom:14px">${d.blurb}</p>
+      <div class="links">${d.links.map(l=>`<a class="${l.pri?'pri':''}" href="${l.href}" ${(l.href.startsWith('http')||l.href.endsWith('.pdf'))?'target="_blank" rel="noopener"':''}>${l.k} · ${l.v}</a>`).join('')}</div>
+      <div class="skill-chips">${d.topSkills.map(s=>`<span class="skill-chip">${s}</span>`).join('')}</div>
+    </div>`;
+    return;
+  }
+  if(key==='experience'){
+    body.innerHTML=`<div class="dc-section"><h1>Experience</h1><div class="subh">struct ${reg.struct} · ${d.length} entries · click any to open detail</div></div>`+
+      d.map(e=>`<div class="entry" data-id="${e.id}" data-section="${key}">
+        <div class="etop"><h3>${e.h}</h3>${e.when?`<span class="when">${e.when}</span>`:''}</div>
+        <div class="role">${e.role}</div><p>${e.p}</p>
+        <div class="chips">${e.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+      </div>`).join('');
+    body.querySelectorAll('.entry[data-id]').forEach(el=>el.addEventListener('click',()=>handleEntryClick(el,key)));
+    return;
+  }
+  if(key==='projects'){
+    body.innerHTML=`<div class="dc-section"><h1>Projects</h1><div class="subh">struct ${reg.struct} · ${d.length} entries · click any to open detail</div></div>`+
+      d.map(p=>`<div class="proj" data-id="${p.id}" data-section="${key}">
+        <div class="pt"><h3>${p.h}</h3><span class="tag">${p.tag}</span></div>
+        <p>${p.p}</p>
+      </div>`).join('');
+    body.querySelectorAll('.proj[data-id]').forEach(el=>el.addEventListener('click',()=>handleEntryClick(el,key)));
+    return;
+  }
+  if(key==='education'){
+    body.innerHTML=`<div class="dc-section"><h1>Education</h1><div class="subh">struct ${reg.struct} · ${d.length} entries</div></div>`+
+      d.map(e=>`<div class="entry"><div class="etop"><h3>${e.h}</h3>${e.when?`<span class="when">${e.when}</span>`:''}</div><div class="role">${e.role||''}</div><p>${e.p}</p>${e.c?`<div class="chips">${e.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:''}</div>`).join('');
+    return;
+  }
+  if(key==='skills'){
+    body.innerHTML=`<div class="dc-section"><h1>Skills</h1><div class="subh">struct ${reg.struct}</div></div>
+      <div class="skills-grid">${d.buckets.map(b=>`<div class="skbucket"><h4>${b.h}</h4><div class="sk-list">${b.items.map(s=>`<span class="sk-tag">${s}</span>`).join('')}</div></div>`).join('')}</div>`;
+    return;
+  }
+  if(key==='contact'){
+    body.innerHTML=`<div class="dc-section"><h1>Contact</h1><div class="subh">struct ${reg.struct}</div></div>
+      <div class="cgrid">${d.map(c=>`<div class="ccard"><div class="k">${c.k}</div><div class="v">${c.v}</div></div>`).join('')}</div>`;
+    return;
+  }
+  if(key==='resume'){
+    body.innerHTML=`<div class="dc-section"><h1>Resume</h1><div class="subh">struct ${reg.struct}</div>
+      <p style="font-size:14px;line-height:1.55;color:#2b2d2e;margin:12px 0">${d.p}</p>
+      <div class="links"><a class="pri" href="resume.pdf" target="_blank" rel="noopener">◆ open resume.pdf →</a></div></div>`;
+    return;
+  }
+}
+
+/* ── state / region select ── */
+let current='header';
+
+function renderRegions(){
+  const list=document.getElementById('reg-list');
+  list.innerHTML=REGIONS.map(r=>`<div class="reg ${r.empty?'empty':''} ${r.key===current?'on':''}" data-key="${r.key}">
+    <div class="addr">0x${hp(r.addr[0],4)} — 0x${hp(r.addr[1],4)}</div>
+    <div class="nm">${r.name}</div><div class="sz">${r.size}</div>
+  </div>`).join('');
+  list.querySelectorAll('.reg').forEach(el=>el.addEventListener('click',()=>select(el.dataset.key)));
+  const bar=document.getElementById('memmap-bar');
+  bar.innerHTML=REGIONS.map(r=>`<span class="seg ${r.key===current?'on':''}" data-key="${r.key}" style="flex:${((r.addr[1]-r.addr[0])/0xFFFF)*100};background:${r.color}"></span>`).join('');
+  bar.querySelectorAll('.seg').forEach(el=>el.addEventListener('click',()=>select(el.dataset.key)));
+}
+
+function typeInto(el,text){
+  if(!el)return;if(el._typer)clearInterval(el._typer);el.textContent='';let i=0;
+  el._typer=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(el._typer);el._typer=null;}},22);
+}
+
+function select(key,opts){
+  if(!REGIONS.find(r=>r.key===key))return;
+  current=key;
+  const r=REGIONS.find(x=>x.key===key);
+  document.getElementById('hex-region').textContent=r.name;
+  document.getElementById('hex-range').textContent=`0x${hp(r.addr[0],4)}–0x${hp(r.addr[1],4)}`;
+  typeInto(document.getElementById('dc-region'),r.name);
+  typeInto(document.getElementById('dc-struct'),r.struct);
+  document.getElementById('sb-cursor').textContent=`0x${hp(r.addr[0],4)}`;
+  document.getElementById('sb-sym').textContent=r.name;
+  clearDetail();
+  renderRegions();renderHex(r);renderDecode(key);
+  if(opts&&opts.flash){
+    const el=document.querySelector(`.reg[data-key="${key}"]`);
+    if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');el.scrollIntoView({block:'nearest'});}
+  }
+  try{localStorage.setItem('fw.sect',key);}catch(e){}
+}
+
+/* ── command line ── */
+const hist=document.getElementById('term-hist');
+function termLog(html){
+  hist.classList.add('on');
+  const el=document.createElement('div');el.className='line';el.innerHTML=html;
+  hist.appendChild(el);hist.scrollTop=hist.scrollHeight;
+  clearTimeout(termLog._t);termLog._t=setTimeout(()=>{hist.classList.remove('on');hist.innerHTML='';},7000);
+}
+const CMDS={
+  help(){termLog(`<span class="em">commands:</span>  help · ls · cat &lt;section&gt; · open resume|email|github|linkedin · whoami · neofetch · clear`);},
+  ls(){termLog(`<span class="em">regions:</span>\n`+REGIONS.map(r=>`  <span class="dim">0x${hp(r.addr[0],4)}</span>  ${r.name.padEnd(12)}  <span class="dim">${r.size}</span>`).join('\n'));},
+  whoami(){termLog('monil arora · ee @ ubc · hannover → vancouver · open for embedded roles');},
+  neofetch(){termLog(`<span class="dim">   ╔══════════╗  monil@cortex-m4\n   ║ ◆ ◆ ◆ ◆  ║  os: bare-metal arm\n   ║  M O N I L║  kernel: freertos 10.x\n   ╚══[JTAG]══╝  uptime: 22 years</span>`);},
+  clear(){hist.innerHTML='';hist.classList.remove('on');},
+};
+function runCmd(raw){
+  const s=raw.trim();if(!s)return;
+  termLog(`<span class="em">$</span> ${s}`);
+  if(CMDS[s]){CMDS[s]();return;}
+  const catM=s.match(/^cat\s+\.?(\w+)/i);
+  if(catM){const k=catM[1].toLowerCase();if(REGIONS.find(r=>r.key===k)){select(k);termLog(`→ decoded .${k}`);}else termLog(`cat: .${catM[1]}: no such section`);return;}
+  const openM=s.match(/^open\s+(\w+)/i);
+  if(openM){
+    const w=openM[1].toLowerCase();
+    const L={resume:'resume.pdf',email:'mailto:monilarora2003@gmail.com',github:'https://github.com/plundis',linkedin:'https://linkedin.com/in/monil-arora-a26851290'};
+    if(L[w]){window.open(L[w],'_blank','noopener');termLog(`→ opening ${w}`);}
+    else termLog(`open: ${w}: unknown`);return;
+  }
+  termLog(`${s.split(' ')[0]}: command not found. try <span class="em">help</span>.`);
+}
+const input=document.getElementById('cmd');
+input.addEventListener('keydown',(e)=>{
+  if(e.key==='Enter'){runCmd(input.value);input.value='';}
+  else if(e.key==='Tab'){
+    e.preventDefault();
+    const tok=input.value.split(' '),last=tok[tok.length-1];
+    if(last.startsWith('.')||tok[0]==='cat'){
+      const stem=(last.startsWith('.')?last.slice(1):last).toLowerCase();
+      const hit=REGIONS.find(r=>r.key.startsWith(stem)&&!r.empty);
+      if(hit){tok[tok.length-1]='.'+hit.key;input.value=tok.join(' ');}
+    }
+  }
+});
+document.addEventListener('keydown',(e)=>{
+  if(document.activeElement===input)return;
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault();
+    const keys=REGIONS.filter(r=>!r.empty).map(r=>r.key);
+    const i=keys.indexOf(current);
+    select(keys[(i+(e.key==='ArrowDown'?1:-1)+keys.length)%keys.length],{flash:true});
+  }
+  if(e.key==='?')CMDS.help();
+  if(e.key==='/'){e.preventDefault();input.focus();}
+  if(e.key==='Escape'&&activeEntry)clearDetail();
+});
+
+/* ── activity LED ── */
+const led=document.getElementById('actled'),ledLbl=document.getElementById('actled-lbl');
+let ledAcc=0,ledTO=null;
+document.addEventListener('mousemove',()=>{ledAcc+=2;led.classList.add('hot');clearTimeout(ledTO);ledTO=setTimeout(()=>led.classList.remove('hot'),120);});
+setInterval(()=>{const b=Math.min(9999,Math.round(ledAcc*2));ledLbl.textContent=`RX ${b.toString().padStart(4,' ')} B/s`;ledAcc*=0.4;},250);
+
+/* ── konami ── */
+const K=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let kb=[];
+document.addEventListener('keydown',(e)=>{
+  const k=e.key.length===1?e.key.toLowerCase():e.key;
+  kb.push(k);if(kb.length>K.length)kb.shift();
+  if(kb.length===K.length&&kb.every((x,i)=>x===K[i])){togglePlain();kb=[];}
+});
+function togglePlain(){document.body.classList.toggle('plain');document.getElementById('plain-view').setAttribute('aria-hidden',document.body.classList.contains('plain')?'false':'true');}
+document.getElementById('plain-back').addEventListener('click',togglePlain);
+document.addEventListener('keydown',(e)=>{if(document.body.classList.contains('plain')&&e.key==='Escape')togglePlain();});
+
+/* ── compiled date ── */
+(function(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const d = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} @ ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const el = document.getElementById('compiled-date');
+  if(el) el.textContent = d;
+})();
+
+/* ── boot ── */
+(function(){
+  const b=document.getElementById('boot');
+  b.querySelectorAll('.bl').forEach((l,i)=>{l.style.animationDelay=(i*120)+'ms';});
+  setTimeout(()=>{b.classList.add('done');setTimeout(()=>b.remove(),500);},b.querySelectorAll('.bl').length*120+360);
+})();
+
+/* ── init ── */
+try{const s=localStorage.getItem('fw.sect');if(s&&REGIONS.find(r=>r.key===s))current=s;}catch(e){}
+renderRegions();
+const ir=REGIONS.find(r=>r.key===current);
+document.getElementById('hex-region').textContent=ir.name;
+document.getElementById('hex-range').textContent=`0x${hp(ir.addr[0],4)}–0x${hp(ir.addr[1],4)}`;
+document.getElementById('dc-region').textContent=ir.name;
+document.getElementById('dc-struct').textContent=ir.struct;
+document.getElementById('sb-cursor').textContent=`0x${hp(ir.addr[0],4)}`;
+document.getElementById('sb-sym').textContent=ir.name;
+renderHex(ir);renderDecode(current);
+
+// pulse the decode panel to draw the eye on load
+const decodeEl=document.querySelector('.decode');
+setTimeout(()=>{
+  decodeEl.classList.add('pulse');
+  decodeEl.addEventListener('animationend',()=>decodeEl.classList.remove('pulse'),{once:true});
+},800);
+</script>
+</body>
+</html>
