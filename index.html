@@ -49,43 +49,43 @@
   /* main — original 3-column */
   .main{display:grid;grid-template-columns:minmax(280px,320px) minmax(0,1fr) minmax(460px,560px);gap:10px;min-height:0;}
 
-  /* ── LEFT: regions — high-contrast nav ── */
-  .regions{border:1px solid var(--line2);background:var(--bg2);display:flex;flex-direction:column;min-height:0;}
-  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:#9ffaac;}
-  .reg-hd .sz{color:#7a9980}
+  /* ── LEFT: regions — match phosphor palette ── */
+  .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;}
+  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos);}
+  .reg-hd .sz{color:var(--phos-dim)}
   .reg-list{flex:1;overflow:auto;padding:6px}
   .reg-list::-webkit-scrollbar{width:6px}
-  .reg-list::-webkit-scrollbar-track{background:var(--bg2)}
-  .reg-list::-webkit-scrollbar-thumb{background:var(--line2)}
+  .reg-list::-webkit-scrollbar-track{background:#080e0a}
+  .reg-list::-webkit-scrollbar-thumb{background:var(--phos-deep)}
 
-  /* Each region row — visible by default, not faded */
+  /* Each region row — full phosphor green names */
   .reg{
     display:grid;grid-template-columns:1fr auto;gap:4px 10px;
     padding:10px 12px;
-    border:1px solid rgba(124,245,138,.08);
+    border:1px solid rgba(124,245,138,.1);
     cursor:pointer;
-    transition:border-color .1s,background .1s,color .1s;
+    transition:border-color .1s,background .1s;
     margin-bottom:4px;position:relative;
-    background:rgba(124,245,138,.025);
+    background:rgba(124,245,138,.03);
   }
-  .reg:hover{background:rgba(124,245,138,.06);border-color:var(--phos-dim)}
-  .reg .addr{grid-column:1;font-size:10px;color:#7a9980;letter-spacing:.08em;}
+  .reg:hover{background:rgba(124,245,138,.08);border-color:var(--phos-dim)}
+  .reg .addr{grid-column:1;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;}
   .reg .nm{
     grid-column:1;
-    font-family:var(--sans);font-weight:700;font-size:14px;
-    color:#dde8e0;  /* was paper2 #ded5bf — now bright greenish-white */
-    letter-spacing:0;line-height:1.1;margin-top:1px;
+    font-family:var(--mono);font-weight:500;font-size:13px;
+    color:var(--phos);   /* full phosphor green — matches hex panel */
+    letter-spacing:.04em;line-height:1.2;margin-top:2px;
   }
-  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:10px;color:#7a9980;letter-spacing:.06em;}
-  .reg.on{background:var(--phos-deep);border-color:var(--phos-dim);border-left:3px solid var(--phos);}
-  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:var(--phos);font-weight:800}.reg.on .sz{color:#9ffaac}
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:10px;color:var(--phos-dim);letter-spacing:.06em;}
+  .reg.on{background:var(--phos-deep);border-color:var(--phos);border-left:3px solid var(--phos);}
+  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:#ffffff;font-weight:700;text-shadow:0 0 8px rgba(124,245,138,.5)}.reg.on .sz{color:#9ffaac}
   .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
-  .reg.empty{opacity:.5}.reg.empty .nm{color:#8a9a90}
-  .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:#7a9980;letter-spacing:.1em;}
+  .reg.empty{opacity:.35}.reg.empty .nm{color:var(--phos-dim)}
+  .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
   .memmap .bar{display:flex;height:12px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
   .memmap .seg{height:100%;transition:filter .15s;border-right:1px solid rgba(0,0,0,.4);}
   .memmap .seg:last-child{border-right:none}.memmap .seg.on{filter:brightness(1.5)}
-  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:#7a9980;font-size:9px}
+  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--phos-dim);font-size:9px}
 
   /* middle: hex panel */
   .hexpanel{border:1px solid var(--line);background:#05080a;display:flex;flex-direction:column;min-height:0;position:relative;overflow:hidden;}
@@ -321,23 +321,43 @@
   .rv-sk-list{display:flex;flex-wrap:wrap;gap:5px;}
   .rv-sk{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
 
-  /* ── FIX: recruiter mode button — visually prominent ── */
+  /* ── recruiter mode button — amber, separated, unmissable ── */
+  .tb-mode-sep{width:1px;height:22px;background:var(--line2);margin:0 4px;flex-shrink:0;}
   .tb-mode{
-    font-family:var(--mono);font-size:11px;font-weight:700;
-    color:var(--bg);
-    background:#c8f0ce;
-    border:2px solid var(--phos);
-    padding:5px 14px;letter-spacing:.08em;cursor:pointer;
-    transition:background .12s,border-color .12s,box-shadow .12s;
-    display:inline-flex;align-items:center;gap:7px;
-    box-shadow:0 0 10px rgba(124,245,138,.3);
+    font-family:var(--mono);font-size:12px;font-weight:700;
+    color:#07090a;background:var(--amber);
+    border:2px solid var(--amber);
+    padding:6px 16px;letter-spacing:.06em;cursor:pointer;
+    transition:background .12s,box-shadow .12s;
+    display:inline-flex;align-items:center;gap:8px;
+    box-shadow:0 0 14px rgba(240,182,74,.45);
+    white-space:nowrap;
   }
-  .tb-mode:hover{background:#a8e8b4;border-color:#9ffaac;box-shadow:0 0 18px rgba(124,245,138,.5)}
+  .tb-mode:hover{background:#ffd077;box-shadow:0 0 24px rgba(240,182,74,.75)}
   .tb-mode .dot{
     width:7px;height:7px;border-radius:50%;
-    background:var(--bg);
+    background:#07090a;opacity:.6;
     animation:pulse 1.3s ease-in-out infinite;
   }
+  /* floating "not a dev?" badge */
+  .rec-float{
+    position:fixed;bottom:36px;right:16px;z-index:19999;
+    display:flex;align-items:center;gap:8px;
+    background:var(--amber);color:#07090a;
+    font-family:var(--mono);font-size:12px;font-weight:700;
+    letter-spacing:.05em;padding:10px 16px;
+    box-shadow:0 4px 24px rgba(240,182,74,.5);
+    cursor:pointer;border:none;
+    animation:floatIn .4s ease-out both;
+  }
+  .rec-float:hover{background:#ffd077;box-shadow:0 6px 32px rgba(240,182,74,.7)}
+  .rec-float-x{
+    width:18px;height:18px;display:grid;place-items:center;
+    background:rgba(0,0,0,.18);font-size:10px;cursor:pointer;
+    flex-shrink:0;margin-left:4px;font-weight:400;border:none;
+    font-family:var(--mono);color:#07090a;background:rgba(0,0,0,.15);
+  }
+  @keyframes floatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
   /* firmware mode button */
   .rv-fw-btn{
@@ -577,7 +597,7 @@
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">◆ github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">◆ linkedin</a>
       <a class="tb-link" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <button class="tb-mode" id="mode-btn"><span class="dot"></span>recruiter mode</button>
+      <span class="tb-mode-sep"></span><button class="tb-mode" id="mode-btn"><span class="dot"></span>not a dev? → recruiter view</button>
     </div>
   </header>
 
@@ -595,7 +615,7 @@
     <section class="hexpanel">
       <div class="hex-hd">
         <div>HEX · <b id="hex-region">.about_me</b> &nbsp;<span id="hex-range">0x0000–0x01FF</span></div>
-        <div id="hex-hd-hint" class="hint">click an entry to inspect →</div>
+        <div id="hex-hd-hint" class="hint">C struct · decoded source view</div>
       </div>
       <div class="hex-body" id="hex-body">
         <div class="hex-row hd"><span class="off">OFFSET</span><span class="bytes">00 01 02 03  04 05 06 07   08 09 0A 0B  0C 0D 0E 0F</span><span class="ascii">ASCII</span></div>
@@ -1081,8 +1101,7 @@ const STRUCT_CONTENT = {
       S('  },') +
       S('') +
       S('};') +
-      S('') +
-      S('/* ▸ click any entry for full writeup */','cmt');
+      S('');
   },
 
   projects(reg){
@@ -1116,8 +1135,7 @@ const STRUCT_CONTENT = {
       S('    .status = COMPLETE },') +
       S('') +
       S('};') +
-      S('') +
-      S('/* ▸ click any entry for full writeup */','cmt');
+      S('');
   },
 
   skills(reg){
@@ -1241,11 +1259,28 @@ const STRUCT_CONTENT = {
   },
 };
 
+// Option A — Classic C IDE (VSCode Dark+)
+// kw/types/= → amber | field → cyan | enum → magenta | braces/punct → dim green
+const SC = {
+  cmt:   '#3b7a46',  // dim green  — comments
+  str:   '#f0b64a',  // amber      — string literals
+  kw:    '#f0b64a',  // amber      — const, struct, char, #pragma, typedef
+  field: '#5ad1ff',  // cyan       — .name .role .email
+  op:    '#f0b64a',  // amber      — = (grouped with keywords per spec)
+  brace: '#3b7a46',  // dim green  — { } , ; |
+  enum:  '#ff5aa8',  // magenta    — ENUM_VALUES
+  num:   '#ff5aa8',  // magenta    — numbers
+  plain: '#ece4d0',  // off-white  — bare identifiers
+};
+// S(text, type) — single-color line
 function S(text, type){
-  const color = type==='cmt'  ? 'var(--phos-dim)'
-              : type==='str'  ? 'var(--amber)'
-              : 'var(--phos)';
+  const color = SC[type] || '#ece4d0';
   return `<div style="color:${color};font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${text||' '}</div>`;
+}
+// T([type,text],...) — mixed-token line
+function T(...tokens){
+  const inner = tokens.map(([t,v])=>`<span style="color:${SC[t]||'#ece4d0'}">${v}</span>`).join('');
+  return `<div style="font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${inner}</div>`;
 }
 
 function renderHex(region){
@@ -1273,6 +1308,12 @@ function renderDetail(detail,title){
 
   const fieldsHtml=detail.fields.map(f=>`<div class="dv-field"><div class="dv-key">${f.k}</div><div class="dv-val">${f.v}</div></div>`).join('');
 
+  // linkify github URLs in blog text
+  function linkifyBlog(text){
+    return text.replace(/(github\.com\/[\w./-]+)/g,
+      '<a href="https://$1" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">$1</a>');
+  }
+
   const blogHtml=detail.blog.split('\n').map(line=>{
     if(line.startsWith('//')) return `<span style="color:var(--phos-dim)">${line}</span>`;
     if(/^\[.+\]$/.test(line.trim())) return `<span style="color:var(--amber);font-weight:700">${line}</span>`;
@@ -1280,6 +1321,8 @@ function renderDetail(detail,title){
     if(line.trim().startsWith('-')) return `<span style="color:var(--phos)">${line}</span>`;
     return `<span style="color:var(--phos)">${line}</span>`;
   }).join('\n');
+  // apply linkification after line processing
+  const blogHtmlLinked = linkifyBlog(blogHtml);
 
   dv.innerHTML=`
     <div class="dv-back" id="dv-back">◄ ESC / back</div>
@@ -1288,7 +1331,7 @@ function renderDetail(detail,title){
     <hr class="dv-divider"/>
     <div class="dv-field">
       <div class="dv-key">// writeup</div>
-      <div class="dv-blog">${blogHtml}<span class="dv-cursor"></span></div>
+      <div class="dv-blog">${blogHtmlLinked}<span class="dv-cursor"></span></div>
     </div>`;
 
   hb.classList.add('hidden');
@@ -1302,7 +1345,7 @@ function renderDetail(detail,title){
 function clearDetail(){
   document.getElementById('detail-view').classList.remove('on');
   document.getElementById('hex-body').classList.remove('hidden');
-  document.getElementById('hex-hd-hint').textContent='click an entry to inspect →';
+  document.getElementById('hex-hd-hint').textContent='C struct · decoded source view';
   activeEntry=null;
   document.querySelectorAll('.entry.active,.proj.active').forEach(e=>e.classList.remove('active'));
 }
@@ -1501,6 +1544,33 @@ function togglePlain(){
 document.getElementById('plain-back').addEventListener('click',togglePlain);
 document.getElementById('mode-btn').addEventListener('click',togglePlain);
 document.addEventListener('keydown',(e)=>{if(document.body.classList.contains('plain')&&e.key==='Escape')togglePlain();});
+
+
+  // ── Floating recruiter badge — shows after boot, dismissible ──
+  (function(){
+    try{ if(sessionStorage.getItem('fw.float.dismissed')) return; }catch(e){}
+    const badge = document.createElement('button');
+    badge.className = 'rec-float';
+    badge.id = 'rec-float';
+    badge.style.animationDelay = '2s';
+    badge.innerHTML = '👤 not a developer? &nbsp;<b>→ recruiter view</b><span class="rec-float-x" id="rec-float-x" title="dismiss">✕</span>';
+    document.body.appendChild(badge);
+
+    badge.addEventListener('click', (e)=>{
+      if(e.target.id === 'rec-float-x' || e.target.closest('#rec-float-x')){
+        badge.style.transition = 'opacity .2s';
+        badge.style.opacity = '0';
+        setTimeout(()=>badge.remove(), 200);
+        try{ sessionStorage.setItem('fw.float.dismissed','1'); }catch(err){}
+        return;
+      }
+      togglePlain();
+      badge.remove();
+    });
+
+    // auto-hide once recruiter mode is toggled
+    document.getElementById('mode-btn').addEventListener('click', ()=>badge.remove(), {once:true});
+  })();
 
 /* ── compiled date ── */
 (function(){
