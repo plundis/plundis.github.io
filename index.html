@@ -49,28 +49,43 @@
   /* main — original 3-column */
   .main{display:grid;grid-template-columns:minmax(280px,320px) minmax(0,1fr) minmax(460px,560px);gap:10px;min-height:0;}
 
-  /* left: regions */
-  .regions{border:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;min-height:0;}
-  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos-dim);}
-  .reg-hd .sz{color:var(--paper-dim)}
+  /* ── LEFT: regions — high-contrast nav ── */
+  .regions{border:1px solid var(--line2);background:var(--bg2);display:flex;flex-direction:column;min-height:0;}
+  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:#9ffaac;}
+  .reg-hd .sz{color:#7a9980}
   .reg-list{flex:1;overflow:auto;padding:6px}
   .reg-list::-webkit-scrollbar{width:6px}
   .reg-list::-webkit-scrollbar-track{background:var(--bg2)}
   .reg-list::-webkit-scrollbar-thumb{background:var(--line2)}
-  .reg{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:10px 12px;border:1px solid transparent;cursor:pointer;transition:border-color .1s,background .1s,color .1s;margin-bottom:4px;position:relative;}
-  .reg:hover{background:var(--bg3);border-color:var(--line2)}
-  .reg .addr{grid-column:1;font-size:10px;color:var(--paper-dim);letter-spacing:.08em;}
-  .reg .nm{grid-column:1;font-family:var(--sans);font-weight:600;font-size:14px;color:var(--paper2);letter-spacing:0;line-height:1.1;margin-top:1px;}
-  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:10px;color:var(--paper-dim);letter-spacing:.06em;}
-  .reg.on{background:var(--phos-deep);border-color:var(--phos-dim);}
-  .reg.on .addr{color:var(--phos)}.reg.on .nm{color:var(--phos)}.reg.on .sz{color:var(--phos)}
+
+  /* Each region row — visible by default, not faded */
+  .reg{
+    display:grid;grid-template-columns:1fr auto;gap:4px 10px;
+    padding:10px 12px;
+    border:1px solid rgba(124,245,138,.08);
+    cursor:pointer;
+    transition:border-color .1s,background .1s,color .1s;
+    margin-bottom:4px;position:relative;
+    background:rgba(124,245,138,.025);
+  }
+  .reg:hover{background:rgba(124,245,138,.06);border-color:var(--phos-dim)}
+  .reg .addr{grid-column:1;font-size:10px;color:#7a9980;letter-spacing:.08em;}
+  .reg .nm{
+    grid-column:1;
+    font-family:var(--sans);font-weight:700;font-size:14px;
+    color:#dde8e0;  /* was paper2 #ded5bf — now bright greenish-white */
+    letter-spacing:0;line-height:1.1;margin-top:1px;
+  }
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:10px;color:#7a9980;letter-spacing:.06em;}
+  .reg.on{background:var(--phos-deep);border-color:var(--phos-dim);border-left:3px solid var(--phos);}
+  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:var(--phos);font-weight:800}.reg.on .sz{color:#9ffaac}
   .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
-  .reg.empty{opacity:.45}.reg.empty .nm{color:var(--paper-dim)}
-  .memmap{border-top:1px solid var(--line);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
+  .reg.empty{opacity:.5}.reg.empty .nm{color:#8a9a90}
+  .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:#7a9980;letter-spacing:.1em;}
   .memmap .bar{display:flex;height:12px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
   .memmap .seg{height:100%;transition:filter .15s;border-right:1px solid rgba(0,0,0,.4);}
   .memmap .seg:last-child{border-right:none}.memmap .seg.on{filter:brightness(1.5)}
-  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--paper-dim);font-size:9px}
+  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:#7a9980;font-size:9px}
 
   /* middle: hex panel */
   .hexpanel{border:1px solid var(--line);background:#05080a;display:flex;flex-direction:column;min-height:0;position:relative;overflow:hidden;}
@@ -110,10 +125,32 @@
   .dv-cursor{display:inline-block;width:7px;height:13px;background:var(--phos);vertical-align:-2px;animation:blink 1s steps(2) infinite;margin-left:2px}
   @keyframes blink{50%{opacity:0}}
 
-  /* cmd bar */
-  .cmdbar{border-top:1px solid var(--line);background:var(--bg2);padding:8px 14px;display:flex;align-items:center;gap:10px;position:relative;z-index:1;font-family:var(--mono);font-size:12px;flex-shrink:0;}
-  .cmdbar .prompt{color:var(--amber);flex-shrink:0}
-  .cmdbar input{flex:1;background:transparent;border:none;outline:none;color:var(--phos);font-family:var(--mono);font-size:12px;caret-color:var(--phos);}
+  /* ── FIX 5: cmd bar — real terminal input ── */
+  .cmdbar{
+    border-top:1px solid var(--phos-dim);
+    background:#050d07;
+    padding:8px 14px;
+    display:flex;align-items:center;gap:10px;
+    position:relative;z-index:1;
+    font-family:var(--mono);font-size:12px;flex-shrink:0;
+  }
+  .cmdbar .prompt{color:var(--amber);flex-shrink:0;text-shadow:0 0 8px rgba(240,182,74,.35)}
+  .cmdbar input{
+    flex:1;
+    background:rgba(124,245,138,.03);
+    border:1px solid var(--phos-deep);
+    outline:none;
+    color:var(--phos);
+    font-family:var(--mono);font-size:12px;
+    caret-color:var(--phos);
+    padding:3px 8px;
+    transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .cmdbar input:focus{
+    border-color:var(--phos);
+    background:rgba(124,245,138,.06);
+    box-shadow:0 0 0 2px rgba(124,245,138,.1);
+  }
   .cmdbar input::placeholder{color:var(--phos-dim)}
   .cmdbar .hint{color:var(--phos-dim);font-size:10px;letter-spacing:.08em;flex-shrink:0}
 
@@ -284,6 +321,24 @@
   .rv-sk-list{display:flex;flex-wrap:wrap;gap:5px;}
   .rv-sk{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
 
+  /* ── FIX: recruiter mode button — visually prominent ── */
+  .tb-mode{
+    font-family:var(--mono);font-size:11px;font-weight:700;
+    color:var(--bg);
+    background:#c8f0ce;
+    border:2px solid var(--phos);
+    padding:5px 14px;letter-spacing:.08em;cursor:pointer;
+    transition:background .12s,border-color .12s,box-shadow .12s;
+    display:inline-flex;align-items:center;gap:7px;
+    box-shadow:0 0 10px rgba(124,245,138,.3);
+  }
+  .tb-mode:hover{background:#a8e8b4;border-color:#9ffaac;box-shadow:0 0 18px rgba(124,245,138,.5)}
+  .tb-mode .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--bg);
+    animation:pulse 1.3s ease-in-out infinite;
+  }
+
   /* firmware mode button */
   .rv-fw-btn{
     display:inline-flex;align-items:center;gap:8px;
@@ -295,17 +350,7 @@
   .rv-fw-btn:hover{background:var(--bg3);border-color:var(--phos)}
   .rv-fw-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--phos);box-shadow:0 0 6px var(--phos);animation:pulse 1.3s ease-in-out infinite;}
 
-  /* mode toggle button in fw topbar */
-  .tb-mode{
-    font-family:var(--mono);font-size:11px;
-    color:#17191a;background:#f9f6f0;
-    border:1px solid rgba(249,246,240,.6);
-    padding:5px 12px;letter-spacing:.08em;cursor:pointer;
-    transition:background .12s,border-color .12s,color .12s;
-    display:inline-flex;align-items:center;gap:7px;
-  }
-  .tb-mode:hover{background:#fff;border-color:#fff}
-  .tb-mode .dot{width:6px;height:6px;border-radius:50%;background:#17191a;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
   @media(max-width:700px){
     .rv-proj-grid{grid-template-columns:1fr}
@@ -321,6 +366,9 @@
   .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
   .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
   @keyframes boot-in{to{opacity:1}}
+
+  /* ── FIX 1: guide banner animation ── */
+  @keyframes bannerIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
   @media(min-width:1800px){.shell{padding:10px 20px}}
   @media(max-width:1400px){.main{grid-template-columns:minmax(260px,300px) minmax(0,1fr) minmax(440px,520px)}}
@@ -975,10 +1023,7 @@ function genHex(region){
 function hp(n,w){return n.toString(16).toUpperCase().padStart(w,'0')}
 function ao(b){return(b>=0x20&&b<0x7f)?String.fromCharCode(b):'·'}
 
-/* ── C struct renderer ──
-   Two colors only: dim green for comments, bright green for code.
-   Amber only for section header comments. Clean, readable, consistent.
-*/
+/* ── C struct renderer ── */
 const STRUCT_CONTENT = {
 
   header(reg){
@@ -1196,12 +1241,6 @@ const STRUCT_CONTENT = {
   },
 };
 
-/*
-  S(text, type) — two color system:
-    'cmt'  → dim green  (comments)
-    'str'  → amber      (string literals only)
-    everything else → bright green
-*/
 function S(text, type){
   const color = type==='cmt'  ? 'var(--phos-dim)'
               : type==='str'  ? 'var(--amber)'
@@ -1212,15 +1251,12 @@ function S(text, type){
 function renderHex(region){
   const body = document.getElementById('hex-body');
   const renderer = STRUCT_CONTENT[region.key] || STRUCT_CONTENT.empty;
-
-  // clean title line instead of the misleading hex column header
   const reg = region;
   body.innerHTML =
     `<div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--phos-dim);padding:8px 0 10px;border-bottom:1px dashed var(--phos-deep);margin-bottom:4px">` +
     `${reg.name} &nbsp;·&nbsp; ${reg.struct} &nbsp;·&nbsp; 0x${hp(reg.addr[0],4)}–0x${hp(reg.addr[1],4)}</div>` +
     `<div id="hex-content">${renderer(region)}</div>`;
 
-  // stream in lines
   body.querySelectorAll('#hex-content > div').forEach((el,i)=>{
     el.style.opacity='0';
     setTimeout(()=>{ el.style.transition='opacity .06s'; el.style.opacity='1'; }, i*10);
@@ -1237,7 +1273,6 @@ function renderDetail(detail,title){
 
   const fieldsHtml=detail.fields.map(f=>`<div class="dv-field"><div class="dv-key">${f.k}</div><div class="dv-val">${f.v}</div></div>`).join('');
 
-  // syntax highlight blog text
   const blogHtml=detail.blog.split('\n').map(line=>{
     if(line.startsWith('//')) return `<span style="color:var(--phos-dim)">${line}</span>`;
     if(/^\[.+\]$/.test(line.trim())) return `<span style="color:var(--amber);font-weight:700">${line}</span>`;
@@ -1461,7 +1496,6 @@ function togglePlain(){
   document.body.classList.toggle('plain');
   const on=document.body.classList.contains('plain');
   document.getElementById('plain-view').setAttribute('aria-hidden',on?'false':'true');
-  // scroll recruiter view back to top each time it opens
   if(on) document.getElementById('plain-view').scrollTop=0;
 }
 document.getElementById('plain-back').addEventListener('click',togglePlain);
@@ -1484,8 +1518,57 @@ document.addEventListener('keydown',(e)=>{if(document.body.classList.contains('p
   setTimeout(()=>{b.classList.add('done');setTimeout(()=>b.remove(),500);},b.querySelectorAll('.bl').length*120+360);
 })();
 
+/* ── FIX 1: guide banner — injected into decoded panel on first load ── */
+(function(){
+  // Only show once per session
+  try{ if(sessionStorage.getItem('fw.hint.dismissed')) return; }catch(e){}
+
+  const banner = document.createElement('div');
+  banner.id = 'guide-banner';
+  Object.assign(banner.style, {
+    margin: '0 -20px 16px',
+    padding: '10px 16px',
+    background: '#dff0e4',
+    borderTop: '1px solid rgba(0,0,0,.1)',
+    borderBottom: '2px solid rgba(0,180,60,.25)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+    fontFamily: 'var(--mono)',
+    fontSize: '11px',
+    color: '#1a3d26',
+    letterSpacing: '.05em',
+    lineHeight: '1.5',
+    animation: 'bannerIn .35s ease-out .9s both',
+  });
+
+  banner.innerHTML = `
+    <span>
+      <b style="color:#0d6630">[ HOW TO NAVIGATE ]</b>&nbsp;
+      Click a <b>REGION</b> on the left · then click any entry here to see its detail in the <b>HEX</b> panel · <b>↑↓</b> keys also work
+    </span>
+    <button id="banner-dismiss" style="
+      font-family:var(--mono);font-size:11px;white-space:nowrap;
+      background:rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.2);
+      padding:3px 10px;cursor:pointer;color:#1a3d26;letter-spacing:.04em;
+      flex-shrink:0;
+    ">✕ got it</button>`;
+
+  setTimeout(()=>{
+    const body = document.getElementById('dc-body');
+    if(body) body.insertBefore(banner, body.firstChild);
+    const btn = document.getElementById('banner-dismiss');
+    if(btn) btn.addEventListener('click', ()=>{
+      banner.style.transition = 'opacity .2s';
+      banner.style.opacity = '0';
+      setTimeout(()=>banner.remove(), 200);
+      try{ sessionStorage.setItem('fw.hint.dismissed','1'); }catch(e){}
+    });
+  }, 950);
+})();
+
 /* ── init ── */
-/* always open on .about_me — localStorage intentionally not restored on init */
 renderRegions();
 const ir=REGIONS.find(r=>r.key===current);
 document.getElementById('hex-region').textContent=ir.name;
@@ -1496,7 +1579,7 @@ document.getElementById('sb-cursor').textContent=`0x${hp(ir.addr[0],4)}`;
 document.getElementById('sb-sym').textContent=ir.name;
 renderHex(ir);renderDecode(current);
 
-// pulse the decode panel to draw the eye on load
+// pulse decode panel to draw eye on load
 const decodeEl=document.querySelector('.decode');
 setTimeout(()=>{
   decodeEl.classList.add('pulse');
