@@ -1044,188 +1044,207 @@ function hp(n,w){return n.toString(16).toUpperCase().padStart(w,'0')}
 function ao(b){return(b>=0x20&&b<0x7f)?String.fromCharCode(b):'·'}
 
 /* ── C struct renderer ── */
+// ── Option A: VSCode Dark+ palette ──
+const SC = {
+  cmt:   '#3b7a46',
+  str:   '#f0b64a',
+  kw:    '#f0b64a',
+  field: '#5ad1ff',
+  op:    '#f0b64a',
+  brace: '#3b7a46',
+  enum:  '#ff5aa8',
+  num:   '#ff5aa8',
+  plain: '#ece4d0',
+};
+function S(text, type){
+  const color = SC[type] || '#ece4d0';
+  return `<div style="color:${color};font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${text||' '}</div>`;
+}
+function T(...tokens){
+  const inner = tokens.map(([t,v])=>`<span style="color:${SC[t]||'#ece4d0'}">${v}</span>`).join('');
+  return `<div style="font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${inner}</div>`;
+}
+
 const STRUCT_CONTENT = {
 
   header(reg){
     return S('/* about_me.c @ 0x0000 */','cmt') +
       S('') +
-      S('const about_me_t about_me = {') +
+      T(['kw','const '],['kw','about_me_t '],['plain','about_me '],['op','= '],['brace','{']) +
       S('') +
-      S('  .name      = "Monil Arora",','str') +
-      S('  .degree    = "BASc Electrical Engineering",','str') +
-      S('  .school    = "University of British Columbia",','str') +
-      S('  .grad      = 2027,') +
-      S('  .location  = "Hannover, DE  →  Vancouver, BC",','str') +
+      T(['field','  .name     '],['op','= '],['str','"Monil Arora"'],['brace',',']) +
+      T(['field','  .degree   '],['op','= '],['str','"BASc Electrical Engineering"'],['brace',',']) +
+      T(['field','  .school   '],['op','= '],['str','"University of British Columbia"'],['brace',',']) +
+      T(['field','  .grad     '],['op','= '],['num','2027'],['brace',',']) +
+      T(['field','  .location '],['op','= '],['str','"Hannover, DE  →  Vancouver, BC"'],['brace',',']) +
       S('') +
-      S('  .role      = EMBEDDED_FIRMWARE_ENGINEER,') +
-      S('  .status    = OPEN_TO_OFFERS,') +
+      T(['field','  .role     '],['op','= '],['enum','EMBEDDED_FIRMWARE_ENGINEER'],['brace',',']) +
+      T(['field','  .status   '],['op','= '],['enum','OPEN_TO_OFFERS'],['brace',',']) +
       S('') +
-      S('  .email     = "monilarora2003@gmail.com",','str') +
-      S('  .github    = "github.com/plundis",','str') +
-      S('  .linkedin  = "in/monil-arora-a26851290",','str') +
+      T(['field','  .email    '],['op','= '],['str','"monilarora2003@gmail.com"'],['brace',',']) +
+      T(['field','  .github   '],['op','= '],['str','"github.com/plundis"'],['brace',',']) +
+      T(['field','  .linkedin '],['op','= '],['str','"in/monil-arora-a26851290"'],['brace',',']) +
       S('') +
-      S('  .skills    = {') +
-      S('    C_CPP, STM32, FREERTOS, VERILOG,') +
-      S('    YAMCS, CCSDS, LINUX, PYTHON,') +
-      S('    UART_SPI_I2C, GSTREAMER,') +
-      S('  },') +
+      T(['field','  .skills   '],['op','= '],['brace','{']) +
+      S('    C_CPP, STM32, FREERTOS, VERILOG,','enum') +
+      S('    YAMCS, CCSDS, LINUX, PYTHON,','enum') +
+      S('    UART_SPI_I2C, GSTREAMER,','enum') +
+      S('  },','brace') +
       S('') +
-      S('};');
+      S('};','brace');
   },
 
   experience(reg){
     return S('/* experience.c @ 0x0200 */','cmt') +
       S('') +
-      S('const role_t roles[] = {') +
+      T(['kw','const '],['kw','role_t '],['plain','roles[] '],['op','= '],['brace','{']) +
       S('') +
       S('  /* Laser Zentrum Hannover — Mar–Jul 2026 */','cmt') +
-      S('  {') +
-      S('    .title    = "Research Assistant",','str') +
-      S('    .location = "Hannover, DE",','str') +
-      S('    .stack    = { YAMCS, CCSDS, STM32,') +
-      S('                  FREERTOS, JAVA, GSTREAMER },') +
-      S('  },') +
+      S('  {','brace') +
+      T(['field','    .title    '],['op','= '],['str','"Research Assistant"'],['brace',',']) +
+      T(['field','    .location '],['op','= '],['str','"Hannover, DE"'],['brace',',']) +
+      T(['field','    .stack    '],['op','= '],['brace','{ '],['enum','YAMCS, CCSDS, STM32,']) +
+      S('                  FREERTOS, JAVA, GSTREAMER ','enum') +
+      S('  },','brace') +
       S('') +
       S('  /* Sharang Shakti — Summer 2023 */','cmt') +
-      S('  {') +
-      S('    .title    = "RF / Signal Processing Intern",','str') +
-      S('    .location = "Delhi, IN",','str') +
-      S('    .stack    = { AD9910_DDS, AD8336_VGA,') +
-      S('                  RF_DESIGN, MATLAB },') +
-      S('  },') +
+      S('  {','brace') +
+      T(['field','    .title    '],['op','= '],['str','"RF / Signal Processing Intern"'],['brace',',']) +
+      T(['field','    .location '],['op','= '],['str','"Delhi, IN"'],['brace',',']) +
+      T(['field','    .stack    '],['op','= '],['brace','{ '],['enum','AD9910_DDS, AD8336_VGA,']) +
+      S('                  RF_DESIGN, MATLAB ','enum') +
+      S('  },','brace') +
       S('') +
       S('  /* Drake International — 2022 */','cmt') +
-      S('  {') +
-      S('    .title    = "Operations",','str') +
-      S('    .stack    = { COMMS, SCHEDULING },') +
-      S('  },') +
+      S('  {','brace') +
+      T(['field','    .title    '],['op','= '],['str','"Operations"'],['brace',',']) +
+      T(['field','    .stack    '],['op','= '],['brace','{ '],['enum','COMMS, SCHEDULING '],['brace','},']) +
+      S('  },','brace') +
       S('') +
-      S('};') +
-      S('');
+      S('};','brace');
   },
 
   projects(reg){
     return S('/* projects.c @ 0x1000 */','cmt') +
       S('') +
-      S('const project_t projects[] = {') +
+      T(['kw','const '],['kw','project_t '],['plain','projects[] '],['op','= '],['brace','{']) +
       S('') +
       S('  /* 0x1000 — CubeSat Ground Station */','cmt') +
-      S('  { .stack  = { YAMCS, CCSDS, STM32, FREERTOS },') +
-      S('    .status = ACTIVE,') +
-      S('    .repo   = "github.com/plundis/cubesat-gs" },','str') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','YAMCS, CCSDS, STM32, FREERTOS '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','ACTIVE'],['brace',',']) +
+      T(['field','    .repo   '],['op','= '],['str','"github.com/plundis/cubesat-gs"'],['brace',' },']) +
       S('') +
       S('  /* 0x1400 — Self-Balancing Robot */','cmt') +
-      S('  { .stack  = { STM32, FREERTOS, PID, MPU6050 },') +
-      S('    .status = COMPLETE },') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','STM32, FREERTOS, PID, MPU6050 '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
       S('') +
       S('  /* 0x1800 — DNN Accelerator */','cmt') +
-      S('  { .stack  = { VERILOG, NIOS2, FPGA, SDRAM },') +
-      S('    .status = COMPLETE },') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','VERILOG, NIOS2, FPGA, SDRAM '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
       S('') +
       S('  /* 0x1C00 — 4-Camera RTSP Display */','cmt') +
-      S('  { .stack  = { GSTREAMER, RPI4, WAYLAND },') +
-      S('    .status = DEPLOYED },') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','GSTREAMER, RPI4, WAYLAND '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','DEPLOYED'],['brace',' },']) +
       S('') +
       S('  /* 0x2000 — Metal-Detecting Rover */','cmt') +
-      S('  { .stack  = { ESP32, BLE, KICAD, ESP_IDF },') +
-      S('    .status = COMPLETE },') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','ESP32, BLE, KICAD, ESP_IDF '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
       S('') +
       S('  /* 0x2400 — Reflow Oven Controller */','cmt') +
-      S('  { .stack  = { EFM8, PID, MAX31855, SSR },') +
-      S('    .status = COMPLETE },') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','EFM8, PID, MAX31855, SSR '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
       S('') +
-      S('};') +
-      S('');
+      S('};','brace');
   },
 
   skills(reg){
     return S('/* skills.h @ 0x3000 */','cmt') +
       S('') +
-      S('#pragma once') +
+      S('#pragma once','kw') +
       S('') +
       S('/* --- Firmware / RTOS --- */','cmt') +
-      S('static const char *fw[] = {') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','fw[] '],['op','= '],['brace','{']) +
       S('  "C / C++ (embedded)",','str') +
       S('  "STM32 HAL / LL",','str') +
       S('  "FreeRTOS",','str') +
       S('  "Bare-metal ARM",','str') +
       S('  "ESP-IDF",','str') +
-      S('};') +
+      S('};','brace') +
       S('') +
       S('/* --- HDL / FPGA --- */','cmt') +
-      S('static const char *hdl[] = {') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','hdl[] '],['op','= '],['brace','{']) +
       S('  "Verilog",','str') +
       S('  "VHDL",','str') +
       S('  "Quartus / ModelSim",','str') +
       S('  "Nios II softcore",','str') +
-      S('};') +
+      S('};','brace') +
       S('') +
       S('/* --- Protocols --- */','cmt') +
-      S('static const char *proto[] = {') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','proto[] '],['op','= '],['brace','{']) +
       S('  "UART / SPI / I2C / CAN",','str') +
       S('  "JTAG / SWD",','str') +
       S('  "CCSDS",','str') +
       S('  "RTSP / TCP-IP",','str') +
-      S('};') +
+      S('};','brace') +
       S('') +
       S('/* --- Tools --- */','cmt') +
-      S('static const char *tools[] = {') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','tools[] '],['op','= '],['brace','{']) +
       S('  "Linux / Git",','str') +
       S('  "Python",','str') +
       S('  "YAMCS / GStreamer",','str') +
       S('  "Java / MATLAB",','str') +
-      S('};');
+      S('};','brace');
   },
 
   education(reg){
     return S('/* education.c @ 0x3800 */','cmt') +
       S('') +
-      S('const degree_t degree = {') +
-      S('  .name   = "BASc Electrical Engineering",','str') +
-      S('  .school = "University of British Columbia",','str') +
-      S('  .grad   = 2027,') +
-      S('};') +
+      T(['kw','const '],['kw','degree_t '],['plain','degree '],['op','= '],['brace','{']) +
+      T(['field','  .name   '],['op','= '],['str','"BASc Electrical Engineering"'],['brace',',']) +
+      T(['field','  .school '],['op','= '],['str','"University of British Columbia"'],['brace',',']) +
+      T(['field','  .grad   '],['op','= '],['num','2027'],['brace',',']) +
+      S('};','brace') +
       S('') +
-      S('const course_t courses[] = {') +
+      T(['kw','const '],['kw','course_t '],['plain','courses[] '],['op','= '],['brace','{']) +
       S('') +
       S('  /* CPEN 311 — Digital Systems Design */','cmt') +
-      S('  { .skills = { VERILOG, VHDL, FPGA, DE1_SOC } },') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','VERILOG, VHDL, FPGA, DE1_SOC '],['brace','} },']) +
       S('') +
       S('  /* CPEN 211 — Computer Architecture */','cmt') +
-      S('  { .skills = { RISC_PIPELINE, CACHE, HAZARD } },') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','RISC_PIPELINE, CACHE, HAZARD '],['brace','} },']) +
       S('') +
       S('  /* ELEC 391 — Embedded Capstone */','cmt') +
-      S('  { .skills  = { STM32, FREERTOS, PID },') +
-      S('    .output  = &projects[SELF_BALANCING_ROBOT] },') +
+      T(['brace','  { '],['field','.skills  '],['op','= '],['brace','{ '],['enum','STM32, FREERTOS, PID '],['brace','},']) +
+      T(['field','    .output  '],['op','= '],['plain','&projects['],['enum','SELF_BALANCING_ROBOT'],['plain',']'],['brace',' },']) +
       S('') +
       S('  /* ELEC 301 — DSP */','cmt') +
-      S('  { .skills = { FIR_IIR, FFT, Z_TRANSFORM } },') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','FIR_IIR, FFT, Z_TRANSFORM '],['brace','} },']) +
       S('') +
       S('  /* ELEC 311 — Control Systems */','cmt') +
-      S('  { .skills = { PID, ROOT_LOCUS, BODE } },') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','PID, ROOT_LOCUS, BODE '],['brace','} },']) +
       S('') +
-      S('};');
+      S('};','brace');
   },
 
   contact(reg){
     return S('/* contact.c @ 0x4000 */','cmt') +
       S('') +
-      S('const contact_t contact = {') +
+      T(['kw','const '],['kw','contact_t '],['plain','contact '],['op','= '],['brace','{']) +
       S('') +
-      S('  .email    = "monilarora2003@gmail.com",','str') +
-      S('  .phone    = "+1 236 777 5739",','str') +
-      S('  .github   = "github.com/plundis",','str') +
-      S('  .linkedin = "in/monil-arora-a26851290",','str') +
+      T(['field','  .email    '],['op','= '],['str','"monilarora2003@gmail.com"'],['brace',',']) +
+      T(['field','  .phone    '],['op','= '],['str','"+1 236 777 5739"'],['brace',',']) +
+      T(['field','  .github   '],['op','= '],['str','"github.com/plundis"'],['brace',',']) +
+      T(['field','  .linkedin '],['op','= '],['str','"in/monil-arora-a26851290"'],['brace',',']) +
       S('') +
-      S('  .loc_now  = "Hannover, DE",','str') +
-      S('  .loc_home = "Vancouver, BC, CA",','str') +
+      T(['field','  .loc_now  '],['op','= '],['str','"Hannover, DE"'],['brace',',']) +
+      T(['field','  .loc_home '],['op','= '],['str','"Vancouver, BC, CA"'],['brace',',']) +
       S('') +
-      S('  .status   = OPEN_TO_OFFERS,') +
-      S('  .type     = EMBEDDED | FIRMWARE | HW,') +
-      S('  .start    = SEP_2026,') +
-      S('  .relocate = true,') +
+      T(['field','  .status   '],['op','= '],['enum','OPEN_TO_OFFERS'],['brace',',']) +
+      T(['field','  .type     '],['op','= '],['enum','EMBEDDED '],['brace','| '],['enum','FIRMWARE '],['brace','| '],['enum','HW'],['brace',',']) +
+      T(['field','  .start    '],['op','= '],['enum','SEP_2026'],['brace',',']) +
+      T(['field','  .relocate '],['op','= '],['enum','true'],['brace',',']) +
       S('') +
-      S('};') +
+      S('};','brace') +
       S('') +
       S('/* preferred contact: email or linkedin */','cmt');
   },
@@ -1233,12 +1252,12 @@ const STRUCT_CONTENT = {
   resume(reg){
     return S('/* resume.c @ 0x4200 */','cmt') +
       S('') +
-      S('const pdf_ref_t resume = {') +
-      S('  .file   = "monil_arora_resume.pdf",','str') +
-      S('  .rev    = "2026.04",','str') +
-      S('  .pages  = 1,') +
-      S('  .format = SINGLE_PAGE | ATS_COMPATIBLE,') +
-      S('};') +
+      T(['kw','const '],['kw','pdf_ref_t '],['plain','resume '],['op','= '],['brace','{']) +
+      T(['field','  .file   '],['op','= '],['str','"monil_arora_resume.pdf"'],['brace',',']) +
+      T(['field','  .rev    '],['op','= '],['str','"2026.04"'],['brace',',']) +
+      T(['field','  .pages  '],['op','= '],['num','1'],['brace',',']) +
+      T(['field','  .format '],['op','= '],['enum','SINGLE_PAGE '],['brace','| '],['enum','ATS_COMPATIBLE'],['brace',',']) +
+      S('};','brace') +
       S('') +
       S('/* open via top-right button  ↑ */','cmt');
   },
@@ -1247,41 +1266,18 @@ const STRUCT_CONTENT = {
     return S('/* .empty @ 0x4400 */','cmt') +
       S('/* 47 KB — unprogrammed flash */','cmt') +
       S('') +
-      S('#ifdef FUTURE') +
+      S('#ifdef FUTURE','kw') +
       S('') +
-      S('typedef struct {') +
-      S('  project_t  pcb_design;    /* in progress */','cmt') +
-      S('  project_t  rf_frontend;   /* planned     */','cmt') +
-      S('  char       next_role[64]; /* TBD         */','cmt') +
-      S('} future_t;') +
+      T(['kw','typedef '],['kw','struct '],['brace','{']) +
+      T(['kw','  project_t  '],['plain','pcb_design'],['brace',';    '],['cmt','/* in progress */']) +
+      T(['kw','  project_t  '],['plain','rf_frontend'],['brace',';   '],['cmt','/* planned     */']) +
+      T(['kw','  char       '],['plain','next_role['],['num','64'],['plain',']'],['brace','; '],['cmt','/* TBD         */']) +
+      T(['brace','} '],['plain','future_t'],['brace',';']) +
       S('') +
-      S('#endif');
+      S('#endif','kw');
   },
-};
 
-// Option A — Classic C IDE (VSCode Dark+)
-// kw/types/= → amber | field → cyan | enum → magenta | braces/punct → dim green
-const SC = {
-  cmt:   '#3b7a46',  // dim green  — comments
-  str:   '#f0b64a',  // amber      — string literals
-  kw:    '#f0b64a',  // amber      — const, struct, char, #pragma, typedef
-  field: '#5ad1ff',  // cyan       — .name .role .email
-  op:    '#f0b64a',  // amber      — = (grouped with keywords per spec)
-  brace: '#3b7a46',  // dim green  — { } , ; |
-  enum:  '#ff5aa8',  // magenta    — ENUM_VALUES
-  num:   '#ff5aa8',  // magenta    — numbers
-  plain: '#ece4d0',  // off-white  — bare identifiers
 };
-// S(text, type) — single-color line
-function S(text, type){
-  const color = SC[type] || '#ece4d0';
-  return `<div style="color:${color};font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${text||' '}</div>`;
-}
-// T([type,text],...) — mixed-token line
-function T(...tokens){
-  const inner = tokens.map(([t,v])=>`<span style="color:${SC[t]||'#ece4d0'}">${v}</span>`).join('');
-  return `<div style="font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${inner}</div>`;
-}
 
 function renderHex(region){
   const body = document.getElementById('hex-body');
