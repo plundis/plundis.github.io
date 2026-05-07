@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Monil Arora — Embedded Engineer</title>
+<title>monil_arora.bin — Firmware Dump</title>
 <meta name="description" content="Monil Arora — Electrical Engineering @ UBC · embedded firmware, STM32/FreeRTOS, Verilog, ground-station software."/>
 <meta name="theme-color" content="#07090a"/>
 <meta property="og:type" content="website"/>
-<meta property="og:title" content="Monil Arora — Embedded Engineer"/>
+<meta property="og:title" content="monil_arora.bin — Firmware Dump"/>
 <meta property="og:description" content="Portfolio of Monil Arora — EE @ UBC, embedded firmware, STM32/FreeRTOS, Verilog."/>
-<meta property="og:url" content="https://monilarora.com/"/>
+<meta property="og:url" content="https://plundis.github.io/"/>
 <meta name="twitter:card" content="summary"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-size='22' fill='%23f0b64a'%3E%E2%97%86%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -19,8 +19,7 @@
   :root{
     --bg:#07090a;--bg2:#0c1012;--bg3:#11161a;
     --line:#1a2328;--line2:#2a3740;
-    --paper:#ece4d0;--paper-bg:#f8f2e0;--paper-bg2:#e8dfc6;
-    --paper-ink:#0e0f10;--paper-ink2:#2b2d2e;--paper-dim:#4a4937;--paper-line:rgba(0,0,0,.18);
+    --paper:#ece4d0;--paper2:#ded5bf;--paper-ink:#17191a;--paper-dim:#5b5a53;
     --phos:#7cf58a;--phos-dim:#3b7a46;--phos-deep:#1d3a24;
     --amber:#f0b64a;--amber-dim:#6b5020;
     --magenta:#ff5aa8;--cyan:#5ad1ff;
@@ -30,673 +29,1628 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   html{background:var(--bg)}
-  body{background:var(--bg);color:var(--paper-ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;}
-  /* CRT scanlines — only on the dark chrome strips, NOT the paper panel */
-  .topbar::before,.regions::before,.statusbar::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 3px);mix-blend-mode:multiply;}
-  .topbar > *,.regions > *,.statusbar > *{position:relative;z-index:6;}
-  .statusbar{position:relative;}
+  body{background:var(--bg);color:var(--phos);font-family:var(--mono);font-size:13px;line-height:1.5;overflow:hidden;-webkit-font-smoothing:antialiased;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.22) 2px,rgba(0,0,0,.22) 3px);mix-blend-mode:multiply;}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);}
 
-  /* ── shell — fills viewport edge-to-edge ── */
-  .shell{
-    height:100vh;width:100%;
-    display:grid;grid-template-rows:auto 1fr auto;
-    margin:0 auto;
-    padding:8px 10px;gap:8px;
-    background:var(--bg);
-    overflow:hidden;
-  }
-  body.has-shell{background:var(--bg)}
+  .shell{height:100vh;display:grid;grid-template-rows:auto 1fr auto;padding:10px 14px;gap:10px;max-width:1800px;margin:0 auto;width:100%;}
 
   /* top bar */
-  .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;font-family:var(--mono);position:relative;}
+  .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;}
   .tb-left{display:flex;align-items:center;gap:14px;min-width:0}
   .tb-logo{width:28px;height:28px;flex-shrink:0;border:1px solid var(--phos-dim);display:grid;place-items:center;color:var(--phos);font-weight:700;font-size:13px;box-shadow:inset 0 0 8px rgba(124,245,138,.15);}
   .tb-title{font-family:var(--sans);font-weight:700;font-size:15px;color:var(--paper);letter-spacing:.01em}
   .tb-title small{color:var(--phos-dim);font-weight:500;font-family:var(--mono);font-size:11px;margin-left:8px;letter-spacing:.08em}
-  .tb-meta{color:var(--phos-dim);font-size:11px;letter-spacing:.06em;font-family:var(--mono);}
-  .tb-right{display:flex;align-items:center;gap:8px;font-size:11px;flex-wrap:wrap;}
-  .tb-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;padding:5px 10px;border:1px solid var(--amber-dim);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;}
+  .tb-meta{color:var(--phos-dim);font-size:11px;letter-spacing:.06em}
+  .tb-right{display:flex;align-items:center;gap:10px;font-size:11px}
+  .tb-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;padding:5px 10px;border:1px solid var(--amber-dim);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;}
   .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
-  .tb-link.pri{background:var(--amber);color:#07090a;border-color:var(--amber);font-weight:700;}
-  .tb-link.pri:hover{background:#ffd077;color:#07090a;}
 
-  /* main: 3-column — regions nav + content + hex inspector */
-  .main{display:grid;grid-template-columns:minmax(220px,250px) minmax(0,1fr) minmax(280px,340px);gap:10px;min-height:0;}
-  @media(max-width:1300px){
-    .main{grid-template-columns:minmax(200px,230px) minmax(0,1fr) minmax(260px,300px);}
-  }
-  @media(max-width:1100px){
-    .main{grid-template-columns:minmax(200px,230px) minmax(0,1fr);}
-    .hexpanel{display:none;}
-  }
+  /* main — original 3-column */
+  .main{display:grid;grid-template-columns:minmax(280px,320px) minmax(0,1fr) minmax(460px,560px);gap:10px;min-height:0;}
 
-  /* LEFT: regions nav (anchors, not gates) */
-  .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;}
+  /* ── LEFT: regions — match phosphor palette ── */
+  .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;}
   .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos);}
   .reg-hd .sz{color:var(--phos-dim)}
   .reg-list{flex:1;overflow:auto;padding:6px}
   .reg-list::-webkit-scrollbar{width:6px}
   .reg-list::-webkit-scrollbar-track{background:#080e0a}
   .reg-list::-webkit-scrollbar-thumb{background:var(--phos-deep)}
-  .reg{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 12px;border:1px solid rgba(124,245,138,.1);cursor:pointer;transition:border-color .1s,background .1s,box-shadow .15s;margin-bottom:4px;position:relative;background:rgba(124,245,138,.03);text-decoration:none;}
+
+  /* Each region row — full phosphor green names */
+  .reg{
+    display:grid;grid-template-columns:1fr auto;gap:4px 10px;
+    padding:10px 12px;
+    border:1px solid rgba(124,245,138,.1);
+    cursor:pointer;
+    transition:border-color .1s,background .1s;
+    margin-bottom:4px;position:relative;
+    background:rgba(124,245,138,.03);
+  }
   .reg:hover{background:rgba(124,245,138,.08);border-color:var(--phos-dim)}
-  .reg .addr{grid-column:1;font-size:9.5px;color:var(--phos-dim);letter-spacing:.08em;}
-  .reg .nm{grid-column:1;font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--phos);letter-spacing:.04em;line-height:1.2;margin-top:2px;}
-  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:9.5px;color:var(--phos-dim);letter-spacing:.06em;}
+  .reg .addr{grid-column:1;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;}
+  .reg .nm{
+    grid-column:1;
+    font-family:var(--mono);font-weight:500;font-size:13px;
+    color:var(--phos);   /* full phosphor green — matches hex panel */
+    letter-spacing:.04em;line-height:1.2;margin-top:2px;
+  }
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:10px;color:var(--phos-dim);letter-spacing:.06em;}
   .reg.on{background:var(--phos-deep);border-color:var(--phos);border-left:3px solid var(--phos);}
-  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:#fff;font-weight:700;text-shadow:0 0 8px rgba(124,245,138,.5)}.reg.on .sz{color:#9ffaac}
+  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:#ffffff;font-weight:700;text-shadow:0 0 8px rgba(124,245,138,.5)}.reg.on .sz{color:#9ffaac}
   .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
+  .reg.empty{opacity:.35}.reg.empty .nm{color:var(--phos-dim)}
   .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
-  .memmap .bar{display:flex;height:10px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
-  .memmap .seg{height:100%;border-right:1px solid rgba(0,0,0,.4);}
-  .memmap .seg:last-child{border-right:none}
+  .memmap .bar{display:flex;height:12px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
+  .memmap .seg{height:100%;transition:filter .15s;border-right:1px solid rgba(0,0,0,.4);}
+  .memmap .seg:last-child{border-right:none}.memmap .seg.on{filter:brightness(1.5)}
   .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--phos-dim);font-size:9px}
 
-  /* RIGHT: content panel — paper-style, scrollable, all sections visible */
-  .content{background:var(--paper-bg);border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;}
-  .content-hd{padding:8px 14px;border-bottom:1px solid var(--paper-line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);background:var(--paper-bg2);flex-shrink:0;text-transform:uppercase;}
-  .content-hd b{color:var(--paper-ink);font-weight:700;}
-  .content-hd .scroll-pos{font-variant-numeric:tabular-nums;}
-  .content-body{flex:1;overflow:auto;padding:24px 32px 28px;scroll-behavior:smooth;}
-  .content-body::-webkit-scrollbar{width:8px}
-  .content-body::-webkit-scrollbar-track{background:var(--paper-bg2)}
-  .content-body::-webkit-scrollbar-thumb{background:#b4ac97;border-radius:0;}
+  /* middle: hex panel */
+  .hexpanel{border:1px solid var(--line);background:#05080a;display:flex;flex-direction:column;min-height:0;position:relative;overflow:hidden;}
+  .hexpanel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.3) 2px,rgba(0,0,0,.3) 3px);}
+  .hex-hd{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos-dim);background:var(--bg2);position:relative;z-index:1;flex-shrink:0;}
+  .hex-hd b{color:var(--phos)}
+  .hex-hd .hint{font-size:9px;color:var(--phos-dim);letter-spacing:.06em;font-style:italic}
 
-  /* hero */
-  .hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding-bottom:8px;margin-bottom:18px;}
-  .avatar{width:96px;height:96px;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);flex-shrink:0;}
-  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-  .hero-body{min-width:0}
-  .hero h1{font-family:var(--sans);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--paper-ink);margin-bottom:6px;}
-  .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:10px;font-weight:500;}
-  .hero .blurb{font-size:14.5px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;max-width:62ch;}
-  .hero .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
-  .hero .links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
-  .hero .links a:hover{background:rgba(0,0,0,.06)}
-  .hero .links a.pri{background:var(--paper-ink);color:var(--paper-bg)}
-  .hero .links a.pri:hover{background:#000}
-
-  /* status pill — "open to roles" */
-  .status-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#1a5a2c;background:#cdebd2;border:1px solid #6cb578;padding:3px 8px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
-  .status-pill .dot{width:6px;height:6px;border-radius:50%;background:#2a8a3e;animation:pulse 1.4s ease-in-out infinite;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-  /* section titles */
-  .section{margin-bottom:28px;scroll-margin-top:8px;}
-  .section:last-child{margin-bottom:0;}
-  .section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-ink);padding-bottom:6px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--paper-ink);}
-  .section-title .addr{color:var(--paper-dim);font-weight:500;letter-spacing:.1em;font-size:10px;}
-
-  /* experience cards */
-  .exp{padding:14px 0;}
-  .exp + .exp{border-top:none;}
-  .exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;flex-wrap:wrap;}
-  .exp h3{font-size:17px;font-weight:700;color:var(--paper-ink);letter-spacing:-.01em;}
-  .exp .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
-  .exp .role{font-family:var(--mono);font-size:12px;color:var(--paper-dim);margin-bottom:8px;font-weight:500;}
-  .exp p{font-size:14px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;margin-bottom:10px;}
-  .chips{display:flex;flex-wrap:wrap;gap:5px;}
-  .chip{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;letter-spacing:.02em;}
-
-  /* projects: 2-col grid */
-  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .proj{border:1px solid rgba(0,0,0,.18);padding:14px 16px;background:#fff;display:flex;flex-direction:column;}
-  .proj h3{font-size:15px;font-weight:700;color:var(--paper-ink);margin-bottom:3px;letter-spacing:-.005em;}
-  .proj .tag{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
-  .proj p{font-size:13px;line-height:1.55;color:var(--paper-ink2);text-wrap:pretty;}
-
-  /* skills: tag-cloud (NO ratings) */
-  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;}
-  .skbucket h4{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--paper-ink);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;}
-  .sk-list{display:flex;flex-wrap:wrap;gap:5px;}
-  .sk{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
-
-  /* education: compact list */
-  .edu-list{display:flex;flex-direction:column;gap:0;}
-  .edu{padding:12px 0;}
-  .edu-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:2px;flex-wrap:wrap;}
-  .edu h3{font-size:15px;font-weight:700;color:var(--paper-ink);}
-  .edu .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
-  .edu .role{font-family:var(--mono);font-size:11.5px;color:var(--paper-dim);margin-bottom:4px;font-weight:500;}
-  .edu p{font-size:13.5px;line-height:1.55;color:var(--paper-ink2);}
-
-  /* contact mini-grid */
-  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .ccard{border:1px solid rgba(0,0,0,.28);padding:11px 14px;background:#fff;}
-  .ccard .k{font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.1em;margin-bottom:3px;font-weight:600;text-transform:uppercase}
-  .ccard .v{font-family:var(--mono);font-size:13px;line-height:1.4;word-break:break-word;color:var(--paper-ink);font-weight:500;}
-  .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
-  .ccard a:hover{border-color:var(--paper-ink);}
-
-  /* RIGHT: hex inspector panel — ambient, non-distracting */
-  .hexpanel{border:1px solid var(--line);background:#05080a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;overflow:hidden;}
-  .hex-hd{padding:8px 12px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.12em;color:var(--phos-dim);background:var(--bg2);flex-shrink:0;text-transform:uppercase;}
-  .hex-hd b{color:var(--phos);font-weight:500;}
-  .hex-hd .pulse-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--phos);box-shadow:0 0 6px var(--phos);margin-right:6px;animation:pulse 1.5s ease-in-out infinite;}
-  .hex-body{flex:1;overflow:auto;padding:12px;font-size:11px;line-height:1.65;color:var(--phos);position:relative;}
+  /* idle hex rows */
+  .hex-body{flex:1;overflow:auto;padding:12px 14px 14px;position:relative;z-index:1;font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--phos);letter-spacing:.02em;}
   .hex-body::-webkit-scrollbar{width:6px}
   .hex-body::-webkit-scrollbar-track{background:#05080a}
   .hex-body::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .hex-row{display:grid;grid-template-columns:70px 1fr 180px;gap:16px;white-space:pre}
+  .hex-row .off{color:var(--phos-dim)}.hex-row .bytes{color:var(--phos)}.hex-row .ascii{color:var(--paper2);opacity:.85}
+  .hex-row.hd{color:var(--amber);border-bottom:1px dashed var(--phos-deep);padding-bottom:6px;margin-bottom:6px;font-size:11px;letter-spacing:.1em}
+  .hex-row.hd .off,.hex-row.hd .bytes,.hex-row.hd .ascii{color:var(--amber)}
+  .byte-hi{color:var(--amber);background:rgba(240,182,74,.1)}.byte-mag{color:var(--magenta)}
+  .hex-body.hidden{display:none}
 
-  /* idle byte-grid view */
-  .hex-grid{display:grid;grid-template-columns:42px 1fr;gap:8px;font-size:10.5px;line-height:1.6;color:var(--phos);opacity:.7;}
-  .hex-grid .off{color:var(--phos-dim)}
-  .hex-grid .row{display:contents;}
+  /* DETAIL VIEW */
+  .detail-view{flex:1;overflow:auto;padding:16px 18px;position:relative;z-index:1;font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--phos);letter-spacing:.02em;display:none;}
+  .detail-view::-webkit-scrollbar{width:6px}
+  .detail-view::-webkit-scrollbar-track{background:#05080a}
+  .detail-view::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .detail-view.on{display:block}
 
-  /* inspector view (when card clicked) */
-  .hex-insp{display:none;animation:fadeIn .25s ease-out;}
-  .hex-insp.on{display:block;}
-  .hex-grid.off{display:none;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  .dv-back{display:inline-flex;align-items:center;gap:6px;color:var(--amber);font-size:10px;letter-spacing:.12em;cursor:pointer;margin-bottom:14px;border:1px solid var(--amber-dim);padding:3px 9px;transition:background .1s,border-color .1s;text-transform:uppercase;}
+  .dv-back:hover{background:rgba(240,182,74,.08);border-color:var(--amber)}
+  .dv-struct-line{color:var(--phos-dim);font-size:10px;letter-spacing:.1em;margin-bottom:12px;border-bottom:1px dashed var(--phos-deep);padding-bottom:8px;}
+  .dv-struct-line b{color:var(--amber)}
+  .dv-divider{border:none;border-top:1px dashed var(--phos-deep);margin:12px 0;}
+  .dv-field{margin-bottom:10px}
+  .dv-field .dv-key{color:var(--amber);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+  .dv-field .dv-val{color:var(--phos);font-size:12px;line-height:1.6;word-break:break-word}
+  .dv-blog{color:var(--phos);font-size:11.5px;line-height:1.85;white-space:pre-wrap;word-break:break-word;border-left:2px solid var(--phos-deep);padding-left:14px;margin-top:4px;font-family:var(--mono);}
+  .dv-cursor{display:inline-block;width:7px;height:13px;background:var(--phos);vertical-align:-2px;animation:blink 1s steps(2) infinite;margin-left:2px}
+  @keyframes blink{50%{opacity:0}}
 
-  .hi-addr{color:var(--amber);font-size:10px;letter-spacing:.1em;margin-bottom:6px;text-transform:uppercase;font-weight:700;}
-  .hi-title{color:#fff;font-size:13px;font-weight:700;margin-bottom:2px;font-family:var(--sans);letter-spacing:-.005em;}
-  .hi-sub{color:var(--phos-dim);font-size:10px;letter-spacing:.06em;margin-bottom:14px;border-bottom:1px dashed var(--phos-deep);padding-bottom:8px;}
-  .hi-field{margin-bottom:9px;}
-  .hi-k{color:var(--amber);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1px;font-weight:600;}
-  .hi-v{color:var(--phos);font-size:11.5px;line-height:1.5;word-break:break-word;}
-  .hi-v a{color:var(--cyan);text-decoration:none;border-bottom:1px solid transparent;}
-  .hi-v a:hover{border-bottom-color:var(--cyan);}
-  .hi-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
-  .hi-tag{font-size:10px;color:var(--phos);border:1px solid var(--phos-deep);padding:2px 6px;letter-spacing:.02em;background:rgba(124,245,138,.05);}
-  .hi-back{display:inline-block;margin-top:14px;color:var(--amber);font-size:10px;letter-spacing:.12em;cursor:pointer;border:1px solid var(--amber-dim);padding:3px 9px;text-transform:uppercase;background:none;font-family:var(--mono);transition:background .12s;}
-  .hi-back:hover{background:rgba(240,182,74,.1);}
-  .hi-hint{color:var(--phos-dim);font-size:10px;letter-spacing:.04em;margin-top:14px;padding-top:10px;border-top:1px dashed var(--phos-deep);font-style:italic;}
+  /* ── FIX 5: cmd bar — real terminal input ── */
+  .cmdbar{
+    border-top:1px solid var(--phos-dim);
+    background:#050d07;
+    padding:8px 14px;
+    display:flex;align-items:center;gap:10px;
+    position:relative;z-index:1;
+    font-family:var(--mono);font-size:12px;flex-shrink:0;
+  }
+  .cmdbar .prompt{color:var(--amber);flex-shrink:0;text-shadow:0 0 8px rgba(240,182,74,.35)}
+  .cmdbar input{
+    flex:1;
+    background:rgba(124,245,138,.03);
+    border:1px solid var(--phos-deep);
+    outline:none;
+    color:var(--phos);
+    font-family:var(--mono);font-size:12px;
+    caret-color:var(--phos);
+    padding:3px 8px;
+    transition:border-color .15s,background .15s,box-shadow .15s;
+  }
+  .cmdbar input:focus{
+    border-color:var(--phos);
+    background:rgba(124,245,138,.06);
+    box-shadow:0 0 0 2px rgba(124,245,138,.1);
+  }
+  .cmdbar input::placeholder{color:var(--phos-dim)}
+  .cmdbar .hint{color:var(--phos-dim);font-size:10px;letter-spacing:.08em;flex-shrink:0}
 
-  /* clickable card affordance */
-  .exp,.proj,.edu{cursor:pointer;transition:background .12s,box-shadow .12s;border-radius:0;}
-  .exp:hover,.proj:hover,.edu:hover{background:rgba(0,0,0,.025);}
-  .exp.active,.proj.active,.edu.active{background:rgba(240,182,74,.08);box-shadow:inset 3px 0 0 var(--amber);padding-left:12px;}
-  .proj.active{box-shadow:inset 0 0 0 2px var(--amber);}
+  /* term hist */
+  .term-hist{position:absolute;left:14px;right:14px;bottom:48px;z-index:2;max-height:200px;overflow:auto;padding:8px 12px;background:rgba(5,8,10,.95);border:1px solid var(--line2);font-size:11px;color:var(--phos);line-height:1.5;display:none;}
+  .term-hist.on{display:block}
+  .term-hist .line{white-space:pre-wrap}.term-hist .line .em{color:var(--amber)}.term-hist .line .dim{color:var(--phos-dim)}
+
+  /* right: decode panel */
+  .decode{background:#f8f2e0;color:#0e0f10;border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;isolation:isolate;z-index:10000;}
+  .decode.pulse{animation:decodepulse 1.8s ease-out forwards;}
+  @keyframes decodepulse{
+    0%{border-color:var(--amber);box-shadow:0 0 0 3px rgba(240,182,74,.35),inset 0 0 30px rgba(240,182,74,.06)}
+    60%{border-color:var(--amber);box-shadow:0 0 0 1px rgba(240,182,74,.15)}
+    100%{border-color:var(--line);box-shadow:none}
+  }
+  .dc-hd{padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.18);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#3a3933;background:#e8dfc6;flex-shrink:0;}
+  .dc-hd b{color:#0e0f10;font-weight:700}
+  .dc-body{flex:1;overflow:auto;padding:18px 20px}
+  .dc-body::-webkit-scrollbar{width:6px}
+  .dc-body::-webkit-scrollbar-track{background:var(--paper2)}
+  .dc-body::-webkit-scrollbar-thumb{background:#b4ac97}
+  .dc-section h1{font-family:var(--sans);font-weight:700;font-size:24px;letter-spacing:-.01em;line-height:1.1;margin-bottom:6px;color:#0e0f10;}
+  .dc-section .subh{font-family:var(--mono);font-size:12px;color:#4a4937;letter-spacing:.08em;margin-bottom:20px;}
+
+  /* clickable entries */
+  .entry{padding:14px 8px;border-top:1px solid rgba(0,0,0,.18);cursor:pointer;transition:background .1s;margin-left:-8px;margin-right:-8px;}
+  .entry:first-of-type{border-top:none;padding-top:0}
+  .entry:hover{background:rgba(0,0,0,.04)}
+  .entry.active{background:rgba(0,0,0,.06);border-left:3px solid #0e0f10;padding-left:12px;}
+  .entry .etop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+  .entry h3{font-family:var(--sans);font-weight:700;font-size:17px;color:#0e0f10}
+  .entry .when{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.06em;white-space:nowrap;font-weight:500}
+  .entry .role{font-family:var(--mono);font-size:12px;color:#4a4937;letter-spacing:.04em;margin-bottom:6px;font-weight:500}
+  .entry p{font-size:14px;line-height:1.6;color:#15161a;margin-bottom:8px;text-wrap:pretty;}
+  .entry .open-hint{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.08em;margin-top:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#1a1a1a;border:1px solid rgba(0,0,0,.35);padding:3px 8px;background:rgba(0,0,0,.04);font-weight:500;}
+
+  .proj{padding:14px 8px;border-top:1px solid rgba(0,0,0,.18);cursor:pointer;transition:background .1s;margin-left:-8px;margin-right:-8px;}
+  .proj:first-of-type{border-top:none;padding-top:0}
+  .proj:hover{background:rgba(0,0,0,.04)}
+  .proj.active{background:rgba(0,0,0,.06);border-left:3px solid #0e0f10;padding-left:12px;}
+  .proj .pt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .proj h3{font-family:var(--sans);font-weight:700;font-size:16px;color:#0e0f10}
+  .proj .tag{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.06em;white-space:nowrap;font-weight:500}
+  .proj p{font-size:14px;line-height:1.6;color:#15161a;margin:6px 0;text-wrap:pretty}
+  .proj .open-hint{font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:.08em;margin-top:2px}
+
+  /* header decode */
+  .bio{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+  .avatar{width:86px;height:86px;flex-shrink:0;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .bio .who{flex:1;min-width:0}
+  .bio .who .n{font-family:var(--sans);font-weight:700;font-size:28px;line-height:1;letter-spacing:-.01em;color:#0e0f10}
+  .bio .who .t{font-family:var(--mono);font-size:12px;color:#3a3933;margin-top:8px;letter-spacing:.04em;line-height:1.55;font-weight:500}
+  .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .links a{font-family:var(--mono);font-size:12px;color:#0e0f10;text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .links a:hover{background:rgba(0,0,0,.06)}
+  .links a.pri{background:var(--paper-ink);color:var(--paper)}
+  .links a.pri:hover{background:#000}
+  .skill-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+  .skill-chip{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:#1a1a1a;border:1px solid rgba(0,0,0,.35);padding:4px 9px;background:rgba(0,0,0,.04);font-weight:600;}
+
+  /* skills */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+  .skbucket h4{font-family:var(--sans);font-weight:700;font-size:14px;margin-bottom:8px;color:#0e0f10}
+  .skbucket .sk-list{display:flex;flex-wrap:wrap;gap:5px}
+  .skbucket .sk-tag{font-family:var(--mono);font-size:11px;color:#1a1a1a;border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;}
+
+  /* contact */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ccard{border:1px solid rgba(0,0,0,.3);padding:14px;background:rgba(0,0,0,.02);}
+  .ccard .k{font-family:var(--mono);font-size:11px;color:#4a4937;letter-spacing:.08em;margin-bottom:6px;font-weight:600;text-transform:uppercase}
+  .ccard .v{font-family:var(--sans);font-weight:700;font-size:14px;line-height:1.35;word-break:break-word;color:#0e0f10}
 
   /* status bar */
-  .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;font-family:var(--mono);}
+  .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;}
   .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
   .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
   .statusbar .kbd{border:1px solid var(--line2);padding:1px 5px;color:var(--paper2);font-family:var(--mono);font-size:9px;letter-spacing:.06em;}
 
+  /* activity LED */
+  .actled{position:fixed;left:10px;bottom:8px;z-index:20;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--phos-dim);pointer-events:none;}
+  .actled i{width:7px;height:7px;border-radius:50%;background:var(--phos-deep);transition:background .08s,box-shadow .12s;}
+  .actled.hot i{background:var(--phos);box-shadow:0 0 8px var(--phos)}
+
+  .reg.flash{animation:regflash .5s ease-out}
+  @keyframes regflash{0%{box-shadow:0 0 0 2px var(--phos),inset 0 0 20px rgba(124,245,138,.4)}100%{box-shadow:none}}
+
+  /* ── recruiter mode ── */
+  body.plain::before,body.plain::after{display:none}
+  body.plain .shell{display:none}
+  body.plain .actled{display:none}
+
+  .plain-view{
+    display:none;position:fixed;inset:0;z-index:50000;
+    overflow:auto;background:#f9f6f0;color:#17191a;
+    font-family:var(--sans);
+  }
+  body.plain .plain-view{display:block}
+
+  /* recruiter mode top bar */
+  .rv-topbar{
+    position:sticky;top:0;z-index:10;
+    background:#f9f6f0;border-bottom:2px solid #17191a;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 8vw;
+  }
+  .rv-topbar .rv-name{font-family:var(--sans);font-size:22px;font-weight:700;letter-spacing:-.01em;color:#17191a}
+  .rv-topbar .rv-links{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .rv-topbar .rv-link{
+    font-family:var(--mono);font-size:11px;color:#17191a;
+    text-decoration:none;border:1px solid rgba(0,0,0,.35);
+    padding:5px 11px;letter-spacing:.06em;
+    transition:background .1s;font-weight:500;
+  }
+  .rv-topbar .rv-link:hover{background:rgba(0,0,0,.06)}
+  .rv-topbar .rv-link.pri{background:#17191a;color:#f9f6f0;}
+  .rv-topbar .rv-link.pri:hover{background:#000}
+  .rv-back{
+    font-family:var(--mono);font-size:11px;color:#17191a;
+    background:none;border:1px solid rgba(0,0,0,.3);
+    padding:5px 11px;cursor:pointer;letter-spacing:.08em;
+    transition:background .1s;
+  }
+  .rv-back:hover{background:rgba(0,0,0,.06)}
+
+  /* recruiter mode body */
+  .rv-body{max-width:860px;margin:0 auto;padding:48px 8vw 80px;}
+
+  .rv-hero{margin-bottom:48px;}
+  .rv-hero h1{font-size:42px;font-weight:700;letter-spacing:-.02em;line-height:1;margin-bottom:10px;}
+  .rv-hero .rv-tagline{font-family:var(--mono);font-size:13px;color:#4a4937;letter-spacing:.04em;line-height:1.6;margin-bottom:18px;}
+  .rv-hero .rv-blurb{font-size:16px;line-height:1.65;color:#2b2d2e;max-width:62ch;text-wrap:pretty;}
+  .rv-skill-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px;}
+  .rv-skill-chip{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.4);padding:4px 10px;font-weight:600;letter-spacing:.04em;}
+
+  .rv-section{margin-bottom:44px;}
+  .rv-section-title{
+    font-family:var(--mono);font-size:11px;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;
+    color:#17191a;border-bottom:2px solid #17191a;
+    padding-bottom:6px;margin-bottom:20px;
+  }
+
+  /* experience + education cards */
+  .rv-card{padding:18px 0;border-bottom:1px solid rgba(0,0,0,.12);}
+  .rv-card:last-child{border-bottom:none}
+  .rv-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;}
+  .rv-card h3{font-size:17px;font-weight:700;color:#17191a;letter-spacing:-.01em;}
+  .rv-card .rv-when{font-family:var(--mono);font-size:11px;color:#6b6459;white-space:nowrap;font-weight:500;}
+  .rv-card .rv-role{font-family:var(--mono);font-size:12px;color:#6b6459;margin-bottom:8px;font-weight:500;}
+  .rv-card p{font-size:14.5px;line-height:1.65;color:#2b2d2e;text-wrap:pretty;margin-bottom:10px;}
+  .rv-chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .rv-chip{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;}
+
+  /* project grid */
+  .rv-proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .rv-proj{border:1px solid rgba(0,0,0,.18);padding:18px;background:#fff;}
+  .rv-proj h3{font-size:15px;font-weight:700;color:#17191a;margin-bottom:4px;}
+  .rv-proj .rv-tag{font-family:var(--mono);font-size:10px;color:#6b6459;letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
+  .rv-proj p{font-size:13.5px;line-height:1.6;color:#2b2d2e;text-wrap:pretty;}
+
+  /* skills grid */
+  .rv-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;}
+  .rv-skbucket h4{font-size:13px;font-weight:700;color:#17191a;margin-bottom:8px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;}
+  .rv-sk-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .rv-sk{font-family:var(--mono);font-size:11px;color:#17191a;border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
+
+  /* ── recruiter mode button — amber, separated, unmissable ── */
+  .tb-mode-sep{width:1px;height:22px;background:var(--line2);margin:0 4px;flex-shrink:0;}
+  .tb-mode{
+    font-family:var(--mono);font-size:12px;font-weight:700;
+    color:#07090a;background:var(--amber);
+    border:2px solid var(--amber);
+    padding:6px 16px;letter-spacing:.06em;cursor:pointer;
+    transition:background .12s,box-shadow .12s;
+    display:inline-flex;align-items:center;gap:8px;
+    box-shadow:0 0 14px rgba(240,182,74,.45);
+    white-space:nowrap;
+  }
+  .tb-mode:hover{background:#ffd077;box-shadow:0 0 24px rgba(240,182,74,.75)}
+  .tb-mode .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:#07090a;opacity:.6;
+    animation:pulse 1.3s ease-in-out infinite;
+  }
+  /* floating "not a dev?" badge */
+  .rec-float{
+    position:fixed;bottom:36px;right:16px;z-index:19999;
+    display:flex;align-items:center;gap:8px;
+    background:var(--amber);color:#07090a;
+    font-family:var(--mono);font-size:12px;font-weight:700;
+    letter-spacing:.05em;padding:10px 16px;
+    box-shadow:0 4px 24px rgba(240,182,74,.5);
+    cursor:pointer;border:none;
+    animation:floatIn .4s ease-out both;
+  }
+  .rec-float:hover{background:#ffd077;box-shadow:0 6px 32px rgba(240,182,74,.7)}
+  .rec-float-x{
+    width:18px;height:18px;display:grid;place-items:center;
+    background:rgba(0,0,0,.18);font-size:10px;cursor:pointer;
+    flex-shrink:0;margin-left:4px;font-weight:400;border:none;
+    font-family:var(--mono);color:#07090a;background:rgba(0,0,0,.15);
+  }
+  @keyframes floatIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  /* firmware mode button */
+  .rv-fw-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11px;color:var(--phos);
+    background:var(--bg2);border:1px solid var(--phos-dim);
+    padding:5px 12px;letter-spacing:.08em;cursor:pointer;
+    transition:background .12s,border-color .12s;
+  }
+  .rv-fw-btn:hover{background:var(--bg3);border-color:var(--phos)}
+  .rv-fw-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--phos);box-shadow:0 0 6px var(--phos);animation:pulse 1.3s ease-in-out infinite;}
+
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  @media(max-width:700px){
+    .rv-proj-grid{grid-template-columns:1fr}
+    .rv-skills-grid{grid-template-columns:1fr}
+    .rv-topbar{flex-direction:column;gap:12px;align-items:flex-start;padding:14px 6vw;}
+    .rv-body{padding:32px 6vw 60px;}
+    .rv-hero h1{font-size:30px}
+  }
+
   /* boot */
-  .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;overflow:hidden;}
+  .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;}
   .boot.done{opacity:0;pointer-events:none}
   .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
   .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
   @keyframes boot-in{to{opacity:1}}
 
-  /* responsive: collapse to single column on mobile */
+  /* ── FIX 1: guide banner animation ── */
+  @keyframes bannerIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+  @media(min-width:1800px){.shell{padding:10px 20px}}
+  @media(max-width:1400px){.main{grid-template-columns:minmax(260px,300px) minmax(0,1fr) minmax(440px,520px)}}
+  @media(max-width:1200px){.main{grid-template-columns:280px 1fr 440px}}
+  @media(max-width:1050px){.main{grid-template-columns:260px 1fr 400px}.hex-row{grid-template-columns:60px 1fr 140px;gap:10px}}
   @media(max-width:900px){
-    body{overflow:auto;}
-    .shell{height:auto;min-height:100vh;max-width:100%;grid-template-rows:auto auto auto auto;padding:8px;gap:8px;}
+    body{overflow:auto;font-size:12px}
+    .shell{height:auto;min-height:100vh;grid-template-rows:auto auto auto;padding:8px;gap:8px;}
     .topbar{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
     .tb-right{flex-wrap:wrap;gap:6px}
-    .main{display:flex;flex-direction:column;gap:8px;}
-    .hexpanel{display:none;}
-    .regions{flex-shrink:0;max-height:200px;}
+    .main{display:flex;flex-direction:column;gap:8px;min-height:0;}
+    .regions{flex-shrink:0}
     .reg-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px;gap:6px;scroll-snap-type:x mandatory;}
     .reg{flex-shrink:0;min-width:140px;margin-bottom:0;scroll-snap-align:start;padding:8px 10px;grid-template-columns:1fr;}
     .reg .sz{grid-column:1;grid-row:auto;align-self:auto;margin-top:2px}
     .reg.on::before{left:4px;top:8px;transform:none}
-    .memmap{display:none}
-    .content-body{padding:18px 18px 22px;}
-    .hero{grid-template-columns:1fr;gap:14px;}
-    .avatar{width:80px;height:80px;}
-    .hero h1{font-size:26px;}
-    .proj-grid{grid-template-columns:1fr;}
-    .skills-grid{grid-template-columns:1fr;gap:14px;}
-    .cgrid{grid-template-columns:1fr;}
+    .hexpanel{min-height:340px}
+    .hex-row{grid-template-columns:46px 1fr 110px;gap:8px;font-size:10px;}
+    .decode{min-height:520px}.dc-body{padding:14px}
+    .dc-section h1{font-size:20px}
+    .bio{flex-direction:column;gap:12px}
+    .skills-grid{grid-template-columns:1fr;gap:14px}
+    .cgrid{grid-template-columns:1fr}
     .statusbar .right{display:none}
+    .cmdbar .hint{display:none}
   }
+  @media(max-width:480px){.tb-meta{display:none}.hex-row{grid-template-columns:40px 1fr 80px;font-size:9.5px}}
 </style>
 </head>
-<body class="has-shell">
+<body>
 
 <div class="boot" id="boot">
   <div class="bl"><span class="ok">[ OK ]</span>power on self test …………………… <span class="dim">pass</span></div>
   <div class="bl"><span class="ok">[ OK ]</span>crc32 verify  0x<b>DEADBEEF</b> ……… <span class="dim">pass</span></div>
   <div class="bl"><span class="ok">[ OK ]</span>mmap  8192 B · 7 regions ……………… <span class="dim">mounted</span></div>
   <div class="bl"><span class="ok">[ OK ]</span>uart@115200  link up ………………………… <span class="dim">ready</span></div>
+  <div class="bl"><span class="warn">[WARN]</span>empty region 0x4400–0xFFFF ……… <span class="dim">unprogrammed</span></div>
   <div class="bl"><span class="ok">[ OK ]</span>decoder  paper_v1  ………………………… <span class="dim">ok</span></div>
   <div class="bl" style="margin-top:12px;color:var(--amber)">$ ./monil_arora.bin --dump</div>
+  <div class="bl" style="color:var(--phos-dim);font-size:11px;margin-top:4px">[ → ] DECODED panel on the right · click any entry to inspect it in HEX</div>
 </div>
+
+<div class="plain-view" id="plain-view" aria-hidden="true">
+
+  <!-- sticky top bar -->
+  <div class="rv-topbar">
+    <div class="rv-name">Monil Arora</div>
+    <div class="rv-links">
+      <a class="rv-link pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
+      <a class="rv-link" href="mailto:monilarora2003@gmail.com">email</a>
+      <a class="rv-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+      <a class="rv-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+      <button class="rv-back" id="plain-back">◆ firmware mode</button>
+    </div>
+  </div>
+
+  <div class="rv-body">
+
+    <!-- hero -->
+    <div class="rv-hero">
+      <h1>Electrical Engineer</h1>
+      <div class="rv-tagline">UBC BASc · Expected 2027 · Embedded firmware &amp; systems</div>
+      <p class="rv-blurb">Currently at Laser Zentrum Hannover building a CubeSat ground station — YAMCS pipeline, STM32/FreeRTOS firmware, Java CCSDS preprocessor. Back at UBC in the fall. Open to embedded and hardware engineering roles.</p>
+      <div class="rv-skill-chips">
+        <span class="rv-skill-chip">C / C++</span>
+        <span class="rv-skill-chip">STM32 / FreeRTOS</span>
+        <span class="rv-skill-chip">Verilog / FPGA</span>
+        <span class="rv-skill-chip">YAMCS · CCSDS</span>
+        <span class="rv-skill-chip">Linux / Git</span>
+        <span class="rv-skill-chip">UART · SPI · I²C</span>
+        <span class="rv-skill-chip">Python</span>
+        <span class="rv-skill-chip">GStreamer</span>
+      </div>
+    </div>
+
+    <!-- experience -->
+    <div class="rv-section">
+      <div class="rv-section-title">Experience</div>
+
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>LZH — Research Assistant</h3><span class="rv-when">Mar–Jul 2026</span></div>
+        <div class="rv-role">Laser Zentrum Hannover · Hannover, Germany</div>
+        <p>Built a CubeSat ground station end-to-end: YAMCS server stack, Java CCSDS packet preprocessor, Time Correlation Service for OBT→UTC sync, STM32/FreeRTOS firmware integration. Also deployed a 4-camera RTSP surveillance rig on Raspberry Pi + GStreamer for the lab.</p>
+        <div class="rv-chips">
+          <span class="rv-chip">YAMCS</span><span class="rv-chip">CCSDS</span><span class="rv-chip">STM32</span><span class="rv-chip">FreeRTOS</span><span class="rv-chip">Java</span><span class="rv-chip">GStreamer</span><span class="rv-chip">Linux</span>
+        </div>
+      </div>
+
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>Sharang Shakti — RF Intern</h3><span class="rv-when">Summer 2023</span></div>
+        <div class="rv-role">Signal Processing · Delhi, India</div>
+        <p>Anti-drone radar signal chain design. Characterised AD9910 DDS and AD8336 VGA front end, bench-tested on oscilloscope and logic analyser, helped port the SPI driver firmware.</p>
+        <div class="rv-chips">
+          <span class="rv-chip">AD9910 DDS</span><span class="rv-chip">AD8336 VGA</span><span class="rv-chip">RF Design</span><span class="rv-chip">MATLAB</span>
+        </div>
+      </div>
+
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>Drake International — Operations</h3><span class="rv-when">2022</span></div>
+        <div class="rv-role">Customer-facing ops and scheduling</div>
+        <p>Scheduling, customer communication, and operations. Developed clear communication skills under time pressure — useful in hardware debug sessions.</p>
+      </div>
+    </div>
+
+    <!-- projects -->
+    <div class="rv-section">
+      <div class="rv-section-title">Selected Projects</div>
+      <div class="rv-proj-grid">
+
+        <div class="rv-proj">
+          <h3>CubeSat Ground Station</h3>
+          <div class="rv-tag">YAMCS · STM32 · FreeRTOS · CCSDS</div>
+          <p>Full YAMCS stack with Java CCSDS packet preprocessor, OBT→UTC time correlation, STM32 firmware integration, and CI pipeline. Active at LZH.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>Self-Balancing Robot</h3>
+          <div class="rv-tag">STM32 · FreeRTOS · PID · MPU-6050</div>
+          <p>UBC ELEC 391 capstone. Inverted pendulum with cascaded PID, MPU-6050 sensor fusion, FreeRTOS task structure.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>DNN Accelerator</h3>
+          <div class="rv-tag">Verilog · Nios II · DE1-SoC · FPGA</div>
+          <p>Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II softcore.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>4-Camera RTSP Display</h3>
+          <div class="rv-tag">GStreamer · Raspberry Pi · Wayland</div>
+          <p>24/7 surveillance wall for LZH lab. Four IP cameras, Wayland/GStreamer pipeline, PAL 4:3 handling, systemd watchdog.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>Metal-Detecting Rover</h3>
+          <div class="rv-tag">ESP32 · BLE · KiCad · ESP-IDF</div>
+          <p>Autonomous rover with BLE telemetry, custom PCB, servo-swept LDC1614 inductive sensor, occupancy grid navigation.</p>
+        </div>
+
+        <div class="rv-proj">
+          <h3>Reflow Oven Controller</h3>
+          <div class="rv-tag">EFM8 · PID · MAX31855 · SSR</div>
+          <p>PID-controlled reflow oven. K-type thermocouple via MAX31855, SSR switching, LCD UI plotting live temperature vs target curve.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- skills -->
+    <div class="rv-section">
+      <div class="rv-section-title">Skills</div>
+      <div class="rv-skills-grid">
+        <div class="rv-skbucket">
+          <h4>Firmware / RTOS</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">C / C++</span><span class="rv-sk">STM32 HAL/LL</span><span class="rv-sk">FreeRTOS</span><span class="rv-sk">Bare-metal ARM</span><span class="rv-sk">ESP-IDF</span>
+          </div>
+        </div>
+        <div class="rv-skbucket">
+          <h4>HDL / FPGA</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">Verilog</span><span class="rv-sk">VHDL</span><span class="rv-sk">Quartus</span><span class="rv-sk">ModelSim</span><span class="rv-sk">Nios II</span>
+          </div>
+        </div>
+        <div class="rv-skbucket">
+          <h4>Protocols</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">UART · SPI · I²C · CAN</span><span class="rv-sk">JTAG · SWD</span><span class="rv-sk">CCSDS</span><span class="rv-sk">RTSP · TCP/IP</span>
+          </div>
+        </div>
+        <div class="rv-skbucket">
+          <h4>Tools</h4>
+          <div class="rv-sk-list">
+            <span class="rv-sk">Linux · Git</span><span class="rv-sk">Python</span><span class="rv-sk">YAMCS</span><span class="rv-sk">GStreamer</span><span class="rv-sk">Java</span><span class="rv-sk">MATLAB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- education -->
+    <div class="rv-section">
+      <div class="rv-section-title">Education</div>
+      <div class="rv-card">
+        <div class="rv-card-top"><h3>UBC — BASc Electrical Engineering</h3><span class="rv-when">Expected 2027</span></div>
+        <div class="rv-role">University of British Columbia · Vancouver, BC</div>
+        <p>Relevant coursework: CPEN 311 (Digital Systems / FPGA), CPEN 211 (Computer Architecture), ELEC 391 (Embedded Capstone), ELEC 301 (DSP), ELEC 311 (Control Systems).</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="actled" id="actled"><i></i><span id="actled-lbl">RX 0 B/s</span></div>
 
 <div class="shell">
   <header class="topbar">
     <div class="tb-left">
       <div class="tb-logo">◆</div>
       <div>
-        <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.05</small></div>
-        <div class="tb-meta">embedded engineer &nbsp;·&nbsp; ubc ee 2027 &nbsp;·&nbsp; hannover, de</div>
+        <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.04</small></div>
+        <div class="tb-meta">8192 bytes &nbsp;·&nbsp; crc32: DE&nbsp;AD&nbsp;BE&nbsp;EF &nbsp;·&nbsp; target: cortex-m4 &nbsp;·&nbsp; compiled <span id="compiled-date"></span></div>
       </div>
     </div>
     <div class="tb-right">
-      <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <a class="tb-link" href="/cdn-cgi/l/email-protection#74191b1a1d1815061b061546444447341319151d185a171b19">email</a>
-      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
-      <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+      <a class="tb-link" href="mailto:monilarora2003@gmail.com">◆ email</a>
+      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">◆ github</a>
+      <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">◆ linkedin</a>
+      <a class="tb-link" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
+      <span class="tb-mode-sep"></span><button class="tb-mode" id="mode-btn"><span class="dot"></span>not a dev? → recruiter view</button>
     </div>
   </header>
 
   <main class="main">
-    <!-- LEFT: anchor nav, styled as memory regions -->
     <aside class="regions">
-      <div class="reg-hd"><span>REGIONS &nbsp; [6]</span><span class="sz">8 KB</span></div>
-      <div class="reg-list" id="reg-list">
-        <a class="reg on" data-target="sec-about" href="#sec-about">
-          <span class="addr">0x0000</span><span class="nm">.about_me</span><span class="sz">512 B</span>
-        </a>
-        <a class="reg" data-target="sec-experience" href="#sec-experience">
-          <span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">3.5 K</span>
-        </a>
-        <a class="reg" data-target="sec-projects" href="#sec-projects">
-          <span class="addr">0x1000</span><span class="nm">.projects</span><span class="sz">8.0 K</span>
-        </a>
-        <a class="reg" data-target="sec-skills" href="#sec-skills">
-          <span class="addr">0x3000</span><span class="nm">.skills</span><span class="sz">2.0 K</span>
-        </a>
-        <a class="reg" data-target="sec-education" href="#sec-education">
-          <span class="addr">0x3800</span><span class="nm">.education</span><span class="sz">2.0 K</span>
-        </a>
-        <a class="reg" data-target="sec-contact" href="#sec-contact">
-          <span class="addr">0x4000</span><span class="nm">.contact</span><span class="sz">512 B</span>
-        </a>
-      </div>
+      <div class="reg-hd"><span>REGIONS &nbsp; [7]</span><span class="sz">8192 B</span></div>
+      <div class="reg-list" id="reg-list"></div>
       <div class="memmap">
         <div>MEM MAP</div>
-        <div class="bar">
-          <div class="seg" style="flex:1;background:#5ad1ff" title=".about_me"></div>
-          <div class="seg" style="flex:7;background:#f0b64a" title=".experience"></div>
-          <div class="seg" style="flex:16;background:#7cf58a" title=".projects"></div>
-          <div class="seg" style="flex:4;background:#b0a7ff" title=".skills"></div>
-          <div class="seg" style="flex:4;background:#ff5aa8" title=".education"></div>
-          <div class="seg" style="flex:1;background:#ffc04a" title=".contact"></div>
-          <div class="seg" style="flex:90;background:#1a2328" title=".empty"></div>
-        </div>
+        <div class="bar" id="memmap-bar"></div>
         <div class="lg"><span>0x0000</span><span>0xFFFF</span></div>
       </div>
     </aside>
 
-    <!-- RIGHT: content panel — everything visible, scrollable -->
-    <section class="content">
-      <div class="content-hd">
-        <span>DECODED &nbsp;·&nbsp; <b id="cur-section">.about_me</b></span>
-        <span class="scroll-pos" id="scroll-pos">struct about_me_t</span>
+    <section class="hexpanel">
+      <div class="hex-hd">
+        <div>HEX · <b id="hex-region">.about_me</b> &nbsp;<span id="hex-range">0x0000–0x01FF</span></div>
+        <div id="hex-hd-hint" class="hint">C struct · decoded source view</div>
       </div>
-      <div class="content-body" id="content-body">
-
-        <!-- ABOUT -->
-        <div class="section" id="sec-about" data-name=".about_me" data-struct="about_me_t">
-          <div class="hero">
-            <div class="avatar"><img src="photo.jpg" alt="Monil Arora" onerror="this.style.background='#ddd';this.style.display='block';"/></div>
-            <div class="hero-body">
-              <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
-              <h1>Monil Arora</h1>
-              <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS<br/>UBC BASc Electrical Engineering · Expected 2027</div>
-              <p class="blurb">Currently at Laser Zentrum Hannover building a CubeSat ground station — YAMCS pipeline, STM32/FreeRTOS firmware, Java CCSDS preprocessor. Back at UBC in the fall.</p>
-              <div class="links">
-                <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="/cdn-cgi/l/email-protection#b7dad8d9dedbd6c5d8c5d685878784f7d0dad6dedb99d4d8da">email</a>
-                <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
-                <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- EXPERIENCE -->
-        <div class="section" id="sec-experience" data-name=".experience" data-struct="role_t[3]">
-          <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[3]</span></div>
-
-          <div class="exp" data-inspect="exp-lzh">
-            <div class="exp-top"><h3>Laser Zentrum Hannover — Research Assistant</h3><span class="when">Mar – Jul 2026</span></div>
-            <div class="role">CubeSat Ground Station · Hannover, Germany</div>
-            <p>Built a CubeSat ground station end-to-end: YAMCS server stack, Java CCSDS packet preprocessor, Time Correlation Service for OBT→UTC sync, STM32/FreeRTOS firmware integration. Also deployed a 4-camera RTSP surveillance rig on Raspberry Pi + GStreamer for the lab.</p>
-            <div class="chips">
-              <span class="chip">YAMCS</span><span class="chip">CCSDS</span><span class="chip">STM32</span><span class="chip">FreeRTOS</span><span class="chip">Java</span><span class="chip">GStreamer</span><span class="chip">Linux</span>
-            </div>
-          </div>
-
-          <div class="exp" data-inspect="exp-sharang">
-            <div class="exp-top"><h3>Sharang Shakti — RF Intern</h3><span class="when">Summer 2023</span></div>
-            <div class="role">Signal Processing · Delhi, India</div>
-            <p>Anti-drone radar signal-chain design. Characterised AD9910 DDS and AD8336 VGA front end, bench-tested on oscilloscope and logic analyser, helped port the SPI driver firmware.</p>
-            <div class="chips">
-              <span class="chip">AD9910 DDS</span><span class="chip">AD8336 VGA</span><span class="chip">RF</span><span class="chip">MATLAB</span><span class="chip">SPI</span>
-            </div>
-          </div>
-
-          <div class="exp" data-inspect="exp-drake">
-            <div class="exp-top"><h3>Drake International — Operations</h3><span class="when">2022</span></div>
-            <div class="role">Customer-facing ops &amp; scheduling</div>
-            <p>Scheduling, customer communication, operations. Useful reps for clear comms under time pressure — applies in hardware debug sessions too.</p>
-          </div>
-        </div>
-
-        <!-- PROJECTS -->
-        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[6]">
-          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[6]</span></div>
-          <div class="proj-grid">
-
-            <div class="proj" data-inspect="proj-cubesat">
-              <h3>CubeSat Ground Station</h3>
-              <div class="tag">YAMCS · STM32 · FreeRTOS · CCSDS</div>
-              <p>Full YAMCS stack with Java CCSDS preprocessor, OBT→UTC time correlation, STM32 firmware integration, CI pipeline. Active at LZH.</p>
-            </div>
-
-            <div class="proj" data-inspect="proj-robot">
-              <h3>Self-Balancing Robot</h3>
-              <div class="tag">STM32 · FreeRTOS · PID · MPU-6050</div>
-              <p>UBC ELEC 391 capstone. Inverted pendulum with cascaded PID, MPU-6050 sensor fusion, FreeRTOS task structure.</p>
-            </div>
-
-            <div class="proj" data-inspect="proj-dnn">
-              <h3>DNN Accelerator</h3>
-              <div class="tag">Verilog · Nios II · DE1-SoC · FPGA</div>
-              <p>Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II softcore. ~94% accuracy.</p>
-            </div>
-
-            <div class="proj" data-inspect="proj-rtsp">
-              <h3>4-Camera RTSP Display</h3>
-              <div class="tag">GStreamer · Raspberry Pi · Wayland</div>
-              <p>24/7 surveillance wall for LZH lab. Four IP cameras, Wayland/GStreamer pipeline, PAL 4:3 handling, systemd watchdog.</p>
-            </div>
-
-            <div class="proj" data-inspect="proj-rover">
-              <h3>Metal-Detecting Rover</h3>
-              <div class="tag">ESP32 · BLE · KiCad · ESP-IDF</div>
-              <p>Autonomous rover with BLE telemetry, custom 2-layer PCB, servo-swept LDC1614 inductive sensor, occupancy-grid navigation.</p>
-            </div>
-
-            <div class="proj" data-inspect="proj-reflow">
-              <h3>Reflow Oven Controller</h3>
-              <div class="tag">EFM8 · PID · MAX31855 · SSR</div>
-              <p>PID-controlled reflow oven. K-type thermocouple via MAX31855, SSR switching, LCD UI plotting live temperature vs target curve.</p>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- SKILLS — no ratings, just tags -->
-        <div class="section" id="sec-skills" data-name=".skills" data-struct="skillset_t">
-          <div class="section-title"><span>Skills</span><span class="addr">0x3000 — skillset_t</span></div>
-          <div class="skills-grid">
-            <div class="skbucket">
-              <h4>Firmware / RTOS</h4>
-              <div class="sk-list">
-                <span class="sk">C / C++</span><span class="sk">STM32 HAL/LL</span><span class="sk">FreeRTOS</span><span class="sk">Bare-metal ARM</span><span class="sk">ESP-IDF</span>
-              </div>
-            </div>
-            <div class="skbucket">
-              <h4>HDL / FPGA</h4>
-              <div class="sk-list">
-                <span class="sk">Verilog</span><span class="sk">VHDL</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">Nios II</span>
-              </div>
-            </div>
-            <div class="skbucket">
-              <h4>Protocols</h4>
-              <div class="sk-list">
-                <span class="sk">UART · SPI · I²C · CAN</span><span class="sk">JTAG · SWD</span><span class="sk">CCSDS</span><span class="sk">RTSP · TCP/IP</span>
-              </div>
-            </div>
-            <div class="skbucket">
-              <h4>Tools / Software</h4>
-              <div class="sk-list">
-                <span class="sk">Linux · Git</span><span class="sk">Python</span><span class="sk">Java</span><span class="sk">MATLAB</span><span class="sk">YAMCS</span><span class="sk">GStreamer</span><span class="sk">KiCad</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- EDUCATION -->
-        <div class="section" id="sec-education" data-name=".education" data-struct="course_t[6]">
-          <div class="section-title"><span>Education</span><span class="addr">0x3800 — course_t[6]</span></div>
-          <div class="edu-list">
-            <div class="edu" data-inspect="edu-ubc">
-              <div class="edu-top"><h3>UBC — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
-              <div class="role">University of British Columbia · Vancouver, BC</div>
-              <p>Relevant coursework: CPEN 311 (Digital Systems / FPGA), CPEN 211 (Computer Architecture), ELEC 391 (Embedded Capstone), ELEC 301 (DSP), ELEC 311 (Control Systems).</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- CONTACT -->
-        <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
-          <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
-          <div class="cgrid">
-            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#6c01030205000d1e031e0d5e5c5c5f2c0b010d0500420f0301"><span class="__cf_email__" data-cfemail="15787a7b7c7974677a677427252526557278747c793b767a78">[email&#160;protected]</span></a></div></div>
-            <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
-            <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
-            <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
-            <div class="ccard"><div class="k">location · now</div><div class="v">Hannover, DE</div></div>
-            <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
-          </div>
-        </div>
-
+      <div class="hex-body" id="hex-body">
+        <div class="hex-row hd"><span class="off">OFFSET</span><span class="bytes">00 01 02 03  04 05 06 07   08 09 0A 0B  0C 0D 0E 0F</span><span class="ascii">ASCII</span></div>
+      </div>
+      <div class="detail-view" id="detail-view"></div>
+      <div class="term-hist" id="term-hist"></div>
+      <div class="cmdbar">
+        <span class="prompt">monil@cortex-m4:~/bin $</span>
+        <input id="cmd" type="text" spellcheck="false" autocomplete="off" placeholder="try: help · ls · cat .projects · open resume"/>
+        <span class="hint">TAB complete · ↑↓ nav</span>
       </div>
     </section>
-    <!-- RIGHT: hex inspector panel — ambient -->
-    <aside class="hexpanel">
-      <div class="hex-hd">
-        <span><span class="pulse-dot"></span>HEX INSPECTOR &nbsp;·&nbsp; <b id="hex-region">.about_me</b></span>
-        <span id="hex-range">0x0000</span>
+
+    <aside class="decode">
+      <div class="dc-hd">
+        <span>DECODED &nbsp;·&nbsp; <b id="dc-region">.about_me</b></span>
+        <span>struct <span id="dc-struct">about_me_t</span></span>
       </div>
-      <div class="hex-body">
-        <div class="hex-grid" id="hex-grid"></div>
-        <div class="hex-insp" id="hex-insp"></div>
-      </div>
+      <div class="dc-body" id="dc-body"></div>
     </aside>
   </main>
 
   <footer class="statusbar">
     <span>MODE <b>READ-ONLY</b></span><span class="sep">│</span>
-    <span>SECTION <b id="sb-sec">.about_me</b></span><span class="sep">│</span>
-    <span>STRUCT <b id="sb-struct">about_me_t</b></span><span class="sep">│</span>
+    <span>LE · 32-bit</span><span class="sep">│</span>
+    <span>CURSOR <b id="sb-cursor">0x0000</b></span><span class="sep">│</span>
+    <span>SYM <b id="sb-sym">.about_me</b></span><span class="sep">│</span>
     <span>DECODE <b>paper_v1</b></span>
     <div class="right">
+      <span><span class="kbd">?</span> help</span>
+      <span><span class="kbd">↑</span><span class="kbd">↓</span> nav</span>
+      <span><span class="kbd">ESC</span> close detail</span>
       <span>built w/ <b>love + verilog</b></span>
       <span>© 2026 monil arora</span>
     </div>
   </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-(function(){
-  // boot anim
-  const boot=document.getElementById('boot');
-  const lines=boot.querySelectorAll('.bl');
-  lines.forEach((l,i)=>{l.style.animationDelay=(i*180)+'ms';});
-  setTimeout(()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),500);}, lines.length*180+500);
+<script>
+const REGIONS=[
+  {key:'header',    name:'.about_me',   addr:[0x0000,0x01FF],size:'512 B', color:'#5ad1ff',struct:'about_me_t',  note:'bio · links'},
+  {key:'experience',name:'.experience', addr:[0x0200,0x0FFF],size:'3.5 KB',color:'#f0b64a',struct:'role_t[3]',   note:'3 entries'},
+  {key:'projects',  name:'.projects',   addr:[0x1000,0x2FFF],size:'8.0 KB',color:'#7cf58a',struct:'project_t[6]',note:'6 binaries'},
+  {key:'skills',    name:'.skills',     addr:[0x3000,0x37FF],size:'2.0 KB',color:'#b0a7ff',struct:'skillset_t',  note:'symbol table'},
+  {key:'education', name:'.education',  addr:[0x3800,0x3FFF],size:'2.0 KB',color:'#ff5aa8',struct:'course_t[6]', note:'UBC EE · 2027'},
+  {key:'contact',   name:'.contact',    addr:[0x4000,0x41FF],size:'512 B', color:'#ffc04a',struct:'contact_t',   note:'email · phone'},
+  {key:'resume',    name:'.resume',     addr:[0x4200,0x43FF],size:'512 B', color:'#5ad1ff',struct:'pdf_ref_t',   note:'download link'},
+  {key:'empty',     name:'.empty',      addr:[0x4400,0xFFFF],size:'47 KB', color:'#1a2328',struct:'/* 0xFF */',  note:'unprogrammed',empty:true},
+];
 
-  const body=document.getElementById('content-body');
-  const regs=document.querySelectorAll('.reg');
-  const sections=document.querySelectorAll('.section');
-  const curSec=document.getElementById('cur-section');
-  const sbSec=document.getElementById('sb-sec');
-  const sbStruct=document.getElementById('sb-struct');
-  const scrollPos=document.getElementById('scroll-pos');
-  const hexRegion=document.getElementById('hex-region');
-  const hexRange=document.getElementById('hex-range');
-  const hexGrid=document.getElementById('hex-grid');
-  const hexInsp=document.getElementById('hex-insp');
+const DATA={
+  header:{
+    name:'Monil Arora',
+    tagline:'Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS · UBC EE 2027',
+    blurb:'Currently at LZH Hannover shipping a CubeSat ground station (YAMCS + CCSDS + STM32). Back at UBC in the fall. Open to embedded / hardware roles.',
+    links:[
+      {k:'email',   v:'monilarora2003@gmail.com',              href:'mailto:monilarora2003@gmail.com',pri:true},
+      {k:'resume',  v:'resume.pdf',                            href:'resume.pdf',pri:true},
+      {k:'github',  v:'github.com/plundis',                    href:'https://github.com/plundis'},
+      {k:'linkedin',v:'linkedin.com/in/monil-arora-a26851290', href:'https://linkedin.com/in/monil-arora-a26851290'},
+    ],
+    topSkills:['C / C++','STM32 / FreeRTOS','Verilog / FPGA','YAMCS · CCSDS','Linux / Git','UART · SPI · I²C','Python','GStreamer'],
+  },
+  experience:[
+    {id:'lzh',h:'LZH — Research Assistant',role:'Laser Zentrum Hannover · DE',when:'Mar–Jul 2026',
+     p:'CubeSat ground station end-to-end: YAMCS pipeline, Java CCSDS preprocessor, TCO OBT→UTC sync, STM32/FreeRTOS firmware. Shipped a 4-camera RTSP surveillance rig on RPi + GStreamer.',
+     c:['YAMCS','CCSDS','STM32','FreeRTOS','Java','GStreamer','Linux'],
+     detail:{addr:0x0200,struct:'role_t',
+      fields:[
+        {k:'company',  v:'Laser Zentrum Hannover e.V. (LZH)'},
+        {k:'title',    v:'Research Assistant — CubeSat Ground Station'},
+        {k:'location', v:'Hannover, Germany'},
+        {k:'duration', v:'Mar 22 – Jul 11, 2026'},
+        {k:'stack',    v:'YAMCS · Java · CCSDS · STM32 · FreeRTOS · GStreamer · Python · Linux'},
+      ],
+      blog:`// LZH — CubeSat Ground Station internship
+// ──────────────────────────────────────────
 
-  // ── ambient byte grid ─────────────────────────────────
-  function genGrid(seed){
-    let html='';
-    for(let r=0;r<14;r++){
-      const off=(seed + r*16).toString(16).toUpperCase().padStart(4,'0');
-      let bytes='';
-      for(let c=0;c<8;c++){
-        const v = ((seed*7 + r*31 + c*13) ^ 0x5a) & 0xff;
-        bytes += v.toString(16).toUpperCase().padStart(2,'0') + ' ';
-      }
-      html += `<div class="row"><span class="off">${off}</span><span>${bytes.trim()}</span></div>`;
+[YAMCS PIPELINE]
+Built the YAMCS server stack from scratch:
+- Mission database in XTCE XML
+- Custom Java packet preprocessor (MyPacketPreprocessor.java)
+  strips CCSDS primary header before YAMCS ingestion
+- Time Correlation Service (TCO): maps OBT → UTC
+  Confirmed via generation_time vs reception_time divergence
+  in YAMCS web UI
+
+[STM32 / FREERTOS]
+- CCSDS packet framing with boot_counter + OBT fields
+- UART serial debug via #define DDEBUG
+- Python Tkinter payload simulator for injection testing
+- Multi-user repo config: per-person YAML gitignored,
+  shared server code committed
+
+[4-CAMERA RTSP RIG — SIDE PROJECT]
+- Raspberry Pi 4, four IP cameras, GStreamer pipelines
+- Wayland sink, PAL 4:3 aspect ratio fix
+- systemd autostart + watchdog for 24/7 uptime
+- Fought LZH SSL certs: -Dmaven.wagon.http.ssl.insecure=true
+
+[REPO]
+github.com/plundis/cubesat-groundstation`
+     }
+    },
+    {id:'sharang',h:'Sharang Shakti — RF Intern',role:'Signal processing · Delhi, IN',when:'Summer 2023',
+     p:'Anti-drone radar signal-chain design. Characterised AD9910 DDS + AD8336 VGA front end, bench-tested on scope/logic analyzer, helped port driver firmware.',
+     c:['AD9910','AD8336','RF','Radar','DDS','MATLAB'],
+     detail:{addr:0x0600,struct:'role_t',
+      fields:[
+        {k:'company',  v:'Sharang Shakti Pvt Ltd'},
+        {k:'title',    v:'RF / Signal Processing Intern'},
+        {k:'location', v:'Delhi, India'},
+        {k:'duration', v:'Summer 2023'},
+        {k:'stack',    v:'AD9910 DDS · AD8336 VGA · MATLAB · Oscilloscope · Logic Analyzer'},
+      ],
+      blog:`// Sharang Shakti — RF internship
+// ─────────────────────────────────
+
+[SIGNAL CHAIN]
+Anti-drone radar front end:
+- AD9910 DDS: swept frequency output, measured phase noise,
+  documented output spectrum vs register config
+- AD8336 VGA: receive path gain control,
+  characterised gain vs control voltage curve
+
+[BENCH WORK]
+- Scope probing, logic analyser captures on SPI bus
+- MATLAB post-processing of captured waveforms
+- Good reps reading RF datasheets and translating
+  to working hardware configs
+
+[FIRMWARE]
+- Helped port SPI driver for AD9910
+- Register map is dense — worked through it
+  systematically with scope verification
+
+First real exposure to RF systems. Noise floor
+matters in ways that don't bite you in pure
+digital design.`
+     }
+    },
+    {id:'drake',h:'Drake International — Operations',role:'Staffing / customer ops',when:'2022',
+     p:'Customer-facing ops and scheduling.',
+     c:['Operations','Comms'],
+     detail:{addr:0x0A00,struct:'role_t',
+      fields:[
+        {k:'company',  v:'Drake International'},
+        {k:'title',    v:'Operations'},
+        {k:'duration', v:'2022'},
+      ],
+      blog:`// Drake International
+// ───────────────────
+
+Non-engineering role, but transferable skills:
+- Clear communication under time pressure
+- Managing expectations
+- Staying calm when things go sideways
+
+All applicable to a hardware debug session
+at 2am before a 9am demo.`
+     }
+    },
+  ],
+  projects:[
+    {id:'cubesat',h:'CubeSat Ground Station',tag:'YAMCS · STM32',
+     p:'Full YAMCS stack with Java CCSDS preprocessor, TCO OBT-to-UTC, FreeRTOS/STM32 firmware integration, CI pipeline.',
+     detail:{addr:0x1000,struct:'project_t',
+      fields:[
+        {k:'name',   v:'CubeSat Ground Station (Moonrise_LZH)'},
+        {k:'stack',  v:'YAMCS · Java · CCSDS · STM32F4 · FreeRTOS · Python · Linux'},
+        {k:'repo',   v:'github.com/plundis/cubesat-groundstation'},
+        {k:'status', v:'ACTIVE — LZH internship, Mar–Jul 2026'},
+      ],
+      blog:`// CubeSat Ground Station — architecture
+// ──────────────────────────────────────
+
+[BLOCK DIAGRAM]
+  STM32/FreeRTOS  ──UART──►  RPi gateway
+                                  │ TCP
+                             YAMCS server
+                             (Java stack)
+                                  │
+                              Web UI / MCS
+
+[YAMCS STACK]
+- XTCE XML mission database (TM/TC definitions)
+- MyPacketPreprocessor.java: strips CCSDS primary
+  header before YAMCS frame ingestion
+- TCO: OBT counter → UTC via sync packets
+- Data links: UDP + serial, config per hardware
+
+[STM32 FIRMWARE]
+- CCSDS primary header + boot_counter + OBT
+- FreeRTOS task structure (sensor, comms, debug)
+- UART debug: #define DDEBUG strips in release
+
+[TOOLING]
+- Python Tkinter simulator for packet injection
+- Maven build, CI catches regressions
+- Multi-user repo: per-hardware YAML gitignored`
+     }
+    },
+    {id:'robot',h:'Self-Balancing Robot',tag:'STM32 · PID',
+     p:'UBC ELEC 391 capstone. Cascaded PID (angle + velocity), MPU-6050 fusion, FreeRTOS.',
+     detail:{addr:0x1400,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Self-Balancing Robot'},
+        {k:'course', v:'UBC ELEC 391 — Embedded Capstone'},
+        {k:'stack',  v:'STM32F4 · FreeRTOS · MPU-6050 · Cascaded PID · Custom PCB'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// Self-Balancing Robot — ELEC 391
+// ─────────────────────────────────
+
+[CONTROL — CASCADED PID]
+  angle_error  → PID_outer → velocity_setpoint
+  vel_error    → PID_inner → motor_pwm
+
+Tuned with Ziegler-Nichols as starting point,
+manual refinement while watching it crash.
+
+[SENSOR FUSION — MPU-6050]
+Complementary filter (gyro drifts, accel noisy):
+  angle = 0.98*(angle + gyro*dt) + 0.02*accel_angle
+Sample rate: 500 Hz
+
+[FREERTOS TASKS]
+  SensorTask  @ 500 Hz  — IMU read
+  ControlTask @ 250 Hz  — PID compute
+  MotorTask             — PWM output
+  DebugTask             — UART telemetry
+
+[RESULT]
+Balances. Push recovery ~0.5s.
+Good enough for a capstone demo.`
+     }
+    },
+    {id:'dnn',h:'DNN Accelerator',tag:'Verilog · Nios II',
+     p:'Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II.',
+     detail:{addr:0x1800,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Deep Neural Network Accelerator'},
+        {k:'stack',  v:'Verilog · Nios II · DE1-SoC · Quartus Prime · SDRAM · Q8.8 fixed-point'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// DNN Accelerator — DE1-SoC FPGA
+// ──────────────────────────────────
+
+[ARCHITECTURE]
+  Nios II softcore
+    ├─► weight SRAM (preloaded at boot)
+    ├─► activation buffer (SDRAM, double-buffered)
+    └─► matmul accelerator (custom Verilog)
+              └─► ReLU → next layer
+
+[MATMUL CORE]
+Pipelined MAC array. Q8.8 fixed-point arithmetic.
+Saturating overflow. Latency: N cycles for N-wide
+dot product. Throughput: 1 result/cycle after fill.
+
+[SDRAM DOUBLE BUFFERING]
+While accelerator computes layer N,
+Nios II loads layer N+1 weights into buffer B.
+Hides SDRAM latency. Keeps MAC fed.
+
+[RESULT]
+~94% accuracy on MNIST test set.
+~2ms inference per image @ 50 MHz.`
+     }
+    },
+    {id:'rtsp',h:'4-Camera RTSP Display',tag:'GStreamer · RPi',
+     p:'Raspberry Pi surveillance wall for LZH lab. Wayland/GStreamer, PAL 4:3, autostart + watchdog.',
+     detail:{addr:0x1C00,struct:'project_t',
+      fields:[
+        {k:'name',   v:'4-Camera RTSP Surveillance Display'},
+        {k:'stack',  v:'Raspberry Pi 4 · GStreamer · RTSP · H.264 · Wayland · systemd'},
+        {k:'status', v:'DEPLOYED — LZH lab, 24/7'},
+      ],
+      blog:`// 4-Camera RTSP Display — LZH lab
+// ─────────────────────────────────
+
+[GSTREAMER PIPELINE (per camera)]
+rtspsrc → rtph264depay → h264parse
+  → avdec_h264 → videoconvert
+  → videoscale → compositor → waylandsink
+
+[WAYLAND]
+RPi OS uses Wayland by default (no X11).
+Must export WAYLAND_DISPLAY + XDG_RUNTIME_DIR
+or waylandsink fails silently.
+
+[PAL 4:3 QUIRK]
+Cameras: PAL 4:3 native. Display: 16:9.
+Force videoscale to 4:3, compositor adds
+letterbox bars. Otherwise: stretched faces.
+
+[WATCHDOG]
+systemd Restart=always for pipeline crashes.
+Script checks for frozen frames (same PTS
+>30s → kill + restart). Zero manual restarts
+since deployment.`
+     }
+    },
+    {id:'rover',h:'Metal-Detecting Rover',tag:'ESP32 · BLE',
+     p:'Autonomous ESP32 rover with BLE telemetry, custom PCB, servo-swept inductive sensor, occupancy grid.',
+     detail:{addr:0x2000,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Metal-Detecting Autonomous Rover'},
+        {k:'stack',  v:'ESP32 · BLE · LDC1614 · DRV8833 · KiCad · ESP-IDF'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// Metal-Detecting Rover
+// ──────────────────────
+
+[HARDWARE]
+- ESP32 dual-core (BLE + control loop)
+- Custom PCB: DRV8833 motor driver, 5V reg,
+  JST connectors (KiCad, 2-layer, JLCPCB)
+- LDC1614 inductive proximity sensor
+  on servo mount (sweeps ±45°)
+- Differential drive + encoders
+
+[NAVIGATION]
+- Encoder odometry → dead-reckoning pose
+- 50×50 occupancy grid, 5cm/cell
+- Metal hit → mark cell, flag for revisit
+- Ultrasonic obstacle avoidance
+
+[BLE TELEMETRY]
+GATT server, custom service UUID.
+Streams: pose (x,y,θ), grid updates,
+battery voltage, hit events.
+Python client renders live map.
+
+[PCB]
+First board from JLCPCB that worked
+first try. Mostly.`
+     }
+    },
+    {id:'reflow',h:'Reflow Oven Controller',tag:'EFM8 · PID',
+     p:'PID reflow oven on EFM8. MAX31855 thermocouple, SSR switching, LCD temperature plot.',
+     detail:{addr:0x2400,struct:'project_t',
+      fields:[
+        {k:'name',   v:'Reflow Oven Controller'},
+        {k:'stack',  v:'EFM8 · MAX31855 · SSR · SPI · PID · 16×2 LCD · C'},
+        {k:'status', v:'COMPLETE'},
+      ],
+      blog:`// Reflow Oven Controller
+// ──────────────────────
+
+[REFLOW PROFILE — Sn63/Pb37]
+  Preheat:  25°C → 150°C  @ 2°C/s
+  Soak:     150°C, hold 60–90s
+  Reflow:   150°C → 220°C @ 3°C/s
+  Peak:     220°C, hold 10–20s
+  Cooldown: passive, >6°C/s target
+
+[PID]
+Discrete PID with anti-windup.
+SSR PWM'd at ~1 Hz (oven thermal τ ≈ 10s).
+  output = Kp*e + Ki*∫e + Kd*(de/dt)
+  integral clamp: [-50, 50]
+
+[THERMOCOUPLE]
+MAX31855 via SPI. Reads cold-junction
+compensated temp. Fault detection on open/short.
+
+[LCD UI]
+Scrolling bargraph: each char = 2°C.
+Shows: current temp, target, phase label.
+
+[RESULT]
+Boards come out clean. Good enough
+for hobby SMD work.`
+     }
+    },
+  ],
+  skills:{
+    buckets:[
+      {h:'Firmware / RTOS',  items:['C / C++ (embedded)','FreeRTOS','STM32 HAL / LL','ESP-IDF','Bare-metal ARM']},
+      {h:'HDL / FPGA',       items:['Verilog','VHDL','Quartus · ModelSim','Nios II softcore']},
+      {h:'Protocols',        items:['UART · SPI · I²C · CAN','CCSDS','RTSP · TCP/IP','JTAG · SWD']},
+      {h:'Tools / Software', items:['Python','Java','MATLAB','Linux · Git','YAMCS · GStreamer']},
+    ]
+  },
+  education:[
+    {h:'UBC — BASc Electrical Engineering',role:'Vancouver, BC',when:'Expected 2027',p:'Bachelor of Applied Science. Leaning into embedded and digital systems.'},
+    {h:'CPEN 311 — Digital Systems Design',role:'FPGA · HDL',when:'',p:'Verilog, VHDL, DE1-SoC, Quartus, ModelSim.',c:['Verilog','VHDL','FPGA']},
+    {h:'CPEN 211 — Computer Architecture',role:'RISC datapath',when:'',p:'RISC pipeline, caches, hazard detection, forwarding.',c:['RISC','Pipeline','Cache']},
+    {h:'ELEC 391 — Embedded Capstone',role:'FreeRTOS · STM32',when:'',p:'Real-time control, motor control, PID. Self-balancing robot.',c:['FreeRTOS','STM32','PID']},
+    {h:'ELEC 301 — DSP',role:'Signal processing',when:'',p:'FIR/IIR filters, Z-transform, DFT/FFT, sampling theory.',c:['DSP','FIR','FFT']},
+    {h:'ELEC 311 — Control Systems',role:'Feedback control',when:'',p:'PID tuning, root locus, Bode plots, stability.',c:['Control','PID','Bode']},
+  ],
+  contact:[
+    {k:'email',          v:'monilarora2003@gmail.com'},
+    {k:'phone',          v:'+1 236 777 5739'},
+    {k:'github',         v:'github.com/plundis'},
+    {k:'linkedin',       v:'in/monil-arora-a26851290'},
+    {k:'location · now', v:'Albertstraße 12, 30451 Hannover, DE'},
+    {k:'location · home',v:'2205 Lower Mall, Vancouver, BC, CA'},
+  ],
+  resume:{p:'Single-page PDF. Updated April 2026.'},
+};
+
+/* ── hex utils ── */
+function bytesFromString(s,padTo){const b=[];for(let i=0;i<s.length;i++)b.push(s.charCodeAt(i)&0xff);while(padTo&&b.length<padTo)b.push(0);return b;}
+function genHex(region){
+  const lines=[],label=region.name.toUpperCase().replace('.','')+'  '+region.struct.toUpperCase();
+  const lb=bytesFromString(label),s0=region.addr[0];
+  for(let r=0;r<16;r++){
+    const off=s0+r*16,bytes=[];
+    for(let c=0;c<16;c++){
+      const idx=r*16+c;
+      let b;
+      if(r<2&&idx<lb.length) b=lb[idx];
+      else if(r===15&&c>=12){const t=[0xDE,0xAD,0xBE,0xEF];b=t[c-12];}
+      else if(region.empty) b=0xFF;
+      else{const seed=(off+c*31+region.key.charCodeAt(0)*7)&0xff;b=(seed^(seed>>3)^0x5a)&0xff;if(c%3===0)b=0x20+(b&0x3f);}
+      bytes.push(b);
     }
-    return html;
+    lines.push({off,bytes,header:r<2,terminator:r===15});
   }
-  function setGridForSection(addr){
-    hexGrid.innerHTML = genGrid(addr);
-    hexGrid.classList.remove('off');
-    hexInsp.classList.remove('on');
-  }
+  return lines;
+}
+function hp(n,w){return n.toString(16).toUpperCase().padStart(w,'0')}
+function ao(b){return(b>=0x20&&b<0x7f)?String.fromCharCode(b):'·'}
 
-  // ── inspector content ─────────────────────────────────
-  const INSPECT = {
-    // experience
-    'exp-lzh':{addr:0x0200,struct:'role_t',title:'LZH — Research Assistant',sub:'CubeSat Ground Station · Hannover, DE',
-      fields:[{k:'company',v:'Laser Zentrum Hannover e.V.'},{k:'duration',v:'Mar 22 – Jul 11, 2026'},{k:'stack',v:'YAMCS · CCSDS · STM32 · FreeRTOS · Java · GStreamer'}],
-      tags:['YAMCS','CCSDS','STM32','FreeRTOS','Java','GStreamer'],
-      link:{label:'github.com/plundis/cubesat-groundstation',url:'https://github.com/plundis'}},
-    'exp-sharang':{addr:0x0600,struct:'role_t',title:'Sharang Shakti — RF Intern',sub:'Anti-drone radar signal chain · Delhi, IN',
-      fields:[{k:'role',v:'RF / Signal Processing Intern'},{k:'duration',v:'Summer 2023'},{k:'stack',v:'AD9910 DDS · AD8336 VGA · MATLAB · SPI'}],
-      tags:['AD9910','AD8336','RF','MATLAB','SPI']},
-    'exp-drake':{addr:0x0A00,struct:'role_t',title:'Drake International — Operations',sub:'Customer ops · 2022',
-      fields:[{k:'role',v:'Operations'},{k:'transfer',v:'Comms under pressure, scheduling, multi-task'}],tags:['Operations','Comms']},
-    // projects
-    'proj-cubesat':{addr:0x1000,struct:'project_t',title:'CubeSat Ground Station',sub:'YAMCS · STM32 · FreeRTOS',
-      fields:[{k:'stack',v:'YAMCS · Java · CCSDS · STM32F4 · FreeRTOS · Python'},{k:'status',v:'ACTIVE — LZH internship'},{k:'highlights',v:'XTCE mission DB · OBT→UTC TCO · Java preprocessor'}],
-      tags:['YAMCS','CCSDS','STM32','FreeRTOS','Java'],
-      link:{label:'github.com/plundis/cubesat-groundstation',url:'https://github.com/plundis'}},
-    'proj-robot':{addr:0x1400,struct:'project_t',title:'Self-Balancing Robot',sub:'UBC ELEC 391 capstone',
-      fields:[{k:'stack',v:'STM32F4 · FreeRTOS · MPU-6050 · PID'},{k:'control',v:'Cascaded PID, complementary filter @ 500 Hz'},{k:'result',v:'Balances. Push recovery ~0.5s.'}],
-      tags:['STM32','FreeRTOS','PID','MPU-6050']},
-    'proj-dnn':{addr:0x1800,struct:'project_t',title:'DNN Accelerator',sub:'DE1-SoC FPGA',
-      fields:[{k:'stack',v:'Verilog · Nios II · Quartus · Q8.8 fixed-point'},{k:'arch',v:'Pipelined MAC array, SDRAM double-buffering'},{k:'result',v:'~94% MNIST accuracy, ~2 ms inference @ 50 MHz'}],
-      tags:['Verilog','Nios II','FPGA','MNIST']},
-    'proj-rtsp':{addr:0x1C00,struct:'project_t',title:'4-Camera RTSP Display',sub:'LZH lab · deployed 24/7',
-      fields:[{k:'stack',v:'Raspberry Pi 4 · GStreamer · RTSP · H.264 · Wayland'},{k:'pipeline',v:'rtspsrc → h264parse → avdec_h264 → compositor → waylandsink'},{k:'reliability',v:'systemd watchdog, frozen-frame detector'}],
-      tags:['GStreamer','RPi','Wayland','systemd']},
-    'proj-rover':{addr:0x2000,struct:'project_t',title:'Metal-Detecting Rover',sub:'ESP32 · BLE · KiCad',
-      fields:[{k:'stack',v:'ESP32 · BLE · LDC1614 · DRV8833 · KiCad'},{k:'nav',v:'Encoder odometry → 50×50 occupancy grid, 5cm/cell'},{k:'pcb',v:'Custom 2-layer board, JLCPCB'}],
-      tags:['ESP32','BLE','KiCad','LDC1614']},
-    'proj-reflow':{addr:0x2400,struct:'project_t',title:'Reflow Oven Controller',sub:'EFM8 · PID',
-      fields:[{k:'stack',v:'EFM8 · MAX31855 · SSR · SPI · 16×2 LCD'},{k:'control',v:'Discrete PID + anti-windup, SSR PWM @ 1 Hz'},{k:'profile',v:'Sn63/Pb37: preheat → soak → reflow → cool'}],
-      tags:['EFM8','PID','MAX31855','SSR']},
-    // education
-    'edu-ubc':{addr:0x3800,struct:'course_t',title:'UBC — BASc Electrical Engineering',sub:'Vancouver, BC · Expected 2027',
-      fields:[{k:'coursework',v:'CPEN 311 · CPEN 211 · ELEC 391 · ELEC 301 · ELEC 311'},{k:'focus',v:'Embedded systems, digital design, control'}],
-      tags:['Embedded','Digital','Control']},
-  };
+/* ── C struct renderer ── */
+// ── Option A: VSCode Dark+ palette ──
+const SC = {
+  cmt:   '#3b7a46',
+  str:   '#f0b64a',
+  kw:    '#f0b64a',
+  field: '#5ad1ff',
+  op:    '#f0b64a',
+  brace: '#3b7a46',
+  enum:  '#ff5aa8',
+  num:   '#ff5aa8',
+  plain: '#ece4d0',
+};
+function S(text, type){
+  const color = SC[type] || '#ece4d0';
+  return `<div style="color:${color};font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${text||' '}</div>`;
+}
+function T(...tokens){
+  const inner = tokens.map(([t,v])=>`<span style="color:${SC[t]||'#ece4d0'}">${v}</span>`).join('');
+  return `<div style="font-size:12.5px;line-height:2;font-family:var(--mono);white-space:pre">${inner}</div>`;
+}
 
-  function showInspect(key){
-    const d = INSPECT[key];
-    if(!d){ return; }
-    hexRegion.textContent = '0x'+d.addr.toString(16).toUpperCase().padStart(4,'0');
-    hexRange.textContent = d.struct;
-    const fieldsHtml = d.fields.map(f=>`<div class="hi-field"><div class="hi-k">${f.k}</div><div class="hi-v">${f.v}</div></div>`).join('');
-    const tagsHtml = d.tags ? `<div class="hi-tags">${d.tags.map(t=>`<span class="hi-tag">${t}</span>`).join('')}</div>` : '';
-    const linkHtml = d.link ? `<div class="hi-field"><div class="hi-k">repo</div><div class="hi-v"><a href="${d.link.url}" target="_blank" rel="noopener">${d.link.label} ↗</a></div></div>` : '';
-    hexInsp.innerHTML = `
-      <div class="hi-addr">@ 0x${d.addr.toString(16).toUpperCase().padStart(4,'0')} · ${d.struct}</div>
-      <div class="hi-title">${d.title}</div>
-      <div class="hi-sub">${d.sub}</div>
-      ${fieldsHtml}
-      ${linkHtml}
-      ${tagsHtml}
-      <button class="hi-back" id="hi-back">◄ close</button>
-    `;
-    hexGrid.classList.add('off');
-    hexInsp.classList.add('on');
-    document.getElementById('hi-back').addEventListener('click',()=>{
-      document.querySelectorAll('.exp.active,.proj.active,.edu.active').forEach(e=>e.classList.remove('active'));
-      // restore default grid for current section
-      const cur = sections[currentIdx];
-      if(cur) updateHexForSection(cur);
-    });
-  }
+const STRUCT_CONTENT = {
 
-  function updateHexForSection(section){
-    const seedMap={'sec-about':0x0000,'sec-experience':0x0200,'sec-projects':0x1000,'sec-skills':0x3000,'sec-education':0x3800,'sec-contact':0x4000};
-    const seed = seedMap[section.id] || 0;
-    hexRegion.textContent = section.dataset.name;
-    hexRange.textContent = section.dataset.struct;
-    setGridForSection(seed);
-  }
+  header(reg){
+    return S('/* about_me.c @ 0x0000 */','cmt') +
+      S('') +
+      T(['kw','const '],['kw','about_me_t '],['plain','about_me '],['op','= '],['brace','{']) +
+      S('') +
+      T(['field','  .name     '],['op','= '],['str','"Monil Arora"'],['brace',',']) +
+      T(['field','  .degree   '],['op','= '],['str','"BASc Electrical Engineering"'],['brace',',']) +
+      T(['field','  .school   '],['op','= '],['str','"University of British Columbia"'],['brace',',']) +
+      T(['field','  .grad     '],['op','= '],['num','2027'],['brace',',']) +
+      T(['field','  .location '],['op','= '],['str','"Hannover, DE  →  Vancouver, BC"'],['brace',',']) +
+      S('') +
+      T(['field','  .role     '],['op','= '],['enum','EMBEDDED_FIRMWARE_ENGINEER'],['brace',',']) +
+      T(['field','  .status   '],['op','= '],['enum','OPEN_TO_OFFERS'],['brace',',']) +
+      S('') +
+      T(['field','  .email    '],['op','= '],['str','"monilarora2003@gmail.com"'],['brace',',']) +
+      T(['field','  .github   '],['op','= '],['str','"github.com/plundis"'],['brace',',']) +
+      T(['field','  .linkedin '],['op','= '],['str','"in/monil-arora-a26851290"'],['brace',',']) +
+      S('') +
+      T(['field','  .skills   '],['op','= '],['brace','{']) +
+      S('    C_CPP, STM32, FREERTOS, VERILOG,','enum') +
+      S('    YAMCS, CCSDS, LINUX, PYTHON,','enum') +
+      S('    UART_SPI_I2C, GSTREAMER,','enum') +
+      S('  },','brace') +
+      S('') +
+      S('};','brace');
+  },
 
-  // wire card clicks
-  document.querySelectorAll('[data-inspect]').forEach(el=>{
-    el.addEventListener('click', e=>{
-      // don't trigger on link clicks inside cards
-      if(e.target.closest('a')) return;
-      document.querySelectorAll('.exp.active,.proj.active,.edu.active').forEach(x=>x.classList.remove('active'));
-      el.classList.add('active');
-      showInspect(el.dataset.inspect);
-    });
+  experience(reg){
+    return S('/* experience.c @ 0x0200 */','cmt') +
+      S('') +
+      T(['kw','const '],['kw','role_t '],['plain','roles[] '],['op','= '],['brace','{']) +
+      S('') +
+      S('  /* Laser Zentrum Hannover — Mar–Jul 2026 */','cmt') +
+      S('  {','brace') +
+      T(['field','    .title    '],['op','= '],['str','"Research Assistant"'],['brace',',']) +
+      T(['field','    .location '],['op','= '],['str','"Hannover, DE"'],['brace',',']) +
+      T(['field','    .stack    '],['op','= '],['brace','{ '],['enum','YAMCS, CCSDS, STM32,']) +
+      S('                  FREERTOS, JAVA, GSTREAMER ','enum') +
+      S('  },','brace') +
+      S('') +
+      S('  /* Sharang Shakti — Summer 2023 */','cmt') +
+      S('  {','brace') +
+      T(['field','    .title    '],['op','= '],['str','"RF / Signal Processing Intern"'],['brace',',']) +
+      T(['field','    .location '],['op','= '],['str','"Delhi, IN"'],['brace',',']) +
+      T(['field','    .stack    '],['op','= '],['brace','{ '],['enum','AD9910_DDS, AD8336_VGA,']) +
+      S('                  RF_DESIGN, MATLAB ','enum') +
+      S('  },','brace') +
+      S('') +
+      S('  /* Drake International — 2022 */','cmt') +
+      S('  {','brace') +
+      T(['field','    .title    '],['op','= '],['str','"Operations"'],['brace',',']) +
+      T(['field','    .stack    '],['op','= '],['brace','{ '],['enum','COMMS, SCHEDULING '],['brace','},']) +
+      S('  },','brace') +
+      S('') +
+      S('};','brace');
+  },
+
+  projects(reg){
+    return S('/* projects.c @ 0x1000 */','cmt') +
+      S('') +
+      T(['kw','const '],['kw','project_t '],['plain','projects[] '],['op','= '],['brace','{']) +
+      S('') +
+      S('  /* 0x1000 — CubeSat Ground Station */','cmt') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','YAMCS, CCSDS, STM32, FREERTOS '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','ACTIVE'],['brace',',']) +
+      T(['field','    .repo   '],['op','= '],['str','"github.com/plundis/cubesat-gs"'],['brace',' },']) +
+      S('') +
+      S('  /* 0x1400 — Self-Balancing Robot */','cmt') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','STM32, FREERTOS, PID, MPU6050 '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
+      S('') +
+      S('  /* 0x1800 — DNN Accelerator */','cmt') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','VERILOG, NIOS2, FPGA, SDRAM '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
+      S('') +
+      S('  /* 0x1C00 — 4-Camera RTSP Display */','cmt') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','GSTREAMER, RPI4, WAYLAND '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','DEPLOYED'],['brace',' },']) +
+      S('') +
+      S('  /* 0x2000 — Metal-Detecting Rover */','cmt') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','ESP32, BLE, KICAD, ESP_IDF '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
+      S('') +
+      S('  /* 0x2400 — Reflow Oven Controller */','cmt') +
+      T(['brace','  { '],['field','.stack  '],['op','= '],['brace','{ '],['enum','EFM8, PID, MAX31855, SSR '],['brace','},']) +
+      T(['field','    .status '],['op','= '],['enum','COMPLETE'],['brace',' },']) +
+      S('') +
+      S('};','brace');
+  },
+
+  skills(reg){
+    return S('/* skills.h @ 0x3000 */','cmt') +
+      S('') +
+      S('#pragma once','kw') +
+      S('') +
+      S('/* --- Firmware / RTOS --- */','cmt') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','fw[] '],['op','= '],['brace','{']) +
+      S('  "C / C++ (embedded)",','str') +
+      S('  "STM32 HAL / LL",','str') +
+      S('  "FreeRTOS",','str') +
+      S('  "Bare-metal ARM",','str') +
+      S('  "ESP-IDF",','str') +
+      S('};','brace') +
+      S('') +
+      S('/* --- HDL / FPGA --- */','cmt') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','hdl[] '],['op','= '],['brace','{']) +
+      S('  "Verilog",','str') +
+      S('  "VHDL",','str') +
+      S('  "Quartus / ModelSim",','str') +
+      S('  "Nios II softcore",','str') +
+      S('};','brace') +
+      S('') +
+      S('/* --- Protocols --- */','cmt') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','proto[] '],['op','= '],['brace','{']) +
+      S('  "UART / SPI / I2C / CAN",','str') +
+      S('  "JTAG / SWD",','str') +
+      S('  "CCSDS",','str') +
+      S('  "RTSP / TCP-IP",','str') +
+      S('};','brace') +
+      S('') +
+      S('/* --- Tools --- */','cmt') +
+      T(['kw','static '],['kw','const '],['kw','char '],['brace','*'],['plain','tools[] '],['op','= '],['brace','{']) +
+      S('  "Linux / Git",','str') +
+      S('  "Python",','str') +
+      S('  "YAMCS / GStreamer",','str') +
+      S('  "Java / MATLAB",','str') +
+      S('};','brace');
+  },
+
+  education(reg){
+    return S('/* education.c @ 0x3800 */','cmt') +
+      S('') +
+      T(['kw','const '],['kw','degree_t '],['plain','degree '],['op','= '],['brace','{']) +
+      T(['field','  .name   '],['op','= '],['str','"BASc Electrical Engineering"'],['brace',',']) +
+      T(['field','  .school '],['op','= '],['str','"University of British Columbia"'],['brace',',']) +
+      T(['field','  .grad   '],['op','= '],['num','2027'],['brace',',']) +
+      S('};','brace') +
+      S('') +
+      T(['kw','const '],['kw','course_t '],['plain','courses[] '],['op','= '],['brace','{']) +
+      S('') +
+      S('  /* CPEN 311 — Digital Systems Design */','cmt') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','VERILOG, VHDL, FPGA, DE1_SOC '],['brace','} },']) +
+      S('') +
+      S('  /* CPEN 211 — Computer Architecture */','cmt') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','RISC_PIPELINE, CACHE, HAZARD '],['brace','} },']) +
+      S('') +
+      S('  /* ELEC 391 — Embedded Capstone */','cmt') +
+      T(['brace','  { '],['field','.skills  '],['op','= '],['brace','{ '],['enum','STM32, FREERTOS, PID '],['brace','},']) +
+      T(['field','    .output  '],['op','= '],['plain','&projects['],['enum','SELF_BALANCING_ROBOT'],['plain',']'],['brace',' },']) +
+      S('') +
+      S('  /* ELEC 301 — DSP */','cmt') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','FIR_IIR, FFT, Z_TRANSFORM '],['brace','} },']) +
+      S('') +
+      S('  /* ELEC 311 — Control Systems */','cmt') +
+      T(['brace','  { '],['field','.skills '],['op','= '],['brace','{ '],['enum','PID, ROOT_LOCUS, BODE '],['brace','} },']) +
+      S('') +
+      S('};','brace');
+  },
+
+  contact(reg){
+    return S('/* contact.c @ 0x4000 */','cmt') +
+      S('') +
+      T(['kw','const '],['kw','contact_t '],['plain','contact '],['op','= '],['brace','{']) +
+      S('') +
+      T(['field','  .email    '],['op','= '],['str','"monilarora2003@gmail.com"'],['brace',',']) +
+      T(['field','  .phone    '],['op','= '],['str','"+1 236 777 5739"'],['brace',',']) +
+      T(['field','  .github   '],['op','= '],['str','"github.com/plundis"'],['brace',',']) +
+      T(['field','  .linkedin '],['op','= '],['str','"in/monil-arora-a26851290"'],['brace',',']) +
+      S('') +
+      T(['field','  .loc_now  '],['op','= '],['str','"Hannover, DE"'],['brace',',']) +
+      T(['field','  .loc_home '],['op','= '],['str','"Vancouver, BC, CA"'],['brace',',']) +
+      S('') +
+      T(['field','  .status   '],['op','= '],['enum','OPEN_TO_OFFERS'],['brace',',']) +
+      T(['field','  .type     '],['op','= '],['enum','EMBEDDED '],['brace','| '],['enum','FIRMWARE '],['brace','| '],['enum','HW'],['brace',',']) +
+      T(['field','  .start    '],['op','= '],['enum','SEP_2026'],['brace',',']) +
+      T(['field','  .relocate '],['op','= '],['enum','true'],['brace',',']) +
+      S('') +
+      S('};','brace') +
+      S('') +
+      S('/* preferred contact: email or linkedin */','cmt');
+  },
+
+  resume(reg){
+    return S('/* resume.c @ 0x4200 */','cmt') +
+      S('') +
+      T(['kw','const '],['kw','pdf_ref_t '],['plain','resume '],['op','= '],['brace','{']) +
+      T(['field','  .file   '],['op','= '],['str','"monil_arora_resume.pdf"'],['brace',',']) +
+      T(['field','  .rev    '],['op','= '],['str','"2026.04"'],['brace',',']) +
+      T(['field','  .pages  '],['op','= '],['num','1'],['brace',',']) +
+      T(['field','  .format '],['op','= '],['enum','SINGLE_PAGE '],['brace','| '],['enum','ATS_COMPATIBLE'],['brace',',']) +
+      S('};','brace') +
+      S('') +
+      S('/* open via top-right button  ↑ */','cmt');
+  },
+
+  empty(reg){
+    return S('/* .empty @ 0x4400 */','cmt') +
+      S('/* 47 KB — unprogrammed flash */','cmt') +
+      S('') +
+      S('#ifdef FUTURE','kw') +
+      S('') +
+      T(['kw','typedef '],['kw','struct '],['brace','{']) +
+      T(['kw','  project_t  '],['plain','pcb_design'],['brace',';    '],['cmt','/* in progress */']) +
+      T(['kw','  project_t  '],['plain','rf_frontend'],['brace',';   '],['cmt','/* planned     */']) +
+      T(['kw','  char       '],['plain','next_role['],['num','64'],['plain',']'],['brace','; '],['cmt','/* TBD         */']) +
+      T(['brace','} '],['plain','future_t'],['brace',';']) +
+      S('') +
+      S('#endif','kw');
+  },
+
+};
+
+function renderHex(region){
+  const body = document.getElementById('hex-body');
+  const renderer = STRUCT_CONTENT[region.key] || STRUCT_CONTENT.empty;
+  const reg = region;
+  body.innerHTML =
+    `<div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--phos-dim);padding:8px 0 10px;border-bottom:1px dashed var(--phos-deep);margin-bottom:4px">` +
+    `${reg.name} &nbsp;·&nbsp; ${reg.struct} &nbsp;·&nbsp; 0x${hp(reg.addr[0],4)}–0x${hp(reg.addr[1],4)}</div>` +
+    `<div id="hex-content">${renderer(region)}</div>`;
+
+  body.querySelectorAll('#hex-content > div').forEach((el,i)=>{
+    el.style.opacity='0';
+    setTimeout(()=>{ el.style.transition='opacity .06s'; el.style.opacity='1'; }, i*10);
   });
+}
 
-  // ── section tracking via IntersectionObserver ─────────
-  let currentIdx = 0;
-  let lockedIdx = null;
+/* ── detail view ── */
+let activeEntry=null;
 
-  function setActive(i){
-    currentIdx = i;
-    const s = sections[i];
-    const id = s.id;
-    regs.forEach(r=>r.classList.toggle('on', r.dataset.target===id));
-    curSec.textContent = s.dataset.name;
-    sbSec.textContent = s.dataset.name;
-    sbStruct.textContent = s.dataset.struct;
-    scrollPos.textContent = 'struct '+s.dataset.struct;
-    // only update hex if not pinned to an entry
-    if(!document.querySelector('.exp.active,.proj.active,.edu.active')){
-      updateHexForSection(s);
-    }
+function renderDetail(detail,title){
+  const dv=document.getElementById('detail-view');
+  const hb=document.getElementById('hex-body');
+  const hh=document.getElementById('hex-hd-hint');
+
+  const fieldsHtml=detail.fields.map(f=>`<div class="dv-field"><div class="dv-key">${f.k}</div><div class="dv-val">${f.v}</div></div>`).join('');
+
+  // linkify github URLs in blog text
+  function linkifyBlog(text){
+    return text.replace(/(github\.com\/[\w./-]+)/g,
+      '<a href="https://$1" target="_blank" rel="noopener" style="color:var(--cyan);text-decoration:underline;text-underline-offset:2px">$1</a>');
   }
 
-  // observer: highlights the section whose top is closest to viewport top
-  const sectionTops = ()=>[...sections].map(s=>s.offsetTop);
-  function detectFromScroll(){
-    if(lockedIdx !== null) return;
-    const top = body.scrollTop;
-    const atBottom = (top + body.clientHeight) >= (body.scrollHeight - 4);
-    if(atBottom){ setActive(sections.length-1); return; }
-    // pick section whose top is closest to (and at or above) probe line
-    const probe = top + 80;
-    let best = 0, bestDist = Infinity;
-    for(let i=0;i<sections.length;i++){
-      const t = sections[i].offsetTop;
-      if(t <= probe){
-        const d = probe - t;
-        if(d < bestDist){ bestDist = d; best = i; }
-      }
-    }
-    setActive(best);
+  const blogHtml=detail.blog.split('\n').map(line=>{
+    if(line.startsWith('//')) return `<span style="color:var(--phos-dim)">${line}</span>`;
+    if(/^\[.+\]$/.test(line.trim())) return `<span style="color:var(--amber);font-weight:700">${line}</span>`;
+    if(line.includes('→')||line.includes('►')) return `<span style="color:var(--cyan)">${line}</span>`;
+    if(line.trim().startsWith('-')) return `<span style="color:var(--phos)">${line}</span>`;
+    return `<span style="color:var(--phos)">${line}</span>`;
+  }).join('\n');
+  // apply linkification after line processing
+  const blogHtmlLinked = linkifyBlog(blogHtml);
+
+  dv.innerHTML=`
+    <div class="dv-back" id="dv-back">◄ ESC / back</div>
+    <div class="dv-struct-line"><b>${title}</b> &nbsp;·&nbsp; ${detail.struct} &nbsp;·&nbsp; 0x${hp(detail.addr,4)}</div>
+    ${fieldsHtml}
+    <hr class="dv-divider"/>
+    <div class="dv-field">
+      <div class="dv-key">// writeup</div>
+      <div class="dv-blog">${blogHtmlLinked}<span class="dv-cursor"></span></div>
+    </div>`;
+
+  hb.classList.add('hidden');
+  dv.classList.add('on');
+  hh.textContent=title+' · detail';
+  dv.scrollTop=0;
+
+  document.getElementById('dv-back').addEventListener('click',clearDetail);
+}
+
+function clearDetail(){
+  document.getElementById('detail-view').classList.remove('on');
+  document.getElementById('hex-body').classList.remove('hidden');
+  document.getElementById('hex-hd-hint').textContent='C struct · decoded source view';
+  activeEntry=null;
+  document.querySelectorAll('.entry.active,.proj.active').forEach(e=>e.classList.remove('active'));
+}
+
+function handleEntryClick(el,sectionKey){
+  const id=el.dataset.id;
+  const entry=DATA[sectionKey].find(e=>e.id===id);
+  if(!entry||!entry.detail)return;
+  document.querySelectorAll('.entry.active,.proj.active').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  activeEntry=id;
+  const reg=REGIONS.find(r=>r.key===sectionKey);
+  document.getElementById('hex-region').textContent=reg.name;
+  document.getElementById('hex-range').textContent=`0x${hp(entry.detail.addr,4)}`;
+  renderDetail(entry.detail,entry.h);
+}
+
+/* ── decode renderer ── */
+function renderDecode(key){
+  const body=document.getElementById('dc-body');
+  body.innerHTML='';
+  const d=DATA[key];
+  const reg=REGIONS.find(r=>r.key===key);
+
+  if(!d){
+    body.innerHTML=`<div class="dc-section"><h1 style="font-family:var(--mono);font-size:18px">${reg.name} · empty</h1><div class="subh">0xFF · ${reg.size} unprogrammed</div><p style="font-family:var(--sans);font-size:13px;line-height:1.55;color:#2b2d2e">Room to grow.</p></div>`;
+    return;
   }
-  body.addEventListener('scroll', ()=>requestAnimationFrame(detectFromScroll));
-
-  // smooth-scroll on region click
-  regs.forEach((r,i)=>{
-    r.addEventListener('click', e=>{
-      e.preventDefault();
-      navigateTo(i);
-      r.blur();
-    });
-  });
-
-  function navigateTo(i){
-    const t = sections[i];
-    if(!t) return;
-    const target = (i===0) ? 0 : t.offsetTop - 8;
-    lockedIdx = i;
-    setActive(i);
-    body.scrollTo({top:target, behavior:'smooth'});
-    clearTimeout(window.__navUnlock);
-    window.__navUnlock = setTimeout(()=>{ lockedIdx = null; detectFromScroll(); }, 800);
+  if(key==='header'){
+    body.innerHTML=`<div class="dc-section">
+      <div class="bio"><div class="avatar"><img src="photo.jpg" alt="Monil Arora"/></div>
+      <div class="who"><div class="n">${d.name}</div><div class="t">${d.tagline}</div></div></div>
+      <p style="font-size:14px;line-height:1.55;color:#2b2d2e;text-wrap:pretty;margin-bottom:14px">${d.blurb}</p>
+      <div class="links">${d.links.map(l=>`<a class="${l.pri?'pri':''}" href="${l.href}" ${(l.href.startsWith('http')||l.href.endsWith('.pdf'))?'target="_blank" rel="noopener"':''}>${l.k} · ${l.v}</a>`).join('')}</div>
+      <div class="skill-chips">${d.topSkills.map(s=>`<span class="skill-chip">${s}</span>`).join('')}</div>
+    </div>`;
+    return;
   }
+  if(key==='experience'){
+    body.innerHTML=`<div class="dc-section"><h1>Experience</h1><div class="subh">struct ${reg.struct} · ${d.length} entries · click any to open detail</div></div>`+
+      d.map(e=>`<div class="entry" data-id="${e.id}" data-section="${key}">
+        <div class="etop"><h3>${e.h}</h3>${e.when?`<span class="when">${e.when}</span>`:''}</div>
+        <div class="role">${e.role}</div><p>${e.p}</p>
+        <div class="chips">${e.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+      </div>`).join('');
+    body.querySelectorAll('.entry[data-id]').forEach(el=>el.addEventListener('click',()=>handleEntryClick(el,key)));
+    return;
+  }
+  if(key==='projects'){
+    body.innerHTML=`<div class="dc-section"><h1>Projects</h1><div class="subh">struct ${reg.struct} · ${d.length} entries · click any to open detail</div></div>`+
+      d.map(p=>`<div class="proj" data-id="${p.id}" data-section="${key}">
+        <div class="pt"><h3>${p.h}</h3><span class="tag">${p.tag}</span></div>
+        <p>${p.p}</p>
+      </div>`).join('');
+    body.querySelectorAll('.proj[data-id]').forEach(el=>el.addEventListener('click',()=>handleEntryClick(el,key)));
+    return;
+  }
+  if(key==='education'){
+    body.innerHTML=`<div class="dc-section"><h1>Education</h1><div class="subh">struct ${reg.struct} · ${d.length} entries</div></div>`+
+      d.map(e=>`<div class="entry"><div class="etop"><h3>${e.h}</h3>${e.when?`<span class="when">${e.when}</span>`:''}</div><div class="role">${e.role||''}</div><p>${e.p}</p>${e.c?`<div class="chips">${e.c.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:''}</div>`).join('');
+    return;
+  }
+  if(key==='skills'){
+    body.innerHTML=`<div class="dc-section"><h1>Skills</h1><div class="subh">struct ${reg.struct}</div></div>
+      <div class="skills-grid">${d.buckets.map(b=>`<div class="skbucket"><h4>${b.h}</h4><div class="sk-list">${b.items.map(s=>`<span class="sk-tag">${s}</span>`).join('')}</div></div>`).join('')}</div>`;
+    return;
+  }
+  if(key==='contact'){
+    body.innerHTML=`<div class="dc-section"><h1>Contact</h1><div class="subh">struct ${reg.struct}</div></div>
+      <div class="cgrid">${d.map(c=>`<div class="ccard"><div class="k">${c.k}</div><div class="v">${c.v}</div></div>`).join('')}</div>`;
+    return;
+  }
+  if(key==='resume'){
+    body.innerHTML=`<div class="dc-section"><h1>Resume</h1><div class="subh">struct ${reg.struct}</div>
+      <p style="font-size:14px;line-height:1.55;color:#2b2d2e;margin:12px 0">${d.p}</p>
+      <div class="links"><a class="pri" href="resume.pdf" target="_blank" rel="noopener">◆ open resume.pdf →</a></div></div>`;
+    return;
+  }
+}
 
-  // keyboard nav
-  document.addEventListener('keydown', e=>{
-    const tag = (e.target && e.target.tagName) || '';
-    if(tag==='INPUT'||tag==='TEXTAREA') return;
-    if(e.key!=='ArrowDown' && e.key!=='ArrowUp' && e.key!=='PageDown' && e.key!=='PageUp') return;
+/* ── state / region select ── */
+let current='header';
+
+function renderRegions(){
+  const list=document.getElementById('reg-list');
+  list.innerHTML=REGIONS.map(r=>`<div class="reg ${r.empty?'empty':''} ${r.key===current?'on':''}" data-key="${r.key}">
+    <div class="addr">0x${hp(r.addr[0],4)} — 0x${hp(r.addr[1],4)}</div>
+    <div class="nm">${r.name}</div><div class="sz">${r.size}</div>
+  </div>`).join('');
+  list.querySelectorAll('.reg').forEach(el=>el.addEventListener('click',()=>select(el.dataset.key)));
+  const bar=document.getElementById('memmap-bar');
+  bar.innerHTML=REGIONS.map(r=>`<span class="seg ${r.key===current?'on':''}" data-key="${r.key}" style="flex:${((r.addr[1]-r.addr[0])/0xFFFF)*100};background:${r.color}"></span>`).join('');
+  bar.querySelectorAll('.seg').forEach(el=>el.addEventListener('click',()=>select(el.dataset.key)));
+}
+
+function typeInto(el,text){
+  if(!el)return;if(el._typer)clearInterval(el._typer);el.textContent='';let i=0;
+  el._typer=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(el._typer);el._typer=null;}},22);
+}
+
+function select(key,opts){
+  if(!REGIONS.find(r=>r.key===key))return;
+  current=key;
+  const r=REGIONS.find(x=>x.key===key);
+  document.getElementById('hex-region').textContent=r.name;
+  document.getElementById('hex-range').textContent=`0x${hp(r.addr[0],4)}–0x${hp(r.addr[1],4)}`;
+  typeInto(document.getElementById('dc-region'),r.name);
+  typeInto(document.getElementById('dc-struct'),r.struct);
+  document.getElementById('sb-cursor').textContent=`0x${hp(r.addr[0],4)}`;
+  document.getElementById('sb-sym').textContent=r.name;
+  clearDetail();
+  renderRegions();renderHex(r);renderDecode(key);
+  if(opts&&opts.flash){
+    const el=document.querySelector(`.reg[data-key="${key}"]`);
+    if(el){el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');el.scrollIntoView({block:'nearest'});}
+  }
+  try{localStorage.setItem('fw.sect',key);}catch(e){}
+}
+
+/* ── command line ── */
+const hist=document.getElementById('term-hist');
+function termLog(html){
+  hist.classList.add('on');
+  const el=document.createElement('div');el.className='line';el.innerHTML=html;
+  hist.appendChild(el);hist.scrollTop=hist.scrollHeight;
+  clearTimeout(termLog._t);termLog._t=setTimeout(()=>{hist.classList.remove('on');hist.innerHTML='';},7000);
+}
+const CMDS={
+  help(){termLog(`<span class="em">commands:</span>  help · ls · cat &lt;section&gt; · open resume|email|github|linkedin · whoami · neofetch · clear`);},
+  ls(){termLog(`<span class="em">regions:</span>\n`+REGIONS.map(r=>`  <span class="dim">0x${hp(r.addr[0],4)}</span>  ${r.name.padEnd(12)}  <span class="dim">${r.size}</span>`).join('\n'));},
+  whoami(){termLog('monil arora · ee @ ubc · hannover → vancouver · open for embedded roles');},
+  neofetch(){termLog(`<span class="dim">   ╔══════════╗  monil@cortex-m4\n   ║ ◆ ◆ ◆ ◆  ║  os: bare-metal arm\n   ║  M O N I L║  kernel: freertos 10.x\n   ╚══[JTAG]══╝  uptime: 22 years</span>`);},
+  clear(){hist.innerHTML='';hist.classList.remove('on');},
+};
+function runCmd(raw){
+  const s=raw.trim();if(!s)return;
+  termLog(`<span class="em">$</span> ${s}`);
+  if(CMDS[s]){CMDS[s]();return;}
+  const catM=s.match(/^cat\s+\.?(\w+)/i);
+  if(catM){const k=catM[1].toLowerCase();if(REGIONS.find(r=>r.key===k)){select(k);termLog(`→ decoded .${k}`);}else termLog(`cat: .${catM[1]}: no such section`);return;}
+  const openM=s.match(/^open\s+(\w+)/i);
+  if(openM){
+    const w=openM[1].toLowerCase();
+    const L={resume:'resume.pdf',email:'mailto:monilarora2003@gmail.com',github:'https://github.com/plundis',linkedin:'https://linkedin.com/in/monil-arora-a26851290'};
+    if(L[w]){window.open(L[w],'_blank','noopener');termLog(`→ opening ${w}`);}
+    else termLog(`open: ${w}: unknown`);return;
+  }
+  termLog(`${s.split(' ')[0]}: command not found. try <span class="em">help</span>.`);
+}
+const input=document.getElementById('cmd');
+input.addEventListener('keydown',(e)=>{
+  if(e.key==='Enter'){runCmd(input.value);input.value='';}
+  else if(e.key==='Tab'){
     e.preventDefault();
-    const cur = (lockedIdx !== null) ? lockedIdx : currentIdx;
-    const dir = (e.key==='ArrowDown'||e.key==='PageDown') ? 1 : -1;
-    const next = Math.max(0, Math.min(sections.length-1, cur + dir));
-    if(next === cur) return;
-    navigateTo(next);
+    const tok=input.value.split(' '),last=tok[tok.length-1];
+    if(last.startsWith('.')||tok[0]==='cat'){
+      const stem=(last.startsWith('.')?last.slice(1):last).toLowerCase();
+      const hit=REGIONS.find(r=>r.key.startsWith(stem)&&!r.empty);
+      if(hit){tok[tok.length-1]='.'+hit.key;input.value=tok.join(' ');}
+    }
+  }
+});
+document.addEventListener('keydown',(e)=>{
+  if(document.activeElement===input)return;
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+    e.preventDefault();
+    const keys=REGIONS.filter(r=>!r.empty).map(r=>r.key);
+    const i=keys.indexOf(current);
+    select(keys[(i+(e.key==='ArrowDown'?1:-1)+keys.length)%keys.length],{flash:true});
+  }
+  if(e.key==='?')CMDS.help();
+  if(e.key==='/'){e.preventDefault();input.focus();}
+  if(e.key==='Escape'&&activeEntry)clearDetail();
+});
+
+/* ── activity LED ── */
+const led=document.getElementById('actled'),ledLbl=document.getElementById('actled-lbl');
+let ledAcc=0,ledTO=null;
+document.addEventListener('mousemove',()=>{ledAcc+=2;led.classList.add('hot');clearTimeout(ledTO);ledTO=setTimeout(()=>led.classList.remove('hot'),120);});
+setInterval(()=>{const b=Math.min(9999,Math.round(ledAcc*2));ledLbl.textContent=`RX ${b.toString().padStart(4,' ')} B/s`;ledAcc*=0.4;},250);
+
+/* ── mode toggle ── */
+const K=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let kb=[];
+document.addEventListener('keydown',(e)=>{
+  const k=e.key.length===1?e.key.toLowerCase():e.key;
+  kb.push(k);if(kb.length>K.length)kb.shift();
+  if(kb.length===K.length&&kb.every((x,i)=>x===K[i])){togglePlain();kb=[];}
+});
+function togglePlain(){
+  document.body.classList.toggle('plain');
+  const on=document.body.classList.contains('plain');
+  document.getElementById('plain-view').setAttribute('aria-hidden',on?'false':'true');
+  if(on) document.getElementById('plain-view').scrollTop=0;
+}
+document.getElementById('plain-back').addEventListener('click',togglePlain);
+document.getElementById('mode-btn').addEventListener('click',togglePlain);
+document.addEventListener('keydown',(e)=>{if(document.body.classList.contains('plain')&&e.key==='Escape')togglePlain();});
+
+
+  // ── Floating recruiter badge — shows after boot, dismissible ──
+  (function(){
+    try{ if(sessionStorage.getItem('fw.float.dismissed')) return; }catch(e){}
+    const badge = document.createElement('button');
+    badge.className = 'rec-float';
+    badge.id = 'rec-float';
+    badge.style.animationDelay = '2s';
+    badge.innerHTML = '👤 not a developer? &nbsp;<b>→ recruiter view</b><span class="rec-float-x" id="rec-float-x" title="dismiss">✕</span>';
+    document.body.appendChild(badge);
+
+    badge.addEventListener('click', (e)=>{
+      if(e.target.id === 'rec-float-x' || e.target.closest('#rec-float-x')){
+        badge.style.transition = 'opacity .2s';
+        badge.style.opacity = '0';
+        setTimeout(()=>badge.remove(), 200);
+        try{ sessionStorage.setItem('fw.float.dismissed','1'); }catch(err){}
+        return;
+      }
+      togglePlain();
+      badge.remove();
+    });
+
+    // auto-hide once recruiter mode is toggled
+    document.getElementById('mode-btn').addEventListener('click', ()=>badge.remove(), {once:true});
+  })();
+
+/* ── compiled date ── */
+(function(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const d = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} @ ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const el = document.getElementById('compiled-date');
+  if(el) el.textContent = d;
+})();
+
+/* ── boot ── */
+(function(){
+  const b=document.getElementById('boot');
+  b.querySelectorAll('.bl').forEach((l,i)=>{l.style.animationDelay=(i*120)+'ms';});
+  setTimeout(()=>{b.classList.add('done');setTimeout(()=>b.remove(),500);},b.querySelectorAll('.bl').length*120+360);
+})();
+
+/* ── FIX 1: guide banner — injected into decoded panel on first load ── */
+(function(){
+  // Only show once per session
+  try{ if(sessionStorage.getItem('fw.hint.dismissed')) return; }catch(e){}
+
+  const banner = document.createElement('div');
+  banner.id = 'guide-banner';
+  Object.assign(banner.style, {
+    margin: '0 -20px 16px',
+    padding: '10px 16px',
+    background: '#dff0e4',
+    borderTop: '1px solid rgba(0,0,0,.1)',
+    borderBottom: '2px solid rgba(0,180,60,.25)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+    fontFamily: 'var(--mono)',
+    fontSize: '11px',
+    color: '#1a3d26',
+    letterSpacing: '.05em',
+    lineHeight: '1.5',
+    animation: 'bannerIn .35s ease-out .9s both',
   });
 
-  setActive(0);
-})();
-</script>
+  banner.innerHTML = `
+    <span>
+      <b style="color:#0d6630">[ HOW TO NAVIGATE ]</b>&nbsp;
+      Click a <b>REGION</b> on the left · then click any entry here to see its detail in the <b>HEX</b> panel · <b>↑↓</b> keys also work
+    </span>
+    <button id="banner-dismiss" style="
+      font-family:var(--mono);font-size:11px;white-space:nowrap;
+      background:rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.2);
+      padding:3px 10px;cursor:pointer;color:#1a3d26;letter-spacing:.04em;
+      flex-shrink:0;
+    ">✕ got it</button>`;
 
+  setTimeout(()=>{
+    const body = document.getElementById('dc-body');
+    if(body) body.insertBefore(banner, body.firstChild);
+    const btn = document.getElementById('banner-dismiss');
+    if(btn) btn.addEventListener('click', ()=>{
+      banner.style.transition = 'opacity .2s';
+      banner.style.opacity = '0';
+      setTimeout(()=>banner.remove(), 200);
+      try{ sessionStorage.setItem('fw.hint.dismissed','1'); }catch(e){}
+    });
+  }, 950);
+})();
+
+/* ── init ── */
+renderRegions();
+const ir=REGIONS.find(r=>r.key===current);
+document.getElementById('hex-region').textContent=ir.name;
+document.getElementById('hex-range').textContent=`0x${hp(ir.addr[0],4)}–0x${hp(ir.addr[1],4)}`;
+document.getElementById('dc-region').textContent=ir.name;
+document.getElementById('dc-struct').textContent=ir.struct;
+document.getElementById('sb-cursor').textContent=`0x${hp(ir.addr[0],4)}`;
+document.getElementById('sb-sym').textContent=ir.name;
+renderHex(ir);renderDecode(current);
+
+// pulse decode panel to draw eye on load
+const decodeEl=document.querySelector('.decode');
+setTimeout(()=>{
+  decodeEl.classList.add('pulse');
+  decodeEl.addEventListener('animationend',()=>decodeEl.classList.remove('pulse'),{once:true});
+},800);
+</script>
 </body>
 </html>
