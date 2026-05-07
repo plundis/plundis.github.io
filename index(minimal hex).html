@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Monil Arora — Embedded Engineer</title>
+<meta name="description" content="Monil Arora — Electrical Engineering @ UBC · embedded firmware, STM32/FreeRTOS, Verilog, ground-station software."/>
+<meta name="theme-color" content="#07090a"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Monil Arora — Embedded Engineer"/>
+<meta property="og:description" content="Portfolio of Monil Arora — EE @ UBC, embedded firmware, STM32/FreeRTOS, Verilog."/>
+<meta property="og:url" content="https://monilarora.com/"/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-size='22' fill='%23f0b64a'%3E%E2%97%86%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#07090a;--bg2:#0c1012;--bg3:#11161a;
+    --line:#1a2328;--line2:#2a3740;
+    --paper:#ece4d0;--paper-bg:#f8f2e0;--paper-bg2:#e8dfc6;
+    --paper-ink:#0e0f10;--paper-ink2:#2b2d2e;--paper-dim:#4a4937;--paper-line:rgba(0,0,0,.18);
+    --phos:#7cf58a;--phos-dim:#3b7a46;--phos-deep:#1d3a24;
+    --amber:#f0b64a;--amber-dim:#6b5020;
+    --magenta:#ff5aa8;--cyan:#5ad1ff;
+    --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --sans:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  html{background:var(--bg)}
+  body{background:var(--bg);color:var(--paper-ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;}
+  /* CRT scanlines — only on the dark chrome strips, NOT the paper panel */
+  .topbar::before,.regions::before,.statusbar::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 3px);mix-blend-mode:multiply;}
+  .topbar > *,.regions > *,.statusbar > *{position:relative;z-index:6;}
+  .statusbar{position:relative;}
+
+  /* ── shell — fills viewport edge-to-edge ── */
+  .shell{
+    height:100vh;width:100%;
+    display:grid;grid-template-rows:auto 1fr auto;
+    margin:0 auto;
+    padding:8px 10px;gap:8px;
+    background:var(--bg);
+    overflow:hidden;
+  }
+  body.has-shell{background:var(--bg)}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;font-family:var(--mono);position:relative;}
+  .tb-left{display:flex;align-items:center;gap:14px;min-width:0}
+  .tb-logo{width:28px;height:28px;flex-shrink:0;border:1px solid var(--phos-dim);display:grid;place-items:center;color:var(--phos);font-weight:700;font-size:13px;box-shadow:inset 0 0 8px rgba(124,245,138,.15);}
+  .tb-title{font-family:var(--sans);font-weight:700;font-size:15px;color:var(--paper);letter-spacing:.01em}
+  .tb-title small{color:var(--phos-dim);font-weight:500;font-family:var(--mono);font-size:11px;margin-left:8px;letter-spacing:.08em}
+  .tb-meta{color:var(--phos-dim);font-size:11px;letter-spacing:.06em;font-family:var(--mono);}
+  .tb-right{display:flex;align-items:center;gap:8px;font-size:11px;flex-wrap:wrap;}
+  .tb-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;padding:5px 10px;border:1px solid var(--amber-dim);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;}
+  .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
+  .tb-link.pri{background:var(--amber);color:#07090a;border-color:var(--amber);font-weight:700;}
+  .tb-link.pri:hover{background:#ffd077;color:#07090a;}
+
+  /* main: 3-column — regions nav + content + hex inspector */
+  .main{display:grid;grid-template-columns:minmax(220px,250px) minmax(0,1fr) minmax(280px,340px);gap:10px;min-height:0;}
+  @media(max-width:1300px){
+    .main{grid-template-columns:minmax(200px,230px) minmax(0,1fr) minmax(260px,300px);}
+  }
+  @media(max-width:1100px){
+    .main{grid-template-columns:minmax(200px,230px) minmax(0,1fr);}
+    .hexpanel{display:none;}
+  }
+
+  /* LEFT: regions nav (anchors, not gates) */
+  .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;}
+  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos);}
+  .reg-hd .sz{color:var(--phos-dim)}
+  .reg-list{flex:1;overflow:auto;padding:6px}
+  .reg-list::-webkit-scrollbar{width:6px}
+  .reg-list::-webkit-scrollbar-track{background:#080e0a}
+  .reg-list::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .reg{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 12px;border:1px solid rgba(124,245,138,.1);cursor:pointer;transition:border-color .1s,background .1s,box-shadow .15s;margin-bottom:4px;position:relative;background:rgba(124,245,138,.03);text-decoration:none;}
+  .reg:hover{background:rgba(124,245,138,.08);border-color:var(--phos-dim)}
+  .reg .addr{grid-column:1;font-size:9.5px;color:var(--phos-dim);letter-spacing:.08em;}
+  .reg .nm{grid-column:1;font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--phos);letter-spacing:.04em;line-height:1.2;margin-top:2px;}
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:9.5px;color:var(--phos-dim);letter-spacing:.06em;}
+  .reg.on{background:var(--phos-deep);border-color:var(--phos);border-left:3px solid var(--phos);}
+  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:#fff;font-weight:700;text-shadow:0 0 8px rgba(124,245,138,.5)}.reg.on .sz{color:#9ffaac}
+  .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
+  .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
+  .memmap .bar{display:flex;height:10px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
+  .memmap .seg{height:100%;border-right:1px solid rgba(0,0,0,.4);}
+  .memmap .seg:last-child{border-right:none}
+  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--phos-dim);font-size:9px}
+
+  /* RIGHT: content panel — paper-style, scrollable, all sections visible */
+  .content{background:var(--paper-bg);border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;}
+  .content-hd{padding:8px 14px;border-bottom:1px solid var(--paper-line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);background:var(--paper-bg2);flex-shrink:0;text-transform:uppercase;}
+  .content-hd b{color:var(--paper-ink);font-weight:700;}
+  .content-hd .scroll-pos{font-variant-numeric:tabular-nums;}
+  .content-body{flex:1;overflow:auto;padding:24px 32px 28px;scroll-behavior:smooth;}
+  .content-body::-webkit-scrollbar{width:8px}
+  .content-body::-webkit-scrollbar-track{background:var(--paper-bg2)}
+  .content-body::-webkit-scrollbar-thumb{background:#b4ac97;border-radius:0;}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding-bottom:8px;margin-bottom:18px;}
+  .avatar{width:96px;height:96px;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);flex-shrink:0;}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-body{min-width:0}
+  .hero h1{font-family:var(--sans);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--paper-ink);margin-bottom:6px;}
+  .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:10px;font-weight:500;}
+  .hero .blurb{font-size:14.5px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;max-width:62ch;}
+  .hero .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .hero .links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .hero .links a:hover{background:rgba(0,0,0,.06)}
+  .hero .links a.pri{background:var(--paper-ink);color:var(--paper-bg)}
+  .hero .links a.pri:hover{background:#000}
+
+  /* status pill — "open to roles" */
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#1a5a2c;background:#cdebd2;border:1px solid #6cb578;padding:3px 8px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+  .status-pill .dot{width:6px;height:6px;border-radius:50%;background:#2a8a3e;animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* section titles */
+  .section{margin-bottom:28px;scroll-margin-top:8px;}
+  .section:last-child{margin-bottom:0;}
+  .section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-ink);padding-bottom:6px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--paper-ink);}
+  .section-title .addr{color:var(--paper-dim);font-weight:500;letter-spacing:.1em;font-size:10px;}
+
+  /* experience cards */
+  .exp{padding:14px 0;}
+  .exp + .exp{border-top:none;}
+  .exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;flex-wrap:wrap;}
+  .exp h3{font-size:17px;font-weight:700;color:var(--paper-ink);letter-spacing:-.01em;}
+  .exp .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
+  .exp .role{font-family:var(--mono);font-size:12px;color:var(--paper-dim);margin-bottom:8px;font-weight:500;}
+  .exp p{font-size:14px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;margin-bottom:10px;}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;letter-spacing:.02em;}
+
+  /* projects: 2-col grid */
+  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .proj{border:1px solid rgba(0,0,0,.18);padding:14px 16px;background:#fff;display:flex;flex-direction:column;}
+  .proj h3{font-size:15px;font-weight:700;color:var(--paper-ink);margin-bottom:3px;letter-spacing:-.005em;}
+  .proj .tag{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
+  .proj p{font-size:13px;line-height:1.55;color:var(--paper-ink2);text-wrap:pretty;}
+
+  /* skills: tag-cloud (NO ratings) */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;}
+  .skbucket h4{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--paper-ink);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;}
+  .sk-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .sk{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
+
+  /* education: compact list */
+  .edu-list{display:flex;flex-direction:column;gap:0;}
+  .edu{padding:12px 0;}
+  .edu-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:2px;flex-wrap:wrap;}
+  .edu h3{font-size:15px;font-weight:700;color:var(--paper-ink);}
+  .edu .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
+  .edu .role{font-family:var(--mono);font-size:11.5px;color:var(--paper-dim);margin-bottom:4px;font-weight:500;}
+  .edu p{font-size:13.5px;line-height:1.55;color:var(--paper-ink2);}
+
+  /* contact mini-grid */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ccard{border:1px solid rgba(0,0,0,.28);padding:11px 14px;background:#fff;}
+  .ccard .k{font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.1em;margin-bottom:3px;font-weight:600;text-transform:uppercase}
+  .ccard .v{font-family:var(--mono);font-size:13px;line-height:1.4;word-break:break-word;color:var(--paper-ink);font-weight:500;}
+  .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
+  .ccard a:hover{border-color:var(--paper-ink);}
+
+  /* RIGHT: hex inspector panel — ambient, non-distracting */
+  .hexpanel{border:1px solid var(--line);background:#05080a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;overflow:hidden;}
+  .hex-hd{padding:8px 12px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.12em;color:var(--phos-dim);background:var(--bg2);flex-shrink:0;text-transform:uppercase;}
+  .hex-hd b{color:var(--phos);font-weight:500;}
+  .hex-hd .pulse-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--phos);box-shadow:0 0 6px var(--phos);margin-right:6px;animation:pulse 1.5s ease-in-out infinite;}
+  .hex-body{flex:1;overflow:auto;padding:12px;font-size:11px;line-height:1.65;color:var(--phos);position:relative;}
+  .hex-body::-webkit-scrollbar{width:6px}
+  .hex-body::-webkit-scrollbar-track{background:#05080a}
+  .hex-body::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+
+  /* idle byte-grid view */
+  .hex-grid{display:grid;grid-template-columns:42px 1fr;gap:8px;font-size:10.5px;line-height:1.6;color:var(--phos);opacity:.7;}
+  .hex-grid .off{color:var(--phos-dim)}
+  .hex-grid .row{display:contents;}
+
+  /* inspector view (when card clicked) */
+  .hex-insp{display:none;animation:fadeIn .25s ease-out;}
+  .hex-insp.on{display:block;}
+  .hex-grid.off{display:none;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+  .hi-addr{color:var(--amber);font-size:10px;letter-spacing:.1em;margin-bottom:6px;text-transform:uppercase;font-weight:700;}
+  .hi-title{color:#fff;font-size:13px;font-weight:700;margin-bottom:2px;font-family:var(--sans);letter-spacing:-.005em;}
+  .hi-sub{color:var(--phos-dim);font-size:10px;letter-spacing:.06em;margin-bottom:14px;border-bottom:1px dashed var(--phos-deep);padding-bottom:8px;}
+  .hi-field{margin-bottom:9px;}
+  .hi-k{color:var(--amber);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1px;font-weight:600;}
+  .hi-v{color:var(--phos);font-size:11.5px;line-height:1.5;word-break:break-word;}
+  .hi-v a{color:var(--cyan);text-decoration:none;border-bottom:1px solid transparent;}
+  .hi-v a:hover{border-bottom-color:var(--cyan);}
+  .hi-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+  .hi-tag{font-size:10px;color:var(--phos);border:1px solid var(--phos-deep);padding:2px 6px;letter-spacing:.02em;background:rgba(124,245,138,.05);}
+  .hi-back{display:inline-block;margin-top:14px;color:var(--amber);font-size:10px;letter-spacing:.12em;cursor:pointer;border:1px solid var(--amber-dim);padding:3px 9px;text-transform:uppercase;background:none;font-family:var(--mono);transition:background .12s;}
+  .hi-back:hover{background:rgba(240,182,74,.1);}
+  .hi-hint{color:var(--phos-dim);font-size:10px;letter-spacing:.04em;margin-top:14px;padding-top:10px;border-top:1px dashed var(--phos-deep);font-style:italic;}
+
+  /* clickable card affordance */
+  .exp,.proj,.edu{cursor:pointer;transition:background .12s,box-shadow .12s;border-radius:0;}
+  .exp:hover,.proj:hover,.edu:hover{background:rgba(0,0,0,.025);}
+  .exp.active,.proj.active,.edu.active{background:rgba(240,182,74,.08);box-shadow:inset 3px 0 0 var(--amber);padding-left:12px;}
+  .proj.active{box-shadow:inset 0 0 0 2px var(--amber);}
+
+  /* status bar */
+  .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;font-family:var(--mono);}
+  .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
+  .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+  .statusbar .kbd{border:1px solid var(--line2);padding:1px 5px;color:var(--paper2);font-family:var(--mono);font-size:9px;letter-spacing:.06em;}
+
+  /* boot */
+  .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;overflow:hidden;}
+  .boot.done{opacity:0;pointer-events:none}
+  .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
+  .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
+  @keyframes boot-in{to{opacity:1}}
+
+  /* responsive: collapse to single column on mobile */
+  @media(max-width:900px){
+    body{overflow:auto;}
+    .shell{height:auto;min-height:100vh;max-width:100%;grid-template-rows:auto auto auto auto;padding:8px;gap:8px;}
+    .topbar{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
+    .tb-right{flex-wrap:wrap;gap:6px}
+    .main{display:flex;flex-direction:column;gap:8px;}
+    .hexpanel{display:none;}
+    .regions{flex-shrink:0;max-height:200px;}
+    .reg-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px;gap:6px;scroll-snap-type:x mandatory;}
+    .reg{flex-shrink:0;min-width:140px;margin-bottom:0;scroll-snap-align:start;padding:8px 10px;grid-template-columns:1fr;}
+    .reg .sz{grid-column:1;grid-row:auto;align-self:auto;margin-top:2px}
+    .reg.on::before{left:4px;top:8px;transform:none}
+    .memmap{display:none}
+    .content-body{padding:18px 18px 22px;}
+    .hero{grid-template-columns:1fr;gap:14px;}
+    .avatar{width:80px;height:80px;}
+    .hero h1{font-size:26px;}
+    .proj-grid{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;gap:14px;}
+    .cgrid{grid-template-columns:1fr;}
+    .statusbar .right{display:none}
+  }
+</style>
+</head>
+<body class="has-shell">
+
+<div class="boot" id="boot">
+  <div class="bl"><span class="ok">[ OK ]</span>power on self test …………………… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>crc32 verify  0x<b>DEADBEEF</b> ……… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>mmap  8192 B · 7 regions ……………… <span class="dim">mounted</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>uart@115200  link up ………………………… <span class="dim">ready</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>decoder  paper_v1  ………………………… <span class="dim">ok</span></div>
+  <div class="bl" style="margin-top:12px;color:var(--amber)">$ ./monil_arora.bin --dump</div>
+</div>
+
+<div class="shell">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="tb-logo">◆</div>
+      <div>
+        <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.05</small></div>
+        <div class="tb-meta">embedded engineer &nbsp;·&nbsp; ubc ee 2027 &nbsp;·&nbsp; hannover, de</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
+      <a class="tb-link" href="/cdn-cgi/l/email-protection#2f42404146434e5d405d4e1d1f1f1c6f48424e4643014c4042">email</a>
+      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+      <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- LEFT: anchor nav, styled as memory regions -->
+    <aside class="regions">
+      <div class="reg-hd"><span>REGIONS &nbsp; [6]</span><span class="sz">8 KB</span></div>
+      <div class="reg-list" id="reg-list">
+        <a class="reg on" data-target="sec-about" href="#sec-about">
+          <span class="addr">0x0000</span><span class="nm">.about_me</span><span class="sz">512 B</span>
+        </a>
+        <a class="reg" data-target="sec-experience" href="#sec-experience">
+          <span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">3.5 K</span>
+        </a>
+        <a class="reg" data-target="sec-projects" href="#sec-projects">
+          <span class="addr">0x1000</span><span class="nm">.projects</span><span class="sz">8.0 K</span>
+        </a>
+        <a class="reg" data-target="sec-skills" href="#sec-skills">
+          <span class="addr">0x3000</span><span class="nm">.skills</span><span class="sz">2.0 K</span>
+        </a>
+        <a class="reg" data-target="sec-education" href="#sec-education">
+          <span class="addr">0x3800</span><span class="nm">.education</span><span class="sz">2.0 K</span>
+        </a>
+        <a class="reg" data-target="sec-contact" href="#sec-contact">
+          <span class="addr">0x4000</span><span class="nm">.contact</span><span class="sz">512 B</span>
+        </a>
+      </div>
+      <div class="memmap">
+        <div>MEM MAP</div>
+        <div class="bar">
+          <div class="seg" style="flex:1;background:#5ad1ff" title=".about_me"></div>
+          <div class="seg" style="flex:7;background:#f0b64a" title=".experience"></div>
+          <div class="seg" style="flex:16;background:#7cf58a" title=".projects"></div>
+          <div class="seg" style="flex:4;background:#b0a7ff" title=".skills"></div>
+          <div class="seg" style="flex:4;background:#ff5aa8" title=".education"></div>
+          <div class="seg" style="flex:1;background:#ffc04a" title=".contact"></div>
+          <div class="seg" style="flex:90;background:#1a2328" title=".empty"></div>
+        </div>
+        <div class="lg"><span>0x0000</span><span>0xFFFF</span></div>
+      </div>
+    </aside>
+
+    <!-- RIGHT: content panel — everything visible, scrollable -->
+    <section class="content">
+      <div class="content-hd">
+        <span>DECODED &nbsp;·&nbsp; <b id="cur-section">.about_me</b></span>
+        <span class="scroll-pos" id="scroll-pos">struct about_me_t</span>
+      </div>
+      <div class="content-body" id="content-body">
+
+        <!-- ABOUT -->
+        <div class="section" id="sec-about" data-name=".about_me" data-struct="about_me_t">
+          <div class="hero">
+            <div class="avatar"><img src="photo.jpg" alt="Monil Arora" onerror="this.style.background='#ddd';this.style.display='block';"/></div>
+            <div class="hero-body">
+              <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
+              <h1>Monil Arora</h1>
+              <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS<br/>UBC BASc Electrical Engineering · Expected 2027</div>
+              <p class="blurb">Currently at Laser Zentrum Hannover building a CubeSat ground station — YAMCS pipeline, STM32/FreeRTOS firmware, Java CCSDS preprocessor. Back at UBC in the fall.</p>
+              <div class="links">
+                <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
+                <a href="/cdn-cgi/l/email-protection#3d50525354515c4f524f5c0f0d0d0e7d5a505c5451135e5250">email</a>
+                <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+                <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div class="section" id="sec-experience" data-name=".experience" data-struct="role_t[3]">
+          <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[3]</span></div>
+
+          <div class="exp" data-inspect="exp-lzh">
+            <div class="exp-top"><h3>Laser Zentrum Hannover — Research Assistant</h3><span class="when">Mar – Jul 2026</span></div>
+            <div class="role">CubeSat Ground Station · Hannover, Germany</div>
+            <p>Built a CubeSat ground station end-to-end: YAMCS server stack, Java CCSDS packet preprocessor, Time Correlation Service for OBT→UTC sync, STM32/FreeRTOS firmware integration. Also deployed a 4-camera RTSP surveillance rig on Raspberry Pi + GStreamer for the lab.</p>
+            <div class="chips">
+              <span class="chip">YAMCS</span><span class="chip">CCSDS</span><span class="chip">STM32</span><span class="chip">FreeRTOS</span><span class="chip">Java</span><span class="chip">GStreamer</span><span class="chip">Linux</span>
+            </div>
+          </div>
+
+          <div class="exp" data-inspect="exp-sharang">
+            <div class="exp-top"><h3>Sharang Shakti — RF Intern</h3><span class="when">Summer 2023</span></div>
+            <div class="role">Signal Processing · Delhi, India</div>
+            <p>Anti-drone radar signal-chain design. Characterised AD9910 DDS and AD8336 VGA front end, bench-tested on oscilloscope and logic analyser, helped port the SPI driver firmware.</p>
+            <div class="chips">
+              <span class="chip">AD9910 DDS</span><span class="chip">AD8336 VGA</span><span class="chip">RF</span><span class="chip">MATLAB</span><span class="chip">SPI</span>
+            </div>
+          </div>
+
+          <div class="exp" data-inspect="exp-drake">
+            <div class="exp-top"><h3>Drake International — Operations</h3><span class="when">2022</span></div>
+            <div class="role">Customer-facing ops &amp; scheduling</div>
+            <p>Scheduling, customer communication, operations. Useful reps for clear comms under time pressure — applies in hardware debug sessions too.</p>
+          </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[6]">
+          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[6]</span></div>
+          <div class="proj-grid">
+
+            <div class="proj" data-inspect="proj-cubesat">
+              <h3>CubeSat Ground Station</h3>
+              <div class="tag">YAMCS · STM32 · FreeRTOS · CCSDS</div>
+              <p>Full YAMCS stack with Java CCSDS preprocessor, OBT→UTC time correlation, STM32 firmware integration, CI pipeline. Active at LZH.</p>
+            </div>
+
+            <div class="proj" data-inspect="proj-robot">
+              <h3>Self-Balancing Robot</h3>
+              <div class="tag">STM32 · FreeRTOS · PID · MPU-6050</div>
+              <p>UBC ELEC 391 capstone. Inverted pendulum with cascaded PID, MPU-6050 sensor fusion, FreeRTOS task structure.</p>
+            </div>
+
+            <div class="proj" data-inspect="proj-dnn">
+              <h3>DNN Accelerator</h3>
+              <div class="tag">Verilog · Nios II · DE1-SoC · FPGA</div>
+              <p>Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II softcore. ~94% accuracy.</p>
+            </div>
+
+            <div class="proj" data-inspect="proj-rtsp">
+              <h3>4-Camera RTSP Display</h3>
+              <div class="tag">GStreamer · Raspberry Pi · Wayland</div>
+              <p>24/7 surveillance wall for LZH lab. Four IP cameras, Wayland/GStreamer pipeline, PAL 4:3 handling, systemd watchdog.</p>
+            </div>
+
+            <div class="proj" data-inspect="proj-rover">
+              <h3>Metal-Detecting Rover</h3>
+              <div class="tag">ESP32 · BLE · KiCad · ESP-IDF</div>
+              <p>Autonomous rover with BLE telemetry, custom 2-layer PCB, servo-swept LDC1614 inductive sensor, occupancy-grid navigation.</p>
+            </div>
+
+            <div class="proj" data-inspect="proj-reflow">
+              <h3>Reflow Oven Controller</h3>
+              <div class="tag">EFM8 · PID · MAX31855 · SSR</div>
+              <p>PID-controlled reflow oven. K-type thermocouple via MAX31855, SSR switching, LCD UI plotting live temperature vs target curve.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SKILLS — no ratings, just tags -->
+        <div class="section" id="sec-skills" data-name=".skills" data-struct="skillset_t">
+          <div class="section-title"><span>Skills</span><span class="addr">0x3000 — skillset_t</span></div>
+          <div class="skills-grid">
+            <div class="skbucket">
+              <h4>Firmware / RTOS</h4>
+              <div class="sk-list">
+                <span class="sk">C / C++</span><span class="sk">STM32 HAL/LL</span><span class="sk">FreeRTOS</span><span class="sk">Bare-metal ARM</span><span class="sk">ESP-IDF</span>
+              </div>
+            </div>
+            <div class="skbucket">
+              <h4>HDL / FPGA</h4>
+              <div class="sk-list">
+                <span class="sk">Verilog</span><span class="sk">VHDL</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">Nios II</span>
+              </div>
+            </div>
+            <div class="skbucket">
+              <h4>Protocols</h4>
+              <div class="sk-list">
+                <span class="sk">UART · SPI · I²C · CAN</span><span class="sk">JTAG · SWD</span><span class="sk">CCSDS</span><span class="sk">RTSP · TCP/IP</span>
+              </div>
+            </div>
+            <div class="skbucket">
+              <h4>Tools / Software</h4>
+              <div class="sk-list">
+                <span class="sk">Linux · Git</span><span class="sk">Python</span><span class="sk">Java</span><span class="sk">MATLAB</span><span class="sk">YAMCS</span><span class="sk">GStreamer</span><span class="sk">KiCad</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="section" id="sec-education" data-name=".education" data-struct="course_t[6]">
+          <div class="section-title"><span>Education</span><span class="addr">0x3800 — course_t[6]</span></div>
+          <div class="edu-list">
+            <div class="edu" data-inspect="edu-ubc">
+              <div class="edu-top"><h3>UBC — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
+              <div class="role">University of British Columbia · Vancouver, BC</div>
+              <p>Relevant coursework: CPEN 311 (Digital Systems / FPGA), CPEN 211 (Computer Architecture), ELEC 391 (Embedded Capstone), ELEC 301 (DSP), ELEC 311 (Control Systems).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
+          <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
+          <div class="cgrid">
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#86ebe9e8efeae7f4e9f4e7b4b6b6b5c6e1ebe7efeaa8e5e9eb"><span class="__cf_email__" data-cfemail="7e13111017121f0c110c1f4c4e4e4d3e19131f1712501d1113">[email&#160;protected]</span></a></div></div>
+            <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
+            <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
+            <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
+            <div class="ccard"><div class="k">location · now</div><div class="v">Hannover, DE</div></div>
+            <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
+          </div>
+        </div>
+
+      </div>
+    <!-- RIGHT: hex inspector panel — ambient -->
+    <aside class="hexpanel">
+      <div class="hex-hd">
+        <span><span class="pulse-dot"></span>HEX INSPECTOR &nbsp;·&nbsp; <b id="hex-region">.about_me</b></span>
+        <span id="hex-range">0x0000</span>
+      </div>
+      <div class="hex-body">
+        <div class="hex-grid" id="hex-grid"></div>
+        <div class="hex-insp" id="hex-insp"></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="statusbar">
+    <span>MODE <b>READ-ONLY</b></span><span class="sep">│</span>
+    <span>SECTION <b id="sb-sec">.about_me</b></span><span class="sep">│</span>
+    <span>STRUCT <b id="sb-struct">about_me_t</b></span><span class="sep">│</span>
+    <span>DECODE <b>paper_v1</b></span>
+    <div class="right">
+      <span>built w/ <b>love + verilog</b></span>
+      <span>© 2026 monil arora</span>
+    </div>
+  </footer>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+(function(){
+  // boot anim
+  const boot=document.getElementById('boot');
+  const lines=boot.querySelectorAll('.bl');
+  lines.forEach((l,i)=>{l.style.animationDelay=(i*180)+'ms';});
+  setTimeout(()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),500);}, lines.length*180+500);
+
+  const body=document.getElementById('content-body');
+  const regs=document.querySelectorAll('.reg');
+  const sections=document.querySelectorAll('.section');
+  const curSec=document.getElementById('cur-section');
+  const sbSec=document.getElementById('sb-sec');
+  const sbStruct=document.getElementById('sb-struct');
+  const scrollPos=document.getElementById('scroll-pos');
+  const hexRegion=document.getElementById('hex-region');
+  const hexRange=document.getElementById('hex-range');
+  const hexGrid=document.getElementById('hex-grid');
+  const hexInsp=document.getElementById('hex-insp');
+
+  // ── ambient byte grid ─────────────────────────────────
+  function genGrid(seed){
+    let html='';
+    for(let r=0;r<14;r++){
+      const off=(seed + r*16).toString(16).toUpperCase().padStart(4,'0');
+      let bytes='';
+      for(let c=0;c<8;c++){
+        const v = ((seed*7 + r*31 + c*13) ^ 0x5a) & 0xff;
+        bytes += v.toString(16).toUpperCase().padStart(2,'0') + ' ';
+      }
+      html += `<div class="row"><span class="off">${off}</span><span>${bytes.trim()}</span></div>`;
+    }
+    return html;
+  }
+  function setGridForSection(addr){
+    hexGrid.innerHTML = genGrid(addr);
+    hexGrid.classList.remove('off');
+    hexInsp.classList.remove('on');
+  }
+
+  // ── inspector content ─────────────────────────────────
+  const INSPECT = {
+    // experience
+    'exp-lzh':{addr:0x0200,struct:'role_t',title:'LZH — Research Assistant',sub:'CubeSat Ground Station · Hannover, DE',
+      fields:[{k:'company',v:'Laser Zentrum Hannover e.V.'},{k:'duration',v:'Mar 22 – Jul 11, 2026'},{k:'stack',v:'YAMCS · CCSDS · STM32 · FreeRTOS · Java · GStreamer'}],
+      tags:['YAMCS','CCSDS','STM32','FreeRTOS','Java','GStreamer'],
+      link:{label:'github.com/plundis/cubesat-groundstation',url:'https://github.com/plundis'}},
+    'exp-sharang':{addr:0x0600,struct:'role_t',title:'Sharang Shakti — RF Intern',sub:'Anti-drone radar signal chain · Delhi, IN',
+      fields:[{k:'role',v:'RF / Signal Processing Intern'},{k:'duration',v:'Summer 2023'},{k:'stack',v:'AD9910 DDS · AD8336 VGA · MATLAB · SPI'}],
+      tags:['AD9910','AD8336','RF','MATLAB','SPI']},
+    'exp-drake':{addr:0x0A00,struct:'role_t',title:'Drake International — Operations',sub:'Customer ops · 2022',
+      fields:[{k:'role',v:'Operations'},{k:'transfer',v:'Comms under pressure, scheduling, multi-task'}],tags:['Operations','Comms']},
+    // projects
+    'proj-cubesat':{addr:0x1000,struct:'project_t',title:'CubeSat Ground Station',sub:'YAMCS · STM32 · FreeRTOS',
+      fields:[{k:'stack',v:'YAMCS · Java · CCSDS · STM32F4 · FreeRTOS · Python'},{k:'status',v:'ACTIVE — LZH internship'},{k:'highlights',v:'XTCE mission DB · OBT→UTC TCO · Java preprocessor'}],
+      tags:['YAMCS','CCSDS','STM32','FreeRTOS','Java'],
+      link:{label:'github.com/plundis/cubesat-groundstation',url:'https://github.com/plundis'}},
+    'proj-robot':{addr:0x1400,struct:'project_t',title:'Self-Balancing Robot',sub:'UBC ELEC 391 capstone',
+      fields:[{k:'stack',v:'STM32F4 · FreeRTOS · MPU-6050 · PID'},{k:'control',v:'Cascaded PID, complementary filter @ 500 Hz'},{k:'result',v:'Balances. Push recovery ~0.5s.'}],
+      tags:['STM32','FreeRTOS','PID','MPU-6050']},
+    'proj-dnn':{addr:0x1800,struct:'project_t',title:'DNN Accelerator',sub:'DE1-SoC FPGA',
+      fields:[{k:'stack',v:'Verilog · Nios II · Quartus · Q8.8 fixed-point'},{k:'arch',v:'Pipelined MAC array, SDRAM double-buffering'},{k:'result',v:'~94% MNIST accuracy, ~2 ms inference @ 50 MHz'}],
+      tags:['Verilog','Nios II','FPGA','MNIST']},
+    'proj-rtsp':{addr:0x1C00,struct:'project_t',title:'4-Camera RTSP Display',sub:'LZH lab · deployed 24/7',
+      fields:[{k:'stack',v:'Raspberry Pi 4 · GStreamer · RTSP · H.264 · Wayland'},{k:'pipeline',v:'rtspsrc → h264parse → avdec_h264 → compositor → waylandsink'},{k:'reliability',v:'systemd watchdog, frozen-frame detector'}],
+      tags:['GStreamer','RPi','Wayland','systemd']},
+    'proj-rover':{addr:0x2000,struct:'project_t',title:'Metal-Detecting Rover',sub:'ESP32 · BLE · KiCad',
+      fields:[{k:'stack',v:'ESP32 · BLE · LDC1614 · DRV8833 · KiCad'},{k:'nav',v:'Encoder odometry → 50×50 occupancy grid, 5cm/cell'},{k:'pcb',v:'Custom 2-layer board, JLCPCB'}],
+      tags:['ESP32','BLE','KiCad','LDC1614']},
+    'proj-reflow':{addr:0x2400,struct:'project_t',title:'Reflow Oven Controller',sub:'EFM8 · PID',
+      fields:[{k:'stack',v:'EFM8 · MAX31855 · SSR · SPI · 16×2 LCD'},{k:'control',v:'Discrete PID + anti-windup, SSR PWM @ 1 Hz'},{k:'profile',v:'Sn63/Pb37: preheat → soak → reflow → cool'}],
+      tags:['EFM8','PID','MAX31855','SSR']},
+    // education
+    'edu-ubc':{addr:0x3800,struct:'course_t',title:'UBC — BASc Electrical Engineering',sub:'Vancouver, BC · Expected 2027',
+      fields:[{k:'coursework',v:'CPEN 311 · CPEN 211 · ELEC 391 · ELEC 301 · ELEC 311'},{k:'focus',v:'Embedded systems, digital design, control'}],
+      tags:['Embedded','Digital','Control']},
+  };
+
+  function showInspect(key){
+    const d = INSPECT[key];
+    if(!d){ return; }
+    hexRegion.textContent = '0x'+d.addr.toString(16).toUpperCase().padStart(4,'0');
+    hexRange.textContent = d.struct;
+    const fieldsHtml = d.fields.map(f=>`<div class="hi-field"><div class="hi-k">${f.k}</div><div class="hi-v">${f.v}</div></div>`).join('');
+    const tagsHtml = d.tags ? `<div class="hi-tags">${d.tags.map(t=>`<span class="hi-tag">${t}</span>`).join('')}</div>` : '';
+    const linkHtml = d.link ? `<div class="hi-field"><div class="hi-k">repo</div><div class="hi-v"><a href="${d.link.url}" target="_blank" rel="noopener">${d.link.label} ↗</a></div></div>` : '';
+    hexInsp.innerHTML = `
+      <div class="hi-addr">@ 0x${d.addr.toString(16).toUpperCase().padStart(4,'0')} · ${d.struct}</div>
+      <div class="hi-title">${d.title}</div>
+      <div class="hi-sub">${d.sub}</div>
+      ${fieldsHtml}
+      ${linkHtml}
+      ${tagsHtml}
+      <button class="hi-back" id="hi-back">◄ close</button>
+    `;
+    hexGrid.classList.add('off');
+    hexInsp.classList.add('on');
+    document.getElementById('hi-back').addEventListener('click',()=>{
+      document.querySelectorAll('.exp.active,.proj.active,.edu.active').forEach(e=>e.classList.remove('active'));
+      // restore default grid for current section
+      const cur = sections[currentIdx];
+      if(cur) updateHexForSection(cur);
+    });
+  }
+
+  function updateHexForSection(section){
+    const seedMap={'sec-about':0x0000,'sec-experience':0x0200,'sec-projects':0x1000,'sec-skills':0x3000,'sec-education':0x3800,'sec-contact':0x4000};
+    const seed = seedMap[section.id] || 0;
+    hexRegion.textContent = section.dataset.name;
+    hexRange.textContent = section.dataset.struct;
+    setGridForSection(seed);
+  }
+
+  // wire card clicks
+  document.querySelectorAll('[data-inspect]').forEach(el=>{
+    el.addEventListener('click', e=>{
+      // don't trigger on link clicks inside cards
+      if(e.target.closest('a')) return;
+      document.querySelectorAll('.exp.active,.proj.active,.edu.active').forEach(x=>x.classList.remove('active'));
+      el.classList.add('active');
+      showInspect(el.dataset.inspect);
+    });
+  });
+
+  // ── section tracking via IntersectionObserver ─────────
+  let currentIdx = 0;
+  let lockedIdx = null;
+
+  function setActive(i){
+    currentIdx = i;
+    const s = sections[i];
+    const id = s.id;
+    regs.forEach(r=>r.classList.toggle('on', r.dataset.target===id));
+    curSec.textContent = s.dataset.name;
+    sbSec.textContent = s.dataset.name;
+    sbStruct.textContent = s.dataset.struct;
+    scrollPos.textContent = 'struct '+s.dataset.struct;
+    // only update hex if not pinned to an entry
+    if(!document.querySelector('.exp.active,.proj.active,.edu.active')){
+      updateHexForSection(s);
+    }
+  }
+
+  // observer: highlights the section whose top is closest to viewport top
+  const sectionTops = ()=>[...sections].map(s=>s.offsetTop);
+  function detectFromScroll(){
+    if(lockedIdx !== null) return;
+    const top = body.scrollTop;
+    const atBottom = (top + body.clientHeight) >= (body.scrollHeight - 4);
+    if(atBottom){ setActive(sections.length-1); return; }
+    // pick section whose top is closest to (and at or above) probe line
+    const probe = top + 80;
+    let best = 0, bestDist = Infinity;
+    for(let i=0;i<sections.length;i++){
+      const t = sections[i].offsetTop;
+      if(t <= probe){
+        const d = probe - t;
+        if(d < bestDist){ bestDist = d; best = i; }
+      }
+    }
+    setActive(best);
+  }
+  body.addEventListener('scroll', ()=>requestAnimationFrame(detectFromScroll));
+
+  // smooth-scroll on region click
+  regs.forEach((r,i)=>{
+    r.addEventListener('click', e=>{
+      e.preventDefault();
+      navigateTo(i);
+      r.blur();
+    });
+  });
+
+  function navigateTo(i){
+    const t = sections[i];
+    if(!t) return;
+    const target = (i===0) ? 0 : t.offsetTop - 8;
+    lockedIdx = i;
+    setActive(i);
+    body.scrollTo({top:target, behavior:'smooth'});
+    clearTimeout(window.__navUnlock);
+    window.__navUnlock = setTimeout(()=>{ lockedIdx = null; detectFromScroll(); }, 800);
+  }
+
+  // keyboard nav
+  document.addEventListener('keydown', e=>{
+    const tag = (e.target && e.target.tagName) || '';
+    if(tag==='INPUT'||tag==='TEXTAREA') return;
+    if(e.key!=='ArrowDown' && e.key!=='ArrowUp' && e.key!=='PageDown' && e.key!=='PageUp') return;
+    e.preventDefault();
+    const cur = (lockedIdx !== null) ? lockedIdx : currentIdx;
+    const dir = (e.key==='ArrowDown'||e.key==='PageDown') ? 1 : -1;
+    const next = Math.max(0, Math.min(sections.length-1, cur + dir));
+    if(next === cur) return;
+    navigateTo(next);
+  });
+
+  setActive(0);
+})();
+</script>
+
+</body>
+</html>
