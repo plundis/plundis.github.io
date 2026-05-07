@@ -223,7 +223,7 @@
     </div>
     <div class="tb-right">
       <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <a class="tb-link" href="/cdn-cgi/l/email-protection#14797b7a7d7875667b667526242427547379757d783a777b79">email</a>
+      <a class="tb-link" href="/cdn-cgi/l/email-protection#b6dbd9d8dfdad7c4d9c4d784868685f6d1dbd7dfda98d5d9db">email</a>
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
     </div>
@@ -238,7 +238,7 @@
           <span class="addr">0x0000</span><span class="nm">.about_me</span><span class="sz">512 B</span>
         </a>
         <a class="reg" data-target="sec-experience" href="#sec-experience">
-          <span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">3.5 K</span>
+          <span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">2.0 K</span>
         </a>
         <a class="reg" data-target="sec-projects" href="#sec-projects">
           <span class="addr">0x1000</span><span class="nm">.projects</span><span class="sz">8.0 K</span>
@@ -284,10 +284,10 @@
               <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
               <h1>Monil Arora</h1>
               <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS<br/>UBC BASc Electrical Engineering · Expected 2027</div>
-              <p class="blurb">Currently at Laser Zentrum Hannover building a CubeSat ground station — YAMCS pipeline, STM32/FreeRTOS firmware, Java CCSDS preprocessor. Back at UBC in the fall.</p>
+              <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) building CubeSat ground-station infrastructure — STM32F401CC firmware in C++/FreeRTOS, CCSDS SPP framing, YAMCS Mission Control extensions. Back at UBC in the fall.</p>
               <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="/cdn-cgi/l/email-protection#187577767174796a776a792a28282b587f75797174367b7775">email</a>
+                <a href="/cdn-cgi/l/email-protection#583537363134392a372a396a68686b183f35393134763b3735">email</a>
                 <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
                 <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
               </div>
@@ -300,69 +300,51 @@
           <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[3]</span></div>
 
           <div class="exp">
-            <div class="exp-top"><h3>Laser Zentrum Hannover — Research Assistant</h3><span class="when">Mar – Jul 2026</span></div>
+            <div class="exp-top"><h3>Laser Zentrum Hannover (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
             <div class="role">CubeSat Ground Station · Hannover, Germany</div>
-            <p>Built a CubeSat ground station end-to-end: YAMCS server stack, Java CCSDS packet preprocessor, Time Correlation Service for OBT→UTC sync, STM32/FreeRTOS firmware integration. Also deployed a 4-camera RTSP surveillance rig on Raspberry Pi + GStreamer for the lab.</p>
+            <p>Extended STM32F401CC firmware in C++/FreeRTOS to packetize sensor telemetry into CCSDS SPP frames, SLIP-encoded over RS-422 via Brainboxes serial-to-Ethernet with COP-1/FARM delivery and a log-based boot counter in internal flash. Extended the YAMCS Mission Control System with custom Java data links (SLIP-over-UDP), COP-1 FOP reliable TC delivery, and an XTCE mission database decoding APID 130 TM / 101 TC with threshold alarms and parameter archiving. Implemented image downlink (8 KB SRAM buffer, 79-byte APID 131 chunks over VCID 1) and validated the full pipeline with a PyQt6 payload simulator and a Python TCP–UDP bridge.</p>
             <div class="chips">
-              <span class="chip">YAMCS</span><span class="chip">CCSDS</span><span class="chip">STM32</span><span class="chip">FreeRTOS</span><span class="chip">Java</span><span class="chip">GStreamer</span><span class="chip">Linux</span>
+              <span class="chip">STM32F401CC</span><span class="chip">C++</span><span class="chip">FreeRTOS</span><span class="chip">CCSDS SPP</span><span class="chip">YAMCS</span><span class="chip">Java</span><span class="chip">XTCE</span><span class="chip">COP-1</span><span class="chip">SLIP/RS-422</span><span class="chip">PyQt6</span>
             </div>
           </div>
 
           <div class="exp">
-            <div class="exp-top"><h3>Sharang Shakti — RF Intern</h3><span class="when">Summer 2023</span></div>
-            <div class="role">Signal Processing · Delhi, India</div>
-            <p>Anti-drone radar signal-chain design. Characterised AD9910 DDS and AD8336 VGA front end, bench-tested on oscilloscope and logic analyser, helped port the SPI driver firmware.</p>
+            <div class="exp-top"><h3>Sharang Shakti Pvt Ltd — Embedded Signal Processing Engineer</h3><span class="when">May – Jun 2024</span></div>
+            <div class="role">Radar digitalization · Gurugram, India</div>
+            <p>Contributed to digitalizing an analog radar system: designed and optimized high-frequency waveform generation and signal-conditioning modules using the AD9910 DDS, improving signal resolution and reducing phase noise. Integrated the AD8336 VGA with the AD9910 for real-time amplitude modulation and dynamic range adjustment in high-frequency radar signals.</p>
             <div class="chips">
-              <span class="chip">AD9910 DDS</span><span class="chip">AD8336 VGA</span><span class="chip">RF</span><span class="chip">MATLAB</span><span class="chip">SPI</span>
+              <span class="chip">AD9910 DDS</span><span class="chip">AD8336 VGA</span><span class="chip">RF</span><span class="chip">Radar</span><span class="chip">Signal Processing</span>
             </div>
-          </div>
-
-          <div class="exp">
-            <div class="exp-top"><h3>Drake International — Operations</h3><span class="when">2022</span></div>
-            <div class="role">Customer-facing ops &amp; scheduling</div>
-            <p>Scheduling, customer communication, operations. Useful reps for clear comms under time pressure — applies in hardware debug sessions too.</p>
           </div>
         </div>
 
         <!-- PROJECTS -->
-        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[6]">
-          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[6]</span></div>
+        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[4]">
+          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[4]</span></div>
           <div class="proj-grid">
 
             <div class="proj">
-              <h3>CubeSat Ground Station</h3>
-              <div class="tag">YAMCS · STM32 · FreeRTOS · CCSDS</div>
-              <p>Full YAMCS stack with Java CCSDS preprocessor, OBT→UTC time correlation, STM32 firmware integration, CI pipeline. Active at LZH.</p>
-            </div>
-
-            <div class="proj">
               <h3>Self-Balancing Robot</h3>
-              <div class="tag">STM32 · FreeRTOS · PID · MPU-6050</div>
-              <p>UBC ELEC 391 capstone. Inverted pendulum with cascaded PID, MPU-6050 sensor fusion, FreeRTOS task structure.</p>
+              <div class="tag">Arduino Nano 33 · ESP32 · BLE · IMU</div>
+              <p>Two-wheeled self-balancing robot with Arduino Nano 33, IMU sensors, and motor drivers; real-time PWM control stabilises tilt up to 45°. ESP32 BLE mobile app + LCD remote stream RPM, tilt angle, and sonar distance. Proportional-control validation via oscilloscope analysis showed ~30% stability improvement. <em>Jan – Apr 2025</em></p>
             </div>
 
             <div class="proj">
-              <h3>DNN Accelerator</h3>
-              <div class="tag">Verilog · Nios II · DE1-SoC · FPGA</div>
-              <p>Hardware DNN on DE1-SoC. Fixed-point matmul + ReLU in Verilog, SDRAM double-buffering, MNIST inference via Nios II softcore. ~94% accuracy.</p>
+              <h3>Deep Neural Network Accelerator</h3>
+              <div class="tag">Verilog · Nios II · DE1-SoC · Q16.16</div>
+              <p>DNN accelerator on an embedded Nios II system using the DE1-SoC for MNIST classification with Q16.16 fixed-point arithmetic and ReLU activation. SoC includes an SDRAM interface; Quartus timing constraints applied for stable operation at 50 MHz. <em>Oct – Nov 2024</em></p>
             </div>
 
             <div class="proj">
-              <h3>4-Camera RTSP Display</h3>
-              <div class="tag">GStreamer · Raspberry Pi · Wayland</div>
-              <p>24/7 surveillance wall for LZH lab. Four IP cameras, Wayland/GStreamer pipeline, PAL 4:3 handling, systemd watchdog.</p>
-            </div>
-
-            <div class="proj">
-              <h3>Metal-Detecting Rover</h3>
-              <div class="tag">ESP32 · BLE · KiCad · ESP-IDF</div>
-              <p>Autonomous rover with BLE telemetry, custom 2-layer PCB, servo-swept LDC1614 inductive sensor, occupancy-grid navigation.</p>
+              <h3>Metal Detector Robot</h3>
+              <div class="tag">STM32 · EFM8 · JDY-40 BT · LCD</div>
+              <p>Battery-powered, remote-controlled metal-detection robot built with a team of six on STM32 + EFM8 microcontrollers. Robust comms protocols and an LCD interface visualise detection intensity and magnetic field strength up to 1.4 T in real time. <em>Mar – Apr 2024</em></p>
             </div>
 
             <div class="proj">
               <h3>Reflow Oven Controller</h3>
-              <div class="tag">EFM8 · PID · MAX31855 · SSR</div>
-              <p>PID-controlled reflow oven. K-type thermocouple via MAX31855, SSR switching, LCD UI plotting live temperature vs target curve.</p>
+              <div class="tag">N76E00 · ARM · Assembly</div>
+              <p>Reflow-oven controller on N76E00 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping. <em>Jan – Feb 2024</em></p>
             </div>
 
           </div>
@@ -373,27 +355,27 @@
           <div class="section-title"><span>Skills</span><span class="addr">0x3000 — skillset_t</span></div>
           <div class="skills-grid">
             <div class="skbucket">
-              <h4>Firmware / RTOS</h4>
+              <h4>Languages</h4>
               <div class="sk-list">
-                <span class="sk">C / C++</span><span class="sk">STM32 HAL/LL</span><span class="sk">FreeRTOS</span><span class="sk">Bare-metal ARM</span><span class="sk">ESP-IDF</span>
+                <span class="sk">C</span><span class="sk">C++</span><span class="sk">Java</span><span class="sk">Python</span><span class="sk">Assembly</span><span class="sk">Verilog</span><span class="sk">VHDL</span>
               </div>
             </div>
             <div class="skbucket">
-              <h4>HDL / FPGA</h4>
+              <h4>Tools</h4>
               <div class="sk-list">
-                <span class="sk">Verilog</span><span class="sk">VHDL</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">Nios II</span>
+                <span class="sk">YAMCS</span><span class="sk">FreeRTOS</span><span class="sk">PlatformIO</span><span class="sk">Maven</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">CrossIDE</span><span class="sk">Cadence</span><span class="sk">MATLAB</span><span class="sk">LTspice</span><span class="sk">Git</span><span class="sk">VS Code</span>
+              </div>
+            </div>
+            <div class="skbucket">
+              <h4>Hardware</h4>
+              <div class="sk-list">
+                <span class="sk">STM32</span><span class="sk">ESP32</span><span class="sk">EFM8</span><span class="sk">Arduino</span><span class="sk">DE1-SoC</span><span class="sk">Raspberry Pi</span><span class="sk">IMU Sensors</span><span class="sk">Motor Drivers</span>
               </div>
             </div>
             <div class="skbucket">
               <h4>Protocols</h4>
               <div class="sk-list">
-                <span class="sk">UART · SPI · I²C · CAN</span><span class="sk">JTAG · SWD</span><span class="sk">CCSDS</span><span class="sk">RTSP · TCP/IP</span>
-              </div>
-            </div>
-            <div class="skbucket">
-              <h4>Tools / Software</h4>
-              <div class="sk-list">
-                <span class="sk">Linux · Git</span><span class="sk">Python</span><span class="sk">Java</span><span class="sk">MATLAB</span><span class="sk">YAMCS</span><span class="sk">GStreamer</span><span class="sk">KiCad</span>
+                <span class="sk">CCSDS SPP</span><span class="sk">COP-1</span><span class="sk">SLIP</span><span class="sk">RS-422</span><span class="sk">UART · SPI · I²C</span><span class="sk">TCP/UDP</span><span class="sk">BLE</span>
               </div>
             </div>
           </div>
@@ -404,9 +386,9 @@
           <div class="section-title"><span>Education</span><span class="addr">0x3800 — course_t[6]</span></div>
           <div class="edu-list">
             <div class="edu">
-              <div class="edu-top"><h3>UBC — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
-              <div class="role">University of British Columbia · Vancouver, BC</div>
-              <p>Relevant coursework: CPEN 311 (Digital Systems / FPGA), CPEN 211 (Computer Architecture), ELEC 391 (Embedded Capstone), ELEC 301 (DSP), ELEC 311 (Control Systems).</p>
+              <div class="edu-top"><h3>University of British Columbia — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
+              <div class="role">Vancouver, BC</div>
+              <p>Relevant coursework: Digital System Design, Computing Systems, Signals and Systems, Systems and Controls.</p>
             </div>
           </div>
         </div>
@@ -415,12 +397,12 @@
         <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
           <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
           <div class="cgrid">
-            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#81eceeefe8ede0f3eef3e0b3b1b1b2c1e6ece0e8edafe2eeec"><span class="__cf_email__" data-cfemail="dcb1b3b2b5b0bdaeb3aebdeeececef9cbbb1bdb5b0f2bfb3b1">[email&#160;protected]</span></a></div></div>
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#c3aeacadaaafa2b1acb1a2f1f3f3f083a4aea2aaafeda0acae"><span class="__cf_email__" data-cfemail="630e0c0d0a0f02110c11025153535023040e020a0f4d000c0e">[email&#160;protected]</span></a></div></div>
             <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
             <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
             <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
-            <div class="ccard"><div class="k">location · now</div><div class="v">Hannover, DE</div></div>
-            <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
+            <div class="ccard"><div class="k">location</div><div class="v">Vancouver, BC, Canada</div></div>
+            <div class="ccard"><div class="k">resume</div><div class="v"><a href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a></div></div>
           </div>
         </div>
 
@@ -524,4 +506,3 @@
 
 </body>
 </html>
-
