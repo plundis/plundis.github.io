@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Monil Arora — Embedded Engineer</title>
+<meta name="description" content="Monil Arora — Electrical Engineering @ UBC · embedded firmware, STM32/FreeRTOS, Verilog, ground-station software."/>
+<meta name="theme-color" content="#07090a"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Monil Arora — Embedded Engineer"/>
+<meta property="og:description" content="Portfolio of Monil Arora — EE @ UBC, embedded firmware, STM32/FreeRTOS, Verilog."/>
+<meta property="og:url" content="https://monilarora.com/"/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-size='22' fill='%23f0b64a'%3E%E2%97%86%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#07090a;--bg2:#0c1012;--bg3:#11161a;
+    --line:#1a2328;--line2:#2a3740;
+    --paper:#ece4d0;--paper-bg:#f8f2e0;--paper-bg2:#e8dfc6;
+    --paper-ink:#0e0f10;--paper-ink2:#2b2d2e;--paper-dim:#4a4937;--paper-line:rgba(0,0,0,.18);
+    --phos:#7cf58a;--phos-dim:#3b7a46;--phos-deep:#1d3a24;
+    --amber:#f0b64a;--amber-dim:#6b5020;
+    --magenta:#ff5aa8;--cyan:#5ad1ff;
+    --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --sans:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  html{background:var(--bg)}
+  body{background:var(--bg);color:var(--paper-ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;}
+  /* CRT scanlines — dark chrome strips only */
+  .topbar::before,.regions::before,.statusbar::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 3px);mix-blend-mode:multiply;}
+  .topbar > *,.regions > *,.statusbar > *{position:relative;z-index:6;}
+  .statusbar{position:relative;}
+
+  /* ── shell ── */
+  .shell{height:100vh;width:100%;display:grid;grid-template-rows:auto 1fr auto;margin:0 auto;padding:8px 10px;gap:8px;background:var(--bg);overflow:hidden;}
+  body.has-shell{background:var(--bg)}
+
+  /* top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;font-family:var(--mono);position:relative;}
+  .tb-left{display:flex;align-items:center;gap:14px;min-width:0}
+  .tb-logo{width:28px;height:28px;flex-shrink:0;border:1px solid var(--phos-dim);display:grid;place-items:center;color:var(--phos);font-weight:700;font-size:13px;box-shadow:inset 0 0 8px rgba(124,245,138,.15);}
+  .tb-title{font-family:var(--sans);font-weight:700;font-size:15px;color:var(--paper);letter-spacing:.01em}
+  .tb-title small{color:var(--phos-dim);font-weight:500;font-family:var(--mono);font-size:11px;margin-left:8px;letter-spacing:.08em}
+  .tb-meta{color:var(--phos-dim);font-size:11px;letter-spacing:.06em;font-family:var(--mono);}
+  .tb-right{display:flex;align-items:center;gap:8px;font-size:11px;flex-wrap:wrap;}
+  .tb-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;padding:5px 10px;border:1px solid var(--amber-dim);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;}
+  .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
+  .tb-link.pri{background:var(--amber);color:#07090a;border-color:var(--amber);font-weight:700;}
+  .tb-link.pri:hover{background:#ffd077;color:#07090a;}
+
+  /* main: 2-col — regions nav + content (hex panel removed) */
+  .main{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:10px;min-height:0;}
+  @media(max-width:1300px){.main{grid-template-columns:minmax(200px,230px) minmax(0,1fr);}}
+
+  /* LEFT: regions nav */
+  .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;}
+  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos);}
+  .reg-hd .sz{color:var(--phos-dim)}
+  .reg-list{flex:1;overflow:auto;padding:6px}
+  .reg-list::-webkit-scrollbar{width:6px}
+  .reg-list::-webkit-scrollbar-track{background:#080e0a}
+  .reg-list::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .reg{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 12px;border:1px solid rgba(124,245,138,.1);cursor:pointer;transition:border-color .1s,background .1s,box-shadow .15s;margin-bottom:4px;position:relative;background:rgba(124,245,138,.03);text-decoration:none;}
+  .reg:hover{background:rgba(124,245,138,.08);border-color:var(--phos-dim)}
+  .reg .addr{grid-column:1;font-size:9.5px;color:var(--phos-dim);letter-spacing:.08em;}
+  .reg .nm{grid-column:1;font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--phos);letter-spacing:.04em;line-height:1.2;margin-top:2px;}
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:9.5px;color:var(--phos-dim);letter-spacing:.06em;}
+  .reg.on{background:var(--phos-deep);border-color:var(--phos);border-left:3px solid var(--phos);}
+  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:#fff;font-weight:700;text-shadow:0 0 8px rgba(124,245,138,.5)}.reg.on .sz{color:#9ffaac}
+  .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
+  .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
+  .memmap .bar{display:flex;height:10px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
+  .memmap .seg{height:100%;border-right:1px solid rgba(0,0,0,.4);}
+  .memmap .seg:last-child{border-right:none}
+  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--phos-dim);font-size:9px}
+
+  /* RIGHT: content panel */
+  .content{background:var(--paper-bg);border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;}
+  .content-hd{padding:8px 14px;border-bottom:1px solid var(--paper-line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);background:var(--paper-bg2);flex-shrink:0;text-transform:uppercase;}
+  .content-hd b{color:var(--paper-ink);font-weight:700;}
+  .content-hd .scroll-pos{font-variant-numeric:tabular-nums;}
+  .content-body{flex:1;overflow:auto;scroll-behavior:smooth;}
+  .content-body::-webkit-scrollbar{width:8px}
+  .content-body::-webkit-scrollbar-track{background:var(--paper-bg2)}
+  .content-body::-webkit-scrollbar-thumb{background:#b4ac97;border-radius:0;}
+
+  /* list view = original content */
+  .list-view{padding:24px 32px 28px;}
+  .detail-view{display:none;padding:0;}
+  .detail-view.on{display:block;}
+  .list-view.off{display:none;}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding-bottom:8px;margin-bottom:18px;}
+  .avatar{width:96px;height:96px;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);flex-shrink:0;}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-body{min-width:0}
+  .hero h1{font-family:var(--sans);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--paper-ink);margin-bottom:6px;}
+  .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:10px;font-weight:500;}
+  .hero .blurb{font-size:14.5px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;max-width:62ch;}
+  .hero .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .hero .links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .hero .links a:hover{background:rgba(0,0,0,.06)}
+  .hero .links a.pri{background:var(--paper-ink);color:var(--paper-bg)}
+  .hero .links a.pri:hover{background:#000}
+
+  /* status pill */
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#1a5a2c;background:#cdebd2;border:1px solid #6cb578;padding:3px 8px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+  .status-pill .dot{width:6px;height:6px;border-radius:50%;background:#2a8a3e;animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* section titles */
+  .section{margin-bottom:28px;scroll-margin-top:8px;}
+  .section:last-child{margin-bottom:0;}
+  .section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-ink);padding-bottom:6px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--paper-ink);}
+  .section-title .addr{color:var(--paper-dim);font-weight:500;letter-spacing:.1em;font-size:10px;}
+
+  /* experience cards — clickable */
+  .exp{padding:14px 16px;cursor:pointer;transition:background .12s,box-shadow .12s,padding .12s;margin:0 -16px;border:1px solid transparent;position:relative;}
+  .exp:hover{background:rgba(0,0,0,.025);border-color:rgba(0,0,0,.08);}
+  .exp:hover::after{content:'open ↗';position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.08em;text-transform:uppercase;}
+  .exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;flex-wrap:wrap;}
+  .exp h3{font-size:17px;font-weight:700;color:var(--paper-ink);letter-spacing:-.01em;}
+  .exp .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
+  .exp .role{font-family:var(--mono);font-size:12px;color:var(--paper-dim);margin-bottom:8px;font-weight:500;}
+  .exp p{font-size:14px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;margin-bottom:10px;}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;letter-spacing:.02em;}
+
+  /* projects grid — clickable */
+  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .proj{border:1px solid rgba(0,0,0,.18);padding:14px 16px;background:#fff;display:flex;flex-direction:column;cursor:pointer;transition:border-color .12s,box-shadow .12s,transform .12s;position:relative;}
+  .proj:hover{border-color:var(--paper-ink);box-shadow:3px 3px 0 rgba(0,0,0,.08);transform:translate(-1px,-1px);}
+  .proj:hover::after{content:'↗';position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:14px;color:var(--paper-ink);}
+  .proj h3{font-size:15px;font-weight:700;color:var(--paper-ink);margin-bottom:3px;letter-spacing:-.005em;}
+  .proj .tag{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
+  .proj p{font-size:13px;line-height:1.55;color:var(--paper-ink2);text-wrap:pretty;}
+
+  /* skills */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;}
+  .skbucket h4{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--paper-ink);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;}
+  .sk-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .sk{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
+
+  /* education */
+  .edu-list{display:flex;flex-direction:column;gap:0;}
+  .edu{padding:12px 0;}
+  .edu-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:2px;flex-wrap:wrap;}
+  .edu h3{font-size:15px;font-weight:700;color:var(--paper-ink);}
+  .edu .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
+  .edu .role{font-family:var(--mono);font-size:11.5px;color:var(--paper-dim);margin-bottom:4px;font-weight:500;}
+  .edu p{font-size:13.5px;line-height:1.55;color:var(--paper-ink2);}
+
+  /* contact */
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ccard{border:1px solid rgba(0,0,0,.28);padding:11px 14px;background:#fff;}
+  .ccard .k{font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.1em;margin-bottom:3px;font-weight:600;text-transform:uppercase}
+  .ccard .v{font-family:var(--mono);font-size:13px;line-height:1.4;word-break:break-word;color:var(--paper-ink);font-weight:500;}
+  .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
+  .ccard a:hover{border-color:var(--paper-ink);}
+
+  /* ── DETAIL VIEW ── */
+  .dv-bar{position:sticky;top:0;z-index:10;background:var(--paper-bg2);border-bottom:1px solid var(--paper-line);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);text-transform:uppercase;}
+  .dv-bar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .dv-bar .addr{color:var(--paper-ink);font-weight:700;}
+  .dv-back{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-ink);background:none;border:1px solid rgba(0,0,0,.4);padding:4px 10px;text-transform:uppercase;cursor:pointer;font-weight:600;transition:background .1s;}
+  .dv-back:hover{background:rgba(0,0,0,.06);}
+
+  .dv-body{padding:28px 40px 40px;max-width:780px;margin:0 auto;}
+  @media(max-width:900px){.dv-body{padding:20px 18px 30px;}}
+
+  .dv-header{margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid var(--paper-ink);}
+  .dv-kicker{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:10px;}
+  .dv-kicker .badge{background:var(--paper-ink);color:var(--paper-bg);padding:2px 8px;letter-spacing:.1em;}
+  .dv-title{font-family:var(--sans);font-weight:700;font-size:34px;line-height:1.08;letter-spacing:-.02em;color:var(--paper-ink);margin-bottom:6px;text-wrap:balance;}
+  @media(max-width:900px){.dv-title{font-size:26px;}}
+  .dv-sub{font-family:var(--mono);font-size:13px;color:var(--paper-dim);font-weight:500;letter-spacing:.02em;margin-bottom:14px;}
+  .dv-meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--mono);font-size:11px;color:var(--paper-ink2);margin-bottom:14px;}
+  .dv-meta .m{display:flex;gap:6px;align-items:baseline;}
+  .dv-meta .mk{color:var(--paper-dim);letter-spacing:.08em;text-transform:uppercase;font-size:10px;}
+  .dv-meta .mv{color:var(--paper-ink);font-weight:500;}
+  .dv-stack{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+  .dv-links{display:flex;flex-wrap:wrap;gap:6px;}
+  .dv-links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .dv-links a:hover{background:rgba(0,0,0,.06);}
+  .dv-links a.pri{background:var(--paper-ink);color:var(--paper-bg);}
+
+  /* hero image */
+  .dv-hero{margin:0 0 28px;border:1px solid rgba(0,0,0,.2);background:#fff;}
+  .dv-hero img{width:100%;display:block;}
+
+  /* prose styles */
+  .dv-prose{font-size:15px;line-height:1.7;color:var(--paper-ink2);text-wrap:pretty;}
+  .dv-prose h2{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink);margin:32px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--paper-ink);display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .dv-prose h2::before{content:attr(data-addr);color:var(--paper-dim);font-size:10px;font-weight:500;}
+  .dv-prose h2:first-child{margin-top:0;}
+  .dv-prose h3{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--paper-ink);margin:24px 0 8px;letter-spacing:-.005em;}
+  .dv-prose p{margin-bottom:14px;}
+  .dv-prose p:last-child{margin-bottom:0;}
+  .dv-prose strong{color:var(--paper-ink);font-weight:700;}
+  .dv-prose em{font-style:italic;}
+  .dv-prose a{color:var(--paper-ink);border-bottom:1px solid rgba(0,0,0,.4);text-decoration:none;}
+  .dv-prose a:hover{border-bottom-width:2px;}
+  .dv-prose ul,.dv-prose ol{margin:0 0 14px 22px;}
+  .dv-prose li{margin-bottom:5px;}
+  .dv-prose code{font-family:var(--mono);font-size:13px;background:rgba(0,0,0,.06);padding:1px 5px;letter-spacing:0;color:var(--paper-ink);}
+  .dv-prose pre{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:#0a1410;color:var(--phos);padding:14px 16px;margin:18px 0;overflow-x:auto;border:1px solid var(--phos-deep);border-left:3px solid var(--phos);}
+  .dv-prose pre code{background:none;color:inherit;padding:0;font-size:inherit;}
+  .dv-prose blockquote{border-left:3px solid var(--paper-ink);padding:4px 0 4px 14px;margin:14px 0;color:var(--paper-dim);font-style:italic;}
+  .dv-prose figure{margin:18px 0;}
+  .dv-prose figure img{width:100%;display:block;border:1px solid rgba(0,0,0,.2);background:#fff;}
+  .dv-prose figcaption{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.04em;margin-top:6px;font-weight:500;}
+  .dv-prose figcaption::before{content:'// ';color:var(--paper-dim);}
+  .dv-prose .callout{border:1px solid rgba(0,0,0,.3);background:rgba(240,182,74,.12);padding:12px 14px;margin:18px 0;font-size:14px;}
+  .dv-prose .callout::before{content:'NOTE — ';font-family:var(--mono);font-size:10px;letter-spacing:.12em;font-weight:700;color:var(--paper-ink);}
+
+  /* missing-image placeholder */
+  .img-missing{display:block;border:1px dashed rgba(0,0,0,.35);background:repeating-linear-gradient(45deg,rgba(0,0,0,.02),rgba(0,0,0,.02) 10px,rgba(0,0,0,.05) 10px,rgba(0,0,0,.05) 20px);padding:40px 18px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--paper-dim);line-height:1.7;letter-spacing:.04em;}
+  .img-missing .lbl{display:block;color:var(--paper-ink);font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;font-size:10px;}
+  .img-missing .pth{display:block;color:var(--paper-ink2);font-size:11px;margin:4px 0;word-break:break-all;}
+  .img-missing .hint{display:block;color:var(--paper-dim);font-size:10px;font-style:italic;margin-top:6px;}
+
+  /* footer nav */
+  .dv-footer{margin-top:42px;padding-top:18px;border-top:1px solid var(--paper-line);display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;}
+  @media(max-width:700px){.dv-footer{grid-template-columns:1fr;}}
+  .dv-nav{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.3);padding:10px 14px;letter-spacing:.04em;transition:background .1s,border-color .1s;font-weight:500;display:flex;flex-direction:column;gap:2px;cursor:pointer;background:#fff;}
+  .dv-nav:hover{background:rgba(0,0,0,.04);border-color:var(--paper-ink);}
+  .dv-nav.next{text-align:right;align-items:flex-end;}
+  .dv-nav .nav-k{font-size:9.5px;color:var(--paper-dim);letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
+  .dv-nav .nav-v{font-size:13px;font-weight:700;font-family:var(--sans);letter-spacing:-.005em;}
+  .dv-nav.disabled{opacity:.35;pointer-events:none;}
+  .dv-back-big{font-family:var(--mono);font-size:11px;color:var(--paper-bg);background:var(--paper-ink);border:1px solid var(--paper-ink);padding:10px 18px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:background .1s;}
+  .dv-back-big:hover{background:#000;}
+
+  /* status bar */
+  .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;font-family:var(--mono);}
+  .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
+  .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+
+  /* boot */
+  .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;overflow:hidden;}
+  .boot.done{opacity:0;pointer-events:none}
+  .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
+  .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
+  @keyframes boot-in{to{opacity:1}}
+
+  /* responsive */
+  @media(max-width:900px){
+    body{overflow:auto;}
+    .shell{height:auto;min-height:100vh;max-width:100%;grid-template-rows:auto auto auto auto;padding:8px;gap:8px;}
+    .topbar{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
+    .tb-right{flex-wrap:wrap;gap:6px}
+    .main{display:flex;flex-direction:column;gap:8px;}
+    .regions{flex-shrink:0;max-height:200px;}
+    .reg-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px;gap:6px;scroll-snap-type:x mandatory;}
+    .reg{flex-shrink:0;min-width:140px;margin-bottom:0;scroll-snap-align:start;padding:8px 10px;grid-template-columns:1fr;}
+    .reg .sz{grid-column:1;grid-row:auto;align-self:auto;margin-top:2px}
+    .reg.on::before{left:4px;top:8px;transform:none}
+    .memmap{display:none}
+    .list-view{padding:18px 18px 22px;}
+    .hero{grid-template-columns:1fr;gap:14px;}
+    .avatar{width:80px;height:80px;}
+    .hero h1{font-size:26px;}
+    .proj-grid{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;gap:14px;}
+    .cgrid{grid-template-columns:1fr;}
+    .statusbar .right{display:none}
+    .exp{margin:0;padding:14px 0;}
+    .exp:hover::after{display:none;}
+  }
+</style>
+</head>
+<body class="has-shell">
+
+<div class="boot" id="boot">
+  <div class="bl"><span class="ok">[ OK ]</span>power on self test …………………… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>crc32 verify  0x<b>DEADBEEF</b> ……… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>mmap  8192 B · 6 regions ……………… <span class="dim">mounted</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>uart@115200  link up ………………………… <span class="dim">ready</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>decoder  paper_v1  ………………………… <span class="dim">ok</span></div>
+  <div class="bl" style="margin-top:12px;color:var(--amber)">$ ./monil_arora.bin --dump</div>
+</div>
+
+<div class="shell">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="tb-logo">◆</div>
+      <div>
+        <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.05</small></div>
+        <div class="tb-meta">embedded engineer &nbsp;·&nbsp; ubc ee 2027 &nbsp;·&nbsp; hannover, de</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
+      <a class="tb-link" href="mailto:monilarora2003@gmail.com">email</a>
+      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+      <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <aside class="regions">
+      <div class="reg-hd"><span>REGIONS &nbsp; [6]</span><span class="sz">8 KB</span></div>
+      <div class="reg-list" id="reg-list">
+        <a class="reg on" data-target="sec-about" href="#sec-about"><span class="addr">0x0000</span><span class="nm">.about_me</span><span class="sz">512 B</span></a>
+        <a class="reg" data-target="sec-experience" href="#sec-experience"><span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-projects" href="#sec-projects"><span class="addr">0x1000</span><span class="nm">.projects</span><span class="sz">8.0 K</span></a>
+        <a class="reg" data-target="sec-skills" href="#sec-skills"><span class="addr">0x3000</span><span class="nm">.skills</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-education" href="#sec-education"><span class="addr">0x3800</span><span class="nm">.education</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-contact" href="#sec-contact"><span class="addr">0x4000</span><span class="nm">.contact</span><span class="sz">512 B</span></a>
+      </div>
+      <div class="memmap">
+        <div>MEM MAP</div>
+        <div class="bar">
+          <div class="seg" style="flex:1;background:#5ad1ff" title=".about_me"></div>
+          <div class="seg" style="flex:7;background:#f0b64a" title=".experience"></div>
+          <div class="seg" style="flex:16;background:#7cf58a" title=".projects"></div>
+          <div class="seg" style="flex:4;background:#b0a7ff" title=".skills"></div>
+          <div class="seg" style="flex:4;background:#ff5aa8" title=".education"></div>
+          <div class="seg" style="flex:1;background:#ffc04a" title=".contact"></div>
+          <div class="seg" style="flex:90;background:#1a2328" title=".empty"></div>
+        </div>
+        <div class="lg"><span>0x0000</span><span>0xFFFF</span></div>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="content-hd">
+        <span>DECODED &nbsp;·&nbsp; <b id="cur-section">.about_me</b></span>
+        <span class="scroll-pos" id="scroll-pos">struct about_me_t</span>
+      </div>
+      <div class="content-body" id="content-body">
+
+        <!-- LIST VIEW -->
+        <div class="list-view" id="list-view">
+
+        <!-- ABOUT -->
+        <div class="section" id="sec-about" data-name=".about_me" data-struct="about_me_t">
+          <div class="hero">
+            <div class="avatar"><img src="photo.jpg" alt="Monil Arora" onerror="this.style.background='#ddd';this.style.display='block';"/></div>
+            <div class="hero-body">
+              <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
+              <h1>Monil Arora</h1>
+              <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS<br/>UBC BASc Electrical Engineering · Expected 2027</div>
+              <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) building CubeSat ground-station infrastructure — STM32F401CC firmware in C++/FreeRTOS, CCSDS SPP framing, YAMCS Mission Control extensions. Back at UBC in the fall.</p>
+              <div class="links">
+                <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
+                <a href="mailto:monilarora2003@gmail.com">email</a>
+                <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+                <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div class="section" id="sec-experience" data-name=".experience" data-struct="role_t[2]">
+          <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[2]</span></div>
+
+          <div class="exp" data-detail="exp/lzh">
+            <div class="exp-top"><h3>Laser Zentrum Hannover (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
+            <div class="role">CubeSat Ground Station · Hannover, Germany</div>
+            <p>Extended STM32F401CC firmware in C++/FreeRTOS to packetize sensor telemetry into CCSDS SPP frames, SLIP-encoded over RS-422 via Brainboxes serial-to-Ethernet with COP-1/FARM delivery and a log-based boot counter in internal flash. Extended the YAMCS Mission Control System with custom Java data links (SLIP-over-UDP), COP-1 FOP reliable TC delivery, and an XTCE mission database decoding APID 130 TM / 101 TC with threshold alarms and parameter archiving. Implemented image downlink (8 KB SRAM buffer, 79-byte APID 131 chunks over VCID 1) and validated the full pipeline with a PyQt6 payload simulator and a Python TCP–UDP bridge.</p>
+            <div class="chips"><span class="chip">STM32F401CC</span><span class="chip">C++</span><span class="chip">FreeRTOS</span><span class="chip">CCSDS SPP</span><span class="chip">YAMCS</span><span class="chip">Java</span><span class="chip">XTCE</span><span class="chip">COP-1</span><span class="chip">SLIP/RS-422</span><span class="chip">PyQt6</span></div>
+          </div>
+
+          <div class="exp" data-detail="exp/sharang">
+            <div class="exp-top"><h3>Sharang Shakti Pvt Ltd — Embedded Signal Processing Engineer</h3><span class="when">May – Jun 2024</span></div>
+            <div class="role">Radar digitalization · Gurugram, India</div>
+            <p>Contributed to digitalizing an analog radar system: designed and optimized high-frequency waveform generation and signal-conditioning modules using the AD9910 DDS, improving signal resolution and reducing phase noise. Integrated the AD8336 VGA with the AD9910 for real-time amplitude modulation and dynamic range adjustment in high-frequency radar signals.</p>
+            <div class="chips"><span class="chip">AD9910 DDS</span><span class="chip">AD8336 VGA</span><span class="chip">RF</span><span class="chip">Radar</span><span class="chip">Signal Processing</span></div>
+          </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[4]">
+          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[4]</span></div>
+          <div class="proj-grid">
+            <div class="proj" data-detail="proj/self-balancing-robot">
+              <h3>Self-Balancing Robot</h3>
+              <div class="tag">Arduino Nano 33 · ESP32 · BLE · IMU</div>
+              <p>Two-wheeled self-balancing robot with Arduino Nano 33, IMU sensors, and motor drivers; real-time PWM control stabilises tilt up to 45°. ESP32 BLE mobile app + LCD remote stream RPM, tilt angle, and sonar distance. Proportional-control validation via oscilloscope analysis showed ~30% stability improvement. <em>Jan – Apr 2025</em></p>
+            </div>
+            <div class="proj" data-detail="proj/dnn-accelerator">
+              <h3>Deep Neural Network Accelerator</h3>
+              <div class="tag">Verilog · Nios II · DE1-SoC · Q16.16</div>
+              <p>DNN accelerator on an embedded Nios II system using the DE1-SoC for MNIST classification with Q16.16 fixed-point arithmetic and ReLU activation. SoC includes an SDRAM interface; Quartus timing constraints applied for stable operation at 50 MHz. <em>Oct – Nov 2024</em></p>
+            </div>
+            <div class="proj" data-detail="proj/metal-detector-robot">
+              <h3>Metal Detector Robot</h3>
+              <div class="tag">STM32 · EFM8 · JDY-40 BT · LCD</div>
+              <p>Battery-powered, remote-controlled metal-detection robot built with a team of six on STM32 + EFM8 microcontrollers. Robust comms protocols and an LCD interface visualise detection intensity and magnetic field strength up to 1.4 T in real time. <em>Mar – Apr 2024</em></p>
+            </div>
+            <div class="proj" data-detail="proj/reflow-oven-controller">
+              <h3>Reflow Oven Controller</h3>
+              <div class="tag">N76E00 · ARM · Assembly</div>
+              <p>Reflow-oven controller on N76E00 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping. <em>Jan – Feb 2024</em></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="section" id="sec-skills" data-name=".skills" data-struct="skillset_t">
+          <div class="section-title"><span>Skills</span><span class="addr">0x3000 — skillset_t</span></div>
+          <div class="skills-grid">
+            <div class="skbucket"><h4>Languages</h4><div class="sk-list"><span class="sk">C</span><span class="sk">C++</span><span class="sk">Java</span><span class="sk">Python</span><span class="sk">Assembly</span><span class="sk">Verilog</span><span class="sk">VHDL</span></div></div>
+            <div class="skbucket"><h4>Tools</h4><div class="sk-list"><span class="sk">YAMCS</span><span class="sk">FreeRTOS</span><span class="sk">PlatformIO</span><span class="sk">Maven</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">CrossIDE</span><span class="sk">Cadence</span><span class="sk">MATLAB</span><span class="sk">LTspice</span><span class="sk">Git</span><span class="sk">VS Code</span></div></div>
+            <div class="skbucket"><h4>Hardware</h4><div class="sk-list"><span class="sk">STM32</span><span class="sk">ESP32</span><span class="sk">EFM8</span><span class="sk">Arduino</span><span class="sk">DE1-SoC</span><span class="sk">Raspberry Pi</span><span class="sk">IMU Sensors</span><span class="sk">Motor Drivers</span></div></div>
+            <div class="skbucket"><h4>Protocols</h4><div class="sk-list"><span class="sk">CCSDS SPP</span><span class="sk">COP-1</span><span class="sk">SLIP</span><span class="sk">RS-422</span><span class="sk">UART · SPI · I²C</span><span class="sk">TCP/UDP</span><span class="sk">BLE</span></div></div>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="section" id="sec-education" data-name=".education" data-struct="degree_t[1]">
+          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1]</span></div>
+          <div class="edu-list">
+            <div class="edu">
+              <div class="edu-top"><h3>University of British Columbia — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
+              <div class="role">Vancouver, BC</div>
+              <p>Relevant coursework: Digital System Design, Computing Systems, Signals and Systems, Systems and Controls.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
+          <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
+          <div class="cgrid">
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a></div></div>
+            <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
+            <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
+            <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
+            <div class="ccard"><div class="k">location · now</div><div class="v">Hannover, DE</div></div>
+            <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
+          </div>
+        </div>
+
+        </div><!-- /list-view -->
+
+        <!-- DETAIL VIEW (populated by JS) -->
+        <div class="detail-view" id="detail-view"></div>
+
+      </div>
+  </main>
+
+  <footer class="statusbar">
+    <span>MODE <b>READ-ONLY</b></span><span class="sep">│</span>
+    <span>SECTION <b id="sb-sec">.about_me</b></span><span class="sep">│</span>
+    <span>STRUCT <b id="sb-struct">about_me_t</b></span><span class="sep">│</span>
+    <span>DECODE <b>paper_v1</b></span>
+    <div class="right">
+      <span>built w/ <b>love + verilog</b></span>
+      <span>© 2026 monil arora</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* ─── DETAIL CONTENT ──────────────────────────────────────────────
+   Each entry: title, sub, dates, location, stack[], links[], hero,
+   body (HTML string). Body supports <h2 data-addr="0x..">, <h3>,
+   <p>, <ul>/<li>, <code>, <pre>, <figure><img><figcaption>,
+   <div class="callout">. Image paths follow the convention
+   images/{type}/{slug}/{filename} — drop files there to fill in.
+   Missing images render a styled placeholder automatically.
+─────────────────────────────────────────────────────────────────── */
+
+const DETAILS = {
+  /* ─────── EXPERIENCE ─────── */
+  'exp/lzh': {
+    type:'exp',
+    addr:'0x0200',
+    struct:'role_t',
+    badge:'EXPERIENCE',
+    title:'Laser Zentrum Hannover — Research Intern',
+    sub:'CubeSat Ground Station',
+    meta:[
+      {k:'duration', v:'Jan – Jul 2026'},
+      {k:'location', v:'Hannover, DE'},
+      {k:'team',     v:'Space Systems group'},
+    ],
+    stack:['STM32F401CC','C++','FreeRTOS','CCSDS SPP','YAMCS','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
+    links:[
+      {label:'lzh.de ↗', url:'https://www.lzh.de/en', primary:false},
+    ],
+    hero:'images/experience/lzh/hero.jpg',
+    body:`
+      <h2 data-addr="0x0210">The brief</h2>
+      <p>Joined LZH for a half-year internship to work on ground-software for an upcoming CubeSat mission. The lab needed a working ground station ahead of payload integration testing — that meant building both ends of the link: firmware on the satellite-side controller, and a YAMCS Mission Control deployment on the ground that could actually talk to it.</p>
+      <p>Most of the work sat at the boundary between the two: defining the packet formats, getting the time bases aligned, and making the link reliable enough that we could trust what we were seeing during integration runs.</p>
+
+      <figure>
+        <img src="images/experience/lzh/01-bench.jpg" alt="Bench setup with STM32 and ground station" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — bench setup, STM32F401CC + Brainboxes serial bridge talking to YAMCS over UDP.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0220">Firmware side</h2>
+      <p>Extended the STM32F401CC firmware (C++ / FreeRTOS) to packetize sensor telemetry into <strong>CCSDS Space Packet Protocol</strong> frames, then SLIP-encoded the byte stream out over RS-422 through a Brainboxes serial-to-Ethernet bridge. On top of that sat <strong>COP-1/FARM</strong> for reliable telecommand delivery, plus a small log-based boot counter living in internal flash so we could tell from the ground how many resets the unit had seen.</p>
+      <p>A few things that ate more time than expected:</p>
+      <ul>
+        <li>Getting the OBT (onboard time) drift bounded enough that ground-side correlation produced sane UTC timestamps</li>
+        <li>Buffering image downlinks against an SRAM that wasn't generous (8 KB), chunked into 79-byte APID 131 packets over VCID 1</li>
+        <li>SLIP framing edge cases when a packet ended on an <code>0xC0</code> boundary</li>
+      </ul>
+
+      <h2 data-addr="0x0230">Ground side</h2>
+      <p>The YAMCS Mission Control System ships with most of what you'd want, but the link layer it gave us out of the box didn't match our hardware. So I wrote custom Java <strong>data links</strong> for SLIP-over-UDP, wired in COP-1 FOP for reliable TC delivery, and built out an <strong>XTCE mission database</strong> that decoded APID 130 telemetry and APID 101 telecommands — with threshold alarms and parameter archiving so we could replay a session after the fact.</p>
+      <p>The most interesting bit was the <strong>Time Correlation Service</strong>. OBT-to-UTC mapping is the kind of thing that's easy to get 90% right and painful to get the last 10%. The version that finally worked uses a periodic CCSDS time packet from the spacecraft, fits a linear model on a sliding window, and re-stamps everything downstream.</p>
+
+      <figure>
+        <img src="images/experience/lzh/02-yamcs.png" alt="YAMCS web UI with live telemetry" onerror="imgFallback(this)"/>
+        <figcaption>fig 02 — YAMCS web UI showing live telemetry parameters from the bench setup.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0240">Image downlink</h2>
+      <p>Camera payloads needed to send compressed frames down the same packet pipe. With only an 8 KB SRAM buffer I split each image into 79-byte APID 131 chunks routed over VCID 1, with a tiny header carrying chunk index / total / image ID so the ground side could reassemble even if frames arrived out of order or after a brief link drop.</p>
+
+      <h2 data-addr="0x0250">Validation</h2>
+      <p>Before integration with the real flight hardware I built a <strong>PyQt6 payload simulator</strong> that produces the same packet stream the spacecraft would, plus a small <strong>Python TCP–UDP bridge</strong> for routing between debug tools and the YAMCS link. Catching protocol bugs against a simulator is much cheaper than catching them with a real radio in the loop.</p>
+
+      <div class="callout">All flight code is held by LZH; what's in this writeup is the architecture, not source. Happy to walk through specifics in conversation.</div>
+
+      <h2 data-addr="0x0260">Bonus: lab surveillance rig</h2>
+      <p>Aside from the main project, I built a 4-camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland — 704×576 PAL streams composited into a 1440×1080 quad with autostart and a watchdog so it self-recovers from camera drop-outs. Documented in the projects section.</p>
+    `,
+  },
+
+  'exp/sharang': {
+    type:'exp',
+    addr:'0x0600',
+    struct:'role_t',
+    badge:'EXPERIENCE',
+    title:'Sharang Shakti — Embedded Signal Processing Engineer',
+    sub:'Anti-drone radar digitalization',
+    meta:[
+      {k:'duration', v:'May – Jun 2024'},
+      {k:'location', v:'Gurugram, IN'},
+    ],
+    stack:['AD9910 DDS','AD8336 VGA','RF','Radar','Signal Processing','SPI'],
+    hero:'images/experience/sharang/hero.jpg',
+    body:`
+      <h2 data-addr="0x0610">Context</h2>
+      <p>Short summer stint at Sharang Shakti, working on the digitalization side of an analog anti-drone radar system. The team was moving away from purely analog waveform generation and conditioning, and needed someone to characterise and bring up the digital RF front-end.</p>
+
+      <h2 data-addr="0x0620">What I worked on</h2>
+      <p>Two main blocks:</p>
+      <ul>
+        <li><strong>AD9910 DDS</strong> — designed and optimised the high-frequency waveform-generation path, focusing on signal resolution and reducing phase noise. Spent a lot of bench time chasing spurs.</li>
+        <li><strong>AD8336 VGA</strong> — integrated with the AD9910 for real-time amplitude modulation and dynamic-range adjustment of the high-frequency radar output.</li>
+      </ul>
+
+      <figure>
+        <img src="images/experience/sharang/01-bench.jpg" alt="DDS bench measurements" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — DDS output on the spectrum analyser during phase-noise tuning.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0630">Takeaways</h2>
+      <p>First serious exposure to RF measurement gear and the gap between datasheet plots and what your bench actually does. Phase noise in particular is one of those numbers you only really understand after you've measured it badly a few times.</p>
+    `,
+  },
+
+  /* ─────── PROJECTS ─────── */
+  'proj/self-balancing-robot': {
+    type:'proj',
+    addr:'0x1000',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'Self-Balancing Robot',
+    sub:'Two-wheeled inverted pendulum',
+    meta:[
+      {k:'duration', v:'Jan – Apr 2025'},
+      {k:'role',     v:'Solo build'},
+    ],
+    stack:['Arduino Nano 33','ESP32','BLE','IMU','Motor Drivers','LCD','C'],
+    hero:'images/projects/self-balancing-robot/hero.jpg',
+    body:`
+      <h2 data-addr="0x1010">Goal</h2>
+      <p>Build a two-wheeled robot that stays upright on its own — the classic inverted-pendulum problem — with enough remote-control sugar on top to actually drive it around. Limit was 45° of tilt before it loses balance.</p>
+
+      <h2 data-addr="0x1020">Hardware</h2>
+      <ul>
+        <li><strong>Arduino Nano 33</strong> — main controller, IMU sensor fusion, motor PWM</li>
+        <li><strong>ESP32</strong> — BLE bridge for the mobile app + secondary LCD remote</li>
+        <li>Geared DC motors with encoders, H-bridge driver, lithium pack, sonar for distance</li>
+      </ul>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/01-build.jpg" alt="Robot chassis" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — chassis with motors, IMU, and battery pack.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1030">Control</h2>
+      <p>Real-time PWM control on the tilt-angle error with proportional gain. The IMU runs sensor fusion to give a clean tilt estimate, and the controller updates motor PWM at a fast enough rate that the robot recovers from small pushes within a fraction of a second.</p>
+      <p>I validated the control loop on an oscilloscope, looking at PWM response to step disturbances. After tuning, stability metrics improved by roughly <strong>30%</strong> over the initial implementation.</p>
+
+      <h2 data-addr="0x1040">Comms</h2>
+      <p>Two ways to drive it: a BLE-enabled mobile app and a dedicated LCD remote. Both stream live RPM, tilt angle, and sonar distance back from the robot so you can see what it's doing in real time.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/02-running.jpg" alt="Robot balancing" onerror="imgFallback(this)"/>
+        <figcaption>fig 02 — balancing on hardwood. The robot is genuinely standing here, no edits.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1050">What I'd do differently</h2>
+      <p>The control loop is proportional-only and that's why disturbance recovery isn't as clean as it could be. A full PID with derivative on the angular rate (not the angle, to avoid kick) would tighten the response. Also worth moving the IMU lower in the chassis next time — its placement up top means tilt readings include a small lever-arm acceleration term that polluted the estimate at high angles.</p>
+    `,
+  },
+
+  'proj/dnn-accelerator': {
+    type:'proj',
+    addr:'0x1400',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'Deep Neural Network Accelerator',
+    sub:'MNIST classification on DE1-SoC',
+    meta:[
+      {k:'duration', v:'Oct – Nov 2024'},
+      {k:'platform', v:'DE1-SoC FPGA'},
+    ],
+    stack:['Verilog','Nios II','DE1-SoC','FPGA','SDRAM','Q16.16','Quartus'],
+    hero:'images/projects/dnn-accelerator/hero.jpg',
+    body:`
+      <h2 data-addr="0x1410">What it is</h2>
+      <p>A small DNN accelerator for MNIST handwritten-digit classification, sitting alongside a Nios II soft-core processor on a DE1-SoC FPGA board. The Nios II handles control flow and weight loading; the accelerator does the math.</p>
+
+      <h2 data-addr="0x1420">Numerics</h2>
+      <p><strong>Q16.16 fixed-point</strong> throughout — 16 integer bits, 16 fractional bits. That's a deliberate choice: floating-point on a soft-core is slow and area-hungry, and MNIST doesn't need that dynamic range. ReLU is the activation between layers, which is essentially free in hardware.</p>
+
+      <figure>
+        <img src="images/projects/dnn-accelerator/01-board.jpg" alt="DE1-SoC running classifier" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — DE1-SoC running the classifier. VGA output shows the input digit and predicted class.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1430">SoC integration</h2>
+      <p>The system is wired up as a small SoC: Nios II + accelerator + an SDRAM interface for storing weights and intermediate activations. Quartus timing constraints keep everything stable at <strong>50 MHz</strong>, which is the comfortable corner for this design — pushing higher hits setup violations on the SDRAM controller path.</p>
+
+      <h2 data-addr="0x1440">Pipeline</h2>
+      <ul>
+        <li>Input image landed in SDRAM by the Nios II</li>
+        <li>Accelerator pulls a tile, multiplies against weights, accumulates</li>
+        <li>ReLU, write-back, next layer</li>
+        <li>Final softmax-equivalent in the Nios II (just an argmax — close enough for inference-only)</li>
+      </ul>
+
+      <h2 data-addr="0x1450">Lessons</h2>
+      <p>The fun part of FPGA DNN work isn't the math — it's the memory bandwidth. The accelerator itself is pretty simple; making sure the Nios II + SDRAM path could feed it without stalling was where most of the iteration happened.</p>
+    `,
+  },
+
+  'proj/metal-detector-robot': {
+    type:'proj',
+    addr:'0x1800',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'Metal Detector Robot',
+    sub:'Battery-powered, remote-controlled',
+    meta:[
+      {k:'duration', v:'Mar – Apr 2024'},
+      {k:'team',     v:'Team of 6'},
+    ],
+    stack:['STM32','EFM8','JDY-40 BT','LCD','C'],
+    hero:'images/projects/metal-detector-robot/hero.jpg',
+    body:`
+      <h2 data-addr="0x1810">Project</h2>
+      <p>Team build (six of us) for a battery-powered, remote-controlled metal-detection robot. Two microcontrollers in the loop: <strong>STM32</strong> on the robot, <strong>EFM8</strong> on the remote. Wireless link via JDY-40.</p>
+
+      <h2 data-addr="0x1820">My role</h2>
+      <p>I worked on the comms protocol between robot and remote — making the link robust enough to survive interference and packet loss without the operator noticing — and on the LCD interface that shows detection intensity in real time.</p>
+
+      <figure>
+        <img src="images/projects/metal-detector-robot/01-robot.jpg" alt="Metal detector robot" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — the robot, mid-sweep.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1830">Detection</h2>
+      <p>The detection coil's output is processed and rendered as a live magnetic-field-strength readout on the LCD, with a tested upper bound of <strong>1.4 T</strong>. The display gives both a numeric reading and an intensity bar, which is what the operator actually watches while sweeping.</p>
+
+      <h2 data-addr="0x1840">Comms</h2>
+      <p>Frame format with a sync byte, length, payload, and checksum. The remote retransmits on missed acks, the robot ignores duplicates. Nothing exotic — but the stability difference between "send raw bytes and hope" and an actual framed protocol with retries was night-and-day.</p>
+    `,
+  },
+
+  'proj/reflow-oven-controller': {
+    type:'proj',
+    addr:'0x1C00',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'Reflow Oven Controller',
+    sub:'N76E00 in pure assembly',
+    meta:[
+      {k:'duration', v:'Jan – Feb 2024'},
+      {k:'mcu',      v:'N76E00 (ARM)'},
+    ],
+    stack:['N76E00','ARM Assembly','PC monitoring'],
+    hero:'images/projects/reflow-oven-controller/hero.jpg',
+    body:`
+      <h2 data-addr="0x1C10">What it does</h2>
+      <p>A microcontroller-based reflow oven controller that automates soldering temperature profiles from <strong>25 °C to 240 °C</strong>, holding precision to within <strong>±3 °C</strong>. Multi-stage ramping for proper preheat → soak → reflow → cool curves, plus a real-time PC monitoring interface.</p>
+
+      <h2 data-addr="0x1C20">Why assembly</h2>
+      <p>The N76E00 is small. Assembly gives you full control over timing-sensitive paths — important when you're toggling an SSR-driven heating element and you don't want any surprises from the compiler. Also, course requirement.</p>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/01-oven.jpg" alt="Reflow oven with controller" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — modified toaster oven, controller mounted on the side.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1C30">Safety</h2>
+      <p>Several hard interlocks that cut power to the heating element if anything looks wrong: thermocouple disconnect, runaway temperature climb, sensor outside plausible range. The controller flashes a warning and stops the profile rather than trying to recover — wrong call to make automatically when the failure mode is fire.</p>
+
+      <h2 data-addr="0x1C40">PC interface</h2>
+      <p>Live serial stream of temperature vs target, plotted host-side. Useful for watching whether your tuning actually tracks the intended curve.</p>
+    `,
+  },
+};
+
+(function(){
+  // boot anim
+  const boot=document.getElementById('boot');
+  const lines=boot.querySelectorAll('.bl');
+  lines.forEach((l,i)=>{l.style.animationDelay=(i*180)+'ms';});
+  setTimeout(()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),500);}, lines.length*180+500);
+
+  const body=document.getElementById('content-body');
+  const regs=document.querySelectorAll('.reg');
+  const sections=document.querySelectorAll('.section');
+  const curSec=document.getElementById('cur-section');
+  const sbSec=document.getElementById('sb-sec');
+  const sbStruct=document.getElementById('sb-struct');
+  const scrollPos=document.getElementById('scroll-pos');
+  const listView=document.getElementById('list-view');
+  const detailView=document.getElementById('detail-view');
+
+  // ── image fallback helper, exposed globally for inline onerror ──
+  window.imgFallback=function(img){
+    const path=img.getAttribute('src')||'';
+    const div=document.createElement('div');
+    div.className='img-missing';
+    div.innerHTML=`<span class="lbl">— missing image —</span><span class="pth">${path}</span><span class="hint">drop an image at this path to fill this slot</span>`;
+    if(img.parentNode){img.parentNode.replaceChild(div,img);}
+  };
+
+  // ── ordered key lists for prev/next nav ──
+  const KEYS={
+    exp: Object.keys(DETAILS).filter(k=>DETAILS[k].type==='exp'),
+    proj:Object.keys(DETAILS).filter(k=>DETAILS[k].type==='proj'),
+  };
+
+  // ── list view state tracking ──
+  let currentIdx=0;
+  let lockedIdx=null;
+  let inDetail=false;
+
+  function setActiveSection(i){
+    currentIdx=i;
+    const s=sections[i];
+    regs.forEach(r=>r.classList.toggle('on',r.dataset.target===s.id));
+    curSec.textContent=s.dataset.name;
+    sbSec.textContent=s.dataset.name;
+    sbStruct.textContent=s.dataset.struct;
+    scrollPos.textContent='struct '+s.dataset.struct;
+  }
+
+  function detectFromScroll(){
+    if(inDetail||lockedIdx!==null)return;
+    const top=body.scrollTop;
+    const atBottom=(top+body.clientHeight)>=(body.scrollHeight-4);
+    if(atBottom){setActiveSection(sections.length-1);return;}
+    const probe=top+80;
+    let best=0,bestDist=Infinity;
+    for(let i=0;i<sections.length;i++){
+      const t=sections[i].offsetTop;
+      if(t<=probe){const d=probe-t;if(d<bestDist){bestDist=d;best=i;}}
+    }
+    setActiveSection(best);
+  }
+  body.addEventListener('scroll',()=>requestAnimationFrame(detectFromScroll));
+
+  function navigateToSection(i){
+    if(inDetail){closeDetail(false);}
+    const t=sections[i];
+    if(!t)return;
+    const target=(i===0)?0:t.offsetTop-8;
+    lockedIdx=i;
+    setActiveSection(i);
+    body.scrollTo({top:target,behavior:'smooth'});
+    clearTimeout(window.__navUnlock);
+    window.__navUnlock=setTimeout(()=>{lockedIdx=null;detectFromScroll();},800);
+  }
+
+  // region click → navigate to section
+  regs.forEach((r,i)=>{
+    r.addEventListener('click',e=>{
+      e.preventDefault();
+      const targetId=r.dataset.target;
+      // clear hash so we go to list view
+      history.pushState(null,'','#'+targetId);
+      navigateToSection(i);
+      r.blur();
+    });
+  });
+
+  // keyboard nav (arrows = section nav, only in list view)
+  document.addEventListener('keydown',e=>{
+    if(inDetail&&e.key==='Escape'){closeDetail();return;}
+    const tag=(e.target&&e.target.tagName)||'';
+    if(tag==='INPUT'||tag==='TEXTAREA')return;
+    if(inDetail)return;
+    if(e.key!=='ArrowDown'&&e.key!=='ArrowUp'&&e.key!=='PageDown'&&e.key!=='PageUp')return;
+    e.preventDefault();
+    const cur=(lockedIdx!==null)?lockedIdx:currentIdx;
+    const dir=(e.key==='ArrowDown'||e.key==='PageDown')?1:-1;
+    const next=Math.max(0,Math.min(sections.length-1,cur+dir));
+    if(next===cur)return;
+    navigateToSection(next);
+  });
+
+  // ── DETAIL VIEW rendering ──
+  function buildDetail(slug){
+    const d=DETAILS[slug];
+    if(!d)return '';
+    const stackHtml=d.stack?d.stack.map(s=>`<span class="chip">${s}</span>`).join(''):'';
+    const linksHtml=d.links?d.links.map(l=>`<a href="${l.url}" ${l.primary?'class="pri"':''} target="_blank" rel="noopener">${l.label}</a>`).join(''):'';
+    const metaHtml=d.meta?d.meta.map(m=>`<div class="m"><span class="mk">${m.k}</span><span class="mv">${m.v}</span></div>`).join(''):'';
+    const heroHtml=d.hero?`<div class="dv-hero"><img src="${d.hero}" alt="${d.title}" onerror="imgFallback(this)"/></div>`:'';
+
+    // prev/next within type
+    const list=KEYS[d.type];
+    const idx=list.indexOf(slug);
+    const prev=idx>0?DETAILS[list[idx-1]]:null;
+    const next=idx<list.length-1?DETAILS[list[idx+1]]:null;
+    const prevSlug=idx>0?list[idx-1]:null;
+    const nextSlug=idx<list.length-1?list[idx+1]:null;
+    const prevHtml=prev
+      ?`<a class="dv-nav prev" data-goto="${prevSlug}"><span class="nav-k">◄ prev ${d.type==='exp'?'role':'project'}</span><span class="nav-v">${prev.title.split(' — ')[0].split(' (')[0]}</span></a>`
+      :`<a class="dv-nav prev disabled"><span class="nav-k">◄ prev</span><span class="nav-v">—</span></a>`;
+    const nextHtml=next
+      ?`<a class="dv-nav next" data-goto="${nextSlug}"><span class="nav-k">next ${d.type==='exp'?'role':'project'} ►</span><span class="nav-v">${next.title.split(' — ')[0].split(' (')[0]}</span></a>`
+      :`<a class="dv-nav next disabled"><span class="nav-k">next ►</span><span class="nav-v">—</span></a>`;
+
+    return `
+      <div class="dv-bar">
+        <div class="left">
+          <span class="addr">@ ${d.addr} · ${d.struct}</span>
+          <span>· DECODE paper_v1</span>
+        </div>
+        <button class="dv-back" data-back>◄ back to list</button>
+      </div>
+      <article class="dv-body">
+        <header class="dv-header">
+          <div class="dv-kicker"><span class="badge">${d.badge}</span><span>${d.struct} @ ${d.addr}</span></div>
+          <h1 class="dv-title">${d.title}</h1>
+          <div class="dv-sub">${d.sub}</div>
+          <div class="dv-meta">${metaHtml}</div>
+          ${stackHtml?`<div class="dv-stack">${stackHtml}</div>`:''}
+          ${linksHtml?`<div class="dv-links">${linksHtml}</div>`:''}
+        </header>
+        ${heroHtml}
+        <div class="dv-prose">${d.body}</div>
+        <footer class="dv-footer">
+          ${prevHtml}
+          <button class="dv-back-big" data-back>back to list</button>
+          ${nextHtml}
+        </footer>
+      </article>
+    `;
+  }
+
+  function openDetail(slug,push){
+    const d=DETAILS[slug];
+    if(!d){closeDetail();return;}
+    detailView.innerHTML=buildDetail(slug);
+    detailView.classList.add('on');
+    listView.classList.add('off');
+    inDetail=true;
+    body.scrollTop=0;
+
+    // update header chrome
+    curSec.textContent=d.type==='exp'?'.experience':'.projects';
+    sbSec.textContent=d.type==='exp'?'.experience':'.projects';
+    sbStruct.textContent=d.struct;
+    scrollPos.textContent=`struct ${d.struct} @ ${d.addr}`;
+
+    // highlight parent region
+    const parentId=d.type==='exp'?'sec-experience':'sec-projects';
+    regs.forEach(r=>r.classList.toggle('on',r.dataset.target===parentId));
+
+    // wire detail-view buttons
+    detailView.querySelectorAll('[data-back]').forEach(el=>{
+      el.addEventListener('click',()=>closeDetail());
+    });
+    detailView.querySelectorAll('[data-goto]').forEach(el=>{
+      el.addEventListener('click',e=>{
+        e.preventDefault();
+        const target=el.dataset.goto;
+        history.pushState(null,'','#'+target);
+        openDetail(target,false);
+      });
+    });
+
+    if(push){history.pushState(null,'','#'+slug);}
+  }
+
+  function closeDetail(updateHash=true){
+    detailView.classList.remove('on');
+    listView.classList.remove('off');
+    detailView.innerHTML='';
+    inDetail=false;
+    if(updateHash){
+      // restore hash to parent section if possible
+      const pid=document.querySelector('.reg.on')?.dataset.target||'sec-about';
+      history.pushState(null,'','#'+pid);
+      const sec=document.getElementById(pid);
+      if(sec){
+        // small delay so the layout settles
+        requestAnimationFrame(()=>{
+          body.scrollTo({top:pid==='sec-about'?0:sec.offsetTop-8,behavior:'auto'});
+          detectFromScroll();
+        });
+      }
+    }
+  }
+
+  // wire list-view card clicks
+  document.querySelectorAll('[data-detail]').forEach(card=>{
+    card.addEventListener('click',e=>{
+      if(e.target.closest('a'))return;
+      const slug=card.dataset.detail;
+      openDetail(slug,true);
+    });
+  });
+
+  // ── hash routing on load + popstate ──
+  function routeFromHash(){
+    const h=(location.hash||'').replace(/^#/,'');
+    if(!h){closeDetail(false);setActiveSection(0);body.scrollTop=0;return;}
+    if(DETAILS[h]){openDetail(h,false);return;}
+    // section anchor
+    const idx=[...sections].findIndex(s=>s.id===h);
+    if(idx>=0){closeDetail(false);navigateToSection(idx);}
+  }
+  window.addEventListener('popstate',routeFromHash);
+  window.addEventListener('hashchange',e=>{routeFromHash();});
+
+  // initial state
+  setActiveSection(0);
+  routeFromHash();
+})();
+</script>
+
+</body>
+</html>
