@@ -164,6 +164,11 @@
   .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
   .ccard a:hover{border-color:var(--paper-ink);}
 
+  /* end-of-dump marker — owns the bottom scroll space so the last sections are reachable */
+  .dump-end{margin:60px 0 0;padding-bottom:60vh;display:flex;align-items:center;gap:14px;color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.7;}
+  .dump-end::before,.dump-end::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--paper-dim) 30%,var(--paper-dim) 70%,transparent);}
+  @media(max-width:900px){.dump-end{margin-top:40px;padding-bottom:50vh;font-size:9px;gap:10px;}}
+
   /* ── DETAIL VIEW ── */
   .dv-bar{position:sticky;top:0;z-index:10;background:var(--paper-bg2);border-bottom:1px solid var(--paper-line);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);text-transform:uppercase;}
   .dv-bar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
@@ -439,6 +444,8 @@
             <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
           </div>
         </div>
+
+        <div class="dump-end">// END OF DUMP · 0xFFFF · 8192/8192 BYTES</div>
 
         </div><!-- /list-view -->
 
@@ -769,13 +776,10 @@ const DETAILS = {
   function detectFromScroll(){
     if(inDetail||lockedIdx!==null)return;
     const top=body.scrollTop;
-    const atBottom=(top+body.clientHeight)>=(body.scrollHeight-4);
-    if(atBottom){setActiveSection(sections.length-1);return;}
     const probe=top+80;
-    let best=0,bestDist=Infinity;
+    let best=0;
     for(let i=0;i<sections.length;i++){
-      const t=sections[i].offsetTop;
-      if(t<=probe){const d=probe-t;if(d<bestDist){bestDist=d;best=i;}}
+      if(sections[i].offsetTop<=probe) best=i;
     }
     setActiveSection(best);
   }
