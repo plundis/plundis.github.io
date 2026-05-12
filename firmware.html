@@ -158,7 +158,14 @@
   .edu h3{font-size:15px;font-weight:700;color:var(--paper-ink);}
   .edu .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
   .edu .role{font-family:var(--mono);font-size:11.5px;color:var(--paper-dim);margin-bottom:4px;font-weight:500;}
-  .edu p{font-size:13.5px;line-height:1.55;color:var(--paper-ink2);}
+  .edu p{font-size:13.5px;line-height:1.55;color:var(--paper-ink2);margin-bottom:12px;}
+  .courses{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px;}
+  @media(max-width:760px){.courses{grid-template-columns:1fr;}}
+  .course{border:1px solid rgba(0,0,0,.22);background:#fff;padding:10px 12px;display:flex;align-items:center;gap:12px;}
+  .course .code{flex-shrink:0;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;background:var(--paper-ink);color:var(--paper-bg);padding:6px 9px;line-height:1;min-width:64px;text-align:center;}
+  .course .body{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .course .nm{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--paper-ink);line-height:1.25;}
+  .course .top{font-family:var(--sans);font-size:12px;color:var(--paper-ink2);letter-spacing:0;line-height:1.45;text-wrap:pretty;}
 
   /* contact */
   .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -308,7 +315,7 @@
     </div>
     <div class="tb-right">
       <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <a class="tb-link" href="/cdn-cgi/l/email-protection#44292b2a2d2825362b362576747477042329252d286a272b29">email</a>
+      <a class="tb-link" href="/cdn-cgi/l/email-protection#573a38393e3b36253825366567676417303a363e3b7934383a">email</a>
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
     </div>
@@ -361,7 +368,7 @@
               <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) building CubeSat ground-station infrastructure — STM32F401CC firmware in C++/FreeRTOS, CCSDS SPP framing, YAMCS Mission Control extensions. Back at UBC in the fall.</p>
               <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="/cdn-cgi/l/email-protection#177a78797e7b76657865762527272457707a767e7b3974787a">email</a>
+                <a href="/cdn-cgi/l/email-protection#f4999b9a9d9895869b8695c6c4c4c7b49399959d98da979b99">email</a>
                 <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
                 <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
               </div>
@@ -428,12 +435,42 @@
 
         <!-- EDUCATION -->
         <div class="section" id="sec-education" data-name=".education" data-struct="degree_t[1]">
-          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1]</span></div>
+          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1] + course_t[4]</span></div>
           <div class="edu-list">
             <div class="edu">
               <div class="edu-top"><h3>University of British Columbia — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
               <div class="role">Vancouver, BC</div>
-              <p>Relevant coursework: Digital System Design, Computing Systems, Signals and Systems, Systems and Controls.</p>
+              <p>Relevant coursework — 4 courses:</p>
+              <div class="courses">
+                <div class="course">
+                  <span class="code">CPEN&nbsp;311</span>
+                  <span class="body">
+                    <span class="nm">Digital Systems Design</span>
+                    <span class="top">Designing combinational and sequential hardware in Verilog/VHDL, synthesised onto FPGAs: from arithmetic and datapath circuits up to pipelined processors and GPU architecture.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">CPEN&nbsp;211</span>
+                  <span class="body">
+                    <span class="nm">Computing Systems I</span>
+                    <span class="top">How a microcomputer actually works, from Boolean algebra and logic gates up through instruction sets, memory addressing, assembly programming, and I/O interfacing.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">ELEC&nbsp;221</span>
+                  <span class="body">
+                    <span class="nm">Signals and Systems</span>
+                    <span class="top">Analysing LTI systems in time and frequency domains using convolution and the Fourier, Laplace, and z-transforms, with applications to sampling, filtering, and modulation.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">ELEC&nbsp;341</span>
+                  <span class="body">
+                    <span class="nm">Systems and Control</span>
+                    <span class="top">Modelling continuous-time systems with transfer functions and state-space, then designing feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -442,7 +479,7 @@
         <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
           <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
           <div class="cgrid">
-            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#533e3c3d3a3f32213c21326163636013343e323a3f7d303c3e"><span class="__cf_email__" data-cfemail="04696b6a6d6865766b766536343437446369656d682a676b69">[email&#160;protected]</span></a></div></div>
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#8ee3e1e0e7e2effce1fcefbcbebebdcee9e3efe7e2a0ede1e3"><span class="__cf_email__" data-cfemail="177a78797e7b76657865762527272457707a767e7b3974787a">[email&#160;protected]</span></a></div></div>
             <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
             <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
             <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
@@ -555,10 +592,18 @@ const DETAILS = {
       {k:'location', v:'Gurugram, IN'},
     ],
     stack:['AD9910 DDS','AD8336 VGA','RF','Radar','Signal Processing','SPI'],
-    hero:'images/experience/sharang/hero.jpg',
     body:`
       <h2 data-addr="0x0610">Context</h2>
       <p>Short summer stint at Sharang Shakti, working on the digitalization side of an analog anti-drone radar system. The team was moving away from purely analog waveform generation and conditioning, and needed someone to characterise and bring up the digital RF front-end.</p>
+
+      <pre><code>   +---------+   SPI    +-----------+   RF out   +-----------+   to mixer
+   |  MCU    | -------&gt; |  AD9910   | ---------&gt; |  AD8336   | -----------&gt;
+   | (host)  |          |    DDS    |            |    VGA    |
+   +---------+          +-----------+            +-----------+
+        |                    ^                        ^
+        |   profile/freq     |        gain ctrl       |
+        +--------------------+------------------------+</code></pre>
+      <p class="figcap">// fig 01 — digital RF front-end. MCU programs DDS profiles over SPI; VGA gain is set in real time for amplitude modulation.</p>
 
       <h2 data-addr="0x0620">What I worked on</h2>
       <p>Two main blocks:</p>
@@ -566,11 +611,6 @@ const DETAILS = {
         <li><strong>AD9910 DDS</strong> — designed and optimised the high-frequency waveform-generation path, focusing on signal resolution and reducing phase noise. Spent a lot of bench time chasing spurs.</li>
         <li><strong>AD8336 VGA</strong> — integrated with the AD9910 for real-time amplitude modulation and dynamic-range adjustment of the high-frequency radar output.</li>
       </ul>
-
-      <figure>
-        <img src="images/experience/sharang/01-bench.jpg" alt="DDS bench measurements" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — DDS output on the spectrum analyser during phase-noise tuning.</figcaption>
-      </figure>
 
       <h2 data-addr="0x0630">Takeaways</h2>
       <p>First serious exposure to RF measurement gear and the gap between datasheet plots and what your bench actually does. Phase noise in particular is one of those numbers you only really understand after you've measured it badly a few times.</p>
