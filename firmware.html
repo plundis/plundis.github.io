@@ -123,8 +123,9 @@
   /* experience cards — clickable */
   .exp{padding:14px 16px;cursor:pointer;transition:background .12s,box-shadow .12s,padding .12s;margin:0 -16px;border:1px solid transparent;position:relative;}
   .exp:hover{background:rgba(0,0,0,.025);border-color:rgba(0,0,0,.08);}
-  .exp:hover::after{content:'open ↗';position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.08em;text-transform:uppercase;}
-  .exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;flex-wrap:wrap;}
+  .exp::after{content:'↗';position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);line-height:1;opacity:.55;transition:opacity .12s,color .12s,transform .12s;pointer-events:none;}
+  .exp:hover::after{opacity:1;color:var(--paper-ink);transform:translate(1px,-1px);}
+  .exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;flex-wrap:wrap;padding-right:22px;}
   .exp h3{font-size:17px;font-weight:700;color:var(--paper-ink);letter-spacing:-.01em;}
   .exp .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
   .exp .role{font-family:var(--mono);font-size:12px;color:var(--paper-dim);margin-bottom:8px;font-weight:500;}
@@ -135,9 +136,12 @@
   /* projects grid — clickable */
   .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   .proj{border:1px solid rgba(0,0,0,.18);padding:14px 16px;background:#fff;display:flex;flex-direction:column;cursor:pointer;transition:border-color .12s,box-shadow .12s,transform .12s;position:relative;}
+  .proj::after{content:'↗';position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);line-height:1;opacity:.55;transition:opacity .12s,color .12s,transform .12s;pointer-events:none;}
   .proj:hover{border-color:var(--paper-ink);box-shadow:3px 3px 0 rgba(0,0,0,.08);transform:translate(-1px,-1px);}
-  .proj:hover::after{content:'↗';position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:14px;color:var(--paper-ink);}
-  .proj h3{font-size:15px;font-weight:700;color:var(--paper-ink);margin-bottom:3px;letter-spacing:-.005em;}
+  .proj:hover::after{opacity:1;color:var(--paper-ink);transform:translate(1px,-1px);}
+  .proj-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:3px;padding-right:18px;}
+  .proj h3{font-size:15px;font-weight:700;color:var(--paper-ink);letter-spacing:-.005em;}
+  .proj .when{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);white-space:nowrap;font-weight:500;letter-spacing:.02em;flex-shrink:0;}
   .proj .tag{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
   .proj p{font-size:13px;line-height:1.55;color:var(--paper-ink2);text-wrap:pretty;}
 
@@ -221,6 +225,7 @@
   .dv-prose figure img{width:100%;display:block;border:1px solid rgba(0,0,0,.2);background:#fff;}
   .dv-prose figcaption{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.04em;margin-top:6px;font-weight:500;}
   .dv-prose figcaption::before{content:'// ';color:var(--paper-dim);}
+  .dv-prose .figcap{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.04em;margin:-10px 0 18px;font-weight:500;}
   .dv-prose .callout{border:1px solid rgba(0,0,0,.3);background:rgba(240,182,74,.12);padding:12px 14px;margin:18px 0;font-size:14px;}
   .dv-prose .callout::before{content:'NOTE — ';font-family:var(--mono);font-size:10px;letter-spacing:.12em;font-weight:700;color:var(--paper-ink);}
 
@@ -276,7 +281,8 @@
     .cgrid{grid-template-columns:1fr;}
     .statusbar .right{display:none}
     .exp{margin:0;padding:14px 0;}
-    .exp:hover::after{display:none;}
+    .exp::after{top:14px;right:2px;}
+    .exp-top{padding-right:18px;}
   }
 </style>
 </head>
@@ -302,7 +308,7 @@
     </div>
     <div class="tb-right">
       <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <a class="tb-link" href="mailto:monilarora2003@gmail.com">email</a>
+      <a class="tb-link" href="/cdn-cgi/l/email-protection#44292b2a2d2825362b362576747477042329252d286a272b29">email</a>
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
     </div>
@@ -355,7 +361,7 @@
               <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) building CubeSat ground-station infrastructure — STM32F401CC firmware in C++/FreeRTOS, CCSDS SPP framing, YAMCS Mission Control extensions. Back at UBC in the fall.</p>
               <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="mailto:monilarora2003@gmail.com">email</a>
+                <a href="/cdn-cgi/l/email-protection#177a78797e7b76657865762527272457707a767e7b3974787a">email</a>
                 <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
                 <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
               </div>
@@ -387,24 +393,24 @@
           <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[4]</span></div>
           <div class="proj-grid">
             <div class="proj" data-detail="proj/self-balancing-robot">
-              <h3>Self-Balancing Robot</h3>
+              <div class="proj-top"><h3>Self-Balancing Robot</h3><span class="when">Jan – Apr 2025</span></div>
               <div class="tag">Arduino Nano 33 · ESP32 · BLE · IMU</div>
-              <p>Two-wheeled self-balancing robot with Arduino Nano 33, IMU sensors, and motor drivers; real-time PWM control stabilises tilt up to 45°. ESP32 BLE mobile app + LCD remote stream RPM, tilt angle, and sonar distance. Proportional-control validation via oscilloscope analysis showed ~30% stability improvement. <em>Jan – Apr 2025</em></p>
+              <p>Two-wheeled self-balancing robot with Arduino Nano 33, IMU sensors, and motor drivers; real-time PWM control stabilises tilt up to 45°. ESP32 BLE mobile app + LCD remote stream RPM, tilt angle, and sonar distance. Proportional-control validation via oscilloscope analysis showed ~30% stability improvement.</p>
             </div>
             <div class="proj" data-detail="proj/dnn-accelerator">
-              <h3>Deep Neural Network Accelerator</h3>
+              <div class="proj-top"><h3>Deep Neural Network Accelerator</h3><span class="when">Oct – Nov 2024</span></div>
               <div class="tag">Verilog · Nios II · DE1-SoC · Q16.16</div>
-              <p>DNN accelerator on an embedded Nios II system using the DE1-SoC for MNIST classification with Q16.16 fixed-point arithmetic and ReLU activation. SoC includes an SDRAM interface; Quartus timing constraints applied for stable operation at 50 MHz. <em>Oct – Nov 2024</em></p>
+              <p>DNN accelerator on an embedded Nios II system using the DE1-SoC for MNIST classification with Q16.16 fixed-point arithmetic and ReLU activation. SoC includes an SDRAM interface; Quartus timing constraints applied for stable operation at 50 MHz.</p>
             </div>
             <div class="proj" data-detail="proj/metal-detector-robot">
-              <h3>Metal Detector Robot</h3>
+              <div class="proj-top"><h3>Metal Detector Robot</h3><span class="when">Mar – Apr 2024</span></div>
               <div class="tag">STM32 · EFM8 · JDY-40 BT · LCD</div>
-              <p>Battery-powered, remote-controlled metal-detection robot built with a team of six on STM32 + EFM8 microcontrollers. Robust comms protocols and an LCD interface visualise detection intensity and magnetic field strength up to 1.4 T in real time. <em>Mar – Apr 2024</em></p>
+              <p>Battery-powered, remote-controlled metal-detection robot built with a team of six on STM32 + EFM8 microcontrollers. Robust comms protocols and an LCD interface visualise detection intensity and magnetic field strength up to 1.4 T in real time.</p>
             </div>
             <div class="proj" data-detail="proj/reflow-oven-controller">
-              <h3>Reflow Oven Controller</h3>
+              <div class="proj-top"><h3>Reflow Oven Controller</h3><span class="when">Jan – Feb 2024</span></div>
               <div class="tag">N76E00 · ARM · Assembly</div>
-              <p>Reflow-oven controller on N76E00 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping. <em>Jan – Feb 2024</em></p>
+              <p>Reflow-oven controller on N76E00 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping.</p>
             </div>
           </div>
         </div>
@@ -436,7 +442,7 @@
         <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
           <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
           <div class="cgrid">
-            <div class="ccard"><div class="k">email</div><div class="v"><a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a></div></div>
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#533e3c3d3a3f32213c21326163636013343e323a3f7d303c3e"><span class="__cf_email__" data-cfemail="04696b6a6d6865766b766536343437446369656d682a676b69">[email&#160;protected]</span></a></div></div>
             <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
             <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
             <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
@@ -467,7 +473,7 @@
   </footer>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ─── DETAIL CONTENT ──────────────────────────────────────────────
    Each entry: title, sub, dates, location, stack[], links[], hero,
    body (HTML string). Body supports <h2 data-addr="0x..">, <h3>,
@@ -630,32 +636,66 @@ const DETAILS = {
       {k:'platform', v:'DE1-SoC FPGA'},
     ],
     stack:['Verilog','Nios II','DE1-SoC','FPGA','SDRAM','Q16.16','Quartus'],
-    hero:'images/projects/dnn-accelerator/hero.jpg',
     body:`
       <h2 data-addr="0x1410">What it is</h2>
-      <p>A small DNN accelerator for MNIST handwritten-digit classification, sitting alongside a Nios II soft-core processor on a DE1-SoC FPGA board. The Nios II handles control flow and weight loading; the accelerator does the math.</p>
+      <p>A small DNN accelerator for MNIST handwritten-digit classification, sitting alongside a Nios II soft-core processor on a DE1-SoC FPGA board. The Nios II handles control flow and weight loading; custom Avalon master/servant cores in Verilog do the math. The network is a multi-layer perceptron — 784-pixel input, two 1000-neuron hidden layers, 10-neuron output — and every layer computes <em>a' = ReLU(W·a + b)</em>.</p>
+
+      <pre><code>    +--------------+   instr    +--------------+
+    |   on-chip    | ---------&gt; |              |
+    |  ROM (32KB)  | &lt;--------- |   Nios II    |
+    +--------------+            |   soft CPU   |
+                                +------+-------+
+                                       | data master  (Avalon-MM)
+        +--------------+----------+----+----+-----------+--------------+
+        v              v          v         v           v              v
+   +---------+   +----------+   +----------+   +---------+   +-----------+
+   |  JTAG   |   | PIO hex  |   | wordcopy |   | dotopt  |   |    VGA    |
+   |  UART   |   | display  |   |   DMA    |   |   MAC   |   |  adapter  |
+   +---------+   +----------+   +-----+----+   +----+----+   +-----------+
+                                      | master      | m0  m1 |
+                                      v             v        v
+                              +---------------+   +---------------------+
+                              | SDRAM  (64MB) |   | bank0 / bank1  SRAM |
+                              +---------------+   +---------------------+</code></pre>
+      <p class="figcap">// fig 01 — SoC dataflow. Three masters on each memory: Nios II + wordcopy + a dotopt port. Reproduced from the UBC CPEN 311 lab spec.</p>
 
       <h2 data-addr="0x1420">Numerics</h2>
-      <p><strong>Q16.16 fixed-point</strong> throughout — 16 integer bits, 16 fractional bits. That's a deliberate choice: floating-point on a soft-core is slow and area-hungry, and MNIST doesn't need that dynamic range. ReLU is the activation between layers, which is essentially free in hardware.</p>
+      <p><strong>Q16.16 signed fixed-point</strong> everywhere — 16 integer bits, 16 fractional bits in a 32-bit two's-complement word. After every multiply the 64-bit result is right-shifted by 16 (truncation, not rounding — MNIST doesn't care) to put the binary point back where it belongs. Floating-point on a soft-core would have been slow and area-hungry; this lets a single DSP block do a Q16.16 multiply in one cycle.</p>
 
-      <figure>
-        <img src="images/projects/dnn-accelerator/01-board.jpg" alt="DE1-SoC running classifier" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — DE1-SoC running the classifier. VGA output shows the input digit and predicted class.</figcaption>
-      </figure>
+      <h2 data-addr="0x1430">Memory map</h2>
+      <pre><code>+----------------------------+--------------+--------------+
+| component                  |   base       |   end        |
++----------------------------+--------------+--------------+
+| Nios II debug mem servant  |  0x00000800  |  0x00000fff  |
+| JTAG UART                  |  0x00001000  |  0x00001007  |
+| PIO  (7-segment hex)       |  0x00001010  |  0x0000101f  |
+| wordcopy accelerator       |  0x00001040  |  0x0000107f  |
+| DOT / DOTOPT accelerator   |  0x00001100  |  0x0000113f  |
+| VGA adapter                |  0x00004000  |  0x0000401f  |
+| SRAM  bank0 / bank1        |  0x00006000  |  0x00007fff  |
+| on-chip instruction memory |  0x00008000  |  0x0000ffff  |
+| SDRAM controller           |  0x08000000  |  0x0bffffff  |
++----------------------------+--------------+--------------+</code></pre>
+      <p class="figcap">// fig 02 — Avalon-MM address space. Lifted from the lab manual; my Platform Designer project matches these exactly.</p>
 
-      <h2 data-addr="0x1430">SoC integration</h2>
-      <p>The system is wired up as a small SoC: Nios II + accelerator + an SDRAM interface for storing weights and intermediate activations. Quartus timing constraints keep everything stable at <strong>50 MHz</strong>, which is the comfortable corner for this design — pushing higher hits setup violations on the SDRAM controller path.</p>
+      <h2 data-addr="0x1440">Avalon waitrequest is the whole game</h2>
+      <p>The accelerator cores expose a memory-mapped servant interface to the Nios II (start/poll registers, weight + input addresses, vector length) and a master interface to SDRAM. The SDRAM controller can stall on refresh or row-open, so the FSM has to honour <code>waitrequest</code> on reads, latch <code>readdata</code> only when <code>readdatavalid</code> is high, and never drop in-flight requests on the floor.</p>
+      <pre><code>clk      _|‾|_|‾|_|‾|_|‾|_|‾|_|‾|_|‾|_|‾
+read     ___|‾‾‾‾‾‾‾‾‾‾‾‾|___________
+address  ---&lt;     A     &gt;-----------
+waitreq  ___|‾‾‾‾‾‾‾‾|_______________   &lt;-- controller busy; hold request
+rdvalid  _______________|‾‾|_________   &lt;-- data lands one cycle later
+rddata   --------------&lt; D &gt;---------</code></pre>
+      <p class="figcap">// fig 03 — variable-latency Avalon read. Hold <code>address</code> + <code>read</code> while <code>waitrequest</code> is high; sample <code>readdata</code> only on <code>readdatavalid</code>.</p>
 
-      <h2 data-addr="0x1440">Pipeline</h2>
-      <ul>
-        <li>Input image landed in SDRAM by the Nios II</li>
-        <li>Accelerator pulls a tile, multiplies against weights, accumulates</li>
-        <li>ReLU, write-back, next layer</li>
-        <li>Final softmax-equivalent in the Nios II (just an argmax — close enough for inference-only)</li>
-      </ul>
+      <h2 data-addr="0x1450">Going faster: dotopt</h2>
+      <p>The first dot-product core (<code>dot.sv</code>) had a single Avalon master that walked through SDRAM serially — fetch input, fetch weight, multiply-accumulate, repeat. Bandwidth-bound. The optimised version (<code>dotopt.sv</code>) splits the input activations into on-chip SRAM (bank0/bank1) using the wordcopy DMA, then runs <strong>two master ports</strong>: one to SDRAM for weights, one to SRAM for inputs. Concurrent reads. The SDRAM weight fetch is always the long pole, which lets the FSM stay simple — just gate the multiply on the slower of the two.</p>
 
-      <h2 data-addr="0x1450">Lessons</h2>
-      <p>The fun part of FPGA DNN work isn't the math — it's the memory bandwidth. The accelerator itself is pretty simple; making sure the Nios II + SDRAM path could feed it without stalling was where most of the iteration happened.</p>
+      <h2 data-addr="0x1460">Timing</h2>
+      <p>The PLL emits two 50 MHz clocks: a 0° phase to the SoC fabric and a −3 ns phase to the SDRAM pins (compensating for trace + IO delay between the FPGA and the off-chip chip). With <code>settings/timing.sdc</code> in place, Quartus closes at 50 MHz across all paths — including the dotopt MAC and the SDRAM controller. Pushing higher hits setup violations on the SDRAM controller path, which would need a more aggressive pipeline.</p>
+
+      <h2 data-addr="0x1470">Lessons</h2>
+      <p>The fun part of FPGA DNN work isn't the math — it's the memory bandwidth, and on a soft-core SoC, the interconnect protocol. The MAC unit fit on a napkin. Getting <code>waitrequest</code>, <code>readdatavalid</code>, and the two-master arbitration on the SRAM banks right is what actually took the iterations.</p>
     `,
   },
 
@@ -727,11 +767,18 @@ const DETAILS = {
 };
 
 (function(){
-  // boot anim
+  // boot anim — skip on deep links or repeat visits within session
   const boot=document.getElementById('boot');
-  const lines=boot.querySelectorAll('.bl');
-  lines.forEach((l,i)=>{l.style.animationDelay=(i*180)+'ms';});
-  setTimeout(()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),500);}, lines.length*180+500);
+  const reduceMotion=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const skipBoot=location.hash||sessionStorage.getItem('booted')||reduceMotion;
+  if(skipBoot){
+    boot.remove();
+  }else{
+    const lines=boot.querySelectorAll('.bl');
+    lines.forEach((l,i)=>{l.style.animationDelay=(i*180)+'ms';});
+    setTimeout(()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),500);}, lines.length*180+500);
+    try{sessionStorage.setItem('booted','1');}catch(e){}
+  }
 
   const body=document.getElementById('content-body');
   const regs=document.querySelectorAll('.reg');
