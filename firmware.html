@@ -383,7 +383,7 @@
           <div class="exp" data-detail="exp/lzh">
             <div class="exp-top"><h3>Laser Zentrum Hannover (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
             <div class="role">CubeSat Ground Station · Hannover, Germany</div>
-            <p>Extended STM32F401CC firmware in C++/FreeRTOS to packetize sensor telemetry into CCSDS SPP frames, SLIP-encoded over RS-422 via Brainboxes serial-to-Ethernet with COP-1/FARM delivery and a log-based boot counter in internal flash. Extended the YAMCS Mission Control System with custom Java data links (SLIP-over-UDP), COP-1 FOP reliable TC delivery, and an XTCE mission database decoding APID 130 TM / 101 TC with threshold alarms and parameter archiving. Implemented image downlink (8 KB SRAM buffer, 79-byte APID 131 chunks over VCID 1) and validated the full pipeline with a PyQt6 payload simulator and a Python TCP–UDP bridge.</p>
+            <p>Extended STM32F401CC firmware in C++/FreeRTOS to packetize sensor telemetry into CCSDS SPP frames, SLIP-encoded over RS-422 via a Lantronix UDS2100 serial-to-Ethernet bridge with COP-1/FARM delivery and a log-based boot counter in internal flash. Extended the YAMCS Mission Control System with custom Java data links (SLIP-over-UDP), COP-1 FOP reliable TC delivery, and an XTCE mission database decoding APID 130 TM / 101 TC with threshold alarms and parameter archiving. Implemented image downlink (8 KB SRAM buffer, 79-byte APID 131 chunks over VCID 1) and validated the full pipeline with a PyQt6 payload simulator and a Python TCP–UDP bridge.</p>
             <div class="chips"><span class="chip">STM32F401CC</span><span class="chip">C++</span><span class="chip">FreeRTOS</span><span class="chip">CCSDS SPP</span><span class="chip">YAMCS</span><span class="chip">Java</span><span class="chip">XTCE</span><span class="chip">COP-1</span><span class="chip">SLIP/RS-422</span><span class="chip">PyQt6</span></div>
           </div>
 
@@ -534,49 +534,76 @@ const DETAILS = {
       {k:'location', v:'Hannover, DE'},
       {k:'team',     v:'Space Systems group'},
     ],
-    stack:['STM32F401CC','C++','FreeRTOS','CCSDS SPP','YAMCS','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
+    stack:['STM32F401CC','C++','FreeRTOS','HAL','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
     links:[
       {label:'lzh.de ↗', url:'https://www.lzh.de/en', primary:false},
     ],
     hero:'images/experience/lzh/hero.jpg',
     body:`
       <h2 data-addr="0x0210">The brief</h2>
-      <p>Joined LZH for a half-year internship to work on ground-software for an upcoming CubeSat mission. The lab needed a working ground station ahead of payload integration testing — that meant building both ends of the link: firmware on the satellite-side controller, and a YAMCS Mission Control deployment on the ground that could actually talk to it.</p>
-      <p>Most of the work sat at the boundary between the two: defining the packet formats, getting the time bases aligned, and making the link reliable enough that we could trust what we were seeing during integration runs.</p>
+      <p>Joined LZH in January for a six-month internship working on ground software for the Moonrise CubeSat mission. By the time I arrived, an earlier intern had built the bones of the firmware — FreeRTOS task structure, command system, basic TM packetization — and a YAMCS instance was running with stock components. The mission needed a working end-to-end pipeline ahead of payload integration: image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that could survive an idle TCP socket dying without anyone noticing.</p>
+      <p>Most of the interesting work sat at the seams: between firmware and ground, between stock YAMCS and the bits we had to write ourselves, and — frequently — between what the docs claimed would work and what the bench actually did.</p>
 
       <figure>
-        <img src="images/experience/lzh/01-bench.jpg" alt="Bench setup with STM32 and ground station" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — bench setup. STM32F401CC on breadboard, RS422→TTL level shifter, Lantronix UDS2100 serial bridge to the ground-station laptop running YAMCS.</figcaption>
+        <img src="images/experience/lzh/01-bench.jpg" alt="Bench setup" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — bench setup. STM32F401CC, RS-422 level shifter, Lantronix UDS2100 serial-to-Ethernet bridge, YAMCS Mission Control running on the lab laptop.</figcaption>
       </figure>
 
-      <h2 data-addr="0x0220">Firmware side</h2>
-      <p>Extended the STM32F401CC firmware (C++ / FreeRTOS) to packetize sensor telemetry into <strong>CCSDS Space Packet Protocol</strong> frames, then SLIP-encoded the byte stream out over RS-422 through a Brainboxes serial-to-Ethernet bridge. On top of that sat <strong>COP-1/FARM</strong> for reliable telecommand delivery, plus a small log-based boot counter living in internal flash so we could tell from the ground how many resets the unit had seen.</p>
-      <p>A few things that ate more time than expected:</p>
-      <ul>
-        <li>Getting the OBT (onboard time) drift bounded enough that ground-side correlation produced sane UTC timestamps</li>
-        <li>Buffering image downlinks against an SRAM that wasn't generous (8 KB), chunked into 79-byte APID 131 packets over VCID 1</li>
-        <li>SLIP framing edge cases when a packet ended on an <code>0xC0</code> boundary</li>
-      </ul>
+      <h2 data-addr="0x0220">Boot counter, or: why erasing a flash sector at boot is a bad idea</h2>
+      <p>The spacecraft needed a persistent counter that survives power cycles so the ground station can spot unexpected resets. Simple feature on paper, surprisingly painful in practice.</p>
+      <p>The first version stored the count in flash <strong>Sector 4</strong> and rewrote the sector every boot — erase, increment, program. It worked on the bench until it didn't: every few power cycles the count would inexplicably reset to 1. The root cause was a race between the IWDG watchdog (2 s timeout) and the flash erase operation (~2 s). After certain soft resets the IWDG keeps running — it only clears on hardware NRST or full power-on. The erase would race the watchdog, the MCU would hard-reset mid-erase, and the next boot would find a blank sector and start over at 1.</p>
+      <p>The redesigned version is <strong>log-based</strong>: each boot appends a 12-byte record (magic sentinel <code>0xDEADBEEF</code> + count + XOR checksum) into Sector 5. The sector only gets erased once every ~10,922 boots, and that rare erase explicitly pets the watchdog before and after. Partial writes from a power-loss mid-program get caught by the checksum, and the previous valid slot is used as fallback. Sector 5 also has 70 KB of headroom above the firmware image — Sector 4 was 4 KB away from being overwritten by a routine firmware update.</p>
+      <p>The cached count gets registered as a telemetry parameter and goes out in every TM frame. Watching it tick up over a long session is satisfying.</p>
 
-      <h2 data-addr="0x0230">Ground side</h2>
-      <p>The YAMCS Mission Control System ships with most of what you'd want, but the link layer it gave us out of the box didn't match our hardware. So I wrote custom Java <strong>data links</strong> for SLIP-over-UDP, wired in COP-1 FOP for reliable TC delivery, and built out an <strong>XTCE mission database</strong> that decoded APID 130 telemetry and APID 101 telecommands — with threshold alarms and parameter archiving so we could replay a session after the fact.</p>
-      <p>The most interesting bit was the <strong>Time Correlation Service</strong>. OBT-to-UTC mapping is the kind of thing that's easy to get 90% right and painful to get the last 10%. The version that finally worked uses a periodic CCSDS time packet from the spacecraft, fits a linear model on a sliding window, and re-stamps everything downstream.</p>
+      <h2 data-addr="0x0230">Image downlink</h2>
+      <p>Camera payloads need to send compressed frames over the same packet pipe as telemetry. The whole image lives in an <strong>8 KB SRAM buffer</strong> (a real camera would write here; for bench testing I built a Python script that converts a JPEG into a C array and embeds it at compile time). A FreeRTOS task splits the buffer into 79-byte chunks, wraps each in a CCSDS SPP packet using <strong>APID 131</strong> (separate from telemetry APID 130) on <strong>VCID 1</strong>, and posts them to the downlink queue at 50 ms per chunk.</p>
+      <p>Each chunk carries a small header (image_id, chunk_index, total_chunks, size) so the ground side can reassemble even if packets arrive out of order. Image traffic deliberately runs on a non-COP-1 stream — losing a chunk just means asking for the image again, and the alternative (windowed retransmission for image data) would have eaten flash and RAM budget that wasn't there.</p>
+
+      <div class="callout">First version of the image task died mid-transfer at exactly 40-ish chunks, every single time. <code>check_in_task(9)</code> — the watchdog kick — was sitting <em>after</em> the full 91-chunk loop. 91 × 50 ms = 4.5 s ≫ 2 s timeout. Moving the check inside the loop fixed it instantly. Lesson: any loop longer than half the IWDG window has to pet the watchdog from the inside.</div>
+
+      <h2 data-addr="0x0240">Real temperature readings (or: why <code>analogRead</code> lies)</h2>
+      <p>The original firmware had a <code>temperature</code> field that was just a fake counter. Wiring up the STM32F401's internal die-temperature sensor seemed straightforward — Arduino exposes it as <code>analogRead(ATEMP)</code>, ST publishes factory-calibrated reference values in fixed flash locations (<code>TS_CAL1</code> at 30 °C and <code>TS_CAL2</code> at 110 °C, both at Vdda = 3.3 V), and the conversion formula is one line:</p>
+      <pre><code>T = 30 + 80 * (raw - CAL1) / (CAL2 - CAL1)</code></pre>
+      <p>First reading: <strong>64 °C in a 19 °C room</strong>. Off by 45 °C. The formula was right; the raw ADC value was wrong.</p>
+      <p>The internal temperature sensor has high output impedance and needs at least 10 µs of sample time to let the ADC's sample-and-hold capacitor charge up. <code>analogRead</code> uses a short fixed sampling time optimised for low-impedance GPIO pins, and exposes no way to change it. There's also a separate gotcha: <code>TSVREFE</code> (bit 23 of <code>ADC_CCR</code>) physically connects the sensor to the ADC — Arduino doesn't guarantee it's set.</p>
+      <p>Fix was to drop down to the HAL: <code>HAL_ADC_ConfigChannel</code> with <code>ADC_SAMPLETIME_480CYCLES</code> (~23 µs at the 21 MHz ADC clock, well above the 10 µs minimum), set <code>TSVREFE</code> explicitly, run a single blocking conversion. Reading settled to 41–42 °C — consistent with normal MCU die temperature at light load. The telemetry type also had to change from <code>uint8_t</code> to <code>int16_t</code> end-to-end (firmware struct → codegen → XTCE), since the original couldn't represent negative values in a cold-boot scenario.</p>
+
+      <h2 data-addr="0x0250">SLIP in YAMCS, in Java</h2>
+      <p>The earlier ground-side architecture handled SLIP framing in a Python bridge script: TCP from the serial server in, SLIP-decoded UDP into YAMCS out. It worked, but the bridge was a single point of failure, opaque to YAMCS, and didn't show up in any of the link statistics the operators were watching.</p>
+      <p>I moved SLIP encode/decode into YAMCS itself as two custom Java data link classes extending the stock <code>UdpTmFrameLink</code> and <code>UdpTcFrameLink</code>. The receive-side class accumulates incoming UDP datagrams in a buffer (since one CCSDS frame can be split across multiple datagrams, or several frames packed into one), scans for the <code>0xC0</code> SLIP <code>END</code> markers, handles the <code>0xDB</code> escape sequences per RFC 1055, and hands fully-decoded 200-byte frames to <code>handleFrame()</code>. A <code>MAX_ACCUM_SZ</code> safety cap resets the buffer if the stream desyncs. The transmit-side class does the inverse on COP-1-assembled TC frames.</p>
+      <p>Two things made this messier than expected.</p>
+      <p><strong>Socket lifecycle.</strong> The parent class <code>doStart()</code> tries to bind its own socket, which conflicts with ours. So <code>doStart</code>, <code>doEnable</code>, and <code>doDisable</code> all had to be overridden — but crucially <em>not</em> <code>doStop()</code>, because the parent's implementation needs to call our overridden <code>doDisable()</code> polymorphically before tearing down the multiplexer.</p>
+      <p><strong>Link statistics.</strong> <code>dataInCount</code> stayed stubbornly at zero in the YAMCS UI even though telemetry was clearly flowing. Because we override <code>run()</code> entirely, the base class never sees the bytes — and YAMCS 5.12.0 backs <code>dataInCount</code> with a protected <code>AtomicLong</code> updated through a protected <code>dataIn(count, bytes)</code> method that subclasses are expected to call themselves. Earlier YAMCS versions used a <code>LongAdder</code> with a different signature, which made the right answer non-obvious without reading the 5.12.0 <code>AbstractLink</code> source via <code>javap</code>. One added line after each successful frame:</p>
+      <pre><code>dataIn(1, FRAME_LEN);   // FRAME_LEN = 200</code></pre>
+
+      <h2 data-addr="0x0260">Mission database (XTCE)</h2>
+      <p>YAMCS uses XTCE to describe the binary layout of every TM/TC packet. Most of my changes were additive — a new <code>BootCount</code> parameter, a new <code>ImagePkt</code> container (APID 131, VCID 1) with all five image-chunk parameters, signed 16-bit temperature type — but I also caught a latent endianness bug. <code>GPS_Seconds</code> and <code>GPS_Subseconds</code> were missing the <code>byteOrder</code> attribute, which means YAMCS defaulted them to big-endian. The STM32 is little-endian, so the values had been silently byte-swapped since day one. Setting <code>byteOrder="leastSignificantByteFirst"</code> on every multi-byte parameter cleared it up.</p>
+
+      <h2 data-addr="0x0270">Image reassembly on the ground</h2>
+      <p>A small Python client subscribes to the five image-chunk parameters on the <code>tm_zump</code> stream via the YAMCS WebSocket API and accumulates chunks in a dict keyed by image_id. When the received chunk count equals the announced <code>total_chunks</code>, it concatenates in order, trims to <code>ImageTotalSize</code> (the last chunk is zero-padded), writes the JPEG locally, and uploads to the YAMCS <code>images</code> bucket so operators can view it in the web UI.</p>
+      <p>Bug that took an embarrassing amount of time to find: <code>YAMCS_HOST</code> was hardcoded to <code>192.168.1.100</code> from a previous lab subnet, so on a freshly-cloned machine the script timed out with <code>WinError 10060</code> and gave no useful error. Defaulted to <code>localhost</code>.</p>
 
       <figure>
-        <img src="images/experience/lzh/02-yamcs.png" alt="YAMCS web UI with live telemetry" onerror="imgFallback(this)"/>
-        <figcaption>fig 02 — YAMCS web UI showing live telemetry parameters from the bench setup.</figcaption>
+        <img src="images/experience/lzh/02-yamcs.png" alt="YAMCS web UI" onerror="imgFallback(this)"/>
+        <figcaption>fig 02 — YAMCS web UI with live TM parameters and a downlinked image rendered from the bucket.</figcaption>
       </figure>
 
-      <h2 data-addr="0x0240">Image downlink</h2>
-      <p>Camera payloads needed to send compressed frames down the same packet pipe. With only an 8 KB SRAM buffer I split each image into 79-byte APID 131 chunks routed over VCID 1, with a tiny header carrying chunk index / total / image ID so the ground side could reassemble even if frames arrived out of order or after a brief link drop.</p>
+      <h2 data-addr="0x0280">Hardware: Brainbox → Lantronix UDS2100</h2>
+      <p>The original serial-to-Ethernet device was a Brainbox ES-313, TCP-only. That meant my Python bridge had to maintain a long-lived TCP connection — and TCP connections die quietly. <code>recv()</code> with no timeout, after the Brainbox silently dropped the link on an idle timeout, would block forever. The socket appeared <code>ESTABLISHED</code>, no exception, no logs, no telemetry. The temporary fix was a 10 s socket timeout with a reconnect loop and a buffer flush in <code>finally</code> to avoid stale partial-frame bytes leaking into the next session.</p>
+      <p>The permanent fix was switching hardware. The <strong>Lantronix UDS2100</strong> was the only serial-to-Ethernet box we evaluated that supports native UDP serial tunnelling, has two RS-422 ports, and accepts the 9–30 V input the CubeSat bus runs on. With the UDS2100 the bridge script disappears entirely — TM goes directly from the spacecraft over RS-422 → UDS2100 → UDP datagram into YAMCS on port 10017, and TC takes the reverse path. SLIP framing stays in the Java data links.</p>
+      <p>Configuring it was its own adventure: the Lantronix discovery tool can't find the device until it has an IP, so the first IP has to be assigned over a serial setup menu. There's also separate config for flashing the STM32 (TCP mode, 8E1 parity for the ROM bootloader, virtual COM port via Lantronix CPR) vs normal operation (UDP, 8N1).</p>
 
-      <h2 data-addr="0x0250">Validation</h2>
-      <p>Before integration with the real flight hardware I built a <strong>PyQt6 payload simulator</strong> that produces the same packet stream the spacecraft would, plus a small <strong>Python TCP–UDP bridge</strong> for routing between debug tools and the YAMCS link. Catching protocol bugs against a simulator is much cheaper than catching them with a real radio in the loop.</p>
+      <h2 data-addr="0x0290">Two small but representative fixes</h2>
+      <p><strong>LED command did nothing.</strong> The <code>LED_ON</code> / <code>LED_OFF</code> commands updated a software <code>led_state</code> variable and returned <code>CMD_OK</code>, and telemetry faithfully reported the new state. But <code>pinMode</code> was never called and <code>digitalWrite</code> was commented out — the physical pins were never driven. The bug was invisible at the YAMCS level because the round-trip looked perfect. LED 2 was also ignored entirely due to a pin-equality check that only matched <code>LED_PIN1</code>. Fix was four lines.</p>
+      <p><strong>Reboot command didn't reboot.</strong> The <code>RESET</code> command was registered, returned <code>CMD_OK</code>, and changed nothing — <code>NVIC_SystemReset()</code> was commented out. Worse, after a real reboot, YAMCS COP-1 AD mode gets stuck: the spacecraft's FARM resets <code>V(R)</code> to 0 while YAMCS retains the old <code>V(S)</code>, so the next telecommand never gets acknowledged. The manual recovery is clicking "Initiate AD" in the web UI. I wrote a short <code>yamcs-client</code> Python procedure that disables COP-1 at the link level (BD mode), issues the reboot, polls <code>BootCount</code> every 500 ms until it increments, then re-initialises COP-1 with <code>WITHOUT_CLCW_CHECK</code>. The whole reset is now unattended.</p>
 
-      <div class="callout">All flight code is held by LZH; what's in this writeup is the architecture, not source. Happy to walk through specifics in conversation.</div>
+      <h2 data-addr="0x02A0">Validation</h2>
+      <p>Before any of this touched the real flight hardware I built a <strong>PyQt6 payload simulator</strong> that produces the same packet stream the spacecraft would, plus a small Python TCP–UDP bridge for routing between debug tools and the YAMCS link. Catching SLIP edge cases and XTCE endianness bugs against a simulator is orders of magnitude cheaper than catching them with a real radio in the loop. I also wrote architecture documentation alongside the code — a <code>brain_map.txt</code> covering every FreeRTOS task, the packet layering (SPP inside TM transfer frames), and full data flows; plus a Java primer for the next embedded-C developer who inherits the YAMCS extensions.</p>
 
-      <h2 data-addr="0x0260">Bonus: lab surveillance rig</h2>
-      <p>Aside from the main project, I built a 4-camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland — 704×576 PAL streams composited into a 1440×1080 quad with autostart and a watchdog so it self-recovers from camera drop-outs. Documented in the projects section.</p>
+      <div class="callout">All flight code is held by LZH; what's in this writeup is architecture and war stories, not source. Happy to walk through specifics in conversation.</div>
+
+      <h2 data-addr="0x02B0">Bonus: lab surveillance rig</h2>
+      <p>Aside from the main project, I built a 4-camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland — 704×576 PAL streams composited into a 1440×1080 quad with autostart and a watchdog so it self-recovers from camera drop-outs. Not flight-related, but it lives in the same room.</p>
     `,
   },
 
