@@ -613,7 +613,7 @@ const DETAILS = {
     `,
   },
 
-  'exp/sharang': {
+ 'exp/sharang': {
     type:'exp',
     addr:'0x0600',
     struct:'role_t',
@@ -624,32 +624,58 @@ const DETAILS = {
       {k:'duration', v:'May – Jun 2024'},
       {k:'location', v:'Gurugram, IN'},
     ],
-    stack:['AD9910 DDS','AD8336 VGA','RF','Radar','Signal Processing','SPI'],
+    stack:['AD9910 DDS','AD8336 VGA','RF','Radar','Signal Processing','SPI','Python'],
     body:`
-      <h2 data-addr="0x0610">Context</h2>
-      <p>Short summer stint at Sharang Shakti, working on the digitalization side of an analog anti-drone radar system. The team was moving away from purely analog waveform generation and conditioning, and needed someone to characterise and bring up the digital RF front-end.</p>
+      <h2 data-addr="0x0610">The brief</h2>
+      <p>Short summer stint at Sharang Shakti working on the digitalization side of an analog anti-drone radar. The system as it stood was analog end to end. My job was to bring up the digital waveform generation path so the radar could be reconfigured in software instead of in hardware. The main parts I was responsible for were the AD9910 DDS for waveform generation and the AD8336 VGA for amplitude control on the output side.</p>
+      <p>I came in with a textbook understanding of DDS and a lot of curiosity about RF. I left having spent enough hours with an oscilloscope and a spectrum analyser to know that a datasheet plot and the actual bench output are two very different things.</p>
 
-      <pre><code>   +---------+   SPI    +-----------+   RF out   +-----------+   to mixer
-   |  MCU    | -------&gt; |  AD9910   | ---------&gt; |  AD8336   | -----------&gt;
-   | (host)  |          |    DDS    |            |    VGA    |
-   +---------+          +-----------+            +-----------+
-        |                    ^                        ^
-        |   profile/freq     |        gain ctrl       |
-        +--------------------+------------------------+</code></pre>
-      <p class="figcap">// fig 01 — digital RF front-end. MCU programs DDS profiles over SPI; VGA gain is set in real time for amplitude modulation.</p>
+      <h2 data-addr="0x0620">Bringing up the AD9910 eval board</h2>
+      <p>Most of the work happened on the AD9910 evaluation board kit. The first day was just getting it powered cleanly. The board needs 1.8 V and 3.3 V rails on TB1 and TB2, and the way I tried to do it first was with a benchtop DC supply through a potentiometer to dial in the voltages. That worked badly. The pot was inaccurate enough that the rails would drift and the board would do strange things, and I burned a few hours blaming the eval board before realising the supply was the problem. Swapped to a regulated DC supply with an Arduino Uno providing the digital control rails and the readings stayed put.</p>
+      <p>That was the first lesson of the internship. When something analog is misbehaving, suspect the supply before you suspect anything clever.</p>
 
-      <h2 data-addr="0x0620">What I worked on</h2>
-      <p>Two main blocks:</p>
+      <h2 data-addr="0x0630">The clock chain, or: why my PLL would not lock</h2>
+      <p>The AD9910 has three options for the system clock. Two external clock inputs and one onboard 25 MHz crystal. I wanted the crystal path because the bench was already cluttered with cables. The eval board ships with capacitors C51 and C52 populated and resistors R4 and R11 open, which routes the system clock somewhere I did not want it. The fix per the eval kit schematic was to remove C51 and C52 and short R4 and R11. Straightforward soldering work, but it was the first time I had touched an eval board with the expectation that I would actually modify it, rather than just plugging it in.</p>
+      <p>The reference clock can be either 25 MHz or 12.5 MHz depending on the divide-by-2 checkbox in the eval software. The internal PLL multiplies that up to the system clock that actually drives the DDS. The catch is that the PLL needs a loop filter, and the AD9910 eval board does not populate the loop filter components by default. So if you tick "use PLL" without soldering down the loop filter values, the PLL never locks and the output is unstable.</p>
+      <p>Analog Devices publishes formulas for the loop filter component values in the AD9910 datasheet, and there is an Excel calculator on the analog.com site that does the arithmetic for you. I plugged in the target system clock, got the component values, soldered them down, and the PLL locked. Not glamorous work, but the kind of thing you only learn by doing it once on something that does not lock.</p>
+
+      <div class="callout">A small mystery I never fully resolved: with the system clock configured above 25 MHz, the board still produced waveforms, even though my reference clock (the crystal) was 25 MHz and the system clock technically should not have been able to exceed it cleanly. The highest setting I used in practice was 1000 MHz and waveforms still came out, although whether they were as clean as the eval software claimed is another question. Probably a combination of the PLL and some specsmanship in the eval kit GUI. Worth a deeper look if I ever come back to it.</div>
+
+      <h2 data-addr="0x0640">Generating waveforms three different ways</h2>
+      <p>The AD9910 supports several modes for getting an arbitrary waveform out. I ended up using all three:</p>
       <ul>
-        <li><strong>AD9910 DDS</strong> — designed and optimised the high-frequency waveform-generation path, focusing on signal resolution and reducing phase noise. Spent a lot of bench time chasing spurs.</li>
-        <li><strong>AD8336 VGA</strong> — integrated with the AD9910 for real-time amplitude modulation and dynamic-range adjustment of the high-frequency radar output.</li>
+        <li><strong>Profile window.</strong> Eight built-in profiles, each with its own frequency, phase offset, and amplitude. By default a profile outputs cosine. Ticking "Enable Sine Out" gets you sine. There is also an Internal Profile Control dropdown that sequences through the profiles, which is useful for stepping through frequencies without reconfiguring over SPI every time.</li>
+        <li><strong>RAM mode.</strong> 1024 RAM addresses of 32 bits each, divided across 8 RAM segments. Each segment can hold frequency, phase, or amplitude data. The way you actually use it is to write a decimal, hex, or binary file with your sample values, load it through the RAM I/O window, and the chip plays it back as a waveform. The frequency relationship is the standard DDS formula <code>F_OUT = (FTW / 2^32) × F_SYSCLK</code>, with the FTW packed into the upper bits of each 32-bit word.</li>
+        <li><strong>OSK and Digital Ramp Generator.</strong> The amplitude ramp mode. You set the output frequency and phase offset to zero in the profile window, set the ramp generator mode to amplitude, then sweep ASF from 0 to <code>0x3FFF</code> (or 1 in the normalised UI) with configured rising and falling step sizes. This is the mode I used for triangular and square waves.</li>
       </ul>
 
-      <h2 data-addr="0x0630">Takeaways</h2>
-      <p>First serious exposure to RF measurement gear and the gap between datasheet plots and what your bench actually does. Phase noise in particular is one of those numbers you only really understand after you've measured it badly a few times.</p>
+      <h2 data-addr="0x0650">Why my RAM-mode waveforms were always sinusoidal</h2>
+      <p>I wrote a small Python script that generated 256-point waveform tables and packed them into the AD9910's expected 32-bit format. The triangular waveform was a ramp up of 14-bit values from 0 to <code>0x3FFF</code> followed by a ramp down, each value shifted left by 18 bits to land in the upper portion of the word. The square wave was a similar idea, just toggling between <code>0x3FFF</code> and <code>0x0000</code>.</p>
+      <pre><code># Triangular waveform, packed for AD9910 RAM
+for i in range(half_points):
+    value = int((i / (half_points - 1)) * 0x3FFF)
+    word  = value &lt;&lt; 18
+    out.write(f"{word:08X}\\n")</code></pre>
+      <p>I loaded the resulting hex file into the RAM I/O window, set the playback mode, and the output came out sinusoidal. Loaded a square wave file, also sinusoidal. Tried binary instead of hex, still sinusoidal. Tried decimal, same.</p>
+      <p>It took some reading to realise that the AD9910's RAM mode has several playback modes (page 33 of the datasheet) and that some of them do interpolation between RAM entries, which effectively low-passes whatever you load into something close to a sine. The fix for getting actual triangular and square output was to abandon RAM mode for these waveforms entirely and use the Digital Ramp Generator instead, where the chip is explicitly building a ramp from your step parameters rather than interpreting RAM samples.</p>
+
+      <h2 data-addr="0x0660">Address step rate, jitter, and where the limits live</h2>
+      <p>With the Digital Ramp Generator producing triangle and square waves, the next problem was that the waveforms were not smooth. They looked correct in shape but had visible step granularity, and at certain settings the falling edge of the square wave would jitter timing-wise from cycle to cycle on the scope.</p>
+      <p>Two things made this better.</p>
+      <p>The first was the system clock. Higher system clock means more DAC update events per second, which means finer resolution on both amplitude steps and ramp timing. I cranked the SYSCLK higher and the steps shrank. There is a hard ceiling here that the eval kit imposes, and somewhere above that the PLL lock quality starts to degrade, so it is not just "make it bigger."</p>
+      <p>The second was the address step rate parameter in the DRG itself. This sets how fast the generator walks through its amplitude steps. There is an upper limit and a lower limit, and outside that range the waveform jitters. I found the limits empirically by sweeping the step rate at a few different system clock frequencies and watching where the output degraded on the scope. Once I had a usable range at our target SYSCLK, the triangle and square were clean enough for the radar's needs.</p>
+
+      <h2 data-addr="0x0670">AD8336 VGA on the output side</h2>
+      <p>The AD8336 sits after the AD9910 and handles the amplitude side of the conditioning. The DDS gives you a swept frequency at a fixed amplitude (or, in OSK mode, a swept amplitude at a fixed frequency). The VGA gives you real-time amplitude control on top of that, which the radar uses for dynamic range adjustment depending on target distance. I worked on integrating the two so the gain control signal coming from the host could ride alongside the frequency tuning words the DDS was receiving, and the combined output stayed clean.</p>
+      <p>Nothing here was as dramatic as the DDS bring-up. The interesting bench work was measuring the gain transfer characteristic and confirming it stayed monotonic across the range we cared about.</p>
+
+      <h2 data-addr="0x0680">What I actually learned</h2>
+      <p>Two months is not long enough to be useful in RF in any deep sense. But there were specific things I came out of this with that I would not have got from a class.</p>
+      <p>How to read a mixed-signal datasheet. The AD9910 datasheet is 64 pages and most of it only makes sense once you have done the corresponding thing on the bench. I came in skimming it. I left able to find the right register table for whatever I needed in under a minute.</p>
+      <p>How analog things actually behave on the bench. Phase noise plots in a datasheet look like nice clean lines. Phase noise on a spectrum analyser is a smear, and reading it accurately depends on the resolution bandwidth setting, which the datasheet quietly assumes you have got right. Same story for jitter, same for harmonics.</p>
+      <p>And the bench-supply lesson from the first week, which I have not forgotten since. Power is the first thing you check.</p>
     `,
   },
-
   /* ─────── PROJECTS ─────── */
   'proj/self-balancing-robot': {
     type:'proj',
