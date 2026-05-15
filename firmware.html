@@ -528,11 +528,10 @@ const DETAILS = {
     struct:'role_t',
     badge:'EXPERIENCE',
     title:'Laser Zentrum Hannover — Research Intern',
-    sub:'CubeSat Ground Station',
+    sub:'Moonrise',
     meta:[
       {k:'duration', v:'Jan – Jul 2026'},
-      {k:'location', v:'Hannover, DE'},
-      {k:'team',     v:'Space Systems group'},
+      {k:'location', v:'Hannover, DE'},,
     ],
     stack:['STM32F401CC','C++','FreeRTOS','HAL','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
     links:[
@@ -541,7 +540,7 @@ const DETAILS = {
     hero:'images/experience/lzh/hero.jpg',
     body:`
       <h2 data-addr="0x0210">The brief</h2>
-      <p>I joined LZH in January for a six month internship working on ground software for the Moonrise CubeSat mission. When I got there a previous intern had already put down the bones of the firmware. FreeRTOS tasks were set up, the command system worked, basic telemetry packetization was in place. There was also a YAMCS instance running with stock components. What the mission actually needed before payload integration was a working end to end pipeline. Image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that wouldn't die quietly when a TCP socket went idle.</p>
+      <p>I joined LZH in January for a seven month internship primarily working on ground software for the Moonrise project. When I got there a previous intern had already put down the bones of the firmware. FreeRTOS tasks were set up, the command system worked, basic telemetry packetization was in place. There was also a YAMCS instance running with stock components. What the mission actually needed before payload integration was a working end to end pipeline. Image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that wouldn't die quietly when a TCP socket went idle.</p>
       <p>Most of the interesting work ended up sitting at the seams. Between firmware and ground, between stock YAMCS and the parts we had to write ourselves, and pretty often between what the docs said would work and what the bench actually did.</p>
 
       <figure>
