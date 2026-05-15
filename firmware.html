@@ -531,7 +531,7 @@ const DETAILS = {
     sub:'Moonrise',
     meta:[
       {k:'duration', v:'Jan – Jul 2026'},
-      {k:'location', v:'Hannover, DE'},,
+      {k:'location', v:'Hannover, DE'},
     ],
     stack:['STM32F401CC','C++','FreeRTOS','HAL','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
     links:[
@@ -605,7 +605,11 @@ const DETAILS = {
 
       <h2 data-addr="0x02B0">Bonus: lab surveillance rig</h2>
       <p>Aside from the main project, I built a 4 camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland. 704 × 576 PAL streams composited into a 1440 × 1080 quad, with autostart and a watchdog so it self recovers from camera drop outs. Not flight related, but it lives in the same room.</p>
-    `,
+
+      <figure>
+        <img src="images/experience/lzh/03-cameras.jpg" alt="4-camera RTSP display running on a lab monitor" onerror="imgFallback(this)"/>
+        <figcaption>fig 03 — the four camera feeds composited into a 2 × 2 quad on the lab monitor.</figcaption>
+      </figure>
   },
 
   'exp/sharang': {
