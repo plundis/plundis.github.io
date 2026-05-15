@@ -543,10 +543,10 @@ const DETAILS = {
       <p>I joined LZH in January for a seven month internship primarily working on ground software for the Moonrise project. When I got there a previous intern had already put down the bones of the firmware. FreeRTOS tasks were set up, the command system worked, basic telemetry packetization was in place. There was also a YAMCS instance running with stock components. What the mission actually needed before payload integration was a working end to end pipeline. Image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that wouldn't die quietly when a TCP socket went idle.</p>
       <p>Most of the interesting work ended up sitting at the seams. Between firmware and ground, between stock YAMCS and the parts we had to write ourselves, and pretty often between what the docs said would work and what the bench actually did.</p>
 
-      <figure>
-        <img src="images/experience/lzh/01-bench.jpg" alt="Bench setup" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — bench setup. STM32F401CC, RS-422 level shifter, Lantronix UDS2100 serial-to-Ethernet bridge, YAMCS Mission Control on the lab laptop.</figcaption>
-      </figure>
+      // <figure>
+      //   <img src="images/experience/lzh/01-bench.jpg" alt="Bench setup" onerror="imgFallback(this)"/>
+      //   <figcaption>fig 01 — bench setup. STM32F401CC, RS-422 level shifter, Lantronix UDS2100 serial-to-Ethernet bridge, YAMCS Mission Control on the lab laptop.</figcaption>
+      // </figure>
 
       <h2 data-addr="0x0220">Boot counter, or: why erasing a flash sector at boot is a bad idea</h2>
       <p>The spacecraft needed a persistent counter that survives power cycles, so the ground station can spot unexpected resets. Sounds like a one afternoon feature. It was not.</p>
