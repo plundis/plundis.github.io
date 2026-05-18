@@ -686,40 +686,104 @@ for i in range(half_points):
     sub:'Two-wheeled inverted pendulum',
     meta:[
       {k:'duration', v:'Jan – Apr 2025'},
-      {k:'role',     v:'Solo build'},
+      {k:'course',   v:'ELEC 391'},
+      {k:'team',     v:'Team of 3'},
     ],
-    stack:['Arduino Nano 33','ESP32','BLE','IMU','Motor Drivers','LCD','C'],
-    hero:'images/projects/self-balancing-robot/hero.jpg',
+    stack:['Arduino Nano 33','ESP32','BLE','BMI270 IMU','DRV8833','HC-SR04','C'],
+    hero:'images/projects/self-balancing-robot/01-robot.png',
     body:`
-      <h2 data-addr="0x1010">Goal</h2>
-      <p>Build a two-wheeled robot that stays upright on its own — the classic inverted-pendulum problem — with enough remote-control sugar on top to actually drive it around. Limit was 45° of tilt before it loses balance.</p>
+      <h2 data-addr="0x1010">The brief</h2>
+      <p>ELEC 391 is the UBC EE design studio course. The deliverable was a two-wheeled self-balancing robot that could stay upright on its own and be driven around over BLE. Three of us on the team. We had a course kit with the motors, mounts, wheels, and frame, a $65 budget for anything extra, and about three months.</p>
+      <p>The core loop is the classic inverted-pendulum problem. Lean forward, apply forward torque to catch yourself, repeat fast enough that the thing doesn't fall over. The interesting work turned out to be everything that got in the way of closing that loop cleanly on real hardware.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/01-robot.png" alt="Final robot" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — the finished robot. Three-tier chassis on four threaded rods. Battery pack on the bottom, main Arduino breadboard in the middle, ultrasonic sensors and LEDs on the top platform.</figcaption>
+      </figure>
 
       <h2 data-addr="0x1020">Hardware</h2>
-      <ul>
-        <li><strong>Arduino Nano 33</strong> — main controller, IMU sensor fusion, motor PWM</li>
-        <li><strong>ESP32</strong> — BLE bridge for the mobile app + secondary LCD remote</li>
-        <li>Geared DC motors with encoders, H-bridge driver, lithium pack, sonar for distance</li>
-      </ul>
+      <p>The robot runs on an Arduino Nano 33 BLE Sense Rev 2. It has a BMI270 IMU on board, 3-axis accelerometer and gyroscope, no extra wiring needed. BLE radio is built in. Two DRV8833 H-bridge motor drivers run the DC motors, one per side. Two HC-SR04 ultrasonic sensors sit on the top platform, one facing front and one back. Power is eight 1.2V NiMH cells in series at 9.6V, feeding the Arduino and both motor drivers through a power jack.</p>
+      <p>The remote controller is a separate ESP32 DevKit board on a breadboard with a 2-axis analog joystick, a 16x2 LCD, and a piezo speaker. It runs off USB. Total spend on extra components was $63.59 before tax.</p>
 
       <figure>
-        <img src="images/projects/self-balancing-robot/01-build.jpg" alt="Robot chassis" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — chassis with motors, IMU, and battery pack.</figcaption>
+        <img src="images/projects/self-balancing-robot/02-controller.png" alt="ESP32 joystick controller" onerror="imgFallback(this)"/>
+        <figcaption>fig 02 — the ESP32 controller. Joystick bottom right, LCD top right, piezo speaker and Bluetooth antenna on the breadboard, trimmer potentiometer for LCD contrast top left.</figcaption>
       </figure>
-
-      <h2 data-addr="0x1030">Control</h2>
-      <p>Real-time PWM control on the tilt-angle error with proportional gain. The IMU runs sensor fusion to give a clean tilt estimate, and the controller updates motor PWM at a fast enough rate that the robot recovers from small pushes within a fraction of a second.</p>
-      <p>I validated the control loop on an oscilloscope, looking at PWM response to step disturbances. After tuning, stability metrics improved by roughly <strong>30%</strong> over the initial implementation.</p>
-
-      <h2 data-addr="0x1040">Comms</h2>
-      <p>Two ways to drive it: a BLE-enabled mobile app and a dedicated LCD remote. Both stream live RPM, tilt angle, and sonar distance back from the robot so you can see what it's doing in real time.</p>
 
       <figure>
-        <img src="images/projects/self-balancing-robot/02-running.jpg" alt="Robot balancing" onerror="imgFallback(this)"/>
-        <figcaption>fig 02 — balancing on hardwood. The robot is genuinely standing here, no edits.</figcaption>
+        <img src="images/projects/self-balancing-robot/03-block-diagram.png" alt="High-level functional diagram" onerror="imgFallback(this)"/>
+        <figcaption>fig 03 — high-level block diagram. The ESP32 sends joystick commands over BLE to the Arduino, which drives the motors and reads the ultrasonic sensors. Both sides have a speaker.</figcaption>
       </figure>
 
-      <h2 data-addr="0x1050">What I'd do differently</h2>
-      <p>The control loop is proportional-only and that's why disturbance recovery isn't as clean as it could be. A full PID with derivative on the angular rate (not the angle, to avoid kick) would tighten the response. Also worth moving the IMU lower in the chassis next time — its placement up top means tilt readings include a small lever-arm acceleration term that polluted the estimate at high angles.</p>
+      <h2 data-addr="0x1030">Wiring</h2>
+      <p>The Arduino schematic has four motor driver control pins on D2 through D5, ultrasonic trigger and echo on D7 through D10, speaker and LED indicators on A5 through A7. The battery pack feeds VIN directly. Motor VMM runs off the same 9.6V rail with decoupling caps across the supply.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/04-arduino-schematic.png" alt="Arduino robot schematic" onerror="imgFallback(this)"/>
+        <figcaption>fig 04 — Arduino robot schematic. Two DRV8833 motor drivers per side, front and back HC-SR04 sensors at 3.3V, LED indicators on analog pins, 9.6V battery pack into VIN.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/05-esp32-schematic.png" alt="ESP32 controller schematic" onerror="imgFallback(this)"/>
+        <figcaption>fig 05 — ESP32 controller schematic. Joystick VRX and VRY to pins 34 and 35, pushbutton on 32, 16x2 LCD in 4-bit mode, speaker on pin 14, external U.FL antenna.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1040">The control loop</h2>
+      <p>The IMU gives you raw accelerometer and gyroscope readings. Neither is usable on its own. The accelerometer angle is noisy and picks up every motor vibration. The gyroscope angle drifts. A complementary filter blends the two:</p>
+      <pre><code>filteredAngle = Kw * (filteredAngle + gyroChange) + (1 - Kw) * accelAngle;</code></pre>
+      <p>With Kw at 0.99, the filtered angle is mostly gyro-integrated so it's fast and smooth, but gets pulled back toward the accelerometer reading over time to correct drift. The gyroscope also gets a bias calibration on startup. 1000 samples averaged, then subtracted from every subsequent reading. Without that step, the robot slowly walks in one direction even when you're not touching it.</p>
+      <p>The PID runs on the angle error. Proportional drives the motors in proportion to the lean. Derivative damps the response so the robot doesn't overcorrect and start oscillating. Integral accumulates error over time to handle consistent offsets like a slightly off-center mass. The derivative term goes through a low-pass filter, an 80/20 blend with the previous value, to keep it from amplifying high-frequency sensor noise. There is also a kill zone at 25 degrees of tilt in either direction. Past that point the robot physically can't recover, so the code cuts motor power rather than running the motors into the ground at full speed.</p>
+
+      <h2 data-addr="0x1050">PID tuning: Simulink first, bench after</h2>
+      <p>We started with a Simulink mechanical model of the chassis. Three platforms, four pillars, battery mass, wheel geometry as rigid bodies. The idea was to get an initial set of gains to start from without risking hardware damage in the early sessions.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/08-simulink-chassis.png" alt="Simulink chassis model" onerror="imgFallback(this)"/>
+        <figcaption>fig 06 — Simulink chassis model. Three platform layers connected by pillars with battery and wheel geometry modelled as rigid bodies. Used to get an initial PID baseline before touching the hardware.</figcaption>
+      </figure>
+
+      <p>The simulation gave us Kp = 4.0, Ki = 18.0, Kd = 0.3 as a starting point. These were fine as a baseline but the simulation doesn't capture real friction, motor dead zones, or the actual noise floor of the IMU, so they needed significant work once we got to the physical robot.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/09-pid-values.png" alt="Simulink PID block parameters" onerror="imgFallback(this)"/>
+        <figcaption>fig 07 — Simulink PID block with the initial simulation values. P = 4, I = 18, D = 0.3.</figcaption>
+      </figure>
+
+      <p>On the bench we used Ziegler-Nichols. Start with all gains at zero, raise Kp until the robot oscillates but nearly holds balance, then bring in Kd to damp it, then Ki to eliminate the positional drift. Final values: Kp = 8.0, Ki = 95.0, Kd = 0.35. The integral term ended up needing to be much higher than simulation suggested. Real friction introduces steady-state error that the model underestimated pretty significantly.</p>
+
+      <h2 data-addr="0x1060">Motor drivers: fast decay versus slow decay</h2>
+      <p>The DRV8833 has two PWM modes. In fast decay the unused pins go to ground, so the motor freewheels between pulses. In slow decay the unused pins are driven high, so the driver actively brakes between pulses.</p>
+      <p>We started with fast decay. It balanced, but the robot had a drift problem. Even when commanded to stay still, it would slowly walk in one direction. Switching to slow decay fixed this almost entirely. Drift dropped to under 1 cm/s and on-the-spot oscillation came down to within 2 cm. The reason is that slow decay provides much more aggressive braking on direction reversals, which gives the PID cleaner and more linear motor response to work with.</p>
+      <p>The second problem was the PWM dead zone. With one DRV8833 per side the motors needed 15 to 20% PWM before they'd start moving at all. Running two DRV8833s in parallel per motor pushed that threshold down to 10%, which made the low-speed control needed for subtle balance adjustments actually usable.</p>
+
+      <div class="callout">The decoupling capacitors on the motor driver power rails turned out to matter more than expected. Motor switching was injecting voltage spikes back into the Arduino supply rail and causing occasional resets mid-balance. A 220µF and two 100nF caps across the motor VMM supply cleaned it up.</div>
+
+      <h2 data-addr="0x1070">The BLE and ultrasonic conflict</h2>
+      <p>The HC-SR04 works by sending a 10µs trigger pulse and then timing how long the echo pin stays high. The standard Arduino way to do this is <code>pulseIn()</code>, which blocks until the echo returns. With the BLE stack running, blocking for even a few milliseconds is enough to drop packets and destabilise the connection. Every time the sensor fired, BLE would hiccup.</p>
+      <p>The fix was rewriting the sonar logic as a non-blocking state machine. Instead of waiting on the echo, the loop checks the echo pin state on every iteration and records timestamps. The two sensors are staggered by 50ms so their pulses don't interfere with each other. A 25ms timeout resets the state machine if no echo comes back, and defaults the distance to 400cm rather than triggering a false obstacle stop. The beeper is non-blocking for the same reason, using <code>millis()</code> timing and calling <code>tone()</code> with a 50ms duration that returns immediately. Beep interval maps from 100ms at 5cm to 1000ms at 100cm.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/07-ultrasonic-range.png" alt="Ultrasonic sensor detection cone" onerror="imgFallback(this)"/>
+        <figcaption>fig 08 — HC-SR04 detection cone at 50cm range. The sensor has a 15 degree vertical angle, which means an obstacle needs to be at least 14.6cm above the ground to be detected at 50cm distance. The robot itself is about 28cm tall.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1080">BLE architecture and joystick mapping</h2>
+      <p>The Arduino is the BLE server. One service with three characteristics. A control characteristic where the ESP32 writes 2-byte packets encoding button state and direction code every 50ms. A telemetry characteristic where the Arduino notifies the ESP32 with the current tilt angle as a 4-byte float every 300ms. A sensor characteristic with two distance floats packed into 8 bytes. The joystick maps to nine direction codes with a deadzone of 400 ADC counts around the calibrated centre to filter resting noise.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/06-joystick-map.png" alt="Joystick direction mapping" onerror="imgFallback(this)"/>
+        <figcaption>fig 09 — joystick direction mapping. Nine zones: CENTER (0), FORWARD (1), four diagonal gradual-turn codes (2, 4, 6, 8), and two in-place pivot codes (3, 7). The deadzone around centre stops resting noise from being interpreted as movement commands.</figcaption>
+      </figure>
+
+      <p>Connection range came out well past spec. The requirement was 5m. In practice we still had a stable link past 25m, which made the demo a lot easier to run. One design choice that paid off: the Arduino keeps balancing autonomously if the BLE connection drops, rather than falling over waiting for a reconnect. The ESP32 restarts scanning automatically and updates the LCD with link status throughout.</p>
+
+      <h2 data-addr="0x1090">How it went</h2>
+      <p>The robot balanced within 10 degrees of disturbance, which fell short of the 15 degree spec. The motors simply didn't have enough torque to recover from larger tilts. Stationary oscillation stayed within 2cm and drift under 1cm/s. Forward, backward, and turning all worked, though there was some oscillation when a command stopped mid-motion. The robot made it up a 10 degree ramp but not the 15 degree target. Same constraint.</p>
+      <p>Ultrasonic readings were accurate to within 0.5cm. The 14.6cm ground-clearance requirement at 50cm distance meant the obstacle avoidance missed small floor-level objects, but also avoided false stops from floor texture. That was the right tradeoff for the demo environment.</p>
+
+      <h2 data-addr="0x10A0">What I'd do differently</h2>
+      <p>The motor torque was the binding constraint on everything. Heavier motors or a better gear ratio would give more headroom. The three-tier chassis also puts the centre of mass high, which makes the control problem harder than it needs to be. A lower, denser layout would give the controller more margin.</p>
+      <p>The derivative term is computed from the angle error rather than the angular rate off the gyroscope directly. Taking it from the gyro would give cleaner response and eliminate the kick that happens when the setpoint changes. Worth trying on the next build.</p>
     `,
   },
 
