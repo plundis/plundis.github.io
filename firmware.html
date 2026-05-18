@@ -1055,37 +1055,150 @@ return 0xffffff - SysTick->VAL;</code></pre>
 },
 
   'proj/reflow-oven-controller': {
-    type:'proj',
-    addr:'0x1C00',
-    struct:'project_t',
-    badge:'PROJECT',
-    title:'Reflow Oven Controller',
-    sub:'N76E00 in pure assembly',
-    meta:[
-      {k:'duration', v:'Jan – Feb 2024'},
-      {k:'mcu',      v:'N76E00 (ARM)'},
-    ],
-    stack:['N76E00','ARM Assembly','PC monitoring'],
-    hero:'images/projects/reflow-oven-controller/hero.jpg',
-    body:`
-      <h2 data-addr="0x1C10">What it does</h2>
-      <p>A microcontroller-based reflow oven controller that automates soldering temperature profiles from <strong>25 °C to 240 °C</strong>, holding precision to within <strong>±3 °C</strong>. Multi-stage ramping for proper preheat → soak → reflow → cool curves, plus a real-time PC monitoring interface.</p>
+  type:'proj', addr:'0x1C00', struct:'project_t', badge:'PROJECT',
+  title:'Reflow Oven Controller',
+  sub:'ARM Assembly state machine that turns a toaster oven into a PCB soldering station',
+  meta:[
+    {k:'duration', v:'Jan – Mar 2024'},
+    {k:'course',   v:'ELEC 291'},
+    {k:'team',     v:'7 people'},
+  ],
+  stack:['ARM Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
+  hero:'images/projects/reflow-oven-controller/01-hero.png',
+  body:`
+    <h2 data-addr="0x1C10">the job</h2>
+    <p>
+      Reflow soldering is how real PCBs get assembled. You spread solder paste on the pads, place your SMD components, then run the board through a carefully controlled temperature profile. Too cool and the solder never flows properly. Too hot and you cook the components. The profile has to hit specific temperatures for specific durations, in the right order.
+    </p>
+    <p>
+      Our ELEC 291 group built a controller that does exactly that, using a toaster oven as the heat source and an N76E003 microcontroller as the brain. The whole thing is programmed in ARM Assembly. Six states, a K-type thermocouple for feedback, bang-bang PWM to drive the oven's solid-state relay, and an HD44780 LCD showing live temperature and state. A Python strip chart on a connected PC plots everything in real time.
+    </p>
 
-      <h2 data-addr="0x1C20">Why assembly</h2>
-      <p>The N76E00 is small. Assembly gives you full control over timing-sensitive paths — important when you're toggling an SSR-driven heating element and you don't want any surprises from the compiler. Also, course requirement.</p>
+    <figure>
+      <img src="images/projects/reflow-oven-controller/02-block-diagram.png"
+           alt="Hardware block diagram showing thermocouple, op-amp, ADC, FSM, SSR, LCD, and PC connections"
+           onerror="imgFallback(this)">
+      <figcaption>fig 01 — full system block diagram: thermocouple signal flows through the op-amp into the ADC, FSM drives the SSR via PWM and streams data to the PC over serial</figcaption>
+    </figure>
 
-      <figure>
-        <img src="images/projects/reflow-oven-controller/01-oven.jpg" alt="Reflow oven with controller" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — modified toaster oven, controller mounted on the side.</figcaption>
-      </figure>
+    <h2 data-addr="0x1C20">the analog chain</h2>
+    <p>
+      A K-type thermocouple puts out about 41 µV per degree Celsius. At 220°C that's roughly 9 mV. The N76E003's ADC runs on a 0–5V range, so you need significant gain before the ADC sees anything useful. We used an OP07 precision op-amp configured as a differential amplifier.
+    </p>
+    <p>
+      The first problem we hit: the OP07 requires its supply rails to exceed the signal range by a few volts. We were only feeding it 0V and +5V, and it was clipping badly at lower temperatures. The fix was a TC7660S charge pump — a simple switched-capacitor IC that inverts +5V to produce a clean −5V rail. That gave the OP07 the headroom it needed.
+    </p>
+    <p>
+      The second problem was the resistors. Our initial breadboard used small-value resistors (around 51Ω) in the feedback network. The thermocouple wire is 2 metres long, which means it has non-trivial resistance of its own. At 51Ω, that wire resistance is a meaningful fraction of the divider and it throws off the gain calculation. We switched to values above 200Ω to make the thermocouple resistance negligible, then measured each resistor individually with an ohmmeter. Final configuration: 100kΩ and 270Ω, giving a gain of 375. That landed us within 3°C across the full operating range.
+    </p>
 
-      <h2 data-addr="0x1C30">Safety</h2>
-      <p>Several hard interlocks that cut power to the heating element if anything looks wrong: thermocouple disconnect, runaway temperature climb, sensor outside plausible range. The controller flashes a warning and stops the profile rather than trying to recover — wrong call to make automatically when the failure mode is fire.</p>
+    <figure>
+      <img src="images/projects/reflow-oven-controller/01-hero.png"
+           alt="Circuit schematic showing N76E003, OP07 op-amp, TC7660S charge pump, SSR, and LCD connections"
+           onerror="imgFallback(this)">
+      <figcaption>fig 02 — full circuit schematic: the TC7660S sits top-right providing the negative rail, OP07 amplifies the thermocouple differential, 13N06LS MOSFET drives the SSR box</figcaption>
+    </figure>
 
-      <h2 data-addr="0x1C40">PC interface</h2>
-      <p>Live serial stream of temperature vs target, plotted host-side. Useful for watching whether your tuning actually tracks the intended curve.</p>
-    `,
-  },
+    <div class="callout">
+      The 2m thermocouple lead resistance was around 2–3Ω. With a 51Ω input resistor that's a 4–6% error baked into every reading. With 270Ω it drops to about 1%. Small detail, big difference in calibration.
+    </div>
+
+    <h2 data-addr="0x1C30">the state machine</h2>
+    <p>
+      The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before going back to idle.
+    </p>
+    <p>
+      There's also an abort condition wired in: if the oven takes more than 60 seconds to get above 50°C in the preheat state, the FSM assumes something is wrong and cuts power immediately.
+    </p>
+
+    <figure>
+      <img src="images/projects/reflow-oven-controller/03-fsm-states.png"
+           alt="FSM state diagram showing six states with temperature and time-based transition conditions"
+           onerror="imgFallback(this)">
+      <figcaption>fig 03 — FSM state diagram: red labels are transition conditions, green labels are power outputs for each state. abort condition omitted for clarity</figcaption>
+    </figure>
+
+    <p>
+      The FSM is implemented as a chain of <code>cjne</code> comparisons against a state variable in DSEG. Transitions check temperature against values stored in named registers (<code>Temp_soak</code>, <code>Temp_refl</code>, <code>Temp_cool</code>) alongside a BCD seconds counter that the Timer 2 ISR maintains. Pushbuttons cycle through four parameter modes before start — soak temp, soak time, reflow temp, reflow time — with increment/decrement in steps of 5.
+    </p>
+
+    <pre><code>; State 1 → State 2 transition: temp crossed soak threshold
+FSM1_state1_part2:
+    mov  a, Temp_soak
+    clr  c
+    subb a, temp         ; if Temp_soak - temp < 0, carry set
+    jnc  FSM1_state1_done
+    mov  FSM1_state, #2  ; advance to soak state
+
+FSM1_state1_done:
+    ljmp FSM2</code></pre>
+
+    <h2 data-addr="0x1C40">PWM and timing</h2>
+    <p>
+      The oven is controlled entirely through a solid-state relay. PWM to an SSR just means toggling it on and off — the oven's heating elements do the averaging. We run three power levels in practice: 0%, 20%, and 100%. Full power for ramping, 20% to hold a soak or dwell, zero for cooling.
+    </p>
+    <p>
+      Timer 2 fires an ISR every millisecond. Inside that ISR, a free-running counter called <code>pwm_counter</code> increments from 0 to 59. If the counter is below the <code>pwm</code> value, the PWM output pin is high. When it rolls over, the ISR also handles seconds counting via BCD arithmetic — incrementing <code>count1</code> and <code>count2</code> as decade counters before bumping <code>sec</code> and setting an <code>s_flag</code> bit for the main loop.
+    </p>
+
+    <pre><code>; PWM logic inside Timer2_ISR
+    inc  pwm_counter
+    clr  c
+    mov  a, pwm
+    subb a, pwm_counter  ; carry set if pwm_counter > pwm
+    cpl  c
+    mov  PWM_OUT, c      ; drive pin high or low
+
+    mov  a, pwm_counter
+    cjne a, #60, Timer2_ISR_done
+    mov  pwm_counter, #0
+    ; ... BCD seconds increment follows</code></pre>
+
+    <h2 data-addr="0x1C50">getting the temperature right</h2>
+    <p>
+      Temperature validation was iterative. We collected over 1000 data points at each configuration, comparing the temperature calculated by the Assembly ADC code against a Python script working from raw multimeter voltage readings of the same point in the circuit. That gave us an objective, hardware-independent reference.
+    </p>
+    <p>
+      Iteration 1 had average deviation above 30°C — mostly wiring issues and the wrong resistor values. Iteration 2 got it below 10°C by fixing the supply rails but was still non-linear above 120°C. Iteration 3 hit 2.12°C average but spiked to 5.74°C around temperature transients. The final resistor configuration brought the average down to 0.79°C with a hard cap of 3°C across the full 25–240°C range.
+    </p>
+
+    <figure>
+      <img src="images/projects/reflow-oven-controller/04-temp-deviation.png"
+           alt="Plot of temperature deviation in °C versus temperature from 0 to 250°C, staying below 3°C"
+           onerror="imgFallback(this)">
+      <figcaption>fig 04 — final design temperature deviation vs. measured temperature: deviation drops as temperature rises, staying well inside the 3°C target across the whole range</figcaption>
+    </figure>
+
+    <p>
+      PWM linearity got the same treatment. We swept the PWM value from 0 to 100 in increments of 5 and measured the output voltage with a multimeter. Prototype 1 was badly off — the MOSFET gate drive wasn't set up correctly and the SSR wasn't seeing proportional voltage. Prototype 2 improved significantly. The final version tracks the ideal V = PWM/100 × 5V line almost exactly.
+    </p>
+
+    <figure>
+      <img src="images/projects/reflow-oven-controller/05-pwm-linearity.png"
+           alt="Plot of SSR output voltage vs. PWM value for three prototype iterations versus ideal"
+           onerror="imgFallback(this)">
+      <figcaption>fig 05 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
+    </figure>
+
+    <h2 data-addr="0x1C60">bugs we actually hit</h2>
+    <p>
+      The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without converting). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
+    </p>
+    <p>
+      Early on, the cooling state couldn't turn off. The exit condition checks if temperature has dropped below 60°C, but we had the comparison inverted — the FSM was staying in State 5 indefinitely even at room temperature. That one was an off-by-one on a carry flag check.
+    </p>
+    <p>
+      We also tried building the FSM, SSR control, and button handling as separate assembly files, planning to tie them together. That turned out to be impractical with the toolchain we were using, so everything ended up consolidated into a single file. Not elegant, but it worked and made the interrupt context a lot easier to reason about.
+    </p>
+    <p>
+      The grounding situation was memorable: the laptop's internal USB ground had enough noise that temperature readings were jumping erratically. We ended up clamping our circuit ground to an oscilloscope probe ground, which is connected to earth through the scope's chassis. That's not something you'd want to ship, but it was stable enough to finish testing. A 220µF bulk cap across Vcc and GND helped with the switching transients from the SSR.
+    </p>
+
+    <div class="callout">
+      Total team time on this project exceeded 200 hours across 7 people. About 40% of that was calibration and debugging. The assembly lines are relatively few — the time cost is in getting analog hardware and embedded software to agree on what the temperature actually is.
+    </div>
+  `,
+},
 };
 
 (function(){
