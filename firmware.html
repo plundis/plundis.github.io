@@ -863,37 +863,196 @@ rddata   --------------&lt; D &gt;---------</code></pre>
   },
 
   'proj/metal-detector-robot': {
-    type:'proj',
-    addr:'0x1800',
-    struct:'project_t',
-    badge:'PROJECT',
-    title:'Metal Detector Robot',
-    sub:'Battery-powered, remote-controlled',
-    meta:[
-      {k:'duration', v:'Mar – Apr 2024'},
-      {k:'team',     v:'Team of 6'},
-    ],
-    stack:['STM32','EFM8','JDY-40 BT','LCD','C'],
-    hero:'images/projects/metal-detector-robot/hero.jpg',
-    body:`
-      <h2 data-addr="0x1810">Project</h2>
-      <p>Team build (six of us) for a battery-powered, remote-controlled metal-detection robot. Two microcontrollers in the loop: <strong>STM32</strong> on the robot, <strong>EFM8</strong> on the remote. Wireless link via JDY-40.</p>
+  type:'proj', addr:'0x1800', struct:'project_t', badge:'PROJECT',
+  title:'Metal Detector Robot',
+  sub:'Battery-powered, remote-controlled',
+  meta:[{k:'duration',v:'Mar – Apr 2024'},{k:'course',v:'ELEC 291'},{k:'team',v:'Team of 7'}],
+  stack:['STM32L051','EFM8LB1','JDY-40','H-Bridge','C'],
+  hero:'images/projects/metal-detector-robot/01-hero.png',
+  body:`
+    <h2 data-addr="0x1810">what it is</h2>
+    <p>
+      A two-part system: a handheld remote and a wheeled robot, talking to each other
+      over a 2.4 GHz JDY-40 radio link. The remote runs an EFM8LB1 microcontroller and
+      reads a thumb joystick. The robot runs an STM32L051, drives two DC motors through
+      an H-bridge, and carries a Colpitts LC oscillator that acts as the metal detector.
+      When the robot rolls over something metallic, the oscillator frequency shifts, the
+      STM32 catches it, transmits the reading back to the remote, and the EFM8 lights up
+      the LCD and changes the buzzer tone accordingly.
+    </p>
+    <p>
+      The whole thing is battery-powered. 9V for the logic on both ends, 6V (four AAs)
+      for the motors. LM7805 drops the 9V to 5V, MCP1700 drops that to 3.3V for the
+      STM32 and JDY-40. Two separate power domains on the robot side, intentionally
+      isolated so motor noise does not get into the MCU rails.
+    </p>
 
-      <h2 data-addr="0x1820">My role</h2>
-      <p>I worked on the comms protocol between robot and remote — making the link robust enough to survive interference and packet loss without the operator noticing — and on the LCD interface that shows detection intensity in real time.</p>
+    <h2 data-addr="0x1820">hardware</h2>
+    <p>
+      The remote is straightforward: EFM8 reads Vrx and Vry from the joystick as 14-bit
+      ADC values, maps them into a 0-100 range, classifies the joystick position into one
+      of eight octant-based direction codes (A through H, plus S for stop), and fires that
+      string over UART to the JDY-40 every loop iteration.
+    </p>
 
-      <figure>
-        <img src="images/projects/metal-detector-robot/01-robot.jpg" alt="Metal detector robot" onerror="imgFallback(this)"/>
-        <figcaption>fig 01 — the robot, mid-sweep.</figcaption>
-      </figure>
+    <figure>
+      <img
+        src="images/projects/metal-detector-robot/fig01-remote-block.png"
+        alt="Remote hardware block diagram showing EFM8, JDY40, joystick, buzzer, and LCD"
+        onerror="imgFallback(this)"
+      >
+      <figcaption>fig 01 — remote hardware block diagram. joystick analog voltages feed the EFM8 ADC; the JDY-40 handles the radio link in both directions</figcaption>
+    </figure>
 
-      <h2 data-addr="0x1830">Detection</h2>
-      <p>The detection coil's output is processed and rendered as a live magnetic-field-strength readout on the LCD, with a tested upper bound of <strong>1.4 T</strong>. The display gives both a numeric reading and an intensity bar, which is what the operator actually watches while sweeping.</p>
+    <p>
+      The robot side is where things get interesting. The STM32 cannot drive motors
+      directly, so there is an optocoupler stage (LTV-846) between the MCU and the
+      H-bridges. The optocouplers take the 3.3V PWM signals from the STM32 and pass them
+      as isolated signals to the gate networks of the MOSFET H-bridges, which run off the
+      separate 6V battery. Two P-channel and two N-channel MOSFETs per motor, giving
+      full forward and reverse control. The isolation means motor switching transients
+      cannot couple back into the MCU supply and corrupt readings.
+    </p>
 
-      <h2 data-addr="0x1840">Comms</h2>
-      <p>Frame format with a sync byte, length, payload, and checksum. The remote retransmits on missed acks, the robot ignores duplicates. Nothing exotic — but the stability difference between "send raw bytes and hope" and an actual framed protocol with retries was night-and-day.</p>
-    `,
-  },
+    <figure>
+      <img
+        src="images/projects/metal-detector-robot/fig02-robot-block.png"
+        alt="Robot hardware block diagram showing STM32, optocouplers, H-bridges, JDY40, and metal detector"
+        onerror="imgFallback(this)"
+      >
+      <figcaption>fig 02 — robot hardware block diagram. optocouplers electrically isolate the STM32 from the motor drive stage</figcaption>
+    </figure>
+
+    <figure>
+      <img
+        src="images/projects/metal-detector-robot/fig03-remote-schematic.png"
+        alt="Remote circuit schematic: EFM8LB1, LM7805, MCP1700, JDY-40, LCD, joystick"
+        onerror="imgFallback(this)"
+      >
+      <figcaption>fig 03 — remote schematic. 9V battery regulated down through LM7805 and MCP1700 to supply 5V and 3.3V rails</figcaption>
+    </figure>
+
+    <figure>
+      <img
+        src="images/projects/metal-detector-robot/fig04-robot-schematic.png"
+        alt="Robot circuit schematic: STM32L051, LTV846 optocouplers, MOSFET H-bridges, Colpitts metal detector, JDY-40"
+        onerror="imgFallback(this)"
+      >
+      <figcaption>fig 04 — robot schematic. two separate battery inputs: 9V for logic (left), 6V for motor drive (bottom-left)</figcaption>
+    </figure>
+
+    <h2 data-addr="0x1830">the radio noise problem</h2>
+    <p>
+      The first version of the comms protocol encoded the joystick values as integers cast
+      to strings, then fired those over the JDY-40. The error rate was high enough to make
+      the robot basically undriveable. Random corrupted frames would land and get
+      interpreted as valid movement commands, so the robot would randomly lurch in
+      whatever direction the garbage bytes happened to decode to.
+    </p>
+    <p>
+      The fix was to constrain what the receiver would accept. Each of the eight joystick
+      octants maps to a specific direction character, and each direction character has an
+      expected range for the accompanying X and Y values. Any received frame that does not
+      satisfy those constraints for its reported direction gets dropped entirely. The robot
+      holds the last valid command instead of executing noise. After that, movement became
+      smooth and predictable. It is a simple filter but it eliminated the problem
+      completely in testing.
+    </p>
+    <p>
+      There was a second radio issue: if the STM32 was reset while the JDY-40 on the
+      remote was in normal operating mode, the two modules would not re-synchronize.
+      Pulling the SET pin low on startup to force AT mode, reconfiguring the DVID, then
+      releasing it fixed the startup handshake.
+    </p>
+
+    <h2 data-addr="0x1840">finding metal</h2>
+    <p>
+      The detector is a Colpitts LC oscillator built around the SN74HC04N hex inverter,
+      with a 1 mH inductor as the sensing element. When the inductor gets close to a
+      metallic object, eddy currents in the metal load the coil and shift the oscillation
+      frequency. The STM32 measures that frequency using the SysTick counter in free-run
+      mode, timing 100 consecutive periods of the square wave on PA8 and averaging the
+      result over 450 samples to reduce noise.
+    </p>
+    <pre><code>// measure 100 periods via SysTick free-run
+SysTick->LOAD = 0xffffff;
+SysTick->VAL  = 0xffffff;
+SysTick->CTRL = CLKSOURCE | ENABLE;
+for (i = 0; i < n; i++) {
+    while (PIN_PERIOD != 0) { if (COUNTFLAG) return 0; }
+    while (PIN_PERIOD == 0) { if (COUNTFLAG) return 0; }
+}
+return 0xffffff - SysTick->VAL;</code></pre>
+    <p>
+      The original capacitor values in the circuit spec produced a frequency around
+      55 kHz. At that range the frequency bands for different metal sizes overlapped badly
+      and were hypersensitive to environmental changes. Swapping capacitors to bring the
+      operating frequency down to roughly 24 kHz gave well-separated bands with enough
+      tolerance to distinguish five strength levels reliably. The neutral reference is
+      24,069 Hz and deviations are binned into six categories from no metal through five
+      increasing strengths, each mapped to a character code the STM32 sends back to the
+      remote.
+    </p>
+    <div class="callout">
+      Neutral: &lt;20 Hz deviation &mdash; Small: 20–50 Hz &mdash; Medium: 50–90 Hz &mdash;
+      Strong: 90–130 Hz &mdash; XStrong: 130–190 Hz &mdash; Max: &gt;190 Hz
+    </div>
+
+    <h2 data-addr="0x1850">moving the thing</h2>
+    <p>
+      Four PWM channels on the STM32, driven out of a 1 kHz TIM2 interrupt. Two channels
+      per motor: one for forward, one for reverse. The interrupt increments a counter and
+      compares it against four variables (pwm1 through pwm4). When the counter exceeds the
+      value, the corresponding pin goes low. Counter resets at 100, so the pwm variables
+      directly represent duty cycle as a percentage.
+    </p>
+    <p>
+      Joystick-to-PWM math treats the X and Y axes as two independent inputs. For forward
+      motion, the base speed is proportional to how far forward Y is pushed. Lateral X
+      input subtracts power from one wheel at a rate of 0.5 times the X deviation,
+      creating a curve rather than a pivot. Pure pivoting happens when Y is near center and
+      X is deflected: one wheel gets full X power and the other gets zero. Getting these
+      curves right took several test iterations with PWM values hard-coded and tape markers
+      on the wheels to measure synchronization.
+    </p>
+    <p>
+      Below PWM 20, neither motor moved at all. Between 20 and 35 there was barely
+      perceptible motion. Usable driving range was roughly 40 to 100, and the code scales
+      joystick input to that range to avoid the dead zone.
+    </p>
+
+    <h2 data-addr="0x1860">sharing the radio link</h2>
+    <p>
+      The JDY-40 is half-duplex. Both the movement commands and the metal strength
+      readings need to flow over the same link, in opposite directions, without stepping on
+      each other. The solution is a counter-based timeslot scheme. The remote sends
+      movement commands for 10 iterations, then on count 10 it sends a special S frame that
+      tells the robot to stop transmitting motion commands and send metal strength instead.
+      The robot sends the reading, the remote listens for counts 11 through 18, then at
+      count 19 the cycle resets and movement commands resume.
+    </p>
+
+    <figure>
+      <img
+        src="images/projects/metal-detector-robot/fig05-software-fsm.png"
+        alt="Software state machine diagram showing remote and robot taking turns on the radio link"
+        onerror="imgFallback(this)"
+      >
+      <figcaption>fig 05 — software protocol state machine. the remote controls the timing; the robot responds only when asked</figcaption>
+    </figure>
+
+    <p>
+      Getting this right took three full test iterations on the radio link alone. Early
+      attempts had the remote getting stuck waiting for a metal strength reply if the robot
+      missed the S frame, causing the control loop to freeze. The fix was a timeout in
+      <code>getchar1_with_timeout()</code> on the EFM8 side: if no valid metal strength
+      frame arrives within half a second, the function returns a newline and the counter
+      resets regardless. The residual delay that showed up in testing (about once every 20
+      seconds) came down to the two JDY-40 modules occasionally mis-timing their channel
+      turnaround, not a software bug.
+    </p>
+  `,
+},
 
   'proj/reflow-oven-controller': {
     type:'proj',
