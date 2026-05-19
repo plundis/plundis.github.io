@@ -1064,7 +1064,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
     {k:'team',     v:'7 people'},
   ],
   stack:['ARM Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
-  hero:'images/projects/reflow-oven-controller/01-hero.png',
+  hero:'images/projects/reflow-oven-controller/01-hero.jpg',
   body:`
     <h2 data-addr="0x1C10">the job</h2>
     <p>
@@ -1093,10 +1093,10 @@ return 0xffffff - SysTick->VAL;</code></pre>
     </p>
 
     <figure>
-      <img src="images/projects/reflow-oven-controller/01-hero.png"
+      <img src="images/projects/reflow-oven-controller/06-schematic.png"
            alt="Circuit schematic showing N76E003, OP07 op-amp, TC7660S charge pump, SSR, and LCD connections"
            onerror="imgFallback(this)">
-      <figcaption>fig 02 — full circuit schematic: the TC7660S sits top-right providing the negative rail, OP07 amplifies the thermocouple differential, 13N06LS MOSFET drives the SSR box</figcaption>
+      <figcaption>fig 02 — full circuit schematic: TC7660S top-right provides the negative rail, OP07 amplifies the thermocouple differential, 13N06LS MOSFET drives the SSR box</figcaption>
     </figure>
 
     <div class="callout">
@@ -1105,17 +1105,24 @@ return 0xffffff - SysTick->VAL;</code></pre>
 
     <h2 data-addr="0x1C30">the state machine</h2>
     <p>
-      The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before going back to idle.
+      The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before returning to idle.
     </p>
     <p>
-      There's also an abort condition wired in: if the oven takes more than 60 seconds to get above 50°C in the preheat state, the FSM assumes something is wrong and cuts power immediately.
+      There's also an abort condition: if the oven takes more than 60 seconds to get above 50°C in the preheat state, the FSM assumes something is wrong and cuts power immediately.
     </p>
+
+    <figure>
+      <img src="images/projects/reflow-oven-controller/01-hero.jpg"
+           alt="Breadboard controller with HD44780 LCD showing State: SOAK, sec: 26, tem: 0082, with multimeter probes attached"
+           onerror="imgFallback(this)">
+      <figcaption>fig 03 — breadboard mid-run during the soak phase: LCD line 1 shows the current FSM state name, line 2 shows elapsed seconds and temperature. multimeter probes are measuring the SSR output voltage simultaneously</figcaption>
+    </figure>
 
     <figure>
       <img src="images/projects/reflow-oven-controller/03-fsm-states.png"
            alt="FSM state diagram showing six states with temperature and time-based transition conditions"
            onerror="imgFallback(this)">
-      <figcaption>fig 03 — FSM state diagram: red labels are transition conditions, green labels are power outputs for each state. abort condition omitted for clarity</figcaption>
+      <figcaption>fig 04 — FSM state diagram: red labels are transition conditions, green labels are power outputs for each state. abort condition omitted for clarity</figcaption>
     </figure>
 
     <p>
@@ -1166,7 +1173,7 @@ FSM1_state1_done:
       <img src="images/projects/reflow-oven-controller/04-temp-deviation.png"
            alt="Plot of temperature deviation in °C versus temperature from 0 to 250°C, staying below 3°C"
            onerror="imgFallback(this)">
-      <figcaption>fig 04 — final design temperature deviation vs. measured temperature: deviation drops as temperature rises, staying well inside the 3°C target across the whole range</figcaption>
+      <figcaption>fig 05 — final design temperature deviation vs. measured temperature: deviation drops as temperature rises, staying well inside the 3°C target across the whole range</figcaption>
     </figure>
 
     <p>
@@ -1177,12 +1184,12 @@ FSM1_state1_done:
       <img src="images/projects/reflow-oven-controller/05-pwm-linearity.png"
            alt="Plot of SSR output voltage vs. PWM value for three prototype iterations versus ideal"
            onerror="imgFallback(this)">
-      <figcaption>fig 05 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
+      <figcaption>fig 06 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
     </figure>
 
     <h2 data-addr="0x1C60">bugs we actually hit</h2>
     <p>
-      The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without converting). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
+      The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without conversion). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
     </p>
     <p>
       Early on, the cooling state couldn't turn off. The exit condition checks if temperature has dropped below 60°C, but we had the comparison inverted — the FSM was staying in State 5 indefinitely even at room temperature. That one was an off-by-one on a carry flag check.
