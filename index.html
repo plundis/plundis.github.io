@@ -488,6 +488,32 @@
           </div>
         </div>
 
+          <!-- NOTES — EOF comments -->
+        <section class="notes" id="sec-notes" aria-label="personal notes">
+          <span class="delim">/* ── notes ──────────────────────────────────────────*/</span><br/>
+          <span class="delim">*</span> <span class="nh">outside of work, mostly:</span><br/>
+          <span class="delim">*</span><br/>
+          <table>
+            <tr><td class="k">&nbsp;&nbsp;football</td>     <td class="v">arsenal. 6am kickoffs from a hannover timezone.</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;games</td>        <td class="v">currently elden ring NG+. previously ~3000 hrs of CS.</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;reading</td>      <td class="v">cold war espionage. le carré, ben macintyre.</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;rabbit holes</td> <td class="v">declassified intel programs, mkultra, the bob lazar tapes —<br/>less “i believe”, more “this is great storytelling.”</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;tinkering</td>    <td class="v">old thinkpads. they don’t make laptops like this anymore.</td></tr>
+          </table>
+          <span class="delim">*</span><br/>
+          <span class="ping"><span class="delim">*</span> if any of this overlaps with you, <a href="/cdn-cgi/l/email-protection#fb96949592979a8994899ac9cbcbc8bb9c969a9297d5989496">ping me</a>.</span>
+          <span class="delim">/* ───────────────────────────────────────────────*/</span>
+        </section>
+
+        <div class="dump-end">// END OF DUMP · 0xFFFF · 8192/8192 BYTES</div>
+
+        </div><!-- /list-view -->
+
+        <!-- DETAIL VIEW (populated by JS) -->
+        <div class="detail-view" id="detail-view"></div>
+
+      </div>
+
         <div class="dump-end">// END OF DUMP · 0xFFFF · 8192/8192 BYTES</div>
 
         </div><!-- /list-view -->
@@ -1443,6 +1469,34 @@ FSM1_state1_done:
   // initial state
   setActiveSection(0);
   routeFromHash();
+
+  // ── rotating status ticker (option 5) ─────────────────
+  const TICKER = [
+    ['LISTENING', 'sturgill simpson, cuttin\u2019 grass'],
+    ['READING',   'tinker tailor soldier spy'],
+    ['PLAYING',   'elden ring NG+'],
+    ['WATCHING',  'arsenal vs whoever, 6am CET'],
+    ['DEBUGGING', 'a watchdog race on flash erase'],
+    ['DRINKING',  'filter coffee, black'],
+  ];
+  const tkK = document.getElementById('tk-k');
+  const tkV = document.getElementById('tk-v');
+  if(tkK && tkV){
+    let tkIdx = 0;
+    function tick(){
+      tkV.classList.add('fade');
+      setTimeout(()=>{
+        tkIdx = (tkIdx + 1) % TICKER.length;
+        tkK.textContent = TICKER[tkIdx][0];
+        tkV.textContent = TICKER[tkIdx][1];
+        tkV.classList.remove('fade');
+      }, 350);
+    }
+    // set first immediately
+    tkK.textContent = TICKER[0][0];
+    tkV.textContent = TICKER[0][1];
+    setInterval(tick, 4500);
+  }
 })();
 </script>
 
