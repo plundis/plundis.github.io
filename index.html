@@ -175,6 +175,20 @@
   .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
   .ccard a:hover{border-color:var(--paper-ink);}
 
+  /* notes block — EOF comments */
+  .notes{margin:48px 0 24px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--paper-dim);font-style:italic;text-wrap:pretty;padding:0 4px;}
+  .notes .nb{color:var(--paper-ink2);}
+  .notes .nh{font-style:normal;color:var(--paper-ink);font-weight:700;letter-spacing:.04em;}
+  .notes a{color:var(--paper-ink);font-style:normal;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.4);}
+  .notes a:hover{border-bottom-width:2px;}
+  .notes table{margin:6px 0 0;border-collapse:collapse;width:auto;}
+  .notes table td{padding:2px 0;vertical-align:top;font-style:italic;}
+  .notes table td.k{color:var(--paper-ink);font-style:normal;font-weight:700;letter-spacing:.02em;padding-right:18px;white-space:nowrap;}
+  .notes table td.v{color:var(--paper-ink2);font-style:italic;}
+  .notes .delim{color:var(--paper-dim);font-style:normal;}
+  .notes .ping{display:block;margin-top:14px;font-style:italic;color:var(--paper-dim);}
+  @media(max-width:600px){.notes{font-size:11.5px;}.notes table td.k{padding-right:10px;}}
+
   /* end-of-dump marker — owns the bottom scroll space so the last sections are reachable */
   .dump-end{margin:60px 0 0;padding-bottom:60vh;display:flex;align-items:center;gap:14px;color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.7;}
   .dump-end::before,.dump-end::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--paper-dim) 30%,var(--paper-dim) 70%,transparent);}
@@ -258,6 +272,12 @@
   .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;font-family:var(--mono);}
   .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
   .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+  /* rotating ticker pill */
+  .ticker{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid var(--phos-deep);background:rgba(124,245,138,.04);color:var(--phos-dim);font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;min-width:240px;}
+  .ticker .tk-k{color:var(--amber);font-weight:600;letter-spacing:.1em;}
+  .ticker .tk-v{color:var(--phos);letter-spacing:.04em;text-transform:none;font-size:10px;transition:opacity .35s ease;}
+  .ticker .tk-v.fade{opacity:0;}
+  @media(max-width:1100px){.ticker{min-width:0;}}
 
   /* boot */
   .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;overflow:hidden;}
@@ -315,7 +335,7 @@
     </div>
     <div class="tb-right">
       <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <a class="tb-link" href="mailto:monilarora2003@gmail.com">email</a>
+      <a class="tb-link" href="/cdn-cgi/l/email-protection#2b46444542474a5944594a191b1b186b4c464a424705484446">email</a>
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
     </div>
@@ -368,7 +388,7 @@
               <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) working on ground-station infrastructure for the Moonrise mission. Back at UBC in the fall.</p>
               <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="mailto:monilarora2003@gmail.com">email</a>
+                <a href="/cdn-cgi/l/email-protection#523f3d3c3b3e33203d20336062626112353f333b3e7c313d3f">email</a>
                 <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
                 <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
               </div>
@@ -479,7 +499,7 @@
         <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
           <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
           <div class="cgrid">
-            <div class="ccard"><div class="k">email</div><div class="v"><a href="mailto:monilarora2003@gmail.com">email</a></a></div></div>
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#620f0d0c0b0e03100d10035052525122050f030b0e4c010d0f"><span class="__cf_email__" data-cfemail="d6bbb9b8bfbab7a4b9a4b7e4e6e6e596b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a></div></div>
             <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
             <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
             <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
@@ -488,9 +508,9 @@
           </div>
         </div>
 
-          <!-- NOTES — EOF comments -->
+        <!-- NOTES — EOF comments -->
         <section class="notes" id="sec-notes" aria-label="personal notes">
-          <span class="delim">/* ── notes ──────────────────────────────────────────*/</span><br/>
+          <span class="delim">/* ── notes ────────────────────────────────────────*/</span><br/>
           <span class="delim">*</span> <span class="nh">outside of work, mostly:</span><br/>
           <span class="delim">*</span><br/>
           <table>
@@ -501,18 +521,9 @@
             <tr><td class="k">&nbsp;&nbsp;tinkering</td>    <td class="v">old thinkpads. they don’t make laptops like this anymore.</td></tr>
           </table>
           <span class="delim">*</span><br/>
-          <span class="ping"><span class="delim">*</span> if any of this overlaps with you, <a href="/cdn-cgi/l/email-protection#fb96949592979a8994899ac9cbcbc8bb9c969a9297d5989496">ping me</a>.</span>
-          <span class="delim">/* ───────────────────────────────────────────────*/</span>
+          <span class="ping"><span class="delim">*</span> if any of this overlaps with you, <a href="/cdn-cgi/l/email-protection#fd90929394919c8f928f9ccfcdcdcebd9a909c9491d39e9290">ping me</a>.</span>
+          <span class="delim">/* ─────────────────────────────────────────────────*/</span>
         </section>
-
-        <div class="dump-end">// END OF DUMP · 0xFFFF · 8192/8192 BYTES</div>
-
-        </div><!-- /list-view -->
-
-        <!-- DETAIL VIEW (populated by JS) -->
-        <div class="detail-view" id="detail-view"></div>
-
-      </div>
 
         <div class="dump-end">// END OF DUMP · 0xFFFF · 8192/8192 BYTES</div>
 
@@ -530,13 +541,17 @@
     <span>STRUCT <b id="sb-struct">about_me_t</b></span><span class="sep">│</span>
     <span>DECODE <b>paper_v1</b></span>
     <div class="right">
+      <span class="ticker" id="ticker">
+        <span class="tk-k" id="tk-k">NOW</span>
+        <span class="tk-v" id="tk-v">booting…</span>
+      </span>
       <span>built w/ <b>love + verilog</b></span>
       <span>© 2026 monil arora</span>
     </div>
   </footer>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ─── DETAIL CONTENT ──────────────────────────────────────────────
    Each entry: title, sub, dates, location, stack[], links[], hero,
    body (HTML string). Body supports <h2 data-addr="0x..">, <h3>,
@@ -896,7 +911,7 @@ rddata   --------------&lt; D &gt;---------</code></pre>
   stack:['STM32L051','EFM8LB1','JDY-40','H-Bridge','C'],
   hero:'images/projects/metal-detector-robot/01-hero.png',
   body:`
-    <h2 data-addr="0x1810">what it is</h2>
+    <h2 data-addr="0x1810">What it is</h2>
     <p>
       A two-part system: a handheld remote and a wheeled robot, talking to each other
       over a 2.4 GHz JDY-40 radio link. The remote runs an EFM8LB1 microcontroller and
@@ -913,7 +928,7 @@ rddata   --------------&lt; D &gt;---------</code></pre>
       isolated so motor noise does not get into the MCU rails.
     </p>
 
-    <h2 data-addr="0x1820">hardware</h2>
+    <h2 data-addr="0x1820">Hardware</h2>
     <p>
       The remote is straightforward: EFM8 reads Vrx and Vry from the joystick as 14-bit
       ADC values, maps them into a 0-100 range, classifies the joystick position into one
@@ -967,7 +982,7 @@ rddata   --------------&lt; D &gt;---------</code></pre>
       <figcaption>fig 04 — robot schematic. two separate battery inputs: 9V for logic (left), 6V for motor drive (bottom-left)</figcaption>
     </figure>
 
-    <h2 data-addr="0x1830">the radio noise problem</h2>
+    <h2 data-addr="0x1830">The radio noise problem</h2>
     <p>
       The first version of the comms protocol encoded the joystick values as integers cast
       to strings, then fired those over the JDY-40. The error rate was high enough to make
@@ -991,7 +1006,7 @@ rddata   --------------&lt; D &gt;---------</code></pre>
       releasing it fixed the startup handshake.
     </p>
 
-    <h2 data-addr="0x1840">finding metal</h2>
+    <h2 data-addr="0x1840">Finding metal</h2>
     <p>
       The detector is a Colpitts LC oscillator built around the SN74HC04N hex inverter,
       with a 1 mH inductor as the sensing element. When the inductor gets close to a
@@ -1024,7 +1039,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
       Strong: 90–130 Hz &mdash; XStrong: 130–190 Hz &mdash; Max: &gt;190 Hz
     </div>
 
-    <h2 data-addr="0x1850">moving the thing</h2>
+    <h2 data-addr="0x1850">Moving the thing</h2>
     <p>
       Four PWM channels on the STM32, driven out of a 1 kHz TIM2 interrupt. Two channels
       per motor: one for forward, one for reverse. The interrupt increments a counter and
@@ -1047,7 +1062,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
       joystick input to that range to avoid the dead zone.
     </p>
 
-    <h2 data-addr="0x1860">sharing the radio link</h2>
+    <h2 data-addr="0x1860">Sharing the radio link</h2>
     <p>
       The JDY-40 is half-duplex. Both the movement commands and the metal strength
       readings need to flow over the same link, in opposite directions, without stepping on
@@ -1092,7 +1107,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
   stack:['ARM Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
   //hero:'images/projects/reflow-oven-controller/01-hero.jpg',
   body:`
-    <h2 data-addr="0x1C10">the job</h2>
+    <h2 data-addr="0x1C10">The job</h2>
     <p>
       Reflow soldering is how real PCBs get assembled. You spread solder paste on the pads, place your SMD components, then run the board through a carefully controlled temperature profile. Too cool and the solder never flows properly. Too hot and you cook the components. The profile has to hit specific temperatures for specific durations, in the right order.
     </p>
@@ -1107,7 +1122,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
       <figcaption>fig 01 — full system block diagram: thermocouple signal flows through the op-amp into the ADC, FSM drives the SSR via PWM and streams data to the PC over serial</figcaption>
     </figure>
 
-    <h2 data-addr="0x1C20">the analog chain</h2>
+    <h2 data-addr="0x1C20">The analog chain</h2>
     <p>
       A K-type thermocouple puts out about 41 µV per degree Celsius. At 220°C that's roughly 9 mV. The N76E003's ADC runs on a 0–5V range, so you need significant gain before the ADC sees anything useful. We used an OP07 precision op-amp configured as a differential amplifier.
     </p>
@@ -1129,7 +1144,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
       The 2m thermocouple lead resistance was around 2–3Ω. With a 51Ω input resistor that's a 4–6% error baked into every reading. With 270Ω it drops to about 1%. Small detail, big difference in calibration.
     </div>
 
-    <h2 data-addr="0x1C30">the state machine</h2>
+    <h2 data-addr="0x1C30">The state machine</h2>
     <p>
       The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before returning to idle.
     </p>
@@ -1187,7 +1202,7 @@ FSM1_state1_done:
     mov  pwm_counter, #0
     ; ... BCD seconds increment follows</code></pre>
 
-    <h2 data-addr="0x1C50">getting the temperature right</h2>
+    <h2 data-addr="0x1C50">Getting the temperature right</h2>
     <p>
       Temperature validation was iterative. We collected over 1000 data points at each configuration, comparing the temperature calculated by the Assembly ADC code against a Python script working from raw multimeter voltage readings of the same point in the circuit. That gave us an objective, hardware-independent reference.
     </p>
@@ -1213,7 +1228,7 @@ FSM1_state1_done:
       <figcaption>fig 06 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
     </figure>
 
-    <h2 data-addr="0x1C60">bugs we actually hit</h2>
+    <h2 data-addr="0x1C60">Bugs we actually hit</h2>
     <p>
       The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without conversion). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
     </p>
@@ -1470,7 +1485,7 @@ FSM1_state1_done:
   setActiveSection(0);
   routeFromHash();
 
-  // ── rotating status ticker (option 5) ─────────────────
+  // ── rotating status ticker (option 5) ──────────────
   const TICKER = [
     ['LISTENING', 'sturgill simpson, cuttin\u2019 grass'],
     ['READING',   'tinker tailor soldier spy'],
@@ -1492,7 +1507,6 @@ FSM1_state1_done:
         tkV.classList.remove('fade');
       }, 350);
     }
-    // set first immediately
     tkK.textContent = TICKER[0][0];
     tkV.textContent = TICKER[0][1];
     setInterval(tick, 4500);
