@@ -299,7 +299,7 @@
   .termlog a      {color:var(--paper);text-decoration:none;border-bottom:1px solid var(--phos-dim);}
   .termlog a:hover{border-bottom-color:var(--phos);color:#fff;}
   .termlog .tl-bar{color:var(--phos);letter-spacing:0;}
-  .termlog .tl-dim{color:var(--phos-dim);font-size:10px;letter-spacing:.02em;display:block;padding-left:calc(10ch + 14px);margin-top:-1px;}
+  .termlog .tl-dim{color:var(--phos-dim);font-size:10px;letter-spacing:.02em;display:block;padding-left:calc(11ch + 22px);margin-top:-1px;}
   .termlog .tl-sep{display:block;height:1px;background:rgba(124,245,138,.1);margin:6px 0;}
 </style>
 </head>
@@ -377,8 +377,7 @@
               <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS</div>
               <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2027</div>
                             <!-- Option C: terminal log -->
-              <div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">CURRENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">MISSION</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar lander</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RESIDENCY</span><span class="tl-bar" data-termlog="bar">[····················]</span>  <span data-termlog="day">day …/…</span></span><span class="tl-dim">JAN 25 ——→ JUL 31 2026 · <span data-termlog="pct">…</span>% complete</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>UBC · final year EE · Fall 2026 → Spring 2027</span></div>
-              <div class="links">
+<div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">CURRENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">MISSION</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar lander</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RESIDENCY</span><span class="tl-bar" data-termlog="bar">[····················]</span>  <span data-termlog="day">day …/…</span></span><span class="tl-dim">JAN 25 ——→ JUL 31 2026 · <span data-termlog="pct">…</span>% complete</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>UBC · final year EE · Fall 2026 → Spring 2027</span></div>              <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
                 <a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a>
                 <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
@@ -1451,7 +1450,7 @@ FSM1_state1_done:
 
   // residency progress (Jan 5 to Jul 31 2026)
   (function(){
-    var S=new Date(2026,0,5),E=new Date(2026,6,31),W=20,now=new Date();
+    var S=new Date(2026,0,25),E=new Date(2026,6,31),W=20,now=new Date();
     var total=Math.round((E-S)/86400000);
     var dayN=Math.max(0,Math.min(total,Math.round((now-S)/86400000)));
     var pct=Math.round((dayN/total)*100);
