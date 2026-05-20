@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Monil Arora</title>
+<meta name="description" content="Monil Arora — Electrical Engineering @ UBC · embedded firmware, STM32/FreeRTOS, Verilog, ground-station software."/>
+<meta name="theme-color" content="#07090a"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Monil Arora"/>
+<meta property="og:description" content="Portfolio of Monil Arora — EE @ UBC, embedded firmware, STM32/FreeRTOS, Verilog."/>
+<meta property="og:url" content="https://monilarora.com/"/>
+<meta name="twitter:card" content="summary"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-size='22' fill='%23f0b64a'%3E%E2%97%86%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#07090a;--bg2:#0c1012;--bg3:#11161a;
+    --line:#1a2328;--line2:#2a3740;
+    --paper:#ece4d0;--paper-bg:#f8f2e0;--paper-bg2:#e8dfc6;
+    --paper-ink:#0e0f10;--paper-ink2:#2b2d2e;--paper-dim:#4a4937;--paper-line:rgba(0,0,0,.18);
+    --phos:#7cf58a;--phos-dim:#3b7a46;--phos-deep:#1d3a24;
+    --amber:#f0b64a;--amber-dim:#6b5020;
+    --magenta:#ff5aa8;--cyan:#5ad1ff;
+    --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --sans:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  html{background:var(--bg)}
+  body{background:var(--bg);color:var(--paper-ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;}
+  .topbar::before,.regions::before,.statusbar::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 3px);mix-blend-mode:multiply;}
+  .topbar > *,.regions > *,.statusbar > *{position:relative;z-index:6;}
+  .statusbar{position:relative;}
+
+  .shell{height:100vh;width:100%;display:grid;grid-template-rows:auto 1fr auto;margin:0 auto;padding:8px 10px;gap:8px;background:var(--bg);overflow:hidden;}
+  body.has-shell{background:var(--bg)}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;font-family:var(--mono);position:relative;}
+  .tb-left{display:flex;align-items:center;gap:14px;min-width:0}
+  .tb-logo{width:28px;height:28px;flex-shrink:0;border:1px solid var(--phos-dim);display:grid;place-items:center;color:var(--phos);font-weight:700;font-size:13px;box-shadow:inset 0 0 8px rgba(124,245,138,.15);}
+  .tb-title{font-family:var(--sans);font-weight:700;font-size:15px;color:var(--paper);letter-spacing:.01em}
+  .tb-title small{color:var(--phos-dim);font-weight:500;font-family:var(--mono);font-size:11px;margin-left:8px;letter-spacing:.08em}
+  .tb-meta{color:var(--phos-dim);font-size:11px;letter-spacing:.06em;font-family:var(--mono);}
+  .tb-right{display:flex;align-items:center;gap:8px;font-size:11px;flex-wrap:wrap;}
+  .tb-link{font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;padding:5px 10px;border:1px solid var(--amber-dim);letter-spacing:.08em;transition:color .12s,border-color .12s,background .12s;white-space:nowrap;}
+  .tb-link:hover{color:#ffd77a;border-color:var(--amber);background:var(--bg3)}
+  .tb-link.pri{background:var(--amber);color:#07090a;border-color:var(--amber);font-weight:700;}
+  .tb-link.pri:hover{background:#ffd077;color:#07090a;}
+
+  .main{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:10px;min-height:0;}
+  @media(max-width:1300px){.main{grid-template-columns:minmax(200px,230px) minmax(0,1fr);}}
+
+  .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;}
+  .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos);}
+  .reg-hd .sz{color:var(--phos-dim)}
+  .reg-list{flex:1;overflow:auto;padding:6px}
+  .reg-list::-webkit-scrollbar{width:6px}
+  .reg-list::-webkit-scrollbar-track{background:#080e0a}
+  .reg-list::-webkit-scrollbar-thumb{background:var(--phos-deep)}
+  .reg{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 12px;border:1px solid rgba(124,245,138,.1);cursor:pointer;transition:border-color .1s,background .1s,box-shadow .15s;margin-bottom:4px;position:relative;background:rgba(124,245,138,.03);text-decoration:none;}
+  .reg:hover{background:rgba(124,245,138,.08);border-color:var(--phos-dim)}
+  .reg .addr{grid-column:1;font-size:9.5px;color:var(--phos-dim);letter-spacing:.08em;}
+  .reg .nm{grid-column:1;font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--phos);letter-spacing:.04em;line-height:1.2;margin-top:2px;}
+  .reg .sz{grid-column:2;grid-row:1/3;align-self:center;font-size:9.5px;color:var(--phos-dim);letter-spacing:.06em;}
+  .reg.on{background:var(--phos-deep);border-color:var(--phos);border-left:3px solid var(--phos);}
+  .reg.on .addr{color:#9ffaac}.reg.on .nm{color:#fff;font-weight:700;text-shadow:0 0 8px rgba(124,245,138,.5)}.reg.on .sz{color:#9ffaac}
+  .reg.on::before{content:'▸';position:absolute;left:-2px;top:50%;transform:translateY(-50%);color:var(--phos);font-size:10px;}
+  .memmap{border-top:1px solid var(--line2);padding:10px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.1em;}
+  .memmap .bar{display:flex;height:10px;border:1px solid var(--line2);margin-top:6px;overflow:hidden;}
+  .memmap .seg{height:100%;border-right:1px solid rgba(0,0,0,.4);}
+  .memmap .seg:last-child{border-right:none}
+  .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--phos-dim);font-size:9px}
+
+  .content{background:var(--paper-bg);border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;}
+  .content-hd{padding:8px 14px;border-bottom:1px solid var(--paper-line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);background:var(--paper-bg2);flex-shrink:0;text-transform:uppercase;}
+  .content-hd b{color:var(--paper-ink);font-weight:700;}
+  .content-hd .scroll-pos{font-variant-numeric:tabular-nums;}
+  .content-body{flex:1;overflow:auto;scroll-behavior:smooth;}
+  .content-body::-webkit-scrollbar{width:8px}
+  .content-body::-webkit-scrollbar-track{background:var(--paper-bg2)}
+  .content-body::-webkit-scrollbar-thumb{background:#b4ac97;border-radius:0;}
+
+  .list-view{padding:24px 32px 28px;}
+  .detail-view{display:none;padding:0;}
+  .detail-view.on{display:block;}
+  .list-view.off{display:none;}
+
+  .hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding-bottom:8px;margin-bottom:18px;}
+  .avatar{width:96px;height:96px;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);flex-shrink:0;}
+  .avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 85%;display:block}
+  .hero-body{min-width:0}
+  .hero h1{font-family:var(--sans);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--paper-ink);margin-bottom:6px;}
+  .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:4px;font-weight:500;}
+  .hero .blurb{font-size:14.5px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;max-width:62ch;margin-top:8px;}
+  .hero .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+  .hero .links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .hero .links a:hover{background:rgba(0,0,0,.06)}
+  .hero .links a.pri{background:var(--paper-ink);color:var(--paper-bg)}
+  .hero .links a.pri:hover{background:#000}
+
+  .status-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#1a5a2c;background:#cdebd2;border:1px solid #6cb578;padding:3px 8px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
+  .status-pill .dot{width:6px;height:6px;border-radius:50%;background:#2a8a3e;animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  .section{margin-bottom:28px;scroll-margin-top:8px;}
+  .section:last-child{margin-bottom:0;}
+  .section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-ink);padding-bottom:6px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--paper-ink);}
+  .section-title .addr{color:var(--paper-dim);font-weight:500;letter-spacing:.1em;font-size:10px;}
+
+  .exp{padding:14px 16px;cursor:pointer;transition:background .12s,box-shadow .12s,padding .12s;margin:0 -16px;border:1px solid transparent;position:relative;}
+  .exp:hover{background:rgba(0,0,0,.025);border-color:var(--paper-ink);box-shadow:3px 3px 0 rgba(0,0,0,.08);transform:translate(-1px,-1px);}
+  .exp::after{content:'↗';position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);line-height:1;opacity:.55;transition:opacity .12s,color .12s,transform .12s;pointer-events:none;}
+  .exp:hover::after{opacity:1;color:var(--paper-ink);transform:translate(1px,-1px);}
+  .exp-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:3px;flex-wrap:wrap;padding-right:22px;}
+  .exp h3{font-size:17px;font-weight:700;color:var(--paper-ink);letter-spacing:-.01em;}
+  .exp .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
+  .exp .role{font-family:var(--mono);font-size:12px;color:var(--paper-dim);margin-bottom:8px;font-weight:500;}
+  .exp p{font-size:14px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;margin-bottom:10px;}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;}
+  .chip{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;letter-spacing:.02em;}
+
+  .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .proj{border:1px solid rgba(0,0,0,.18);padding:14px 16px;background:#fff;display:flex;flex-direction:column;cursor:pointer;transition:border-color .12s,box-shadow .12s,transform .12s;position:relative;}
+  .proj::after{content:'↗';position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);line-height:1;opacity:.55;transition:opacity .12s,color .12s,transform .12s;pointer-events:none;}
+  .proj:hover{border-color:var(--paper-ink);box-shadow:3px 3px 0 rgba(0,0,0,.08);transform:translate(-1px,-1px);}
+  .proj:hover::after{opacity:1;color:var(--paper-ink);transform:translate(1px,-1px);}
+  .proj-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:3px;padding-right:18px;}
+  .proj h3{font-size:15px;font-weight:700;color:var(--paper-ink);letter-spacing:-.005em;}
+  .proj .when{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);white-space:nowrap;font-weight:500;letter-spacing:.02em;flex-shrink:0;}
+  .proj .tag{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
+  .proj p{font-size:13px;line-height:1.55;color:var(--paper-ink2);text-wrap:pretty;}
+
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;}
+  .skbucket h4{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--paper-ink);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;}
+  .sk-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .sk{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
+
+  .edu-list{display:flex;flex-direction:column;gap:0;}
+  .edu{padding:12px 0;}
+  .edu-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:2px;flex-wrap:wrap;}
+  .edu h3{font-size:15px;font-weight:700;color:var(--paper-ink);}
+  .edu .when{font-family:var(--mono);font-size:11px;color:var(--paper-dim);white-space:nowrap;font-weight:500;}
+  .edu .role{font-family:var(--mono);font-size:11.5px;color:var(--paper-dim);margin-bottom:4px;font-weight:500;}
+  .edu p{font-size:13.5px;line-height:1.55;color:var(--paper-ink2);margin-bottom:12px;}
+  .courses{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px;}
+  @media(max-width:760px){.courses{grid-template-columns:1fr;}}
+  .course{border:1px solid rgba(0,0,0,.22);background:#fff;padding:10px 12px;display:flex;align-items:center;gap:12px;}
+  .course .code{flex-shrink:0;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;background:var(--paper-ink);color:var(--paper-bg);padding:6px 9px;line-height:1;min-width:64px;text-align:center;}
+  .course .body{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .course .nm{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--paper-ink);line-height:1.25;}
+  .course .top{font-family:var(--sans);font-size:12px;color:var(--paper-ink2);letter-spacing:0;line-height:1.45;text-wrap:pretty;}
+
+  .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .ccard{border:1px solid rgba(0,0,0,.28);padding:11px 14px;background:#fff;}
+  .ccard .k{font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.1em;margin-bottom:3px;font-weight:600;text-transform:uppercase}
+  .ccard .v{font-family:var(--mono);font-size:13px;line-height:1.4;word-break:break-word;color:var(--paper-ink);font-weight:500;}
+  .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
+  .ccard a:hover{border-color:var(--paper-ink);}
+
+  .notes{margin:48px 0 24px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--paper-dim);font-style:italic;text-wrap:pretty;padding:0 4px;}
+  .notes .nb{color:var(--paper-ink2);}
+  .notes .nh{font-style:normal;color:var(--paper-ink);font-weight:700;letter-spacing:.04em;}
+  .notes a{color:var(--paper-ink);font-style:normal;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.4);}
+  .notes a:hover{border-bottom-width:2px;}
+  .notes table{margin:6px 0 0;border-collapse:collapse;width:auto;}
+  .notes table td{padding:2px 0;vertical-align:top;font-style:italic;}
+  .notes table td.k{color:var(--paper-ink);font-style:normal;font-weight:700;letter-spacing:.02em;padding-right:18px;white-space:nowrap;}
+  .notes table td.v{color:var(--paper-ink2);font-style:italic;}
+  .notes .delim{color:var(--paper-dim);font-style:normal;}
+  .notes .ping{display:block;margin-top:14px;font-style:italic;color:var(--paper-dim);}
+  @media(max-width:600px){.notes{font-size:11.5px;}.notes table td.k{padding-right:10px;}}
+
+  .dump-end{margin:60px 0 0;padding-bottom:60vh;display:flex;align-items:center;gap:14px;color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.7;}
+  .dump-end::before,.dump-end::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--paper-dim) 30%,var(--paper-dim) 70%,transparent);}
+  @media(max-width:900px){.dump-end{margin-top:40px;padding-bottom:50vh;font-size:9px;gap:10px;}}
+
+  .dv-bar{position:sticky;top:0;z-index:10;background:var(--paper-bg2);border-bottom:1px solid var(--paper-line);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);text-transform:uppercase;}
+  .dv-bar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .dv-bar .addr{color:var(--paper-ink);font-weight:700;}
+  .dv-back{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-ink);background:none;border:1px solid rgba(0,0,0,.4);padding:4px 10px;text-transform:uppercase;cursor:pointer;font-weight:600;transition:background .1s;}
+  .dv-back:hover{background:rgba(0,0,0,.06);}
+
+  .dv-body{padding:28px 40px 40px;max-width:780px;margin:0 auto;}
+  @media(max-width:900px){.dv-body{padding:20px 18px 30px;}}
+
+  .dv-header{margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid var(--paper-ink);}
+  .dv-kicker{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:10px;}
+  .dv-kicker .badge{background:var(--paper-ink);color:var(--paper-bg);padding:2px 8px;letter-spacing:.1em;}
+  .dv-title{font-family:var(--sans);font-weight:700;font-size:34px;line-height:1.08;letter-spacing:-.02em;color:var(--paper-ink);margin-bottom:6px;text-wrap:balance;}
+  @media(max-width:900px){.dv-title{font-size:26px;}}
+  .dv-sub{font-family:var(--mono);font-size:13px;color:var(--paper-dim);font-weight:500;letter-spacing:.02em;margin-bottom:14px;}
+  .dv-meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--mono);font-size:11px;color:var(--paper-ink2);margin-bottom:14px;}
+  .dv-meta .m{display:flex;gap:6px;align-items:baseline;}
+  .dv-meta .mk{color:var(--paper-dim);letter-spacing:.08em;text-transform:uppercase;font-size:10px;}
+  .dv-meta .mv{color:var(--paper-ink);font-weight:500;}
+  .dv-stack{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+  .dv-links{display:flex;flex-wrap:wrap;gap:6px;}
+  .dv-links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
+  .dv-links a:hover{background:rgba(0,0,0,.06);}
+  .dv-links a.pri{background:var(--paper-ink);color:var(--paper-bg);}
+
+  .dv-hero{margin:0 0 28px;border:1px solid rgba(0,0,0,.2);background:#fff;}
+  .dv-hero img{width:100%;display:block;}
+
+  .dv-prose{font-size:15px;line-height:1.7;color:var(--paper-ink2);text-wrap:pretty;}
+  .dv-prose h2{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink);margin:32px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--paper-ink);display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .dv-prose h2::before{content:attr(data-addr);color:var(--paper-dim);font-size:10px;font-weight:500;}
+  .dv-prose h2:first-child{margin-top:0;}
+  .dv-prose h3{font-family:var(--sans);font-size:18px;font-weight:700;color:var(--paper-ink);margin:24px 0 8px;letter-spacing:-.005em;}
+  .dv-prose p{margin-bottom:14px;}
+  .dv-prose p:last-child{margin-bottom:0;}
+  .dv-prose strong{color:var(--paper-ink);font-weight:700;}
+  .dv-prose em{font-style:italic;}
+  .dv-prose a{color:var(--paper-ink);border-bottom:1px solid rgba(0,0,0,.4);text-decoration:none;}
+  .dv-prose a:hover{border-bottom-width:2px;}
+  .dv-prose ul,.dv-prose ol{margin:0 0 14px 22px;}
+  .dv-prose li{margin-bottom:5px;}
+  .dv-prose code{font-family:var(--mono);font-size:13px;background:rgba(0,0,0,.06);padding:1px 5px;letter-spacing:0;color:var(--paper-ink);}
+  .dv-prose pre{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:#0a1410;color:var(--phos);padding:14px 16px;margin:18px 0;overflow-x:auto;border:1px solid var(--phos-deep);border-left:3px solid var(--phos);}
+  .dv-prose pre code{background:none;color:inherit;padding:0;font-size:inherit;}
+  .dv-prose blockquote{border-left:3px solid var(--paper-ink);padding:4px 0 4px 14px;margin:14px 0;color:var(--paper-dim);font-style:italic;}
+  .dv-prose figure{margin:18px 0;}
+  .dv-prose figure img{width:100%;display:block;border:1px solid rgba(0,0,0,.2);background:#fff;}
+  .dv-prose figcaption{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.04em;margin-top:6px;font-weight:500;}
+  .dv-prose figcaption::before{content:'// ';color:var(--paper-dim);}
+  .dv-prose .figcap{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.04em;margin:-10px 0 18px;font-weight:500;}
+  .dv-prose .callout{border:1px solid rgba(0,0,0,.3);background:rgba(240,182,74,.12);padding:12px 14px;margin:18px 0;font-size:14px;}
+  .dv-prose .callout::before{content:'NOTE — ';font-family:var(--mono);font-size:10px;letter-spacing:.12em;font-weight:700;color:var(--paper-ink);}
+
+  .img-missing{display:block;border:1px dashed rgba(0,0,0,.35);background:repeating-linear-gradient(45deg,rgba(0,0,0,.02),rgba(0,0,0,.02) 10px,rgba(0,0,0,.05) 10px,rgba(0,0,0,.05) 20px);padding:40px 18px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--paper-dim);line-height:1.7;letter-spacing:.04em;}
+  .img-missing .lbl{display:block;color:var(--paper-ink);font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;font-size:10px;}
+  .img-missing .pth{display:block;color:var(--paper-ink2);font-size:11px;margin:4px 0;word-break:break-all;}
+  .img-missing .hint{display:block;color:var(--paper-dim);font-size:10px;font-style:italic;margin-top:6px;}
+
+  .dv-footer{margin-top:42px;padding-top:18px;border-top:1px solid var(--paper-line);display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;}
+  @media(max-width:700px){.dv-footer{grid-template-columns:1fr;}}
+  .dv-nav{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.3);padding:10px 14px;letter-spacing:.04em;transition:background .1s,border-color .1s;font-weight:500;display:flex;flex-direction:column;gap:2px;cursor:pointer;background:#fff;}
+  .dv-nav:hover{background:rgba(0,0,0,.04);border-color:var(--paper-ink);}
+  .dv-nav.next{text-align:right;align-items:flex-end;}
+  .dv-nav .nav-k{font-size:9.5px;color:var(--paper-dim);letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
+  .dv-nav .nav-v{font-size:13px;font-weight:700;font-family:var(--sans);letter-spacing:-.005em;}
+  .dv-nav.disabled{opacity:.35;pointer-events:none;}
+  .dv-back-big{font-family:var(--mono);font-size:11px;color:var(--paper-bg);background:var(--paper-ink);border:1px solid var(--paper-ink);padding:10px 18px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:background .1s;}
+  .dv-back-big:hover{background:#000;}
+
+  .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;font-family:var(--mono);}
+  .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
+  .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+  .ticker{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid var(--phos-deep);background:rgba(124,245,138,.04);color:var(--phos-dim);font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;min-width:240px;}
+  .ticker .tk-k{color:var(--amber);font-weight:600;letter-spacing:.1em;}
+  .ticker .tk-v{color:var(--phos);letter-spacing:.04em;text-transform:none;font-size:10px;transition:opacity .35s ease;}
+  .ticker .tk-v.fade{opacity:0;}
+  @media(max-width:1100px){.ticker{min-width:0;}}
+
+  .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;overflow:hidden;}
+  .boot.done{opacity:0;pointer-events:none}
+  .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
+  .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
+  @keyframes boot-in{to{opacity:1}}
+
+  @media(max-width:900px){
+    body{overflow:auto;}
+    .shell{height:auto;min-height:100vh;max-width:100%;grid-template-rows:auto auto auto auto;padding:8px;gap:8px;}
+    .topbar{flex-direction:column;align-items:stretch;gap:10px;padding:10px 12px}
+    .tb-right{flex-wrap:wrap;gap:6px}
+    .main{display:flex;flex-direction:column;gap:8px;}
+    .regions{flex-shrink:0;max-height:200px;}
+    .reg-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;padding:6px;gap:6px;scroll-snap-type:x mandatory;}
+    .reg{flex-shrink:0;min-width:140px;margin-bottom:0;scroll-snap-align:start;padding:8px 10px;grid-template-columns:1fr;}
+    .reg .sz{grid-column:1;grid-row:auto;align-self:auto;margin-top:2px}
+    .reg.on::before{left:4px;top:8px;transform:none}
+    .memmap{display:none}
+    .list-view{padding:18px 18px 22px;}
+    .hero{grid-template-columns:1fr;gap:14px;}
+    .avatar{width:80px;height:80px;}
+    .hero h1{font-size:26px;}
+    .proj-grid{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;gap:14px;}
+    .cgrid{grid-template-columns:1fr;}
+    .statusbar .right{display:none}
+    .exp{margin:0;padding:14px 0;}
+    .exp::after{top:14px;right:2px;}
+    .exp-top{padding-right:18px;}
+    .termlog{font-size:10.5px;padding:8px 10px;}
+    .termlog .tl-k{width:9ch;margin-right:6px;}
+    .termlog .tl-dim{padding-left:calc(9ch + 12px);}
+  }
+
+  /* Option C: terminal log bio */
+  .termlog{margin:12px 0 4px;border:1px solid var(--phos-deep);background:#080e0a;color:var(--paper);padding:10px 12px;font-family:var(--mono);font-size:11.5px;line-height:1.5;white-space:nowrap;overflow-x:auto;box-shadow:inset 0 0 24px rgba(124,245,138,.04);}
+  .termlog .tl-line{display:block;}
+  .termlog .tl-p  {color:var(--phos);margin-right:6px;}
+  .termlog .tl-k  {color:var(--amber);letter-spacing:.1em;font-weight:600;display:inline-block;width:10ch;margin-right:8px;}
+  .termlog .tl-at {color:var(--phos-dim);}
+  .termlog .tl-hi {color:var(--phos);font-weight:700;text-shadow:0 0 6px rgba(124,245,138,.4);}
+  .termlog a      {color:var(--paper);text-decoration:none;border-bottom:1px solid var(--phos-dim);}
+  .termlog a:hover{border-bottom-color:var(--phos);color:#fff;}
+  .termlog .tl-bar{color:var(--phos);letter-spacing:0;}
+  .termlog .tl-dim{color:var(--phos-dim);font-size:10px;letter-spacing:.02em;display:block;padding-left:calc(10ch + 14px);margin-top:-1px;}
+  .termlog .tl-sep{display:block;height:1px;background:rgba(124,245,138,.1);margin:6px 0;}
+</style>
+</head>
+<body class="has-shell">
+
+<div class="boot" id="boot">
+  <div class="bl"><span class="ok">[ OK ]</span>power on self test …………………… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>crc32 verify  0x<b>DEADBEEF</b> ……… <span class="dim">pass</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>mmap  8192 B · 6 regions ……………… <span class="dim">mounted</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>uart@115200  link up ………………………… <span class="dim">ready</span></div>
+  <div class="bl"><span class="ok">[ OK ]</span>decoder  paper_v1  ………………………… <span class="dim">ok</span></div>
+  <div class="bl" style="margin-top:12px;color:var(--amber)">$ ./monil_arora.bin --dump</div>
+</div>
+
+<div class="shell">
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="tb-logo">◆</div>
+      <div>
+        <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.05</small></div>
+        <div class="tb-meta">embedded engineer &nbsp;·&nbsp; ubc ee 2027 &nbsp;·&nbsp; hannover, de</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
+      <a class="tb-link" href="mailto:monilarora2003@gmail.com">email</a>
+      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+      <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <aside class="regions">
+      <div class="reg-hd"><span>REGIONS &nbsp; [6]</span><span class="sz">8 KB</span></div>
+      <div class="reg-list" id="reg-list">
+        <a class="reg on" data-target="sec-about" href="#sec-about"><span class="addr">0x0000</span><span class="nm">.about_me</span><span class="sz">512 B</span></a>
+        <a class="reg" data-target="sec-experience" href="#sec-experience"><span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-projects" href="#sec-projects"><span class="addr">0x1000</span><span class="nm">.projects</span><span class="sz">8.0 K</span></a>
+        <a class="reg" data-target="sec-skills" href="#sec-skills"><span class="addr">0x3000</span><span class="nm">.skills</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-education" href="#sec-education"><span class="addr">0x3800</span><span class="nm">.education</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-contact" href="#sec-contact"><span class="addr">0x4000</span><span class="nm">.contact</span><span class="sz">512 B</span></a>
+      </div>
+      <div class="memmap">
+        <div>MEM MAP</div>
+        <div class="bar">
+          <div class="seg" style="flex:1;background:#5ad1ff" title=".about_me"></div>
+          <div class="seg" style="flex:7;background:#f0b64a" title=".experience"></div>
+          <div class="seg" style="flex:16;background:#7cf58a" title=".projects"></div>
+          <div class="seg" style="flex:4;background:#b0a7ff" title=".skills"></div>
+          <div class="seg" style="flex:4;background:#ff5aa8" title=".education"></div>
+          <div class="seg" style="flex:1;background:#ffc04a" title=".contact"></div>
+          <div class="seg" style="flex:90;background:#1a2328" title=".empty"></div>
+        </div>
+        <div class="lg"><span>0x0000</span><span>0xFFFF</span></div>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="content-hd">
+        <span>DECODED &nbsp;·&nbsp; <b id="cur-section">.about_me</b></span>
+        <span class="scroll-pos" id="scroll-pos">struct about_me_t</span>
+      </div>
+      <div class="content-body" id="content-body">
+
+        <!-- LIST VIEW -->
+        <div class="list-view" id="list-view">
+
+        <!-- ABOUT -->
+        <div class="section" id="sec-about" data-name=".about_me" data-struct="about_me_t">
+          <div class="hero">
+            <div class="avatar"><img src="photo.jpg" alt="Monil Arora" onerror="this.style.background='#ddd';this.style.display='block';"/></div>
+            <div class="hero-body">
+              <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
+              <h1>Monil Arora</h1>
+              <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS</div>
+              <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2027</div>
+                            <!-- Option C: terminal log -->
+              <div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">CURRENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">MISSION</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar lander</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">SHIPPING</span>YAMCS pipeline · CCSDS/SLIP over RS-422 · image downlink</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RESIDENCY</span><span class="tl-bar" data-termlog="bar">[····················]</span>  <span data-termlog="day">day …/…</span></span><span class="tl-dim">JAN 05 ——→ JUL 31 2026 · <span data-termlog="pct">…</span>% complete</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>UBC · final year EE · Fall 2026 → Spring 2027</span></div>
+              <div class="links">
+                <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
+                <a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a>
+                <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+                <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div class="section" id="sec-experience" data-name=".experience" data-struct="role_t[2]">
+          <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[2]</span></div>
+
+          <div class="exp" data-detail="exp/lzh">
+            <div class="exp-top"><h3>Laser Zentrum Hannover (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
+            <div class="role">MOONRISE · Hannover, Germany</div>
+            <p>Extended STM32F401CC firmware in C++/FreeRTOS to packetize sensor telemetry into CCSDS SPP frames, SLIP-encoded over RS-422 via a Lantronix UDS2100 serial-to-Ethernet bridge with COP-1/FARM delivery and a log-based boot counter in internal flash. Extended the YAMCS Mission Control System with custom Java data links (SLIP-over-UDP), COP-1 FOP reliable TC delivery, and an XTCE mission database decoding APID 130 TM / 101 TC with threshold alarms and parameter archiving. Implemented image downlink (8 KB SRAM buffer, 79-byte APID 131 chunks over VCID 1) and validated the full pipeline with a PyQt6 payload simulator and a Python TCP–UDP bridge.</p>
+            <div class="chips"><span class="chip">STM32F401CC</span><span class="chip">C++</span><span class="chip">FreeRTOS</span><span class="chip">CCSDS SPP</span><span class="chip">YAMCS</span><span class="chip">Java</span><span class="chip">XTCE</span><span class="chip">COP-1</span><span class="chip">SLIP/RS-422</span><span class="chip">PyQt6</span></div>
+          </div>
+
+          <div class="exp" data-detail="exp/sharang">
+            <div class="exp-top"><h3>Sharang Shakti Pvt Ltd — Embedded Signal Processing Engineer</h3><span class="when">May – Jun 2024</span></div>
+            <div class="role">Radar digitalization · Gurugram, India</div>
+            <p>Contributed to digitalizing an analog radar system: designed and optimized high-frequency waveform generation and signal-conditioning modules using the AD9910 DDS, improving signal resolution and reducing phase noise. Integrated the AD8336 VGA with the AD9910 for real-time amplitude modulation and dynamic range adjustment in high-frequency radar signals.</p>
+            <div class="chips"><span class="chip">AD9910 DDS</span><span class="chip">AD8336 VGA</span><span class="chip">RF</span><span class="chip">Radar</span><span class="chip">Signal Processing</span></div>
+          </div>
+        </div>
+
+        <!-- PROJECTS -->
+        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[4]">
+          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[4]</span></div>
+          <div class="proj-grid">
+            <div class="proj" data-detail="proj/self-balancing-robot">
+              <div class="proj-top"><h3>Self-Balancing Robot</h3><span class="when">Jan – Apr 2025</span></div>
+              <div class="tag">Arduino Nano 33 · ESP32 · BLE · IMU</div>
+              <p>Two-wheeled self-balancing robot with Arduino Nano 33, IMU sensors, and motor drivers; real-time PWM control stabilises tilt up to 45°. ESP32 BLE mobile app + LCD remote stream RPM, tilt angle, and sonar distance. Proportional-control validation via oscilloscope analysis showed ~30% stability improvement.</p>
+            </div>
+            <div class="proj" data-detail="proj/dnn-accelerator">
+              <div class="proj-top"><h3>Deep Neural Network Accelerator</h3><span class="when">Oct – Nov 2024</span></div>
+              <div class="tag">Verilog · Nios II · DE1-SoC · Q16.16</div>
+              <p>DNN accelerator on an embedded Nios II system using the DE1-SoC for MNIST classification with Q16.16 fixed-point arithmetic and ReLU activation. SoC includes an SDRAM interface; Quartus timing constraints applied for stable operation at 50 MHz.</p>
+            </div>
+            <div class="proj" data-detail="proj/metal-detector-robot">
+              <div class="proj-top"><h3>Metal Detector Robot</h3><span class="when">Mar – Apr 2024</span></div>
+              <div class="tag">STM32 · EFM8 · JDY-40 BT · LCD</div>
+              <p>Battery-powered, remote-controlled metal-detection robot built with a team of six on STM32 + EFM8 microcontrollers. Robust comms protocols and an LCD interface visualise detection intensity and magnetic field strength up to 1.4 T in real time.</p>
+            </div>
+            <div class="proj" data-detail="proj/reflow-oven-controller">
+              <div class="proj-top"><h3>Reflow Oven Controller</h3><span class="when">Jan – Feb 2024</span></div>
+              <div class="tag">N76E003 · ARM · Assembly</div>
+              <p>Reflow-oven controller on N76E003 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="section" id="sec-skills" data-name=".skills" data-struct="skillset_t">
+          <div class="section-title"><span>Skills</span><span class="addr">0x3000 — skillset_t</span></div>
+          <div class="skills-grid">
+            <div class="skbucket"><h4>Languages</h4><div class="sk-list"><span class="sk">C</span><span class="sk">C++</span><span class="sk">Java</span><span class="sk">Python</span><span class="sk">Assembly</span><span class="sk">Verilog</span><span class="sk">VHDL</span></div></div>
+            <div class="skbucket"><h4>Tools</h4><div class="sk-list"><span class="sk">YAMCS</span><span class="sk">FreeRTOS</span><span class="sk">PlatformIO</span><span class="sk">Maven</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">CrossIDE</span><span class="sk">Cadence</span><span class="sk">MATLAB</span><span class="sk">LTspice</span><span class="sk">Git</span><span class="sk">VS Code</span></div></div>
+            <div class="skbucket"><h4>Hardware</h4><div class="sk-list"><span class="sk">STM32</span><span class="sk">ESP32</span><span class="sk">EFM8</span><span class="sk">Arduino</span><span class="sk">DE1-SoC</span><span class="sk">Raspberry Pi</span><span class="sk">IMU Sensors</span><span class="sk">Motor Drivers</span></div></div>
+            <div class="skbucket"><h4>Protocols</h4><div class="sk-list"><span class="sk">CCSDS SPP</span><span class="sk">COP-1</span><span class="sk">SLIP</span><span class="sk">RS-422</span><span class="sk">UART · SPI · I²C</span><span class="sk">TCP/UDP</span><span class="sk">BLE</span></div></div>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="section" id="sec-education" data-name=".education" data-struct="degree_t[1]">
+          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1] + course_t[4]</span></div>
+          <div class="edu-list">
+            <div class="edu">
+              <div class="edu-top"><h3>University of British Columbia — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
+              <div class="role">Vancouver, BC</div>
+              <p style="margin-top:14px;">Relevant coursework:</p>
+              <div class="courses">
+                <div class="course">
+                  <span class="code">CPEN&nbsp;311</span>
+                  <span class="body">
+                    <span class="nm">Digital Systems Design</span>
+                    <span class="top">Designing combinational and sequential hardware in Verilog/VHDL, synthesised onto FPGAs: from arithmetic and datapath circuits up to pipelined processors and GPU architecture.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">CPEN&nbsp;211</span>
+                  <span class="body">
+                    <span class="nm">Computing Systems I</span>
+                    <span class="top">How a microcomputer actually works, from Boolean algebra and logic gates up through instruction sets, memory addressing, assembly programming, and I/O interfacing.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">ELEC&nbsp;221</span>
+                  <span class="body">
+                    <span class="nm">Signals and Systems</span>
+                    <span class="top">Analysing LTI systems in time and frequency domains using convolution and the Fourier, Laplace, and z-transforms, with applications to sampling, filtering, and modulation.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">ELEC&nbsp;341</span>
+                  <span class="body">
+                    <span class="nm">Systems and Control</span>
+                    <span class="top">Modelling continuous-time systems with transfer functions and state-space, then designing feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
+          <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
+          <div class="cgrid">
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a></div></div>
+            <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
+            <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
+            <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
+            <div class="ccard"><div class="k">location · now</div><div class="v">Hannover, DE</div></div>
+            <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
+          </div>
+        </div>
+
+        <!-- NOTES — EOF comments -->
+        <section class="notes" id="sec-notes" aria-label="personal notes">
+          <span class="delim">/* ── notes ────────────────────────────────────────*/</span><br/>
+          <span class="delim">*</span> <span class="nh">outside of work, mostly:</span><br/>
+          <span class="delim">*</span><br/>
+          <table>
+            <tr><td class="k">&nbsp;&nbsp;football</td>     <td class="v">real madrid. 6am kickoffs from a hannover timezone.</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;games</td>        <td class="v">currently far cry 4. previously ~1000 hrs of valorant.</td></tr>
+            <!-- <tr><td class="k">&nbsp;&nbsp;reading</td>      <td class="v">cold war espionage. le carré, ben macintyre.</td></tr> -->
+            <tr><td class="k">&nbsp;&nbsp;rabbit holes</td> <td class="v">declassified intel programs, mkultra, the bob lazar tapes.<br/>less "i believe", more "this is great storytelling."</td></tr>
+            <!-- <tr><td class="k">&nbsp;&nbsp;tinkering</td>    <td class="v">old thinkpads. they don't make laptops like this anymore.</td></tr> -->
+          </table>
+          <span class="delim">*</span><br/>
+          <span class="ping"><span class="delim">*</span> if any of this overlaps with you, <a href="mailto:monilarora2003@gmail.com">ping me</a>.</span>
+          <span class="delim">/* ─────────────────────────────────────────────────*/</span>
+        </section>
+
+        <div class="dump-end">// END OF DUMP · 0xFFFF · 8192/8192 BYTES</div>
+
+        </div><!-- /list-view -->
+
+        <!-- DETAIL VIEW (populated by JS) -->
+        <div class="detail-view" id="detail-view"></div>
+
+      </div>
+  </main>
+
+  <footer class="statusbar">
+    <span>MODE <b>READ-ONLY</b></span><span class="sep">│</span>
+    <span>SECTION <b id="sb-sec">.about_me</b></span><span class="sep">│</span>
+    <span>STRUCT <b id="sb-struct">about_me_t</b></span><span class="sep">│</span>
+    <span>DECODE <b>paper_v1</b></span>
+    <div class="right">
+      <span class="ticker" id="ticker">
+        <span class="tk-k" id="tk-k">NOW</span>
+        <span class="tk-v" id="tk-v">booting…</span>
+      </span>
+      <span>built w/ <b>love + verilog</b></span>
+      <span>© 2026 monil arora</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const DETAILS = {
+  'exp/lzh': {
+    type:'exp',
+    addr:'0x0200',
+    struct:'role_t',
+    badge:'EXPERIENCE',
+    title:'Laser Zentrum Hannover — Research Intern',
+    sub:'CubeSat ground station for the Moonrise mission',
+    meta:[
+      {k:'duration', v:'Jan – Jul 2026'},
+      {k:'location', v:'Hannover, DE'},
+    ],
+    stack:['STM32F401CC','C++','FreeRTOS','HAL','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
+    links:[
+      {label:'lzh.de ↗', url:'https://www.lzh.de/en', primary:false},
+    ],
+    //hero:'images/experience/lzh/hero.jpg',
+    body:`
+      <h2 data-addr="0x0210">The brief</h2>
+      <p>I joined LZH in January for a seven month internship primarily working on ground software for the Moonrise project. When I got there a previous intern had already put down the bones of the firmware. FreeRTOS tasks were set up, the command system worked, basic telemetry packetization was in place. There was also a YAMCS instance running with stock components. What the mission actually needed before payload integration was a working end to end pipeline. Image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that wouldn't die quietly when a TCP socket went idle.</p>
+      <p>Most of the interesting work ended up sitting at the seams. Between firmware and ground, between stock YAMCS and the parts we had to write ourselves, and pretty often between what the docs said would work and what the bench actually did.</p>
+
+      <figure>
+        <img src="images/experience/lzh/01-bench.jpg" alt="Bench setup" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — bench setup. STM32F401CC, RS-422 level shifter, Lantronix UDS2100 serial-to-Ethernet bridge, YAMCS Mission Control on the lab laptop.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0220">Boot counter, or: why erasing a flash sector at boot is a bad idea</h2>
+      <p>The spacecraft needed a persistent counter that survives power cycles, so the ground station can spot unexpected resets. Sounds like a one afternoon feature. It was not.</p>
+      <p>My first version put the count in flash Sector 4 and rewrote the sector on every boot. Erase, increment, program. On the bench it worked fine for hours. Then every few power cycles the count would just reset to 1 for no obvious reason. I spent a while assuming the math was wrong before realising the actual culprit was a race between the IWDG watchdog (2 second timeout) and the flash erase, which takes around 2 seconds on this chip. After certain soft resets the IWDG keeps running. It only fully clears on a hardware NRST or a real power on. So the erase was racing the watchdog, the MCU would hard reset mid erase, and the next boot would find a blank sector and start counting from 1 again.</p>
+      <p>The redesign is log based. Each boot just appends a 12 byte record (magic sentinel <code>0xDEADBEEF</code>, the count, and an XOR checksum) into Sector 5. The sector only gets erased once every 10,922 boots or so, and when that rare erase does happen the code explicitly pets the watchdog on both sides of it. If a power loss happens mid program, the checksum catches it and the previous valid slot is used as fallback. Sector 5 also has about 70 KB of headroom above the firmware image. Sector 4 was 4 KB away from being overwritten by a routine firmware update, which is its own minor horror story.</p>
+      <p>The cached count is now registered as a telemetry parameter and goes out in every TM frame. Watching it tick up over a long session is one of those small but oddly satisfying things.</p>
+
+      <h2 data-addr="0x0230">Image downlink</h2>
+      <p>Camera payloads need to send compressed frames over the same packet pipe as telemetry. The whole image lives in an 8 KB SRAM buffer. A real camera would write into that buffer. For bench testing I wrote a small Python script that converts a JPEG into a C array at compile time and embeds it directly in the firmware, which is enough to exercise the downlink path without a sensor connected.</p>
+      <p>A FreeRTOS task splits the buffer into 79 byte chunks, wraps each one in a CCSDS SPP packet on APID 131 (separate from telemetry APID 130) and VCID 1, and posts them to the downlink queue at 50 ms per chunk. Each chunk carries a small header (image_id, chunk_index, total_chunks, size) so the ground side can reassemble even if packets arrive out of order. Image traffic deliberately runs on a non COP-1 stream. Losing a chunk just means asking for the image again, and the alternative (windowed retransmission for image data) would have eaten flash and RAM budget that wasn't there to give.</p>
+
+      <div class="callout">The first version of the image task died mid transfer at roughly 40 chunks every single time. I stared at the buffer logic for an embarrassing amount of time before noticing that <code>check_in_task(9)</code>, the watchdog kick, was sitting after the full 91 chunk loop. 91 × 50 ms is 4.5 seconds, well past the 2 second IWDG timeout. Moving the kick inside the loop fixed it instantly. Anything that loops for longer than half the watchdog window has to pet the dog from inside.</div>
+
+      <h2 data-addr="0x0240">Real temperature readings, or: why <code>analogRead</code> lies</h2>
+      <p>The original firmware had a <code>temperature</code> field that was just a fake counter. Wiring up the STM32F401's internal die temperature sensor looked like a quick win. Arduino exposes the sensor as <code>analogRead(ATEMP)</code>. ST burns two factory calibration values into fixed flash locations, <code>TS_CAL1</code> at 30 °C and <code>TS_CAL2</code> at 110 °C, both at Vdda = 3.3 V. The conversion is one line:</p>
+      <pre><code>T = 30 + 80 * (raw - CAL1) / (CAL2 - CAL1)</code></pre>
+      <p>First reading: 64 °C in a 19 °C room. Off by 45 degrees. The formula was right. The raw ADC value was wrong.</p>
+      <p>The internal temperature sensor has high output impedance and needs at least 10 microseconds of sample time so the ADC's sample and hold capacitor can actually charge up. <code>analogRead</code> uses a short fixed sampling time tuned for low impedance GPIO pins, and exposes no way to change it. There's also a second gotcha. The <code>TSVREFE</code> bit (bit 23 of <code>ADC_CCR</code>) is what physically connects the sensor to the ADC, and Arduino doesn't guarantee it's set.</p>
+      <p>The fix was to drop down to the HAL. <code>HAL_ADC_ConfigChannel</code> with <code>ADC_SAMPLETIME_480CYCLES</code> gives about 23 microseconds at the 21 MHz ADC clock, well above the 10 microsecond minimum. Set <code>TSVREFE</code> explicitly. Run a single blocking conversion. Readings settled to 41 to 42 °C, which is exactly where you'd expect an STM32 die to sit at light load. The telemetry type also had to change from <code>uint8_t</code> to <code>int16_t</code> end to end, all the way from the firmware struct through codegen to the XTCE definition, because the original couldn't represent a negative value in a cold boot scenario.</p>
+
+      <h2 data-addr="0x0250">SLIP in YAMCS, in Java</h2>
+      <p>The earlier ground side architecture handled SLIP framing in a Python bridge script. TCP from the serial server came in, SLIP decoded UDP went out to YAMCS. It worked, but the bridge was a single point of failure, totally opaque to YAMCS, and didn't show up anywhere in the link statistics the operators were watching.</p>
+      <p>I moved SLIP encode and decode into YAMCS itself as two custom Java data link classes extending the stock <code>UdpTmFrameLink</code> and <code>UdpTcFrameLink</code>. The receive side accumulates incoming UDP datagrams in a buffer, since one CCSDS frame can be split across multiple datagrams (or several frames can be packed into one), scans for the <code>0xC0</code> SLIP <code>END</code> markers, handles the <code>0xDB</code> escape sequences from RFC 1055, and passes fully decoded 200 byte frames to <code>handleFrame()</code>. A <code>MAX_ACCUM_SZ</code> safety cap resets the buffer if the stream ever desyncs. The transmit side does the inverse on COP-1 assembled TC frames.</p>
+      <p>Two things made this messier than it had any right to be.</p>
+      <p>The first was the socket lifecycle. The parent class <code>doStart()</code> tries to bind its own socket, which conflicts with the one we want to open. So <code>doStart</code>, <code>doEnable</code>, and <code>doDisable</code> all had to be overridden. Not <code>doStop()</code> though, because the parent's implementation needs to call our overridden <code>doDisable()</code> polymorphically before it tears down the multiplexer. Took a while to find that one.</p>
+      <p>The second was the link statistics. <code>dataInCount</code> stayed stubbornly at zero in the YAMCS UI even though telemetry was clearly flowing through. The reason: we override <code>run()</code> entirely, so the base class never sees the bytes. In YAMCS 5.12.0 the <code>dataInCount</code> counter is backed by a protected <code>AtomicLong</code> that gets updated through a protected <code>dataIn(count, bytes)</code> method, and subclasses are expected to call it themselves. Earlier YAMCS versions used a <code>LongAdder</code> with a different signature, so the right answer wasn't obvious without reading the 5.12.0 <code>AbstractLink</code> source through <code>javap</code>. The fix was a single line after each successful frame:</p>
+      <pre><code>dataIn(1, FRAME_LEN);   // FRAME_LEN = 200</code></pre>
+
+      <h2 data-addr="0x0260">Mission database (XTCE)</h2>
+      <p>YAMCS uses XTCE to describe the binary layout of every TM and TC packet. Most of what I did here was additive. A new <code>BootCount</code> parameter. A new <code>ImagePkt</code> container on APID 131 and VCID 1 with all five image chunk parameters. The signed 16 bit temperature type from above.</p>
+      <p>While in there I also caught a latent endianness bug. <code>GPS_Seconds</code> and <code>GPS_Subseconds</code> were missing the <code>byteOrder</code> attribute, which means YAMCS had been defaulting them to big endian. The STM32 is little endian. So the values had been silently byte swapped since day one and nobody had noticed because the GPS field wasn't actively being read anywhere yet. Setting <code>byteOrder="leastSignificantByteFirst"</code> on every multi byte parameter cleared it up.</p>
+
+      <h2 data-addr="0x0270">Image reassembly on the ground</h2>
+      <p>A small Python client subscribes to the five image chunk parameters on the <code>tm_zump</code> stream over the YAMCS WebSocket API and accumulates chunks in a dict keyed by image_id. When the received chunk count matches the announced <code>total_chunks</code>, it concatenates everything in order, trims to <code>ImageTotalSize</code> (the last chunk is zero padded), writes the JPEG locally, and uploads it to the YAMCS <code>images</code> bucket so operators can see the image directly in the web UI.</p>
+      <p>One bug took an embarrassing amount of time to find. <code>YAMCS_HOST</code> was hardcoded to <code>192.168.1.100</code> from a previous lab subnet, so on a freshly cloned machine the script would just time out with <code>WinError 10060</code> and give no useful error. Defaulted it to <code>localhost</code> and moved on with my life.</p>
+
+      <figure>
+        <img src="images/experience/lzh/02-yamcs.png" alt="YAMCS web UI" onerror="imgFallback(this)"/>
+        <figcaption>fig 02 — YAMCS web UI with live TM parameters and a downlinked image rendered from the bucket.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0280">Hardware: Brainbox → Lantronix UDS2100</h2>
+      <p>The original serial to Ethernet device was a Brainbox ES-313, which is TCP only. That meant my Python bridge had to keep a long lived TCP connection open, and TCP connections have this great habit of dying quietly. The Brainbox would silently drop the link on an idle timeout. The Python side wouldn't notice because <code>recv()</code> with no timeout will just sit there forever waiting on a socket that to it still looks <code>ESTABLISHED</code>. No exception, no log, no telemetry, just silence.</p>
+      <p>The temporary fix was a 10 second socket timeout, a reconnect loop, and a buffer flush in <code>finally</code> so stale partial frame bytes from a dropped session wouldn't leak into the next one. That kept us moving but it was clearly a workaround.</p>
+      <p>The permanent fix was switching hardware. The Lantronix UDS2100 was the only serial to Ethernet box we evaluated that supports native UDP serial tunnelling, has two RS-422 ports, and accepts the 9 to 30 V input the CubeSat bus actually runs on. With the UDS2100 the bridge script just disappears. TM goes from the spacecraft over RS-422 to the UDS2100 to a UDP datagram into YAMCS on port 10017. TC takes the reverse path. SLIP framing stays where it belongs, in the Java data links.</p>
+      <p>Configuring it was its own adventure. The Lantronix discovery tool can't find the device until it already has an IP, so the first IP assignment has to happen over a serial setup menu. There's also a separate config dance for flashing the STM32 (TCP mode, 8E1 parity for the ROM bootloader, virtual COM port through the Lantronix CPR driver) versus normal operation (UDP, 8N1). I wrote the whole thing down in the project docs so the next person doesn't have to figure it out from scratch.</p>
+
+      <h2 data-addr="0x0290">Two small but representative fixes</h2>
+      <p><strong>The LED command did nothing.</strong> <code>LED_ON</code> and <code>LED_OFF</code> would update a software <code>led_state</code> variable and dutifully return <code>CMD_OK</code>, and telemetry would faithfully report the new state. But <code>pinMode</code> was never called and <code>digitalWrite</code> was commented out, so the physical pin was never actually driven. The bug was invisible from the YAMCS side because the round trip looked perfect. LED 2 was also being ignored entirely thanks to a pin equality check that only matched <code>LED_PIN1</code>. The whole fix was four lines.</p>
+      <p><strong>The reboot command didn't reboot.</strong> The <code>RESET</code> command was registered, returned <code>CMD_OK</code>, and changed exactly nothing, because <code>NVIC_SystemReset()</code> was commented out. Even worse, after a real reboot YAMCS COP-1 AD mode would get stuck. The spacecraft's FARM resets <code>V(R)</code> to 0 on boot, but YAMCS holds onto the old <code>V(S)</code>, so the next telecommand goes out and never gets acknowledged. The manual recovery is clicking "Initiate AD" in the web UI, which is fine once but not a great story for an automated reset. I wrote a short <code>yamcs-client</code> Python procedure that disables COP-1 at the link level (BD mode), issues the reboot, polls <code>BootCount</code> every 500 ms until it ticks up, then re-initialises COP-1 with <code>WITHOUT_CLCW_CHECK</code>. The whole reset is now unattended.</p>
+
+      <h2 data-addr="0x02A0">Validation</h2>
+      <p>Before any of this touched real flight hardware I built a PyQt6 payload simulator that produces the same packet stream the spacecraft would, plus a small Python TCP to UDP bridge for routing between debug tools and the YAMCS link. Catching SLIP edge cases and XTCE endianness bugs against a simulator is orders of magnitude cheaper than catching them with a radio in the loop. Alongside the code I also wrote architecture documentation. A <code>brain_map.txt</code> that walks through every FreeRTOS task, the packet layering (SPP inside TM transfer frames), and the full data flows. A short Java primer for the next embedded C person who has to inherit the YAMCS extensions and is going to have questions.</p>
+
+      <div class="callout">All flight code is held by LZH. What's in this writeup is architecture and war stories, not source. Happy to walk through specifics in conversation.</div>
+
+      <h2 data-addr="0x02B0">Bonus: lab surveillance rig</h2>
+      <p>Aside from the main project, I built a 4 camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland. 704 × 576 PAL streams composited into a 1440 × 1080 quad, with autostart and a watchdog so it self recovers from camera drop outs. Not flight related, but it lives in the same room.</p>
+
+      <figure>
+        <img src="images/experience/lzh/03-cameras.jpg" alt="4-camera RTSP display running on a lab monitor" onerror="imgFallback(this)"/>
+        <figcaption>fig 03 — the four feeds on the lab monitor. The fourth camera is fully functional, it just happens to be aimed at an uneventful corner of the bench in this photo. It earns its quadrant in spirit.</figcaption>
+      </figure>
+    `,
+  },
+
+  'exp/sharang': {
+    type:'exp',
+    addr:'0x0600',
+    struct:'role_t',
+    badge:'EXPERIENCE',
+    title:'Sharang Shakti — Embedded Signal Processing Engineer',
+    sub:'Anti-drone radar digitalization',
+    meta:[
+      {k:'duration', v:'May – Jun 2024'},
+      {k:'location', v:'Gurugram, IN'},
+    ],
+    stack:['AD9910 DDS','AD8336 VGA','RF','Radar','Signal Processing','SPI','Python'],
+    body:`
+      <h2 data-addr="0x0610">The brief</h2>
+      <p>Short summer stint at Sharang Shakti working on the digitalization side of an analog anti-drone radar. The system as it stood was analog end to end. My job was to bring up the digital waveform generation path so the radar could be reconfigured in software instead of in hardware. The main parts I was responsible for were the AD9910 DDS for waveform generation and the AD8336 VGA for amplitude control on the output side.</p>
+      <p>I came in with a textbook understanding of DDS and a lot of curiosity about RF. I left having spent enough hours with an oscilloscope and a spectrum analyser to know that a datasheet plot and the actual bench output are two very different things.</p>
+
+      <h2 data-addr="0x0620">Bringing up the AD9910 eval board</h2>
+      <p>Most of the work happened on the AD9910 evaluation board kit. The first day was just getting it powered cleanly. The board needs 1.8 V and 3.3 V rails on TB1 and TB2, and the way I tried to do it first was with a benchtop DC supply through a potentiometer to dial in the voltages. That worked badly. The pot was inaccurate enough that the rails would drift and the board would do strange things, and I burned a few hours blaming the eval board before realising the supply was the problem. Swapped to a regulated DC supply with an Arduino Uno providing the digital control rails and the readings stayed put.</p>
+      <p>That was the first lesson of the internship. When something analog is misbehaving, suspect the supply before you suspect anything clever.</p>
+
+      <h2 data-addr="0x0630">The clock chain, or: why my PLL would not lock</h2>
+      <p>The AD9910 has three options for the system clock. Two external clock inputs and one onboard 25 MHz crystal. I wanted the crystal path because the bench was already cluttered with cables. The eval board ships with capacitors C51 and C52 populated and resistors R4 and R11 open, which routes the system clock somewhere I did not want it. The fix per the eval kit schematic was to remove C51 and C52 and short R4 and R11. Straightforward soldering work, but it was the first time I had touched an eval board with the expectation that I would actually modify it, rather than just plugging it in.</p>
+      <p>The reference clock can be either 25 MHz or 12.5 MHz depending on the divide-by-2 checkbox in the eval software. The internal PLL multiplies that up to the system clock that actually drives the DDS. The catch is that the PLL needs a loop filter, and the AD9910 eval board does not populate the loop filter components by default. So if you tick "use PLL" without soldering down the loop filter values, the PLL never locks and the output is unstable.</p>
+      <p>Analog Devices publishes formulas for the loop filter component values in the AD9910 datasheet, and there is an Excel calculator on the analog.com site that does the arithmetic for you. I plugged in the target system clock, got the component values, soldered them down, and the PLL locked. Not glamorous work, but the kind of thing you only learn by doing it once on something that does not lock.</p>
+
+      <div class="callout">A small mystery I never fully resolved: with the system clock configured above 25 MHz, the board still produced waveforms, even though my reference clock (the crystal) was 25 MHz and the system clock technically should not have been able to exceed it cleanly. The highest setting I used in practice was 1000 MHz and waveforms still came out, although whether they were as clean as the eval software claimed is another question. Probably a combination of the PLL and some specsmanship in the eval kit GUI. Worth a deeper look if I ever come back to it.</div>
+
+      <h2 data-addr="0x0640">Generating waveforms three different ways</h2>
+      <p>The AD9910 supports several modes for getting an arbitrary waveform out. I ended up using all three:</p>
+      <ul>
+        <li><strong>Profile window.</strong> Eight built-in profiles, each with its own frequency, phase offset, and amplitude. By default a profile outputs cosine. Ticking "Enable Sine Out" gets you sine. There is also an Internal Profile Control dropdown that sequences through the profiles, which is useful for stepping through frequencies without reconfiguring over SPI every time.</li>
+        <li><strong>RAM mode.</strong> 1024 RAM addresses of 32 bits each, divided across 8 RAM segments. Each segment can hold frequency, phase, or amplitude data. The way you actually use it is to write a decimal, hex, or binary file with your sample values, load it through the RAM I/O window, and the chip plays it back as a waveform. The frequency relationship is the standard DDS formula <code>F_OUT = (FTW / 2^32) × F_SYSCLK</code>, with the FTW packed into the upper bits of each 32-bit word.</li>
+        <li><strong>OSK and Digital Ramp Generator.</strong> The amplitude ramp mode. You set the output frequency and phase offset to zero in the profile window, set the ramp generator mode to amplitude, then sweep ASF from 0 to <code>0x3FFF</code> (or 1 in the normalised UI) with configured rising and falling step sizes. This is the mode I used for triangular and square waves.</li>
+      </ul>
+
+      <h2 data-addr="0x0650">Why my RAM-mode waveforms were always sinusoidal</h2>
+      <p>I wrote a small Python script that generated 256-point waveform tables and packed them into the AD9910's expected 32-bit format. The triangular waveform was a ramp up of 14-bit values from 0 to <code>0x3FFF</code> followed by a ramp down, each value shifted left by 18 bits to land in the upper portion of the word. The square wave was a similar idea, just toggling between <code>0x3FFF</code> and <code>0x0000</code>.</p>
+      <pre><code># Triangular waveform, packed for AD9910 RAM
+for i in range(half_points):
+    value = int((i / (half_points - 1)) * 0x3FFF)
+    word  = value &lt;&lt; 18
+    out.write(f"{word:08X}\\n")</code></pre>
+      <p>I loaded the resulting hex file into the RAM I/O window, set the playback mode, and the output came out sinusoidal. Loaded a square wave file, also sinusoidal. Tried binary instead of hex, still sinusoidal. Tried decimal, same.</p>
+      <p>It took some reading to realise that the AD9910's RAM mode has several playback modes (page 33 of the datasheet) and that some of them do interpolation between RAM entries, which effectively low-passes whatever you load into something close to a sine. The fix for getting actual triangular and square output was to abandon RAM mode for these waveforms entirely and use the Digital Ramp Generator instead, where the chip is explicitly building a ramp from your step parameters rather than interpreting RAM samples.</p>
+
+      <h2 data-addr="0x0660">Address step rate, jitter, and where the limits live</h2>
+      <p>With the Digital Ramp Generator producing triangle and square waves, the next problem was that the waveforms were not smooth. They looked correct in shape but had visible step granularity, and at certain settings the falling edge of the square wave would jitter timing-wise from cycle to cycle on the scope.</p>
+      <p>Two things made this better.</p>
+      <p>The first was the system clock. Higher system clock means more DAC update events per second, which means finer resolution on both amplitude steps and ramp timing. I cranked the SYSCLK higher and the steps shrank. There is a hard ceiling here that the eval kit imposes, and somewhere above that the PLL lock quality starts to degrade, so it is not just "make it bigger."</p>
+      <p>The second was the address step rate parameter in the DRG itself. This sets how fast the generator walks through its amplitude steps. There is an upper limit and a lower limit, and outside that range the waveform jitters. I found the limits empirically by sweeping the step rate at a few different system clock frequencies and watching where the output degraded on the scope. Once I had a usable range at our target SYSCLK, the triangle and square were clean enough for the radar's needs.</p>
+
+      <h2 data-addr="0x0670">AD8336 VGA on the output side</h2>
+      <p>The AD8336 sits after the AD9910 and handles the amplitude side of the conditioning. The DDS gives you a swept frequency at a fixed amplitude (or, in OSK mode, a swept amplitude at a fixed frequency). The VGA gives you real-time amplitude control on top of that, which the radar uses for dynamic range adjustment depending on target distance. I worked on integrating the two so the gain control signal coming from the host could ride alongside the frequency tuning words the DDS was receiving, and the combined output stayed clean.</p>
+      <p>Nothing here was as dramatic as the DDS bring-up. The interesting bench work was measuring the gain transfer characteristic and confirming it stayed monotonic across the range we cared about.</p>
+
+      <h2 data-addr="0x0680">What I actually learned</h2>
+      <p>Two months is not long enough to be useful in RF in any deep sense. But there were specific things I came out of this with that I would not have got from a class.</p>
+      <p>How to read a mixed-signal datasheet. The AD9910 datasheet is 64 pages and most of it only makes sense once you have done the corresponding thing on the bench. I came in skimming it. I left able to find the right register table for whatever I needed in under a minute.</p>
+      <p>How analog things actually behave on the bench. Phase noise plots in a datasheet look like nice clean lines. Phase noise on a spectrum analyser is a smear, and reading it accurately depends on the resolution bandwidth setting, which the datasheet quietly assumes you have got right. Same story for jitter, same for harmonics.</p>
+      <p>And the bench-supply lesson from the first week, which I have not forgotten since. Power is the first thing you check.</p>
+    `,
+  },
+
+  'proj/self-balancing-robot': {
+    type:'proj',
+    addr:'0x1000',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'Self-Balancing Robot',
+    sub:'Two-wheeled inverted pendulum',
+    meta:[
+      {k:'duration', v:'Jan – Apr 2025'},
+      {k:'course',   v:'ELEC 391'},
+      {k:'team',     v:'Team of 3'},
+    ],
+    stack:['Arduino Nano 33','ESP32','BLE','BMI270 IMU','DRV8833','HC-SR04','C'],
+    //hero:'images/projects/self-balancing-robot/01-robot.png',
+    body:`
+      <h2 data-addr="0x1010">The brief</h2>
+      <p>ELEC 391 is the UBC EE design studio course. The deliverable was a two-wheeled self-balancing robot that could stay upright on its own and be driven around over BLE. Three of us on the team. We had a course kit with the motors, mounts, wheels, and frame, a $65 budget for anything extra, and about three months.</p>
+      <p>The core loop is the classic inverted-pendulum problem. Lean forward, apply forward torque to catch yourself, repeat fast enough that the thing doesn't fall over. The interesting work turned out to be everything that got in the way of closing that loop cleanly on real hardware.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/01-robot.png" alt="Final robot" onerror="imgFallback(this)"/>
+        <figcaption>fig 01 — the finished robot. Three-tier chassis on four threaded rods. Battery pack on the bottom, main Arduino breadboard in the middle, ultrasonic sensors and LEDs on the top platform.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1020">Hardware</h2>
+      <p>The robot runs on an Arduino Nano 33 BLE Sense Rev 2. It has a BMI270 IMU on board, 3-axis accelerometer and gyroscope, no extra wiring needed. BLE radio is built in. Two DRV8833 H-bridge motor drivers run the DC motors, one per side. Two HC-SR04 ultrasonic sensors sit on the top platform, one facing front and one back. Power is eight 1.2V NiMH cells in series at 9.6V, feeding the Arduino and both motor drivers through a power jack.</p>
+      <p>The remote controller is a separate ESP32 DevKit board on a breadboard with a 2-axis analog joystick, a 16x2 LCD, and a piezo speaker. It runs off USB. Total spend on extra components was $63.59 before tax.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/02-controller.png" alt="ESP32 joystick controller" onerror="imgFallback(this)"/>
+        <figcaption>fig 02 — the ESP32 controller. Joystick bottom right, LCD top right, piezo speaker and Bluetooth antenna on the breadboard, trimmer potentiometer for LCD contrast top left.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/03-block-diagram.png" alt="High-level functional diagram" onerror="imgFallback(this)"/>
+        <figcaption>fig 03 — high-level block diagram. The ESP32 sends joystick commands over BLE to the Arduino, which drives the motors and reads the ultrasonic sensors. Both sides have a speaker.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1030">Wiring</h2>
+      <p>The Arduino schematic has four motor driver control pins on D2 through D5, ultrasonic trigger and echo on D7 through D10, speaker and LED indicators on A5 through A7. The battery pack feeds VIN directly. Motor VMM runs off the same 9.6V rail with decoupling caps across the supply.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/04-arduino-schematic.png" alt="Arduino robot schematic" onerror="imgFallback(this)"/>
+        <figcaption>fig 04 — Arduino robot schematic. Two DRV8833 motor drivers per side, front and back HC-SR04 sensors at 3.3V, LED indicators on analog pins, 9.6V battery pack into VIN.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/05-esp32-schematic.png" alt="ESP32 controller schematic" onerror="imgFallback(this)"/>
+        <figcaption>fig 05 — ESP32 controller schematic. Joystick VRX and VRY to pins 34 and 35, pushbutton on 32, 16x2 LCD in 4-bit mode, speaker on pin 14, external U.FL antenna.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1040">The control loop</h2>
+      <p>The IMU gives you raw accelerometer and gyroscope readings. Neither is usable on its own. The accelerometer angle is noisy and picks up every motor vibration. The gyroscope angle drifts. A complementary filter blends the two:</p>
+      <pre><code>filteredAngle = Kw * (filteredAngle + gyroChange) + (1 - Kw) * accelAngle;</code></pre>
+      <p>With Kw at 0.99, the filtered angle is mostly gyro-integrated so it's fast and smooth, but gets pulled back toward the accelerometer reading over time to correct drift. The gyroscope also gets a bias calibration on startup. 1000 samples averaged, then subtracted from every subsequent reading. Without that step, the robot slowly walks in one direction even when you're not touching it.</p>
+      <p>The PID runs on the angle error. Proportional drives the motors in proportion to the lean. Derivative damps the response so the robot doesn't overcorrect and start oscillating. Integral accumulates error over time to handle consistent offsets like a slightly off-center mass. The derivative term goes through a low-pass filter, an 80/20 blend with the previous value, to keep it from amplifying high-frequency sensor noise. There is also a kill zone at 25 degrees of tilt in either direction. Past that point the robot physically can't recover, so the code cuts motor power rather than running the motors into the ground at full speed.</p>
+
+      <h2 data-addr="0x1050">PID tuning: Simulink first, bench after</h2>
+      <p>We started with a Simulink mechanical model of the chassis. Three platforms, four pillars, battery mass, wheel geometry as rigid bodies. The idea was to get an initial set of gains to start from without risking hardware damage in the early sessions.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/08-simulink-chassis.png" alt="Simulink chassis model" onerror="imgFallback(this)"/>
+        <figcaption>fig 06 — Simulink chassis model. Three platform layers connected by pillars with battery and wheel geometry modelled as rigid bodies. Used to get an initial PID baseline before touching the hardware.</figcaption>
+      </figure>
+
+      <p>The simulation gave us Kp = 4.0, Ki = 18.0, Kd = 0.3 as a starting point. These were fine as a baseline but the simulation doesn't capture real friction, motor dead zones, or the actual noise floor of the IMU, so they needed significant work once we got to the physical robot.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/09-pid-values.png" alt="Simulink PID block parameters" onerror="imgFallback(this)"/>
+        <figcaption>fig 07 — Simulink PID block with the initial simulation values. P = 4, I = 18, D = 0.3.</figcaption>
+      </figure>
+
+      <p>On the bench we used Ziegler-Nichols. Start with all gains at zero, raise Kp until the robot oscillates but nearly holds balance, then bring in Kd to damp it, then Ki to eliminate the positional drift. Final values: Kp = 8.0, Ki = 95.0, Kd = 0.35. The integral term ended up needing to be much higher than simulation suggested. Real friction introduces steady-state error that the model underestimated pretty significantly.</p>
+
+      <h2 data-addr="0x1060">Motor drivers: fast decay versus slow decay</h2>
+      <p>The DRV8833 has two PWM modes. In fast decay the unused pins go to ground, so the motor freewheels between pulses. In slow decay the unused pins are driven high, so the driver actively brakes between pulses.</p>
+      <p>We started with fast decay. It balanced, but the robot had a drift problem. Even when commanded to stay still, it would slowly walk in one direction. Switching to slow decay fixed this almost entirely. Drift dropped to under 1 cm/s and on-the-spot oscillation came down to within 2 cm. The reason is that slow decay provides much more aggressive braking on direction reversals, which gives the PID cleaner and more linear motor response to work with.</p>
+      <p>The second problem was the PWM dead zone. With one DRV8833 per side the motors needed 15 to 20% PWM before they'd start moving at all. Running two DRV8833s in parallel per motor pushed that threshold down to 10%, which made the low-speed control needed for subtle balance adjustments actually usable.</p>
+
+      <div class="callout">The decoupling capacitors on the motor driver power rails turned out to matter more than expected. Motor switching was injecting voltage spikes back into the Arduino supply rail and causing occasional resets mid-balance. A 220µF and two 100nF caps across the motor VMM supply cleaned it up.</div>
+
+      <h2 data-addr="0x1070">The BLE and ultrasonic conflict</h2>
+      <p>The HC-SR04 works by sending a 10µs trigger pulse and then timing how long the echo pin stays high. The standard Arduino way to do this is <code>pulseIn()</code>, which blocks until the echo returns. With the BLE stack running, blocking for even a few milliseconds is enough to drop packets and destabilise the connection. Every time the sensor fired, BLE would hiccup.</p>
+      <p>The fix was rewriting the sonar logic as a non-blocking state machine. Instead of waiting on the echo, the loop checks the echo pin state on every iteration and records timestamps. The two sensors are staggered by 50ms so their pulses don't interfere with each other. A 25ms timeout resets the state machine if no echo comes back, and defaults the distance to 400cm rather than triggering a false obstacle stop. The beeper is non-blocking for the same reason, using <code>millis()</code> timing and calling <code>tone()</code> with a 50ms duration that returns immediately. Beep interval maps from 100ms at 5cm to 1000ms at 100cm.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/07-ultrasonic-range.png" alt="Ultrasonic sensor detection cone" onerror="imgFallback(this)"/>
+        <figcaption>fig 08 — HC-SR04 detection cone at 50cm range. The sensor has a 15 degree vertical angle, which means an obstacle needs to be at least 14.6cm above the ground to be detected at 50cm distance. The robot itself is about 28cm tall.</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1080">BLE architecture and joystick mapping</h2>
+      <p>The Arduino is the BLE server. One service with three characteristics. A control characteristic where the ESP32 writes 2-byte packets encoding button state and direction code every 50ms. A telemetry characteristic where the Arduino notifies the ESP32 with the current tilt angle as a 4-byte float every 300ms. A sensor characteristic with two distance floats packed into 8 bytes. The joystick maps to nine direction codes with a deadzone of 400 ADC counts around the calibrated centre to filter resting noise.</p>
+
+      <figure>
+        <img src="images/projects/self-balancing-robot/06-joystick-map.png" alt="Joystick direction mapping" onerror="imgFallback(this)"/>
+        <figcaption>fig 09 — joystick direction mapping. Nine zones: CENTER (0), FORWARD (1), four diagonal gradual-turn codes (2, 4, 6, 8), and two in-place pivot codes (3, 7). The deadzone around centre stops resting noise from being interpreted as movement commands.</figcaption>
+      </figure>
+
+      <p>Connection range came out well past spec. The requirement was 5m. In practice we still had a stable link past 25m, which made the demo a lot easier to run. One design choice that paid off: the Arduino keeps balancing autonomously if the BLE connection drops, rather than falling over waiting for a reconnect. The ESP32 restarts scanning automatically and updates the LCD with link status throughout.</p>
+
+      <h2 data-addr="0x1090">How it went</h2>
+      <p>The robot balanced within 10 degrees of disturbance, which fell short of the 15 degree spec. The motors simply didn't have enough torque to recover from larger tilts. Stationary oscillation stayed within 2cm and drift under 1cm/s. Forward, backward, and turning all worked, though there was some oscillation when a command stopped mid-motion. The robot made it up a 10 degree ramp but not the 15 degree target. Same constraint.</p>
+      <p>Ultrasonic readings were accurate to within 0.5cm. The 14.6cm ground-clearance requirement at 50cm distance meant the obstacle avoidance missed small floor-level objects, but also avoided false stops from floor texture. That was the right tradeoff for the demo environment.</p>
+
+      <h2 data-addr="0x10A0">What I'd do differently</h2>
+      <p>The motor torque was the binding constraint on everything. Heavier motors or a better gear ratio would give more headroom. The three-tier chassis also puts the centre of mass high, which makes the control problem harder than it needs to be. A lower, denser layout would give the controller more margin.</p>
+      <p>The derivative term is computed from the angle error rather than the angular rate off the gyroscope directly. Taking it from the gyro would give cleaner response and eliminate the kick that happens when the setpoint changes. Worth trying on the next build.</p>
+    `,
+  },
+
+  'proj/dnn-accelerator': {
+    type:'proj',
+    addr:'0x1400',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'Deep Neural Network Accelerator',
+    sub:'MNIST classification on DE1-SoC',
+    meta:[
+      {k:'duration', v:'Oct – Nov 2024'},
+      {k:'platform', v:'DE1-SoC FPGA'},
+    ],
+    stack:['Verilog','Nios II','DE1-SoC','FPGA','SDRAM','Q16.16','Quartus'],
+    body:`
+      <h2 data-addr="0x1410">What It Is</h2>
+      <p>A small DNN accelerator for MNIST handwritten-digit classification, sitting alongside a Nios II soft-core processor on a DE1-SoC FPGA board. The Nios II handles control flow and weight loading; custom Avalon master/servant cores in Verilog do the math. The network is a multi-layer perceptron — 784-pixel input, two 1000-neuron hidden layers, 10-neuron output — and every layer computes <em>a' = ReLU(W·a + b)</em>.</p>
+
+      <pre><code>    +--------------+   instr    +--------------+
+    |   on-chip    | ---------&gt; |              |
+    |  ROM (32KB)  | &lt;--------- |   Nios II    |
+    +--------------+            |   soft CPU   |
+                                +------+-------+
+                                       | data master  (Avalon-MM)
+        +--------------+----------+----+----+-----------+--------------+
+        v              v          v         v           v              v
+   +---------+   +----------+   +----------+   +---------+   +-----------+
+   |  JTAG   |   | PIO hex  |   | wordcopy |   | dotopt  |   |    VGA    |
+   |  UART   |   | display  |   |   DMA    |   |   MAC   |   |  adapter  |
+   +---------+   +----------+   +-----+----+   +----+----+   +-----------+
+                                      | master      | m0  m1 |
+                                      v             v        v
+                              +---------------+   +---------------------+
+                              | SDRAM  (64MB) |   | bank0 / bank1  SRAM |
+                              +---------------+   +---------------------+</code></pre>
+      <p class="figcap">// fig 01 — SoC dataflow. Three masters on each memory: Nios II + wordcopy + a dotopt port. Reproduced from the UBC CPEN 311 lab spec.</p>
+
+      <h2 data-addr="0x1420">Numerics</h2>
+      <p><strong>Q16.16 signed fixed-point</strong> everywhere — 16 integer bits, 16 fractional bits in a 32-bit two's-complement word. After every multiply the 64-bit result is right-shifted by 16 (truncation, not rounding — MNIST doesn't care) to put the binary point back where it belongs. Floating-point on a soft-core would have been slow and area-hungry; this lets a single DSP block do a Q16.16 multiply in one cycle.</p>
+
+      <h2 data-addr="0x1430">Memory map</h2>
+      <pre><code>+----------------------------+--------------+--------------+
+| component                  |   base       |   end        |
++----------------------------+--------------+--------------+
+| Nios II debug mem servant  |  0x00000800  |  0x00000fff  |
+| JTAG UART                  |  0x00001000  |  0x00001007  |
+| PIO  (7-segment hex)       |  0x00001010  |  0x0000101f  |
+| wordcopy accelerator       |  0x00001040  |  0x0000107f  |
+| DOT / DOTOPT accelerator   |  0x00001100  |  0x0000113f  |
+| VGA adapter                |  0x00004000  |  0x0000401f  |
+| SRAM  bank0 / bank1        |  0x00006000  |  0x00007fff  |
+| on-chip instruction memory |  0x00008000  |  0x0000ffff  |
+| SDRAM controller           |  0x08000000  |  0x0bffffff  |
++----------------------------+--------------+--------------+</code></pre>
+      <p class="figcap">// fig 02 — Avalon-MM address space. Lifted from the lab manual; my Platform Designer project matches these exactly.</p>
+
+      <h2 data-addr="0x1440">Avalon Waitrequest Is The Whole Game</h2>
+      <p>The accelerator cores expose a memory-mapped servant interface to the Nios II (start/poll registers, weight + input addresses, vector length) and a master interface to SDRAM. The SDRAM controller can stall on refresh or row-open, so the FSM has to honour <code>waitrequest</code> on reads, latch <code>readdata</code> only when <code>readdatavalid</code> is high, and never drop in-flight requests on the floor.</p>
+      <pre><code>clk      _|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;
+read     ___|&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;|___________
+address  ---&lt;     A     &gt;-----------
+waitreq  ___|&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;|_______________   &lt;-- controller busy; hold request
+rdvalid  _______________|&#x203E;&#x203E;|_________   &lt;-- data lands one cycle later
+rddata   --------------&lt; D &gt;---------</code></pre>
+      <p class="figcap">// fig 03 — variable-latency Avalon read. Hold <code>address</code> + <code>read</code> while <code>waitrequest</code> is high; sample <code>readdata</code> only on <code>readdatavalid</code>.</p>
+
+      <h2 data-addr="0x1450">Going Faster: Dotopt</h2>
+      <p>The first dot-product core (<code>dot.sv</code>) had a single Avalon master that walked through SDRAM serially — fetch input, fetch weight, multiply-accumulate, repeat. Bandwidth-bound. The optimised version (<code>dotopt.sv</code>) splits the input activations into on-chip SRAM (bank0/bank1) using the wordcopy DMA, then runs <strong>two master ports</strong>: one to SDRAM for weights, one to SRAM for inputs. Concurrent reads. The SDRAM weight fetch is always the long pole, which lets the FSM stay simple — just gate the multiply on the slower of the two.</p>
+
+      <h2 data-addr="0x1460">Timing</h2>
+      <p>The PLL emits two 50 MHz clocks: a 0° phase to the SoC fabric and a −3 ns phase to the SDRAM pins (compensating for trace + IO delay between the FPGA and the off-chip chip). With <code>settings/timing.sdc</code> in place, Quartus closes at 50 MHz across all paths — including the dotopt MAC and the SDRAM controller. Pushing higher hits setup violations on the SDRAM controller path, which would need a more aggressive pipeline.</p>
+
+      <h2 data-addr="0x1470">Lessons</h2>
+      <p>The fun part of FPGA DNN work isn't the math — it's the memory bandwidth, and on a soft-core SoC, the interconnect protocol. The MAC unit fit on a napkin. Getting <code>waitrequest</code>, <code>readdatavalid</code>, and the two-master arbitration on the SRAM banks right is what actually took the iterations.</p>
+    `,
+  },
+
+  'proj/metal-detector-robot': {
+    type:'proj', addr:'0x1800', struct:'project_t', badge:'PROJECT',
+    title:'Metal Detector Robot',
+    sub:'Battery-powered, remote-controlled',
+    meta:[{k:'duration',v:'Mar – Apr 2024'},{k:'course',v:'ELEC 291'},{k:'team',v:'Team of 7'}],
+    stack:['STM32L051','EFM8LB1','JDY-40','H-Bridge','C'],
+    hero:'images/projects/metal-detector-robot/01-hero.png',
+    body:`
+      <h2 data-addr="0x1810">What It Is</h2>
+      <p>
+        A two-part system: a handheld remote and a wheeled robot, talking to each other
+        over a 2.4 GHz JDY-40 radio link. The remote runs an EFM8LB1 microcontroller and
+        reads a thumb joystick. The robot runs an STM32L051, drives two DC motors through
+        an H-bridge, and carries a Colpitts LC oscillator that acts as the metal detector.
+        When the robot rolls over something metallic, the oscillator frequency shifts, the
+        STM32 catches it, transmits the reading back to the remote, and the EFM8 lights up
+        the LCD and changes the buzzer tone accordingly.
+      </p>
+      <p>
+        The whole thing is battery-powered. 9V for the logic on both ends, 6V (four AAs)
+        for the motors. LM7805 drops the 9V to 5V, MCP1700 drops that to 3.3V for the
+        STM32 and JDY-40. Two separate power domains on the robot side, intentionally
+        isolated so motor noise does not get into the MCU rails.
+      </p>
+
+      <h2 data-addr="0x1820">Hardware</h2>
+      <p>
+        The remote is straightforward: EFM8 reads Vrx and Vry from the joystick as 14-bit
+        ADC values, maps them into a 0-100 range, classifies the joystick position into one
+        of eight octant-based direction codes (A through H, plus S for stop), and fires that
+        string over UART to the JDY-40 every loop iteration.
+      </p>
+
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig01-remote-block.png"
+          alt="Remote hardware block diagram showing EFM8, JDY40, joystick, buzzer, and LCD"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 01 — remote hardware block diagram. joystick analog voltages feed the EFM8 ADC; the JDY-40 handles the radio link in both directions</figcaption>
+      </figure>
+
+      <p>
+        The robot side is where things get interesting. The STM32 cannot drive motors
+        directly, so there is an optocoupler stage (LTV-846) between the MCU and the
+        H-bridges. The optocouplers take the 3.3V PWM signals from the STM32 and pass them
+        as isolated signals to the gate networks of the MOSFET H-bridges, which run off the
+        separate 6V battery. Two P-channel and two N-channel MOSFETs per motor, giving
+        full forward and reverse control. The isolation means motor switching transients
+        cannot couple back into the MCU supply and corrupt readings.
+      </p>
+
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig02-robot-block.png"
+          alt="Robot hardware block diagram showing STM32, optocouplers, H-bridges, JDY40, and metal detector"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 02 — robot hardware block diagram. optocouplers electrically isolate the STM32 from the motor drive stage</figcaption>
+      </figure>
+
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig03-remote-schematic.png"
+          alt="Remote circuit schematic: EFM8LB1, LM7805, MCP1700, JDY-40, LCD, joystick"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 03 — remote schematic. 9V battery regulated down through LM7805 and MCP1700 to supply 5V and 3.3V rails</figcaption>
+      </figure>
+
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig04-robot-schematic.png"
+          alt="Robot circuit schematic: STM32L051, LTV846 optocouplers, MOSFET H-bridges, Colpitts metal detector, JDY-40"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 04 — robot schematic. two separate battery inputs: 9V for logic (left), 6V for motor drive (bottom-left)</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1830">The Radio Noise Problem</h2>
+      <p>
+        The first version of the comms protocol encoded the joystick values as integers cast
+        to strings, then fired those over the JDY-40. The error rate was high enough to make
+        the robot basically undriveable. Random corrupted frames would land and get
+        interpreted as valid movement commands, so the robot would randomly lurch in
+        whatever direction the garbage bytes happened to decode to.
+      </p>
+      <p>
+        The fix was to constrain what the receiver would accept. Each of the eight joystick
+        octants maps to a specific direction character, and each direction character has an
+        expected range for the accompanying X and Y values. Any received frame that does not
+        satisfy those constraints for its reported direction gets dropped entirely. The robot
+        holds the last valid command instead of executing noise. After that, movement became
+        smooth and predictable. It is a simple filter but it eliminated the problem
+        completely in testing.
+      </p>
+      <p>
+        There was a second radio issue: if the STM32 was reset while the JDY-40 on the
+        remote was in normal operating mode, the two modules would not re-synchronize.
+        Pulling the SET pin low on startup to force AT mode, reconfiguring the DVID, then
+        releasing it fixed the startup handshake.
+      </p>
+
+      <h2 data-addr="0x1840">Finding Metal</h2>
+      <p>
+        The detector is a Colpitts LC oscillator built around the SN74HC04N hex inverter,
+        with a 1 mH inductor as the sensing element. When the inductor gets close to a
+        metallic object, eddy currents in the metal load the coil and shift the oscillation
+        frequency. The STM32 measures that frequency using the SysTick counter in free-run
+        mode, timing 100 consecutive periods of the square wave on PA8 and averaging the
+        result over 450 samples to reduce noise.
+      </p>
+      <pre><code>// measure 100 periods via SysTick free-run
+SysTick->LOAD = 0xffffff;
+SysTick->VAL  = 0xffffff;
+SysTick->CTRL = CLKSOURCE | ENABLE;
+for (i = 0; i &lt; n; i++) {
+    while (PIN_PERIOD != 0) { if (COUNTFLAG) return 0; }
+    while (PIN_PERIOD == 0) { if (COUNTFLAG) return 0; }
+}
+return 0xffffff - SysTick->VAL;</code></pre>
+      <p>
+        The original capacitor values in the circuit spec produced a frequency around
+        55 kHz. At that range the frequency bands for different metal sizes overlapped badly
+        and were hypersensitive to environmental changes. Swapping capacitors to bring the
+        operating frequency down to roughly 24 kHz gave well-separated bands with enough
+        tolerance to distinguish five strength levels reliably. The neutral reference is
+        24,069 Hz and deviations are binned into six categories from no metal through five
+        increasing strengths, each mapped to a character code the STM32 sends back to the
+        remote.
+      </p>
+      <div class="callout">
+        Neutral: &lt;20 Hz deviation &mdash; Small: 20–50 Hz &mdash; Medium: 50–90 Hz &mdash;
+        Strong: 90–130 Hz &mdash; XStrong: 130–190 Hz &mdash; Max: &gt;190 Hz
+      </div>
+
+      <h2 data-addr="0x1850">Moving The Thing</h2>
+      <p>
+        Four PWM channels on the STM32, driven out of a 1 kHz TIM2 interrupt. Two channels
+        per motor: one for forward, one for reverse. The interrupt increments a counter and
+        compares it against four variables (pwm1 through pwm4). When the counter exceeds the
+        value, the corresponding pin goes low. Counter resets at 100, so the pwm variables
+        directly represent duty cycle as a percentage.
+      </p>
+      <p>
+        Joystick-to-PWM math treats the X and Y axes as two independent inputs. For forward
+        motion, the base speed is proportional to how far forward Y is pushed. Lateral X
+        input subtracts power from one wheel at a rate of 0.5 times the X deviation,
+        creating a curve rather than a pivot. Pure pivoting happens when Y is near center and
+        X is deflected: one wheel gets full X power and the other gets zero. Getting these
+        curves right took several test iterations with PWM values hard-coded and tape markers
+        on the wheels to measure synchronization.
+      </p>
+      <p>
+        Below PWM 20, neither motor moved at all. Between 20 and 35 there was barely
+        perceptible motion. Usable driving range was roughly 40 to 100, and the code scales
+        joystick input to that range to avoid the dead zone.
+      </p>
+
+      <h2 data-addr="0x1860">Sharing The Radio Link</h2>
+      <p>
+        The JDY-40 is half-duplex. Both the movement commands and the metal strength
+        readings need to flow over the same link, in opposite directions, without stepping on
+        each other. The solution is a counter-based timeslot scheme. The remote sends
+        movement commands for 10 iterations, then on count 10 it sends a special S frame that
+        tells the robot to stop transmitting motion commands and send metal strength instead.
+        The robot sends the reading, the remote listens for counts 11 through 18, then at
+        count 19 the cycle resets and movement commands resume.
+      </p>
+
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig05-software-fsm.png"
+          alt="Software state machine diagram showing remote and robot taking turns on the radio link"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 05 — software protocol state machine. the remote controls the timing; the robot responds only when asked</figcaption>
+      </figure>
+
+      <p>
+        Getting this right took three full test iterations on the radio link alone. Early
+        attempts had the remote getting stuck waiting for a metal strength reply if the robot
+        missed the S frame, causing the control loop to freeze. The fix was a timeout in
+        <code>getchar1_with_timeout()</code> on the EFM8 side: if no valid metal strength
+        frame arrives within half a second, the function returns a newline and the counter
+        resets regardless. The residual delay that showed up in testing (about once every 20
+        seconds) came down to the two JDY-40 modules occasionally mis-timing their channel
+        turnaround, not a software bug.
+      </p>
+    `,
+  },
+
+  'proj/reflow-oven-controller': {
+    type:'proj', addr:'0x1C00', struct:'project_t', badge:'PROJECT',
+    title:'Reflow Oven Controller',
+    sub:'Six-state reflow controller in ARM Assembly',
+    meta:[
+      {k:'duration', v:'Jan – Mar 2024'},
+      {k:'course',   v:'ELEC 291'},
+      {k:'team',     v:'7 people'},
+    ],
+    stack:['ARM Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
+    //hero:'images/projects/reflow-oven-controller/01-hero.jpg',
+    body:`
+      <h2 data-addr="0x1C10">The Job</h2>
+      <p>
+        Reflow soldering is how real PCBs get assembled. You spread solder paste on the pads, place your SMD components, then run the board through a carefully controlled temperature profile. Too cool and the solder never flows properly. Too hot and you cook the components. The profile has to hit specific temperatures for specific durations, in the right order.
+      </p>
+      <p>
+        Our ELEC 291 group built a controller that does exactly that, using a toaster oven as the heat source and an N76E003 microcontroller as the brain. The whole thing is programmed in ARM Assembly. Six states, a K-type thermocouple for feedback, bang-bang PWM to drive the oven's solid-state relay, and an HD44780 LCD showing live temperature and state. A Python strip chart on a connected PC plots everything in real time.
+      </p>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/02-block-diagram.png"
+             alt="Hardware block diagram showing thermocouple, op-amp, ADC, FSM, SSR, LCD, and PC connections"
+             onerror="imgFallback(this)">
+        <figcaption>fig 01 — full system block diagram: thermocouple signal flows through the op-amp into the ADC, FSM drives the SSR via PWM and streams data to the PC over serial</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1C20">The Analog Chain</h2>
+      <p>
+        A K-type thermocouple puts out about 41 µV per degree Celsius. At 220°C that's roughly 9 mV. The N76E003's ADC runs on a 0–5V range, so you need significant gain before the ADC sees anything useful. We used an OP07 precision op-amp configured as a differential amplifier.
+      </p>
+      <p>
+        The first problem we hit: the OP07 requires its supply rails to exceed the signal range by a few volts. We were only feeding it 0V and +5V, and it was clipping badly at lower temperatures. The fix was a TC7660S charge pump, a simple switched-capacitor IC that inverts +5V to produce a clean -5V rail. That gave the OP07 the headroom it needed.
+      </p>
+      <p>
+        The second problem was the resistors. Our initial breadboard used small-value resistors (around 51Ω) in the feedback network. The thermocouple wire is 2 metres long, which means it has non-trivial resistance of its own. At 51Ω, that wire resistance is a meaningful fraction of the divider and it throws off the gain calculation. We switched to values above 200Ω to make the thermocouple resistance negligible, then measured each resistor individually with an ohmmeter. Final configuration: 100kΩ and 270Ω, giving a gain of 375. That landed us within 3°C across the full operating range.
+      </p>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/06-schematic.png"
+             alt="Circuit schematic showing N76E003, OP07 op-amp, TC7660S charge pump, SSR, and LCD connections"
+             onerror="imgFallback(this)">
+        <figcaption>fig 02 — full circuit schematic: TC7660S top-right provides the negative rail, OP07 amplifies the thermocouple differential, 13N06LS MOSFET drives the SSR box</figcaption>
+      </figure>
+
+      <div class="callout">
+        The 2m thermocouple lead resistance was around 2–3Ω. With a 51Ω input resistor that's a 4–6% error baked into every reading. With 270Ω it drops to about 1%. Small detail, big difference in calibration.
+      </div>
+
+      <h2 data-addr="0x1C30">The State Machine</h2>
+      <p>
+        The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before returning to idle.
+      </p>
+      <p>
+        There's also an abort condition: if the oven takes more than 60 seconds to get above 50°C in the preheat state, the FSM assumes something is wrong and cuts power immediately.
+      </p>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/01-hero.jpg"
+             alt="Breadboard controller with HD44780 LCD showing State: SOAK, sec: 26, tem: 0082, with multimeter probes attached"
+             onerror="imgFallback(this)">
+        <figcaption>fig 03 — breadboard mid-run during the soak phase: LCD line 1 shows the current FSM state name, line 2 shows elapsed seconds and temperature. multimeter probes are measuring the SSR output voltage simultaneously</figcaption>
+      </figure>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/03-fsm-states.png"
+             alt="FSM state diagram showing six states with temperature and time-based transition conditions"
+             onerror="imgFallback(this)">
+        <figcaption>fig 04 — FSM state diagram: red labels are transition conditions, green labels are power outputs for each state. abort condition omitted for clarity</figcaption>
+      </figure>
+
+      <p>
+        The FSM is implemented as a chain of <code>cjne</code> comparisons against a state variable in DSEG. Transitions check temperature against values stored in named registers (<code>Temp_soak</code>, <code>Temp_refl</code>, <code>Temp_cool</code>) alongside a BCD seconds counter that the Timer 2 ISR maintains. Pushbuttons cycle through four parameter modes before start — soak temp, soak time, reflow temp, reflow time — with increment/decrement in steps of 5.
+      </p>
+
+      <pre><code>; State 1 → State 2 transition: temp crossed soak threshold
+FSM1_state1_part2:
+    mov  a, Temp_soak
+    clr  c
+    subb a, temp         ; if Temp_soak - temp < 0, carry set
+    jnc  FSM1_state1_done
+    mov  FSM1_state, #2  ; advance to soak state
+
+FSM1_state1_done:
+    ljmp FSM2</code></pre>
+
+      <h2 data-addr="0x1C40">PWM And Timing</h2>
+      <p>
+        The oven is controlled entirely through a solid-state relay. PWM to an SSR just means toggling it on and off — the oven's heating elements do the averaging. We run three power levels in practice: 0%, 20%, and 100%. Full power for ramping, 20% to hold a soak or dwell, zero for cooling.
+      </p>
+      <p>
+        Timer 2 fires an ISR every millisecond. Inside that ISR, a free-running counter called <code>pwm_counter</code> increments from 0 to 59. If the counter is below the <code>pwm</code> value, the PWM output pin is high. When it rolls over, the ISR also handles seconds counting via BCD arithmetic — incrementing <code>count1</code> and <code>count2</code> as decade counters before bumping <code>sec</code> and setting an <code>s_flag</code> bit for the main loop.
+      </p>
+
+      <pre><code>; PWM logic inside Timer2_ISR
+    inc  pwm_counter
+    clr  c
+    mov  a, pwm
+    subb a, pwm_counter  ; carry set if pwm_counter > pwm
+    cpl  c
+    mov  PWM_OUT, c      ; drive pin high or low
+
+    mov  a, pwm_counter
+    cjne a, #60, Timer2_ISR_done
+    mov  pwm_counter, #0
+    ; ... BCD seconds increment follows</code></pre>
+
+      <h2 data-addr="0x1C50">Getting The Temperature Right</h2>
+      <p>
+        Temperature validation was iterative. We collected over 1000 data points at each configuration, comparing the temperature calculated by the Assembly ADC code against a Python script working from raw multimeter voltage readings of the same point in the circuit. That gave us an objective, hardware-independent reference.
+      </p>
+      <p>
+        Iteration 1 had average deviation above 30°C — mostly wiring issues and the wrong resistor values. Iteration 2 got it below 10°C by fixing the supply rails but was still non-linear above 120°C. Iteration 3 hit 2.12°C average but spiked to 5.74°C around temperature transients. The final resistor configuration brought the average down to 0.79°C with a hard cap of 3°C across the full 25–240°C range.
+      </p>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/04-temp-deviation.png"
+             alt="Plot of temperature deviation in °C versus temperature from 0 to 250°C, staying below 3°C"
+             onerror="imgFallback(this)">
+        <figcaption>fig 05 — final design temperature deviation vs. measured temperature: deviation drops as temperature rises, staying well inside the 3°C target across the whole range</figcaption>
+      </figure>
+
+      <p>
+        PWM linearity got the same treatment. We swept the PWM value from 0 to 100 in increments of 5 and measured the output voltage with a multimeter. Prototype 1 was badly off — the MOSFET gate drive wasn't set up correctly and the SSR wasn't seeing proportional voltage. Prototype 2 improved significantly. The final version tracks the ideal V = PWM/100 × 5V line almost exactly.
+      </p>
+
+      <figure>
+        <img src="images/projects/reflow-oven-controller/05-pwm-linearity.png"
+             alt="Plot of SSR output voltage vs. PWM value for three prototype iterations versus ideal"
+             onerror="imgFallback(this)">
+        <figcaption>fig 06 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
+      </figure>
+
+      <h2 data-addr="0x1C60">Bugs We Actually Hit</h2>
+      <p>
+        The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without conversion). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
+      </p>
+      <p>
+        Early on, the cooling state couldn't turn off. The exit condition checks if temperature has dropped below 60°C, but we had the comparison inverted — the FSM was staying in State 5 indefinitely even at room temperature. That one was an off-by-one on a carry flag check.
+      </p>
+      <p>
+        We also tried building the FSM, SSR control, and button handling as separate assembly files, planning to tie them together. That turned out to be impractical with the toolchain we were using, so everything ended up consolidated into a single file. Not elegant, but it worked and made the interrupt context a lot easier to reason about.
+      </p>
+      <p>
+        The grounding situation was memorable: the laptop's internal USB ground had enough noise that temperature readings were jumping erratically. We ended up clamping our circuit ground to an oscilloscope probe ground, which is connected to earth through the scope's chassis. That's not something you'd want to ship, but it was stable enough to finish testing. A 220µF bulk cap across Vcc and GND helped with the switching transients from the SSR.
+      </p>
+
+      <div class="callout">
+        The assembly lines are relatively few. Most of the team's time was calibration and debugging. The time cost is in getting analog hardware and embedded software to agree on what the temperature actually is.
+      </div>
+    `,
+  },
+};
+
+(function(){
+  const boot=document.getElementById('boot');
+  const reduceMotion=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const skipBoot=location.hash||sessionStorage.getItem('booted')||reduceMotion;
+  if(skipBoot){
+    boot.remove();
+  }else{
+    const lines=boot.querySelectorAll('.bl');
+    lines.forEach((l,i)=>{l.style.animationDelay=(i*180)+'ms';});
+    setTimeout(()=>{boot.classList.add('done');setTimeout(()=>boot.remove(),500);}, lines.length*180+500);
+    try{sessionStorage.setItem('booted','1');}catch(e){}
+  }
+
+  const body=document.getElementById('content-body');
+  const regs=document.querySelectorAll('.reg');
+  const sections=document.querySelectorAll('.section');
+  const curSec=document.getElementById('cur-section');
+  const sbSec=document.getElementById('sb-sec');
+  const sbStruct=document.getElementById('sb-struct');
+  const scrollPos=document.getElementById('scroll-pos');
+  const listView=document.getElementById('list-view');
+  const detailView=document.getElementById('detail-view');
+
+  window.imgFallback=function(img){
+    const path=img.getAttribute('src')||'';
+    const div=document.createElement('div');
+    div.className='img-missing';
+    div.innerHTML=`<span class="lbl">— missing image —</span><span class="pth">${path}</span><span class="hint">drop an image at this path to fill this slot</span>`;
+    if(img.parentNode){img.parentNode.replaceChild(div,img);}
+  };
+
+  const KEYS={
+    exp: Object.keys(DETAILS).filter(k=>DETAILS[k].type==='exp'),
+    proj:Object.keys(DETAILS).filter(k=>DETAILS[k].type==='proj'),
+  };
+
+  let currentIdx=0;
+  let lockedIdx=null;
+  let inDetail=false;
+
+  function setActiveSection(i){
+    currentIdx=i;
+    const s=sections[i];
+    regs.forEach(r=>r.classList.toggle('on',r.dataset.target===s.id));
+    curSec.textContent=s.dataset.name;
+    sbSec.textContent=s.dataset.name;
+    sbStruct.textContent=s.dataset.struct;
+    scrollPos.textContent='struct '+s.dataset.struct;
+  }
+
+  function detectFromScroll(){
+    if(inDetail||lockedIdx!==null)return;
+    const top=body.scrollTop;
+    const probe=top+80;
+    let best=0;
+    for(let i=0;i<sections.length;i++){
+      if(sections[i].offsetTop<=probe) best=i;
+    }
+    setActiveSection(best);
+  }
+  body.addEventListener('scroll',()=>requestAnimationFrame(detectFromScroll));
+
+  function navigateToSection(i){
+    if(inDetail){closeDetail(false);}
+    const t=sections[i];
+    if(!t)return;
+    const target=(i===0)?0:t.offsetTop-8;
+    lockedIdx=i;
+    setActiveSection(i);
+    body.scrollTo({top:target,behavior:'smooth'});
+    clearTimeout(window.__navUnlock);
+    window.__navUnlock=setTimeout(()=>{lockedIdx=null;detectFromScroll();},800);
+  }
+
+  regs.forEach((r,i)=>{
+    r.addEventListener('click',e=>{
+      e.preventDefault();
+      const targetId=r.dataset.target;
+      history.pushState(null,'','#'+targetId);
+      navigateToSection(i);
+      r.blur();
+    });
+  });
+
+  document.addEventListener('keydown',e=>{
+    if(inDetail&&e.key==='Escape'){closeDetail();return;}
+    const tag=(e.target&&e.target.tagName)||'';
+    if(tag==='INPUT'||tag==='TEXTAREA')return;
+    if(inDetail)return;
+    if(e.key!=='ArrowDown'&&e.key!=='ArrowUp'&&e.key!=='PageDown'&&e.key!=='PageUp')return;
+    e.preventDefault();
+    const cur=(lockedIdx!==null)?lockedIdx:currentIdx;
+    const dir=(e.key==='ArrowDown'||e.key==='PageDown')?1:-1;
+    const next=Math.max(0,Math.min(sections.length-1,cur+dir));
+    if(next===cur)return;
+    navigateToSection(next);
+  });
+
+  function buildDetail(slug){
+    const d=DETAILS[slug];
+    if(!d)return '';
+    const stackHtml=d.stack?d.stack.map(s=>`<span class="chip">${s}</span>`).join(''):'';
+    const linksHtml=d.links?d.links.map(l=>`<a href="${l.url}" ${l.primary?'class="pri"':''} target="_blank" rel="noopener">${l.label}</a>`).join(''):'';
+    const metaHtml=d.meta?d.meta.map(m=>`<div class="m"><span class="mk">${m.k}</span><span class="mv">${m.v}</span></div>`).join(''):'';
+    const heroHtml=d.hero?`<div class="dv-hero"><img src="${d.hero}" alt="${d.title}" onerror="imgFallback(this)"/></div>`:'';
+
+    const list=KEYS[d.type];
+    const idx=list.indexOf(slug);
+    const prev=idx>0?DETAILS[list[idx-1]]:null;
+    const next=idx<list.length-1?DETAILS[list[idx+1]]:null;
+    const prevSlug=idx>0?list[idx-1]:null;
+    const nextSlug=idx<list.length-1?list[idx+1]:null;
+    const prevHtml=prev
+      ?`<a class="dv-nav prev" data-goto="${prevSlug}"><span class="nav-k">◄ prev ${d.type==='exp'?'role':'project'}</span><span class="nav-v">${prev.title.split(' — ')[0].split(' (')[0]}</span></a>`
+      :`<a class="dv-nav prev disabled"><span class="nav-k">◄ prev</span><span class="nav-v">—</span></a>`;
+    const nextHtml=next
+      ?`<a class="dv-nav next" data-goto="${nextSlug}"><span class="nav-k">next ${d.type==='exp'?'role':'project'} ►</span><span class="nav-v">${next.title.split(' — ')[0].split(' (')[0]}</span></a>`
+      :`<a class="dv-nav next disabled"><span class="nav-k">next ►</span><span class="nav-v">—</span></a>`;
+
+    return `
+      <div class="dv-bar">
+        <div class="left">
+          <span class="addr">@ ${d.addr} · ${d.struct}</span>
+          <span>· DECODE paper_v1</span>
+        </div>
+        <button class="dv-back" data-back>◄ back to list</button>
+      </div>
+      <article class="dv-body">
+        <header class="dv-header">
+          <div class="dv-kicker"><span class="badge">${d.badge}</span></div>
+          <h1 class="dv-title">${d.title}</h1>
+          <div class="dv-sub">${d.sub}</div>
+          <div class="dv-meta">${metaHtml}</div>
+          ${stackHtml?`<div class="dv-stack">${stackHtml}</div>`:''}
+          ${linksHtml?`<div class="dv-links">${linksHtml}</div>`:''}
+        </header>
+        ${heroHtml}
+        <div class="dv-prose">${d.body}</div>
+        <footer class="dv-footer">
+          ${prevHtml}
+          <button class="dv-back-big" data-back>back to list</button>
+          ${nextHtml}
+        </footer>
+      </article>
+    `;
+  }
+
+  function openDetail(slug,push){
+    const d=DETAILS[slug];
+    if(!d){closeDetail();return;}
+    detailView.innerHTML=buildDetail(slug);
+    detailView.classList.add('on');
+    listView.classList.add('off');
+    inDetail=true;
+    body.scrollTop=0;
+
+    curSec.textContent=d.type==='exp'?'.experience':'.projects';
+    sbSec.textContent=d.type==='exp'?'.experience':'.projects';
+    sbStruct.textContent=d.struct;
+    scrollPos.textContent=`struct ${d.struct} @ ${d.addr}`;
+
+    const parentId=d.type==='exp'?'sec-experience':'sec-projects';
+    regs.forEach(r=>r.classList.toggle('on',r.dataset.target===parentId));
+
+    detailView.querySelectorAll('[data-back]').forEach(el=>{
+      el.addEventListener('click',()=>closeDetail());
+    });
+    detailView.querySelectorAll('[data-goto]').forEach(el=>{
+      el.addEventListener('click',e=>{
+        e.preventDefault();
+        const target=el.dataset.goto;
+        history.pushState(null,'','#'+target);
+        openDetail(target,false);
+      });
+    });
+
+    if(push){history.pushState(null,'','#'+slug);}
+  }
+
+  function closeDetail(updateHash=true){
+    detailView.classList.remove('on');
+    listView.classList.remove('off');
+    detailView.innerHTML='';
+    inDetail=false;
+    if(updateHash){
+      const pid=document.querySelector('.reg.on')?.dataset.target||'sec-about';
+      history.pushState(null,'','#'+pid);
+      const sec=document.getElementById(pid);
+      if(sec){
+        requestAnimationFrame(()=>{
+          body.scrollTo({top:pid==='sec-about'?0:sec.offsetTop-8,behavior:'auto'});
+          detectFromScroll();
+        });
+      }
+    }
+  }
+
+  document.querySelectorAll('[data-detail]').forEach(card=>{
+    card.addEventListener('click',e=>{
+      if(e.target.closest('a'))return;
+      const slug=card.dataset.detail;
+      openDetail(slug,true);
+    });
+  });
+
+  function routeFromHash(){
+    const h=(location.hash||'').replace(/^#/,'');
+    if(!h){closeDetail(false);setActiveSection(0);body.scrollTop=0;return;}
+    if(DETAILS[h]){openDetail(h,false);return;}
+    const idx=[...sections].findIndex(s=>s.id===h);
+    if(idx>=0){closeDetail(false);navigateToSection(idx);}
+  }
+  window.addEventListener('popstate',routeFromHash);
+  window.addEventListener('hashchange',e=>{routeFromHash();});
+
+  setActiveSection(0);
+  routeFromHash();
+
+  // residency progress (Jan 5 to Jul 31 2026)
+  (function(){
+    var S=new Date(2026,0,5),E=new Date(2026,6,31),W=20,now=new Date();
+    var total=Math.round((E-S)/86400000);
+    var dayN=Math.max(0,Math.min(total,Math.round((now-S)/86400000)));
+    var pct=Math.round((dayN/total)*100);
+    var filled=Math.round((pct/100)*W);
+    var bar='['+'█'.repeat(filled)+'·'.repeat(W-filled)+']';
+    document.querySelectorAll('[data-termlog="bar"]').forEach(function(el){el.textContent=bar;});
+    document.querySelectorAll('[data-termlog="day"]').forEach(function(el){el.textContent='day '+dayN+'/'+total;});
+    document.querySelectorAll('[data-termlog="pct"]').forEach(function(el){el.textContent=pct;});
+  })();
+
+    const TICKER = [
+    ['DEBUGGING', 'a watchdog race on flash erase'],
+    //['LISTENING', 'sturgill simpson, cuttin\u2019 grass'],
+    //['READING',   'tinker tailor soldier spy'],
+    //['PLAYING',   'elden ring NG+'],
+    ['WATCHING',  'real madrid vs whoever, 6am CET'],
+    ['BUILDING',  'something that shouldn\u2019t exist on a Pi'],
+  ];
+  const tkK = document.getElementById('tk-k');
+  const tkV = document.getElementById('tk-v');
+  if(tkK && tkV){
+    let tkIdx = 0;
+    function tick(){
+      tkV.classList.add('fade');
+      setTimeout(()=>{
+        tkIdx = (tkIdx + 1) % TICKER.length;
+        tkK.textContent = TICKER[tkIdx][0];
+        tkV.textContent = TICKER[tkIdx][1];
+        tkV.classList.remove('fade');
+      }, 350);
+    }
+    tkK.textContent = TICKER[0][0];
+    tkV.textContent = TICKER[0][1];
+    setInterval(tick, 4500);
+  }
+})();
+</script>
+
+</body>
+</html>
