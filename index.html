@@ -31,16 +31,13 @@
   html,body{height:100%}
   html{background:var(--bg)}
   body{background:var(--bg);color:var(--paper-ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow:hidden;}
-  /* CRT scanlines — dark chrome strips only */
   .topbar::before,.regions::before,.statusbar::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:5;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 3px);mix-blend-mode:multiply;}
   .topbar > *,.regions > *,.statusbar > *{position:relative;z-index:6;}
   .statusbar{position:relative;}
 
-  /* ── shell ── */
   .shell{height:100vh;width:100%;display:grid;grid-template-rows:auto 1fr auto;margin:0 auto;padding:8px 10px;gap:8px;background:var(--bg);overflow:hidden;}
   body.has-shell{background:var(--bg)}
 
-  /* top bar */
   .topbar{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--bg));padding:8px 14px;gap:16px;font-family:var(--mono);position:relative;}
   .tb-left{display:flex;align-items:center;gap:14px;min-width:0}
   .tb-logo{width:28px;height:28px;flex-shrink:0;border:1px solid var(--phos-dim);display:grid;place-items:center;color:var(--phos);font-weight:700;font-size:13px;box-shadow:inset 0 0 8px rgba(124,245,138,.15);}
@@ -53,11 +50,9 @@
   .tb-link.pri{background:var(--amber);color:#07090a;border-color:var(--amber);font-weight:700;}
   .tb-link.pri:hover{background:#ffd077;color:#07090a;}
 
-  /* main: 2-col — regions nav + content (hex panel removed) */
   .main{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:10px;min-height:0;}
   @media(max-width:1300px){.main{grid-template-columns:minmax(200px,230px) minmax(0,1fr);}}
 
-  /* LEFT: regions nav */
   .regions{border:1px solid var(--line2);background:#080e0a;display:flex;flex-direction:column;min-height:0;font-family:var(--mono);position:relative;}
   .reg-hd{padding:10px 14px;border-bottom:1px solid var(--line2);display:flex;align-items:center;justify-content:space-between;font-size:10px;letter-spacing:.14em;color:var(--phos);}
   .reg-hd .sz{color:var(--phos-dim)}
@@ -79,7 +74,6 @@
   .memmap .seg:last-child{border-right:none}
   .memmap .lg{display:flex;justify-content:space-between;margin-top:4px;color:var(--phos-dim);font-size:9px}
 
-  /* RIGHT: content panel */
   .content{background:var(--paper-bg);border:2px solid var(--line);display:flex;flex-direction:column;min-height:0;font-family:var(--sans);position:relative;}
   .content-hd{padding:8px 14px;border-bottom:1px solid var(--paper-line);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);background:var(--paper-bg2);flex-shrink:0;text-transform:uppercase;}
   .content-hd b{color:var(--paper-ink);font-weight:700;}
@@ -89,38 +83,33 @@
   .content-body::-webkit-scrollbar-track{background:var(--paper-bg2)}
   .content-body::-webkit-scrollbar-thumb{background:#b4ac97;border-radius:0;}
 
-  /* list view = original content */
   .list-view{padding:24px 32px 28px;}
   .detail-view{display:none;padding:0;}
   .detail-view.on{display:block;}
   .list-view.off{display:none;}
 
-  /* hero */
   .hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding-bottom:8px;margin-bottom:18px;}
   .avatar{width:96px;height:96px;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);flex-shrink:0;}
   .avatar img{width:100%;height:100%;object-fit:cover;display:block}
   .hero-body{min-width:0}
   .hero h1{font-family:var(--sans);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--paper-ink);margin-bottom:6px;}
-  .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:10px;font-weight:500;}
-  .hero .blurb{font-size:14.5px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;max-width:62ch;}
+  .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:4px;font-weight:500;}
+  .hero .blurb{font-size:14.5px;line-height:1.6;color:var(--paper-ink2);text-wrap:pretty;max-width:62ch;margin-top:8px;}
   .hero .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
   .hero .links a{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.4);padding:5px 10px;letter-spacing:.04em;transition:background .1s;font-weight:500;}
   .hero .links a:hover{background:rgba(0,0,0,.06)}
   .hero .links a.pri{background:var(--paper-ink);color:var(--paper-bg)}
   .hero .links a.pri:hover{background:#000}
 
-  /* status pill */
   .status-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#1a5a2c;background:#cdebd2;border:1px solid #6cb578;padding:3px 8px;text-transform:uppercase;font-weight:600;margin-bottom:10px;}
   .status-pill .dot{width:6px;height:6px;border-radius:50%;background:#2a8a3e;animation:pulse 1.4s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-  /* section titles */
   .section{margin-bottom:28px;scroll-margin-top:8px;}
   .section:last-child{margin-bottom:0;}
   .section-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-ink);padding-bottom:6px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--paper-ink);}
   .section-title .addr{color:var(--paper-dim);font-weight:500;letter-spacing:.1em;font-size:10px;}
 
-  /* experience cards — clickable */
   .exp{padding:14px 16px;cursor:pointer;transition:background .12s,box-shadow .12s,padding .12s;margin:0 -16px;border:1px solid transparent;position:relative;}
   .exp:hover{background:rgba(0,0,0,.025);border-color:var(--paper-ink);box-shadow:3px 3px 0 rgba(0,0,0,.08);transform:translate(-1px,-1px);}
   .exp::after{content:'↗';position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);line-height:1;opacity:.55;transition:opacity .12s,color .12s,transform .12s;pointer-events:none;}
@@ -133,7 +122,6 @@
   .chips{display:flex;flex-wrap:wrap;gap:5px;}
   .chip{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.3);padding:3px 8px;background:rgba(0,0,0,.03);font-weight:500;letter-spacing:.02em;}
 
-  /* projects grid — clickable */
   .proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   .proj{border:1px solid rgba(0,0,0,.18);padding:14px 16px;background:#fff;display:flex;flex-direction:column;cursor:pointer;transition:border-color .12s,box-shadow .12s,transform .12s;position:relative;}
   .proj::after{content:'↗';position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:13px;color:var(--paper-dim);line-height:1;opacity:.55;transition:opacity .12s,color .12s,transform .12s;pointer-events:none;}
@@ -145,13 +133,11 @@
   .proj .tag{font-family:var(--mono);font-size:10.5px;color:var(--paper-dim);letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
   .proj p{font-size:13px;line-height:1.55;color:var(--paper-ink2);text-wrap:pretty;}
 
-  /* skills */
   .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;}
   .skbucket h4{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--paper-ink);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;}
   .sk-list{display:flex;flex-wrap:wrap;gap:5px;}
   .sk{font-family:var(--mono);font-size:11px;color:var(--paper-ink);border:1px solid rgba(0,0,0,.28);padding:3px 8px;background:rgba(0,0,0,.02);}
 
-  /* education */
   .edu-list{display:flex;flex-direction:column;gap:0;}
   .edu{padding:12px 0;}
   .edu-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:2px;flex-wrap:wrap;}
@@ -167,7 +153,6 @@
   .course .nm{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--paper-ink);line-height:1.25;}
   .course .top{font-family:var(--sans);font-size:12px;color:var(--paper-ink2);letter-spacing:0;line-height:1.45;text-wrap:pretty;}
 
-  /* contact */
   .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .ccard{border:1px solid rgba(0,0,0,.28);padding:11px 14px;background:#fff;}
   .ccard .k{font-family:var(--mono);font-size:10px;color:var(--paper-dim);letter-spacing:.1em;margin-bottom:3px;font-weight:600;text-transform:uppercase}
@@ -175,7 +160,6 @@
   .ccard a{color:var(--paper-ink);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);}
   .ccard a:hover{border-color:var(--paper-ink);}
 
-  /* notes block — EOF comments */
   .notes{margin:48px 0 24px;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--paper-dim);font-style:italic;text-wrap:pretty;padding:0 4px;}
   .notes .nb{color:var(--paper-ink2);}
   .notes .nh{font-style:normal;color:var(--paper-ink);font-weight:700;letter-spacing:.04em;}
@@ -189,12 +173,10 @@
   .notes .ping{display:block;margin-top:14px;font-style:italic;color:var(--paper-dim);}
   @media(max-width:600px){.notes{font-size:11.5px;}.notes table td.k{padding-right:10px;}}
 
-  /* end-of-dump marker — owns the bottom scroll space so the last sections are reachable */
   .dump-end{margin:60px 0 0;padding-bottom:60vh;display:flex;align-items:center;gap:14px;color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.7;}
   .dump-end::before,.dump-end::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--paper-dim) 30%,var(--paper-dim) 70%,transparent);}
   @media(max-width:900px){.dump-end{margin-top:40px;padding-bottom:50vh;font-size:9px;gap:10px;}}
 
-  /* ── DETAIL VIEW ── */
   .dv-bar{position:sticky;top:0;z-index:10;background:var(--paper-bg2);border-bottom:1px solid var(--paper-line);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);text-transform:uppercase;}
   .dv-bar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
   .dv-bar .addr{color:var(--paper-ink);font-weight:700;}
@@ -220,11 +202,9 @@
   .dv-links a:hover{background:rgba(0,0,0,.06);}
   .dv-links a.pri{background:var(--paper-ink);color:var(--paper-bg);}
 
-  /* hero image */
   .dv-hero{margin:0 0 28px;border:1px solid rgba(0,0,0,.2);background:#fff;}
   .dv-hero img{width:100%;display:block;}
 
-  /* prose styles */
   .dv-prose{font-size:15px;line-height:1.7;color:var(--paper-ink2);text-wrap:pretty;}
   .dv-prose h2{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--paper-ink);margin:32px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--paper-ink);display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
   .dv-prose h2::before{content:attr(data-addr);color:var(--paper-dim);font-size:10px;font-weight:500;}
@@ -250,13 +230,11 @@
   .dv-prose .callout{border:1px solid rgba(0,0,0,.3);background:rgba(240,182,74,.12);padding:12px 14px;margin:18px 0;font-size:14px;}
   .dv-prose .callout::before{content:'NOTE — ';font-family:var(--mono);font-size:10px;letter-spacing:.12em;font-weight:700;color:var(--paper-ink);}
 
-  /* missing-image placeholder */
   .img-missing{display:block;border:1px dashed rgba(0,0,0,.35);background:repeating-linear-gradient(45deg,rgba(0,0,0,.02),rgba(0,0,0,.02) 10px,rgba(0,0,0,.05) 10px,rgba(0,0,0,.05) 20px);padding:40px 18px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--paper-dim);line-height:1.7;letter-spacing:.04em;}
   .img-missing .lbl{display:block;color:var(--paper-ink);font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;font-size:10px;}
   .img-missing .pth{display:block;color:var(--paper-ink2);font-size:11px;margin:4px 0;word-break:break-all;}
   .img-missing .hint{display:block;color:var(--paper-dim);font-size:10px;font-style:italic;margin-top:6px;}
 
-  /* footer nav */
   .dv-footer{margin-top:42px;padding-top:18px;border-top:1px solid var(--paper-line);display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;}
   @media(max-width:700px){.dv-footer{grid-template-columns:1fr;}}
   .dv-nav{font-family:var(--mono);font-size:11px;color:var(--paper-ink);text-decoration:none;border:1px solid rgba(0,0,0,.3);padding:10px 14px;letter-spacing:.04em;transition:background .1s,border-color .1s;font-weight:500;display:flex;flex-direction:column;gap:2px;cursor:pointer;background:#fff;}
@@ -268,25 +246,21 @@
   .dv-back-big{font-family:var(--mono);font-size:11px;color:var(--paper-bg);background:var(--paper-ink);border:1px solid var(--paper-ink);padding:10px 18px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:700;transition:background .1s;}
   .dv-back-big:hover{background:#000;}
 
-  /* status bar */
   .statusbar{border:1px solid var(--line);background:var(--bg2);display:flex;align-items:center;gap:14px;padding:6px 14px;font-size:10px;color:var(--phos-dim);letter-spacing:.08em;flex-wrap:wrap;font-family:var(--mono);}
   .statusbar b{color:var(--phos);font-weight:500}.statusbar .sep{opacity:.35}
   .statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
-  /* rotating ticker pill */
   .ticker{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border:1px solid var(--phos-deep);background:rgba(124,245,138,.04);color:var(--phos-dim);font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;min-width:240px;}
   .ticker .tk-k{color:var(--amber);font-weight:600;letter-spacing:.1em;}
   .ticker .tk-v{color:var(--phos);letter-spacing:.04em;text-transform:none;font-size:10px;transition:opacity .35s ease;}
   .ticker .tk-v.fade{opacity:0;}
   @media(max-width:1100px){.ticker{min-width:0;}}
 
-  /* boot */
   .boot{position:fixed;inset:0;z-index:100000;background:#05080a;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:10vh 8vw;gap:4px;font-family:var(--mono);font-size:13px;color:var(--phos);transition:opacity .4s ease;overflow:hidden;}
   .boot.done{opacity:0;pointer-events:none}
   .boot .bl{opacity:0;animation:boot-in .18s ease-out forwards}
   .boot .bl .ok{color:var(--phos);margin-right:10px}.boot .bl .warn{color:var(--amber);margin-right:10px}.boot .bl .dim{color:var(--phos-dim)}
   @keyframes boot-in{to{opacity:1}}
 
-  /* responsive */
   @media(max-width:900px){
     body{overflow:auto;}
     .shell{height:auto;min-height:100vh;max-width:100%;grid-template-rows:auto auto auto auto;padding:8px;gap:8px;}
@@ -335,7 +309,7 @@
     </div>
     <div class="tb-right">
       <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
-      <a class="tb-link" href="/cdn-cgi/l/email-protection#2b46444542474a5944594a191b1b186b4c464a424705484446">email</a>
+      <a class="tb-link" href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a>
       <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
     </div>
@@ -384,11 +358,12 @@
             <div class="hero-body">
               <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
               <h1>Monil Arora</h1>
-              <div class="tagline">UBC BASc Electrical Engineering · Expected 2027</div>
+              <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS</div>
+              <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2027</div>
               <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) working on ground-station infrastructure for the Moonrise mission. Back at UBC in the fall.</p>
               <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="/cdn-cgi/l/email-protection#523f3d3c3b3e33203d20336062626112353f333b3e7c313d3f">email</a>
+                <a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a>
                 <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
                 <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
               </div>
@@ -436,8 +411,8 @@
             </div>
             <div class="proj" data-detail="proj/reflow-oven-controller">
               <div class="proj-top"><h3>Reflow Oven Controller</h3><span class="when">Jan – Feb 2024</span></div>
-              <div class="tag">N76E00 · ARM · Assembly</div>
-              <p>Reflow-oven controller on N76E00 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping.</p>
+              <div class="tag">N76E003 · ARM · Assembly</div>
+              <p>Reflow-oven controller on N76E003 (ARM) written in assembly, automating soldering profiles from 25 °C to 240 °C with ±3 °C precision. Adds automatic safety shutdowns and alerts, a real-time PC monitoring interface, and multi-stage temperature ramping.</p>
             </div>
           </div>
         </div>
@@ -499,7 +474,7 @@
         <div class="section" id="sec-contact" data-name=".contact" data-struct="contact_t">
           <div class="section-title"><span>Contact</span><span class="addr">0x4000 — contact_t</span></div>
           <div class="cgrid">
-            <div class="ccard"><div class="k">email</div><div class="v"><a href="/cdn-cgi/l/email-protection#620f0d0c0b0e03100d10035052525122050f030b0e4c010d0f"><span class="__cf_email__" data-cfemail="d6bbb9b8bfbab7a4b9a4b7e4e6e6e596b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a></div></div>
+            <div class="ccard"><div class="k">email</div><div class="v"><a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a></div></div>
             <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
             <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
             <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
@@ -517,11 +492,11 @@
             <tr><td class="k">&nbsp;&nbsp;football</td>     <td class="v">arsenal. 6am kickoffs from a hannover timezone.</td></tr>
             <tr><td class="k">&nbsp;&nbsp;games</td>        <td class="v">currently elden ring NG+. previously ~3000 hrs of CS.</td></tr>
             <tr><td class="k">&nbsp;&nbsp;reading</td>      <td class="v">cold war espionage. le carré, ben macintyre.</td></tr>
-            <tr><td class="k">&nbsp;&nbsp;rabbit holes</td> <td class="v">declassified intel programs, mkultra, the bob lazar tapes —<br/>less “i believe”, more “this is great storytelling.”</td></tr>
-            <tr><td class="k">&nbsp;&nbsp;tinkering</td>    <td class="v">old thinkpads. they don’t make laptops like this anymore.</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;rabbit holes</td> <td class="v">declassified intel programs, mkultra, the bob lazar tapes.<br/>less "i believe", more "this is great storytelling."</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;tinkering</td>    <td class="v">old thinkpads. they don't make laptops like this anymore.</td></tr>
           </table>
           <span class="delim">*</span><br/>
-          <span class="ping"><span class="delim">*</span> if any of this overlaps with you, <a href="/cdn-cgi/l/email-protection#fd90929394919c8f928f9ccfcdcdcebd9a909c9491d39e9290">ping me</a>.</span>
+          <span class="ping"><span class="delim">*</span> if any of this overlaps with you, <a href="mailto:monilarora2003@gmail.com">ping me</a>.</span>
           <span class="delim">/* ─────────────────────────────────────────────────*/</span>
         </section>
 
@@ -551,25 +526,15 @@
   </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ─── DETAIL CONTENT ──────────────────────────────────────────────
-   Each entry: title, sub, dates, location, stack[], links[], hero,
-   body (HTML string). Body supports <h2 data-addr="0x..">, <h3>,
-   <p>, <ul>/<li>, <code>, <pre>, <figure><img><figcaption>,
-   <div class="callout">. Image paths follow the convention
-   images/{type}/{slug}/{filename} — drop files there to fill in.
-   Missing images render a styled placeholder automatically.
-─────────────────────────────────────────────────────────────────── */
-
+<script>
 const DETAILS = {
-  /* ─────── EXPERIENCE ─────── */
- 'exp/lzh': {
+  'exp/lzh': {
     type:'exp',
     addr:'0x0200',
     struct:'role_t',
     badge:'EXPERIENCE',
     title:'Laser Zentrum Hannover — Research Intern',
-    sub:'Moonrise',
+    sub:'CubeSat ground station for the Moonrise mission',
     meta:[
       {k:'duration', v:'Jan – Jul 2026'},
       {k:'location', v:'Hannover, DE'},
@@ -654,7 +619,7 @@ const DETAILS = {
     `,
   },
 
- 'exp/sharang': {
+  'exp/sharang': {
     type:'exp',
     addr:'0x0600',
     struct:'role_t',
@@ -717,7 +682,7 @@ for i in range(half_points):
       <p>And the bench-supply lesson from the first week, which I have not forgotten since. Power is the first thing you check.</p>
     `,
   },
-  /* ─────── PROJECTS ─────── */
+
   'proj/self-balancing-robot': {
     type:'proj',
     addr:'0x1000',
@@ -841,7 +806,7 @@ for i in range(half_points):
     ],
     stack:['Verilog','Nios II','DE1-SoC','FPGA','SDRAM','Q16.16','Quartus'],
     body:`
-      <h2 data-addr="0x1410">What it is</h2>
+      <h2 data-addr="0x1410">What It Is</h2>
       <p>A small DNN accelerator for MNIST handwritten-digit classification, sitting alongside a Nios II soft-core processor on a DE1-SoC FPGA board. The Nios II handles control flow and weight loading; custom Avalon master/servant cores in Verilog do the math. The network is a multi-layer perceptron — 784-pixel input, two 1000-neuron hidden layers, 10-neuron output — and every layer computes <em>a' = ReLU(W·a + b)</em>.</p>
 
       <pre><code>    +--------------+   instr    +--------------+
@@ -882,17 +847,17 @@ for i in range(half_points):
 +----------------------------+--------------+--------------+</code></pre>
       <p class="figcap">// fig 02 — Avalon-MM address space. Lifted from the lab manual; my Platform Designer project matches these exactly.</p>
 
-      <h2 data-addr="0x1440">Avalon waitrequest is the whole game</h2>
+      <h2 data-addr="0x1440">Avalon Waitrequest Is The Whole Game</h2>
       <p>The accelerator cores expose a memory-mapped servant interface to the Nios II (start/poll registers, weight + input addresses, vector length) and a master interface to SDRAM. The SDRAM controller can stall on refresh or row-open, so the FSM has to honour <code>waitrequest</code> on reads, latch <code>readdata</code> only when <code>readdatavalid</code> is high, and never drop in-flight requests on the floor.</p>
-      <pre><code>clk      _|‾|_|‾|_|‾|_|‾|_|‾|_|‾|_|‾|_|‾
-read     ___|‾‾‾‾‾‾‾‾‾‾‾‾|___________
+      <pre><code>clk      _|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;|_|&#x2579;
+read     ___|&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;|___________
 address  ---&lt;     A     &gt;-----------
-waitreq  ___|‾‾‾‾‾‾‾‾|_______________   &lt;-- controller busy; hold request
-rdvalid  _______________|‾‾|_________   &lt;-- data lands one cycle later
+waitreq  ___|&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;&#x203E;|_______________   &lt;-- controller busy; hold request
+rdvalid  _______________|&#x203E;&#x203E;|_________   &lt;-- data lands one cycle later
 rddata   --------------&lt; D &gt;---------</code></pre>
       <p class="figcap">// fig 03 — variable-latency Avalon read. Hold <code>address</code> + <code>read</code> while <code>waitrequest</code> is high; sample <code>readdata</code> only on <code>readdatavalid</code>.</p>
 
-      <h2 data-addr="0x1450">Going faster: dotopt</h2>
+      <h2 data-addr="0x1450">Going Faster: Dotopt</h2>
       <p>The first dot-product core (<code>dot.sv</code>) had a single Avalon master that walked through SDRAM serially — fetch input, fetch weight, multiply-accumulate, repeat. Bandwidth-bound. The optimised version (<code>dotopt.sv</code>) splits the input activations into on-chip SRAM (bank0/bank1) using the wordcopy DMA, then runs <strong>two master ports</strong>: one to SDRAM for weights, one to SRAM for inputs. Concurrent reads. The SDRAM weight fetch is always the long pole, which lets the FSM stay simple — just gate the multiply on the slower of the two.</p>
 
       <h2 data-addr="0x1460">Timing</h2>
@@ -904,273 +869,273 @@ rddata   --------------&lt; D &gt;---------</code></pre>
   },
 
   'proj/metal-detector-robot': {
-  type:'proj', addr:'0x1800', struct:'project_t', badge:'PROJECT',
-  title:'Metal Detector Robot',
-  sub:'Battery-powered, remote-controlled',
-  meta:[{k:'duration',v:'Mar – Apr 2024'},{k:'course',v:'ELEC 291'},{k:'team',v:'Team of 7'}],
-  stack:['STM32L051','EFM8LB1','JDY-40','H-Bridge','C'],
-  hero:'images/projects/metal-detector-robot/01-hero.png',
-  body:`
-    <h2 data-addr="0x1810">What it is</h2>
-    <p>
-      A two-part system: a handheld remote and a wheeled robot, talking to each other
-      over a 2.4 GHz JDY-40 radio link. The remote runs an EFM8LB1 microcontroller and
-      reads a thumb joystick. The robot runs an STM32L051, drives two DC motors through
-      an H-bridge, and carries a Colpitts LC oscillator that acts as the metal detector.
-      When the robot rolls over something metallic, the oscillator frequency shifts, the
-      STM32 catches it, transmits the reading back to the remote, and the EFM8 lights up
-      the LCD and changes the buzzer tone accordingly.
-    </p>
-    <p>
-      The whole thing is battery-powered. 9V for the logic on both ends, 6V (four AAs)
-      for the motors. LM7805 drops the 9V to 5V, MCP1700 drops that to 3.3V for the
-      STM32 and JDY-40. Two separate power domains on the robot side, intentionally
-      isolated so motor noise does not get into the MCU rails.
-    </p>
+    type:'proj', addr:'0x1800', struct:'project_t', badge:'PROJECT',
+    title:'Metal Detector Robot',
+    sub:'Battery-powered, remote-controlled',
+    meta:[{k:'duration',v:'Mar – Apr 2024'},{k:'course',v:'ELEC 291'},{k:'team',v:'Team of 7'}],
+    stack:['STM32L051','EFM8LB1','JDY-40','H-Bridge','C'],
+    hero:'images/projects/metal-detector-robot/01-hero.png',
+    body:`
+      <h2 data-addr="0x1810">What It Is</h2>
+      <p>
+        A two-part system: a handheld remote and a wheeled robot, talking to each other
+        over a 2.4 GHz JDY-40 radio link. The remote runs an EFM8LB1 microcontroller and
+        reads a thumb joystick. The robot runs an STM32L051, drives two DC motors through
+        an H-bridge, and carries a Colpitts LC oscillator that acts as the metal detector.
+        When the robot rolls over something metallic, the oscillator frequency shifts, the
+        STM32 catches it, transmits the reading back to the remote, and the EFM8 lights up
+        the LCD and changes the buzzer tone accordingly.
+      </p>
+      <p>
+        The whole thing is battery-powered. 9V for the logic on both ends, 6V (four AAs)
+        for the motors. LM7805 drops the 9V to 5V, MCP1700 drops that to 3.3V for the
+        STM32 and JDY-40. Two separate power domains on the robot side, intentionally
+        isolated so motor noise does not get into the MCU rails.
+      </p>
 
-    <h2 data-addr="0x1820">Hardware</h2>
-    <p>
-      The remote is straightforward: EFM8 reads Vrx and Vry from the joystick as 14-bit
-      ADC values, maps them into a 0-100 range, classifies the joystick position into one
-      of eight octant-based direction codes (A through H, plus S for stop), and fires that
-      string over UART to the JDY-40 every loop iteration.
-    </p>
+      <h2 data-addr="0x1820">Hardware</h2>
+      <p>
+        The remote is straightforward: EFM8 reads Vrx and Vry from the joystick as 14-bit
+        ADC values, maps them into a 0-100 range, classifies the joystick position into one
+        of eight octant-based direction codes (A through H, plus S for stop), and fires that
+        string over UART to the JDY-40 every loop iteration.
+      </p>
 
-    <figure>
-      <img
-        src="images/projects/metal-detector-robot/fig01-remote-block.png"
-        alt="Remote hardware block diagram showing EFM8, JDY40, joystick, buzzer, and LCD"
-        onerror="imgFallback(this)"
-      >
-      <figcaption>fig 01 — remote hardware block diagram. joystick analog voltages feed the EFM8 ADC; the JDY-40 handles the radio link in both directions</figcaption>
-    </figure>
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig01-remote-block.png"
+          alt="Remote hardware block diagram showing EFM8, JDY40, joystick, buzzer, and LCD"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 01 — remote hardware block diagram. joystick analog voltages feed the EFM8 ADC; the JDY-40 handles the radio link in both directions</figcaption>
+      </figure>
 
-    <p>
-      The robot side is where things get interesting. The STM32 cannot drive motors
-      directly, so there is an optocoupler stage (LTV-846) between the MCU and the
-      H-bridges. The optocouplers take the 3.3V PWM signals from the STM32 and pass them
-      as isolated signals to the gate networks of the MOSFET H-bridges, which run off the
-      separate 6V battery. Two P-channel and two N-channel MOSFETs per motor, giving
-      full forward and reverse control. The isolation means motor switching transients
-      cannot couple back into the MCU supply and corrupt readings.
-    </p>
+      <p>
+        The robot side is where things get interesting. The STM32 cannot drive motors
+        directly, so there is an optocoupler stage (LTV-846) between the MCU and the
+        H-bridges. The optocouplers take the 3.3V PWM signals from the STM32 and pass them
+        as isolated signals to the gate networks of the MOSFET H-bridges, which run off the
+        separate 6V battery. Two P-channel and two N-channel MOSFETs per motor, giving
+        full forward and reverse control. The isolation means motor switching transients
+        cannot couple back into the MCU supply and corrupt readings.
+      </p>
 
-    <figure>
-      <img
-        src="images/projects/metal-detector-robot/fig02-robot-block.png"
-        alt="Robot hardware block diagram showing STM32, optocouplers, H-bridges, JDY40, and metal detector"
-        onerror="imgFallback(this)"
-      >
-      <figcaption>fig 02 — robot hardware block diagram. optocouplers electrically isolate the STM32 from the motor drive stage</figcaption>
-    </figure>
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig02-robot-block.png"
+          alt="Robot hardware block diagram showing STM32, optocouplers, H-bridges, JDY40, and metal detector"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 02 — robot hardware block diagram. optocouplers electrically isolate the STM32 from the motor drive stage</figcaption>
+      </figure>
 
-    <figure>
-      <img
-        src="images/projects/metal-detector-robot/fig03-remote-schematic.png"
-        alt="Remote circuit schematic: EFM8LB1, LM7805, MCP1700, JDY-40, LCD, joystick"
-        onerror="imgFallback(this)"
-      >
-      <figcaption>fig 03 — remote schematic. 9V battery regulated down through LM7805 and MCP1700 to supply 5V and 3.3V rails</figcaption>
-    </figure>
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig03-remote-schematic.png"
+          alt="Remote circuit schematic: EFM8LB1, LM7805, MCP1700, JDY-40, LCD, joystick"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 03 — remote schematic. 9V battery regulated down through LM7805 and MCP1700 to supply 5V and 3.3V rails</figcaption>
+      </figure>
 
-    <figure>
-      <img
-        src="images/projects/metal-detector-robot/fig04-robot-schematic.png"
-        alt="Robot circuit schematic: STM32L051, LTV846 optocouplers, MOSFET H-bridges, Colpitts metal detector, JDY-40"
-        onerror="imgFallback(this)"
-      >
-      <figcaption>fig 04 — robot schematic. two separate battery inputs: 9V for logic (left), 6V for motor drive (bottom-left)</figcaption>
-    </figure>
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig04-robot-schematic.png"
+          alt="Robot circuit schematic: STM32L051, LTV846 optocouplers, MOSFET H-bridges, Colpitts metal detector, JDY-40"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 04 — robot schematic. two separate battery inputs: 9V for logic (left), 6V for motor drive (bottom-left)</figcaption>
+      </figure>
 
-    <h2 data-addr="0x1830">The radio noise problem</h2>
-    <p>
-      The first version of the comms protocol encoded the joystick values as integers cast
-      to strings, then fired those over the JDY-40. The error rate was high enough to make
-      the robot basically undriveable. Random corrupted frames would land and get
-      interpreted as valid movement commands, so the robot would randomly lurch in
-      whatever direction the garbage bytes happened to decode to.
-    </p>
-    <p>
-      The fix was to constrain what the receiver would accept. Each of the eight joystick
-      octants maps to a specific direction character, and each direction character has an
-      expected range for the accompanying X and Y values. Any received frame that does not
-      satisfy those constraints for its reported direction gets dropped entirely. The robot
-      holds the last valid command instead of executing noise. After that, movement became
-      smooth and predictable. It is a simple filter but it eliminated the problem
-      completely in testing.
-    </p>
-    <p>
-      There was a second radio issue: if the STM32 was reset while the JDY-40 on the
-      remote was in normal operating mode, the two modules would not re-synchronize.
-      Pulling the SET pin low on startup to force AT mode, reconfiguring the DVID, then
-      releasing it fixed the startup handshake.
-    </p>
+      <h2 data-addr="0x1830">The Radio Noise Problem</h2>
+      <p>
+        The first version of the comms protocol encoded the joystick values as integers cast
+        to strings, then fired those over the JDY-40. The error rate was high enough to make
+        the robot basically undriveable. Random corrupted frames would land and get
+        interpreted as valid movement commands, so the robot would randomly lurch in
+        whatever direction the garbage bytes happened to decode to.
+      </p>
+      <p>
+        The fix was to constrain what the receiver would accept. Each of the eight joystick
+        octants maps to a specific direction character, and each direction character has an
+        expected range for the accompanying X and Y values. Any received frame that does not
+        satisfy those constraints for its reported direction gets dropped entirely. The robot
+        holds the last valid command instead of executing noise. After that, movement became
+        smooth and predictable. It is a simple filter but it eliminated the problem
+        completely in testing.
+      </p>
+      <p>
+        There was a second radio issue: if the STM32 was reset while the JDY-40 on the
+        remote was in normal operating mode, the two modules would not re-synchronize.
+        Pulling the SET pin low on startup to force AT mode, reconfiguring the DVID, then
+        releasing it fixed the startup handshake.
+      </p>
 
-    <h2 data-addr="0x1840">Finding metal</h2>
-    <p>
-      The detector is a Colpitts LC oscillator built around the SN74HC04N hex inverter,
-      with a 1 mH inductor as the sensing element. When the inductor gets close to a
-      metallic object, eddy currents in the metal load the coil and shift the oscillation
-      frequency. The STM32 measures that frequency using the SysTick counter in free-run
-      mode, timing 100 consecutive periods of the square wave on PA8 and averaging the
-      result over 450 samples to reduce noise.
-    </p>
-    <pre><code>// measure 100 periods via SysTick free-run
+      <h2 data-addr="0x1840">Finding Metal</h2>
+      <p>
+        The detector is a Colpitts LC oscillator built around the SN74HC04N hex inverter,
+        with a 1 mH inductor as the sensing element. When the inductor gets close to a
+        metallic object, eddy currents in the metal load the coil and shift the oscillation
+        frequency. The STM32 measures that frequency using the SysTick counter in free-run
+        mode, timing 100 consecutive periods of the square wave on PA8 and averaging the
+        result over 450 samples to reduce noise.
+      </p>
+      <pre><code>// measure 100 periods via SysTick free-run
 SysTick->LOAD = 0xffffff;
 SysTick->VAL  = 0xffffff;
 SysTick->CTRL = CLKSOURCE | ENABLE;
-for (i = 0; i < n; i++) {
+for (i = 0; i &lt; n; i++) {
     while (PIN_PERIOD != 0) { if (COUNTFLAG) return 0; }
     while (PIN_PERIOD == 0) { if (COUNTFLAG) return 0; }
 }
 return 0xffffff - SysTick->VAL;</code></pre>
-    <p>
-      The original capacitor values in the circuit spec produced a frequency around
-      55 kHz. At that range the frequency bands for different metal sizes overlapped badly
-      and were hypersensitive to environmental changes. Swapping capacitors to bring the
-      operating frequency down to roughly 24 kHz gave well-separated bands with enough
-      tolerance to distinguish five strength levels reliably. The neutral reference is
-      24,069 Hz and deviations are binned into six categories from no metal through five
-      increasing strengths, each mapped to a character code the STM32 sends back to the
-      remote.
-    </p>
-    <div class="callout">
-      Neutral: &lt;20 Hz deviation &mdash; Small: 20–50 Hz &mdash; Medium: 50–90 Hz &mdash;
-      Strong: 90–130 Hz &mdash; XStrong: 130–190 Hz &mdash; Max: &gt;190 Hz
-    </div>
+      <p>
+        The original capacitor values in the circuit spec produced a frequency around
+        55 kHz. At that range the frequency bands for different metal sizes overlapped badly
+        and were hypersensitive to environmental changes. Swapping capacitors to bring the
+        operating frequency down to roughly 24 kHz gave well-separated bands with enough
+        tolerance to distinguish five strength levels reliably. The neutral reference is
+        24,069 Hz and deviations are binned into six categories from no metal through five
+        increasing strengths, each mapped to a character code the STM32 sends back to the
+        remote.
+      </p>
+      <div class="callout">
+        Neutral: &lt;20 Hz deviation &mdash; Small: 20–50 Hz &mdash; Medium: 50–90 Hz &mdash;
+        Strong: 90–130 Hz &mdash; XStrong: 130–190 Hz &mdash; Max: &gt;190 Hz
+      </div>
 
-    <h2 data-addr="0x1850">Moving the thing</h2>
-    <p>
-      Four PWM channels on the STM32, driven out of a 1 kHz TIM2 interrupt. Two channels
-      per motor: one for forward, one for reverse. The interrupt increments a counter and
-      compares it against four variables (pwm1 through pwm4). When the counter exceeds the
-      value, the corresponding pin goes low. Counter resets at 100, so the pwm variables
-      directly represent duty cycle as a percentage.
-    </p>
-    <p>
-      Joystick-to-PWM math treats the X and Y axes as two independent inputs. For forward
-      motion, the base speed is proportional to how far forward Y is pushed. Lateral X
-      input subtracts power from one wheel at a rate of 0.5 times the X deviation,
-      creating a curve rather than a pivot. Pure pivoting happens when Y is near center and
-      X is deflected: one wheel gets full X power and the other gets zero. Getting these
-      curves right took several test iterations with PWM values hard-coded and tape markers
-      on the wheels to measure synchronization.
-    </p>
-    <p>
-      Below PWM 20, neither motor moved at all. Between 20 and 35 there was barely
-      perceptible motion. Usable driving range was roughly 40 to 100, and the code scales
-      joystick input to that range to avoid the dead zone.
-    </p>
+      <h2 data-addr="0x1850">Moving The Thing</h2>
+      <p>
+        Four PWM channels on the STM32, driven out of a 1 kHz TIM2 interrupt. Two channels
+        per motor: one for forward, one for reverse. The interrupt increments a counter and
+        compares it against four variables (pwm1 through pwm4). When the counter exceeds the
+        value, the corresponding pin goes low. Counter resets at 100, so the pwm variables
+        directly represent duty cycle as a percentage.
+      </p>
+      <p>
+        Joystick-to-PWM math treats the X and Y axes as two independent inputs. For forward
+        motion, the base speed is proportional to how far forward Y is pushed. Lateral X
+        input subtracts power from one wheel at a rate of 0.5 times the X deviation,
+        creating a curve rather than a pivot. Pure pivoting happens when Y is near center and
+        X is deflected: one wheel gets full X power and the other gets zero. Getting these
+        curves right took several test iterations with PWM values hard-coded and tape markers
+        on the wheels to measure synchronization.
+      </p>
+      <p>
+        Below PWM 20, neither motor moved at all. Between 20 and 35 there was barely
+        perceptible motion. Usable driving range was roughly 40 to 100, and the code scales
+        joystick input to that range to avoid the dead zone.
+      </p>
 
-    <h2 data-addr="0x1860">Sharing the radio link</h2>
-    <p>
-      The JDY-40 is half-duplex. Both the movement commands and the metal strength
-      readings need to flow over the same link, in opposite directions, without stepping on
-      each other. The solution is a counter-based timeslot scheme. The remote sends
-      movement commands for 10 iterations, then on count 10 it sends a special S frame that
-      tells the robot to stop transmitting motion commands and send metal strength instead.
-      The robot sends the reading, the remote listens for counts 11 through 18, then at
-      count 19 the cycle resets and movement commands resume.
-    </p>
+      <h2 data-addr="0x1860">Sharing The Radio Link</h2>
+      <p>
+        The JDY-40 is half-duplex. Both the movement commands and the metal strength
+        readings need to flow over the same link, in opposite directions, without stepping on
+        each other. The solution is a counter-based timeslot scheme. The remote sends
+        movement commands for 10 iterations, then on count 10 it sends a special S frame that
+        tells the robot to stop transmitting motion commands and send metal strength instead.
+        The robot sends the reading, the remote listens for counts 11 through 18, then at
+        count 19 the cycle resets and movement commands resume.
+      </p>
 
-    <figure>
-      <img
-        src="images/projects/metal-detector-robot/fig05-software-fsm.png"
-        alt="Software state machine diagram showing remote and robot taking turns on the radio link"
-        onerror="imgFallback(this)"
-      >
-      <figcaption>fig 05 — software protocol state machine. the remote controls the timing; the robot responds only when asked</figcaption>
-    </figure>
+      <figure>
+        <img
+          src="images/projects/metal-detector-robot/fig05-software-fsm.png"
+          alt="Software state machine diagram showing remote and robot taking turns on the radio link"
+          onerror="imgFallback(this)"
+        >
+        <figcaption>fig 05 — software protocol state machine. the remote controls the timing; the robot responds only when asked</figcaption>
+      </figure>
 
-    <p>
-      Getting this right took three full test iterations on the radio link alone. Early
-      attempts had the remote getting stuck waiting for a metal strength reply if the robot
-      missed the S frame, causing the control loop to freeze. The fix was a timeout in
-      <code>getchar1_with_timeout()</code> on the EFM8 side: if no valid metal strength
-      frame arrives within half a second, the function returns a newline and the counter
-      resets regardless. The residual delay that showed up in testing (about once every 20
-      seconds) came down to the two JDY-40 modules occasionally mis-timing their channel
-      turnaround, not a software bug.
-    </p>
-  `,
-},
+      <p>
+        Getting this right took three full test iterations on the radio link alone. Early
+        attempts had the remote getting stuck waiting for a metal strength reply if the robot
+        missed the S frame, causing the control loop to freeze. The fix was a timeout in
+        <code>getchar1_with_timeout()</code> on the EFM8 side: if no valid metal strength
+        frame arrives within half a second, the function returns a newline and the counter
+        resets regardless. The residual delay that showed up in testing (about once every 20
+        seconds) came down to the two JDY-40 modules occasionally mis-timing their channel
+        turnaround, not a software bug.
+      </p>
+    `,
+  },
 
   'proj/reflow-oven-controller': {
-  type:'proj', addr:'0x1C00', struct:'project_t', badge:'PROJECT',
-  title:'Reflow Oven Controller',
-  sub:'ARM Assembly state machine that turns a toaster oven into a PCB soldering station',
-  meta:[
-    {k:'duration', v:'Jan – Mar 2024'},
-    {k:'course',   v:'ELEC 291'},
-    {k:'team',     v:'7 people'},
-  ],
-  stack:['ARM Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
-  //hero:'images/projects/reflow-oven-controller/01-hero.jpg',
-  body:`
-    <h2 data-addr="0x1C10">The job</h2>
-    <p>
-      Reflow soldering is how real PCBs get assembled. You spread solder paste on the pads, place your SMD components, then run the board through a carefully controlled temperature profile. Too cool and the solder never flows properly. Too hot and you cook the components. The profile has to hit specific temperatures for specific durations, in the right order.
-    </p>
-    <p>
-      Our ELEC 291 group built a controller that does exactly that, using a toaster oven as the heat source and an N76E003 microcontroller as the brain. The whole thing is programmed in ARM Assembly. Six states, a K-type thermocouple for feedback, bang-bang PWM to drive the oven's solid-state relay, and an HD44780 LCD showing live temperature and state. A Python strip chart on a connected PC plots everything in real time.
-    </p>
+    type:'proj', addr:'0x1C00', struct:'project_t', badge:'PROJECT',
+    title:'Reflow Oven Controller',
+    sub:'Six-state reflow controller in ARM Assembly',
+    meta:[
+      {k:'duration', v:'Jan – Mar 2024'},
+      {k:'course',   v:'ELEC 291'},
+      {k:'team',     v:'7 people'},
+    ],
+    stack:['ARM Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
+    //hero:'images/projects/reflow-oven-controller/01-hero.jpg',
+    body:`
+      <h2 data-addr="0x1C10">The Job</h2>
+      <p>
+        Reflow soldering is how real PCBs get assembled. You spread solder paste on the pads, place your SMD components, then run the board through a carefully controlled temperature profile. Too cool and the solder never flows properly. Too hot and you cook the components. The profile has to hit specific temperatures for specific durations, in the right order.
+      </p>
+      <p>
+        Our ELEC 291 group built a controller that does exactly that, using a toaster oven as the heat source and an N76E003 microcontroller as the brain. The whole thing is programmed in ARM Assembly. Six states, a K-type thermocouple for feedback, bang-bang PWM to drive the oven's solid-state relay, and an HD44780 LCD showing live temperature and state. A Python strip chart on a connected PC plots everything in real time.
+      </p>
 
-    <figure>
-      <img src="images/projects/reflow-oven-controller/02-block-diagram.png"
-           alt="Hardware block diagram showing thermocouple, op-amp, ADC, FSM, SSR, LCD, and PC connections"
-           onerror="imgFallback(this)">
-      <figcaption>fig 01 — full system block diagram: thermocouple signal flows through the op-amp into the ADC, FSM drives the SSR via PWM and streams data to the PC over serial</figcaption>
-    </figure>
+      <figure>
+        <img src="images/projects/reflow-oven-controller/02-block-diagram.png"
+             alt="Hardware block diagram showing thermocouple, op-amp, ADC, FSM, SSR, LCD, and PC connections"
+             onerror="imgFallback(this)">
+        <figcaption>fig 01 — full system block diagram: thermocouple signal flows through the op-amp into the ADC, FSM drives the SSR via PWM and streams data to the PC over serial</figcaption>
+      </figure>
 
-    <h2 data-addr="0x1C20">The analog chain</h2>
-    <p>
-      A K-type thermocouple puts out about 41 µV per degree Celsius. At 220°C that's roughly 9 mV. The N76E003's ADC runs on a 0–5V range, so you need significant gain before the ADC sees anything useful. We used an OP07 precision op-amp configured as a differential amplifier.
-    </p>
-    <p>
-      The first problem we hit: the OP07 requires its supply rails to exceed the signal range by a few volts. We were only feeding it 0V and +5V, and it was clipping badly at lower temperatures. The fix was a TC7660S charge pump — a simple switched-capacitor IC that inverts +5V to produce a clean −5V rail. That gave the OP07 the headroom it needed.
-    </p>
-    <p>
-      The second problem was the resistors. Our initial breadboard used small-value resistors (around 51Ω) in the feedback network. The thermocouple wire is 2 metres long, which means it has non-trivial resistance of its own. At 51Ω, that wire resistance is a meaningful fraction of the divider and it throws off the gain calculation. We switched to values above 200Ω to make the thermocouple resistance negligible, then measured each resistor individually with an ohmmeter. Final configuration: 100kΩ and 270Ω, giving a gain of 375. That landed us within 3°C across the full operating range.
-    </p>
+      <h2 data-addr="0x1C20">The Analog Chain</h2>
+      <p>
+        A K-type thermocouple puts out about 41 µV per degree Celsius. At 220°C that's roughly 9 mV. The N76E003's ADC runs on a 0–5V range, so you need significant gain before the ADC sees anything useful. We used an OP07 precision op-amp configured as a differential amplifier.
+      </p>
+      <p>
+        The first problem we hit: the OP07 requires its supply rails to exceed the signal range by a few volts. We were only feeding it 0V and +5V, and it was clipping badly at lower temperatures. The fix was a TC7660S charge pump, a simple switched-capacitor IC that inverts +5V to produce a clean -5V rail. That gave the OP07 the headroom it needed.
+      </p>
+      <p>
+        The second problem was the resistors. Our initial breadboard used small-value resistors (around 51Ω) in the feedback network. The thermocouple wire is 2 metres long, which means it has non-trivial resistance of its own. At 51Ω, that wire resistance is a meaningful fraction of the divider and it throws off the gain calculation. We switched to values above 200Ω to make the thermocouple resistance negligible, then measured each resistor individually with an ohmmeter. Final configuration: 100kΩ and 270Ω, giving a gain of 375. That landed us within 3°C across the full operating range.
+      </p>
 
-    <figure>
-      <img src="images/projects/reflow-oven-controller/06-schematic.png"
-           alt="Circuit schematic showing N76E003, OP07 op-amp, TC7660S charge pump, SSR, and LCD connections"
-           onerror="imgFallback(this)">
-      <figcaption>fig 02 — full circuit schematic: TC7660S top-right provides the negative rail, OP07 amplifies the thermocouple differential, 13N06LS MOSFET drives the SSR box</figcaption>
-    </figure>
+      <figure>
+        <img src="images/projects/reflow-oven-controller/06-schematic.png"
+             alt="Circuit schematic showing N76E003, OP07 op-amp, TC7660S charge pump, SSR, and LCD connections"
+             onerror="imgFallback(this)">
+        <figcaption>fig 02 — full circuit schematic: TC7660S top-right provides the negative rail, OP07 amplifies the thermocouple differential, 13N06LS MOSFET drives the SSR box</figcaption>
+      </figure>
 
-    <div class="callout">
-      The 2m thermocouple lead resistance was around 2–3Ω. With a 51Ω input resistor that's a 4–6% error baked into every reading. With 270Ω it drops to about 1%. Small detail, big difference in calibration.
-    </div>
+      <div class="callout">
+        The 2m thermocouple lead resistance was around 2–3Ω. With a 51Ω input resistor that's a 4–6% error baked into every reading. With 270Ω it drops to about 1%. Small detail, big difference in calibration.
+      </div>
 
-    <h2 data-addr="0x1C30">The state machine</h2>
-    <p>
-      The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before returning to idle.
-    </p>
-    <p>
-      There's also an abort condition: if the oven takes more than 60 seconds to get above 50°C in the preheat state, the FSM assumes something is wrong and cuts power immediately.
-    </p>
+      <h2 data-addr="0x1C30">The State Machine</h2>
+      <p>
+        The reflow profile is a six-state FSM. State 0 is idle (power off). State 1 ramps up at 100% power until the oven hits the soak temperature (default 150°C). State 2 holds at 20% power for the soak duration. State 3 ramps again at 100% toward the reflow temperature (default 220°C). State 4 holds at 20% for the reflow dwell time. State 5 is cooling — power cut, wait for the oven to drop below 60°C before returning to idle.
+      </p>
+      <p>
+        There's also an abort condition: if the oven takes more than 60 seconds to get above 50°C in the preheat state, the FSM assumes something is wrong and cuts power immediately.
+      </p>
 
-    <figure>
-      <img src="images/projects/reflow-oven-controller/01-hero.jpg"
-           alt="Breadboard controller with HD44780 LCD showing State: SOAK, sec: 26, tem: 0082, with multimeter probes attached"
-           onerror="imgFallback(this)">
-      <figcaption>fig 03 — breadboard mid-run during the soak phase: LCD line 1 shows the current FSM state name, line 2 shows elapsed seconds and temperature. multimeter probes are measuring the SSR output voltage simultaneously</figcaption>
-    </figure>
+      <figure>
+        <img src="images/projects/reflow-oven-controller/01-hero.jpg"
+             alt="Breadboard controller with HD44780 LCD showing State: SOAK, sec: 26, tem: 0082, with multimeter probes attached"
+             onerror="imgFallback(this)">
+        <figcaption>fig 03 — breadboard mid-run during the soak phase: LCD line 1 shows the current FSM state name, line 2 shows elapsed seconds and temperature. multimeter probes are measuring the SSR output voltage simultaneously</figcaption>
+      </figure>
 
-    <figure>
-      <img src="images/projects/reflow-oven-controller/03-fsm-states.png"
-           alt="FSM state diagram showing six states with temperature and time-based transition conditions"
-           onerror="imgFallback(this)">
-      <figcaption>fig 04 — FSM state diagram: red labels are transition conditions, green labels are power outputs for each state. abort condition omitted for clarity</figcaption>
-    </figure>
+      <figure>
+        <img src="images/projects/reflow-oven-controller/03-fsm-states.png"
+             alt="FSM state diagram showing six states with temperature and time-based transition conditions"
+             onerror="imgFallback(this)">
+        <figcaption>fig 04 — FSM state diagram: red labels are transition conditions, green labels are power outputs for each state. abort condition omitted for clarity</figcaption>
+      </figure>
 
-    <p>
-      The FSM is implemented as a chain of <code>cjne</code> comparisons against a state variable in DSEG. Transitions check temperature against values stored in named registers (<code>Temp_soak</code>, <code>Temp_refl</code>, <code>Temp_cool</code>) alongside a BCD seconds counter that the Timer 2 ISR maintains. Pushbuttons cycle through four parameter modes before start — soak temp, soak time, reflow temp, reflow time — with increment/decrement in steps of 5.
-    </p>
+      <p>
+        The FSM is implemented as a chain of <code>cjne</code> comparisons against a state variable in DSEG. Transitions check temperature against values stored in named registers (<code>Temp_soak</code>, <code>Temp_refl</code>, <code>Temp_cool</code>) alongside a BCD seconds counter that the Timer 2 ISR maintains. Pushbuttons cycle through four parameter modes before start — soak temp, soak time, reflow temp, reflow time — with increment/decrement in steps of 5.
+      </p>
 
-    <pre><code>; State 1 → State 2 transition: temp crossed soak threshold
+      <pre><code>; State 1 → State 2 transition: temp crossed soak threshold
 FSM1_state1_part2:
     mov  a, Temp_soak
     clr  c
@@ -1181,15 +1146,15 @@ FSM1_state1_part2:
 FSM1_state1_done:
     ljmp FSM2</code></pre>
 
-    <h2 data-addr="0x1C40">PWM and timing</h2>
-    <p>
-      The oven is controlled entirely through a solid-state relay. PWM to an SSR just means toggling it on and off — the oven's heating elements do the averaging. We run three power levels in practice: 0%, 20%, and 100%. Full power for ramping, 20% to hold a soak or dwell, zero for cooling.
-    </p>
-    <p>
-      Timer 2 fires an ISR every millisecond. Inside that ISR, a free-running counter called <code>pwm_counter</code> increments from 0 to 59. If the counter is below the <code>pwm</code> value, the PWM output pin is high. When it rolls over, the ISR also handles seconds counting via BCD arithmetic — incrementing <code>count1</code> and <code>count2</code> as decade counters before bumping <code>sec</code> and setting an <code>s_flag</code> bit for the main loop.
-    </p>
+      <h2 data-addr="0x1C40">PWM And Timing</h2>
+      <p>
+        The oven is controlled entirely through a solid-state relay. PWM to an SSR just means toggling it on and off — the oven's heating elements do the averaging. We run three power levels in practice: 0%, 20%, and 100%. Full power for ramping, 20% to hold a soak or dwell, zero for cooling.
+      </p>
+      <p>
+        Timer 2 fires an ISR every millisecond. Inside that ISR, a free-running counter called <code>pwm_counter</code> increments from 0 to 59. If the counter is below the <code>pwm</code> value, the PWM output pin is high. When it rolls over, the ISR also handles seconds counting via BCD arithmetic — incrementing <code>count1</code> and <code>count2</code> as decade counters before bumping <code>sec</code> and setting an <code>s_flag</code> bit for the main loop.
+      </p>
 
-    <pre><code>; PWM logic inside Timer2_ISR
+      <pre><code>; PWM logic inside Timer2_ISR
     inc  pwm_counter
     clr  c
     mov  a, pwm
@@ -1202,55 +1167,54 @@ FSM1_state1_done:
     mov  pwm_counter, #0
     ; ... BCD seconds increment follows</code></pre>
 
-    <h2 data-addr="0x1C50">Getting the temperature right</h2>
-    <p>
-      Temperature validation was iterative. We collected over 1000 data points at each configuration, comparing the temperature calculated by the Assembly ADC code against a Python script working from raw multimeter voltage readings of the same point in the circuit. That gave us an objective, hardware-independent reference.
-    </p>
-    <p>
-      Iteration 1 had average deviation above 30°C — mostly wiring issues and the wrong resistor values. Iteration 2 got it below 10°C by fixing the supply rails but was still non-linear above 120°C. Iteration 3 hit 2.12°C average but spiked to 5.74°C around temperature transients. The final resistor configuration brought the average down to 0.79°C with a hard cap of 3°C across the full 25–240°C range.
-    </p>
+      <h2 data-addr="0x1C50">Getting The Temperature Right</h2>
+      <p>
+        Temperature validation was iterative. We collected over 1000 data points at each configuration, comparing the temperature calculated by the Assembly ADC code against a Python script working from raw multimeter voltage readings of the same point in the circuit. That gave us an objective, hardware-independent reference.
+      </p>
+      <p>
+        Iteration 1 had average deviation above 30°C — mostly wiring issues and the wrong resistor values. Iteration 2 got it below 10°C by fixing the supply rails but was still non-linear above 120°C. Iteration 3 hit 2.12°C average but spiked to 5.74°C around temperature transients. The final resistor configuration brought the average down to 0.79°C with a hard cap of 3°C across the full 25–240°C range.
+      </p>
 
-    <figure>
-      <img src="images/projects/reflow-oven-controller/04-temp-deviation.png"
-           alt="Plot of temperature deviation in °C versus temperature from 0 to 250°C, staying below 3°C"
-           onerror="imgFallback(this)">
-      <figcaption>fig 05 — final design temperature deviation vs. measured temperature: deviation drops as temperature rises, staying well inside the 3°C target across the whole range</figcaption>
-    </figure>
+      <figure>
+        <img src="images/projects/reflow-oven-controller/04-temp-deviation.png"
+             alt="Plot of temperature deviation in °C versus temperature from 0 to 250°C, staying below 3°C"
+             onerror="imgFallback(this)">
+        <figcaption>fig 05 — final design temperature deviation vs. measured temperature: deviation drops as temperature rises, staying well inside the 3°C target across the whole range</figcaption>
+      </figure>
 
-    <p>
-      PWM linearity got the same treatment. We swept the PWM value from 0 to 100 in increments of 5 and measured the output voltage with a multimeter. Prototype 1 was badly off — the MOSFET gate drive wasn't set up correctly and the SSR wasn't seeing proportional voltage. Prototype 2 improved significantly. The final version tracks the ideal V = PWM/100 × 5V line almost exactly.
-    </p>
+      <p>
+        PWM linearity got the same treatment. We swept the PWM value from 0 to 100 in increments of 5 and measured the output voltage with a multimeter. Prototype 1 was badly off — the MOSFET gate drive wasn't set up correctly and the SSR wasn't seeing proportional voltage. Prototype 2 improved significantly. The final version tracks the ideal V = PWM/100 × 5V line almost exactly.
+      </p>
 
-    <figure>
-      <img src="images/projects/reflow-oven-controller/05-pwm-linearity.png"
-           alt="Plot of SSR output voltage vs. PWM value for three prototype iterations versus ideal"
-           onerror="imgFallback(this)">
-      <figcaption>fig 06 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
-    </figure>
+      <figure>
+        <img src="images/projects/reflow-oven-controller/05-pwm-linearity.png"
+             alt="Plot of SSR output voltage vs. PWM value for three prototype iterations versus ideal"
+             onerror="imgFallback(this)">
+        <figcaption>fig 06 — PWM output voltage vs. value across three iterations: prototype 1 was badly non-linear, final version nearly overlaps the ideal reference line</figcaption>
+      </figure>
 
-    <h2 data-addr="0x1C60">Bugs we actually hit</h2>
-    <p>
-      The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without conversion). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
-    </p>
-    <p>
-      Early on, the cooling state couldn't turn off. The exit condition checks if temperature has dropped below 60°C, but we had the comparison inverted — the FSM was staying in State 5 indefinitely even at room temperature. That one was an off-by-one on a carry flag check.
-    </p>
-    <p>
-      We also tried building the FSM, SSR control, and button handling as separate assembly files, planning to tie them together. That turned out to be impractical with the toolchain we were using, so everything ended up consolidated into a single file. Not elegant, but it worked and made the interrupt context a lot easier to reason about.
-    </p>
-    <p>
-      The grounding situation was memorable: the laptop's internal USB ground had enough noise that temperature readings were jumping erratically. We ended up clamping our circuit ground to an oscilloscope probe ground, which is connected to earth through the scope's chassis. That's not something you'd want to ship, but it was stable enough to finish testing. A 220µF bulk cap across Vcc and GND helped with the switching transients from the SSR.
-    </p>
+      <h2 data-addr="0x1C60">Bugs We Actually Hit</h2>
+      <p>
+        The worst one cost us a solid debugging session: temperature values were being displayed in hex on the LCD instead of decimal. The root cause was that our BCD conversion wasn't being called in all the right places, so what the LCD was printing was the raw byte — <code>0x96</code> showing up as "96" when the actual temperature was 150°C (0x96 = 150 in hex, but we were rendering it without conversion). This also caused the FSM to transition at the wrong temperatures during thermocouple testing, because the comparison was happening before conversion.
+      </p>
+      <p>
+        Early on, the cooling state couldn't turn off. The exit condition checks if temperature has dropped below 60°C, but we had the comparison inverted — the FSM was staying in State 5 indefinitely even at room temperature. That one was an off-by-one on a carry flag check.
+      </p>
+      <p>
+        We also tried building the FSM, SSR control, and button handling as separate assembly files, planning to tie them together. That turned out to be impractical with the toolchain we were using, so everything ended up consolidated into a single file. Not elegant, but it worked and made the interrupt context a lot easier to reason about.
+      </p>
+      <p>
+        The grounding situation was memorable: the laptop's internal USB ground had enough noise that temperature readings were jumping erratically. We ended up clamping our circuit ground to an oscilloscope probe ground, which is connected to earth through the scope's chassis. That's not something you'd want to ship, but it was stable enough to finish testing. A 220µF bulk cap across Vcc and GND helped with the switching transients from the SSR.
+      </p>
 
-    <div class="callout">
-      Total team time on this project exceeded 200 hours across 7 people. About 40% of that was calibration and debugging. The assembly lines are relatively few — the time cost is in getting analog hardware and embedded software to agree on what the temperature actually is.
-    </div>
-  `,
-},
+      <div class="callout">
+        The assembly lines are relatively few. Most of the team's time was calibration and debugging. The time cost is in getting analog hardware and embedded software to agree on what the temperature actually is.
+      </div>
+    `,
+  },
 };
 
 (function(){
-  // boot anim — skip on deep links or repeat visits within session
   const boot=document.getElementById('boot');
   const reduceMotion=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   const skipBoot=location.hash||sessionStorage.getItem('booted')||reduceMotion;
@@ -1273,7 +1237,6 @@ FSM1_state1_done:
   const listView=document.getElementById('list-view');
   const detailView=document.getElementById('detail-view');
 
-  // ── image fallback helper, exposed globally for inline onerror ──
   window.imgFallback=function(img){
     const path=img.getAttribute('src')||'';
     const div=document.createElement('div');
@@ -1282,13 +1245,11 @@ FSM1_state1_done:
     if(img.parentNode){img.parentNode.replaceChild(div,img);}
   };
 
-  // ── ordered key lists for prev/next nav ──
   const KEYS={
     exp: Object.keys(DETAILS).filter(k=>DETAILS[k].type==='exp'),
     proj:Object.keys(DETAILS).filter(k=>DETAILS[k].type==='proj'),
   };
 
-  // ── list view state tracking ──
   let currentIdx=0;
   let lockedIdx=null;
   let inDetail=false;
@@ -1327,19 +1288,16 @@ FSM1_state1_done:
     window.__navUnlock=setTimeout(()=>{lockedIdx=null;detectFromScroll();},800);
   }
 
-  // region click → navigate to section
   regs.forEach((r,i)=>{
     r.addEventListener('click',e=>{
       e.preventDefault();
       const targetId=r.dataset.target;
-      // clear hash so we go to list view
       history.pushState(null,'','#'+targetId);
       navigateToSection(i);
       r.blur();
     });
   });
 
-  // keyboard nav (arrows = section nav, only in list view)
   document.addEventListener('keydown',e=>{
     if(inDetail&&e.key==='Escape'){closeDetail();return;}
     const tag=(e.target&&e.target.tagName)||'';
@@ -1354,7 +1312,6 @@ FSM1_state1_done:
     navigateToSection(next);
   });
 
-  // ── DETAIL VIEW rendering ──
   function buildDetail(slug){
     const d=DETAILS[slug];
     if(!d)return '';
@@ -1363,7 +1320,6 @@ FSM1_state1_done:
     const metaHtml=d.meta?d.meta.map(m=>`<div class="m"><span class="mk">${m.k}</span><span class="mv">${m.v}</span></div>`).join(''):'';
     const heroHtml=d.hero?`<div class="dv-hero"><img src="${d.hero}" alt="${d.title}" onerror="imgFallback(this)"/></div>`:'';
 
-    // prev/next within type
     const list=KEYS[d.type];
     const idx=list.indexOf(slug);
     const prev=idx>0?DETAILS[list[idx-1]]:null;
@@ -1387,7 +1343,7 @@ FSM1_state1_done:
       </div>
       <article class="dv-body">
         <header class="dv-header">
-          <div class="dv-kicker"><span class="badge">${d.badge}</span><span>${d.struct} @ ${d.addr}</span></div>
+          <div class="dv-kicker"><span class="badge">${d.badge}</span></div>
           <h1 class="dv-title">${d.title}</h1>
           <div class="dv-sub">${d.sub}</div>
           <div class="dv-meta">${metaHtml}</div>
@@ -1414,17 +1370,14 @@ FSM1_state1_done:
     inDetail=true;
     body.scrollTop=0;
 
-    // update header chrome
     curSec.textContent=d.type==='exp'?'.experience':'.projects';
     sbSec.textContent=d.type==='exp'?'.experience':'.projects';
     sbStruct.textContent=d.struct;
     scrollPos.textContent=`struct ${d.struct} @ ${d.addr}`;
 
-    // highlight parent region
     const parentId=d.type==='exp'?'sec-experience':'sec-projects';
     regs.forEach(r=>r.classList.toggle('on',r.dataset.target===parentId));
 
-    // wire detail-view buttons
     detailView.querySelectorAll('[data-back]').forEach(el=>{
       el.addEventListener('click',()=>closeDetail());
     });
@@ -1446,12 +1399,10 @@ FSM1_state1_done:
     detailView.innerHTML='';
     inDetail=false;
     if(updateHash){
-      // restore hash to parent section if possible
       const pid=document.querySelector('.reg.on')?.dataset.target||'sec-about';
       history.pushState(null,'','#'+pid);
       const sec=document.getElementById(pid);
       if(sec){
-        // small delay so the layout settles
         requestAnimationFrame(()=>{
           body.scrollTo({top:pid==='sec-about'?0:sec.offsetTop-8,behavior:'auto'});
           detectFromScroll();
@@ -1460,7 +1411,6 @@ FSM1_state1_done:
     }
   }
 
-  // wire list-view card clicks
   document.querySelectorAll('[data-detail]').forEach(card=>{
     card.addEventListener('click',e=>{
       if(e.target.closest('a'))return;
@@ -1469,30 +1419,26 @@ FSM1_state1_done:
     });
   });
 
-  // ── hash routing on load + popstate ──
   function routeFromHash(){
     const h=(location.hash||'').replace(/^#/,'');
     if(!h){closeDetail(false);setActiveSection(0);body.scrollTop=0;return;}
     if(DETAILS[h]){openDetail(h,false);return;}
-    // section anchor
     const idx=[...sections].findIndex(s=>s.id===h);
     if(idx>=0){closeDetail(false);navigateToSection(idx);}
   }
   window.addEventListener('popstate',routeFromHash);
   window.addEventListener('hashchange',e=>{routeFromHash();});
 
-  // initial state
   setActiveSection(0);
   routeFromHash();
 
-  // ── rotating status ticker (option 5) ──────────────
   const TICKER = [
+    ['DEBUGGING', 'a watchdog race on flash erase'],
     ['LISTENING', 'sturgill simpson, cuttin\u2019 grass'],
     ['READING',   'tinker tailor soldier spy'],
     ['PLAYING',   'elden ring NG+'],
     ['WATCHING',  'arsenal vs whoever, 6am CET'],
-    ['DEBUGGING', 'a watchdog race on flash erase'],
-    ['DRINKING',  'filter coffee, black'],
+    ['BUILDING',  'something that shouldn\u2019t exist on a Pi'],
   ];
   const tkK = document.getElementById('tk-k');
   const tkV = document.getElementById('tk-v');
