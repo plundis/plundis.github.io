@@ -9,7 +9,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Monil Arora"/>
 <meta property="og:description" content="Portfolio of Monil Arora — EE @ UBC, embedded firmware, STM32/FreeRTOS, Verilog."/>
-<meta property="og:url" content="https://monilarora.com/"/>
+<!-- <meta property="og:url" content="https://plundis.github.io/"/> -->
 <meta name="twitter:card" content="summary"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307090a'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='monospace' font-size='22' fill='%23f0b64a'%3E%E2%97%86%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -90,7 +90,7 @@
 
   .hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;padding-bottom:8px;margin-bottom:18px;}
   .avatar{width:96px;height:96px;border:1px solid rgba(0,0,0,.25);overflow:hidden;background:#ddd;filter:grayscale(.08) contrast(1.02);flex-shrink:0;}
-  .avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 85%;display:block}
+  .avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 95%;display:block}
   .hero-body{min-width:0}
   .hero h1{font-family:var(--sans);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--paper-ink);margin-bottom:6px;}
   .hero .tagline{font-family:var(--mono);font-size:12px;color:var(--paper-dim);letter-spacing:.04em;line-height:1.5;margin-bottom:4px;font-weight:500;}
@@ -284,7 +284,24 @@
     .exp{margin:0;padding:14px 0;}
     .exp::after{top:14px;right:2px;}
     .exp-top{padding-right:18px;}
+    .termlog{font-size:10.5px;padding:8px 10px;}
+    .termlog .tl-k{width:9ch;margin-right:6px;}
+    .termlog .tl-dim{padding-left:calc(9ch + 12px);}
   }
+
+  /* Option C: terminal log bio */
+  .termlog{max-width:80ch;} 
+  .termlog{margin:12px 0 4px;border:1px solid var(--phos-deep);background:#080e0a;color:var(--paper);padding:10px 12px;font-family:var(--mono);font-size:11.5px;line-height:1.8;white-space:nowrap;overflow-x:auto;box-shadow:inset 0 0 24px rgba(124,245,138,.04);}
+  .termlog .tl-line{display:block;}
+  .termlog .tl-p  {color:var(--phos);margin-right:6px;}
+  .termlog .tl-k  {color:var(--amber);letter-spacing:.1em;font-weight:600;display:inline-block;width:10ch;margin-right:8px;}
+  .termlog .tl-at {color:var(--phos-dim);}
+  .termlog .tl-hi {color:var(--phos);font-weight:700;text-shadow:0 0 6px rgba(124,245,138,.4);}
+  .termlog a      {color:var(--paper);text-decoration:none;border-bottom:1px solid var(--phos-dim);}
+  .termlog a:hover{border-bottom-color:var(--phos);color:#fff;}
+  .termlog .tl-bar{color:var(--phos);letter-spacing:0;}
+  .termlog .tl-dim{color:var(--phos-dim);font-size:10px;letter-spacing:.02em;display:block;padding-left:calc(11ch + 25px);margin-top:3px;}
+  .termlog .tl-sep{display:block;height:0;margin:0;border-top:4px solid rgba(124,245,138,.1);}
 </style>
 </head>
 <body class="has-shell">
@@ -310,7 +327,7 @@
     <div class="tb-right">
       <a class="tb-link pri" href="resume.pdf" target="_blank" rel="noopener">◆ resume.pdf</a>
       <a class="tb-link" href="mailto:monilarora2003@gmail.com">email</a>
-      <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+      <!-- <a class="tb-link" href="https://github.com/plundis" target="_blank" rel="noopener">github</a> -->
       <a class="tb-link" href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
     </div>
   </header>
@@ -360,11 +377,11 @@
               <h1>Monil Arora</h1>
               <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS</div>
               <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2027</div>
-              <p class="blurb">Research intern at Laser Zentrum Hannover (Jan–Jul 2026) working on ground-station infrastructure for the Moonrise mission. Back at UBC in the fall.</p>
-              <div class="links">
+                            <!-- Option C: terminal log -->
+<div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">CURRENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">BUILDING</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar 3D printing payload</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">DEPLOYED</span><span class="tl-bar" data-termlog="bar">[····················]</span>  <span data-termlog="day">day …/…</span>  <span class="tl-at">JAN 25th ⟶ JUL 12th</span></span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>looking for 4 or 8 months internships · September 2026</span></div>              <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
-                <a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a>
-                <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a>
+                <a href="mailto:monilarora2003@gmail.com">email</a>
+                <!-- <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a> -->
                 <a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">linkedin</a>
               </div>
             </div>
@@ -476,7 +493,7 @@
           <div class="cgrid">
             <div class="ccard"><div class="k">email</div><div class="v"><a href="mailto:monilarora2003@gmail.com">monilarora2003@gmail.com</a></div></div>
             <div class="ccard"><div class="k">phone</div><div class="v">+1 236 777 5739</div></div>
-            <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div>
+            <!-- <div class="ccard"><div class="k">github</div><div class="v"><a href="https://github.com/plundis" target="_blank" rel="noopener">github.com/plundis</a></div></div> -->
             <div class="ccard"><div class="k">linkedin</div><div class="v"><a href="https://linkedin.com/in/monil-arora-a26851290" target="_blank" rel="noopener">in/monil-arora-a26851290</a></div></div>
             <div class="ccard"><div class="k">location · now</div><div class="v">Hannover, DE</div></div>
             <div class="ccard"><div class="k">location · home</div><div class="v">Vancouver, BC, CA</div></div>
@@ -489,10 +506,11 @@
           <span class="delim">*</span> <span class="nh">outside of work, mostly:</span><br/>
           <span class="delim">*</span><br/>
           <table>
-            <tr><td class="k">&nbsp;&nbsp;football</td>     <td class="v">real madrid. 6am kickoffs from a hannover timezone.</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;football</td>     <td class="v">real madrid. no more 6am kickoffs now that i'm in CET.</td></tr>
             <tr><td class="k">&nbsp;&nbsp;games</td>        <td class="v">currently far cry 4. previously ~1000 hrs of valorant.</td></tr>
             <!-- <tr><td class="k">&nbsp;&nbsp;reading</td>      <td class="v">cold war espionage. le carré, ben macintyre.</td></tr> -->
-            <tr><td class="k">&nbsp;&nbsp;rabbit holes</td> <td class="v">declassified intel programs, mkultra, the bob lazar tapes.<br/>less "i believe", more "this is great storytelling."</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;rabbit holes</td> <td class="v">the bob lazar tapes, mkultra, declassified intel programs, mossad case files.<br/>less "i believe", more "this is great storytelling"</td></tr>
+            <tr><td class="k">&nbsp;&nbsp;travel</td>        <td class="v">weekend trips out of hannover. amsterdam, copenhagen and hamburg done,<br/> cologne next. low effort, low budget.</td></tr>
             <!-- <tr><td class="k">&nbsp;&nbsp;tinkering</td>    <td class="v">old thinkpads. they don't make laptops like this anymore.</td></tr> -->
           </table>
           <span class="delim">*</span><br/>
@@ -539,7 +557,7 @@ const DETAILS = {
       {k:'duration', v:'Jan – Jul 2026'},
       {k:'location', v:'Hannover, DE'},
     ],
-    stack:['STM32F401CC','C++','FreeRTOS','HAL','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
+    stack:['STM32F401CC','C++','FreeRTOS','HAL','LittleFS','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
     links:[
       {label:'lzh.de ↗', url:'https://www.lzh.de/en', primary:false},
     ],
@@ -557,8 +575,9 @@ const DETAILS = {
       <h2 data-addr="0x0220">Boot counter, or: why erasing a flash sector at boot is a bad idea</h2>
       <p>The spacecraft needed a persistent counter that survives power cycles, so the ground station can spot unexpected resets. Sounds like a one afternoon feature. It was not.</p>
       <p>My first version put the count in flash Sector 4 and rewrote the sector on every boot. Erase, increment, program. On the bench it worked fine for hours. Then every few power cycles the count would just reset to 1 for no obvious reason. I spent a while assuming the math was wrong before realising the actual culprit was a race between the IWDG watchdog (2 second timeout) and the flash erase, which takes around 2 seconds on this chip. After certain soft resets the IWDG keeps running. It only fully clears on a hardware NRST or a real power on. So the erase was racing the watchdog, the MCU would hard reset mid erase, and the next boot would find a blank sector and start counting from 1 again.</p>
-      <p>The redesign is log based. Each boot just appends a 12 byte record (magic sentinel <code>0xDEADBEEF</code>, the count, and an XOR checksum) into Sector 5. The sector only gets erased once every 10,922 boots or so, and when that rare erase does happen the code explicitly pets the watchdog on both sides of it. If a power loss happens mid program, the checksum catches it and the previous valid slot is used as fallback. Sector 5 also has about 70 KB of headroom above the firmware image. Sector 4 was 4 KB away from being overwritten by a routine firmware update, which is its own minor horror story.</p>
-      <p>The cached count is now registered as a telemetry parameter and goes out in every TM frame. Watching it tick up over a long session is one of those small but oddly satisfying things.</p>
+      <p>The second version was log based. Each boot appended a 12 byte record (magic sentinel <code>0xDEADBEEF</code>, the count, and an XOR checksum) into Sector 5, so the sector only got erased once every 10,922 boots or so. I also moved off Sector 4 because the firmware image had crept to within 4 KB of overwriting it, which is its own minor horror story. That design worked and survived a lot of power cycles.</p>
+      <p>Then I threw it away. The hand-rolled log was solving a problem that already has a good off the shelf answer, and I had to add a second persistent value soon anyway (the GPS time, more on that later). So I dropped in <strong>LittleFS</strong>, a small filesystem built for exactly this kind of flash, and moved the boot count to a file called <code>boot_count</code> on the same Sector 5. LFS handles wear leveling and power fail safety internally, which is the whole point of using it instead of my own append log.</p>
+      <p>The migration had its own trap. The first cut left <code>lfs_stm32_reset_boot_count()</code> being called unconditionally in <code>setup()</code>, so every single boot deleted the count file before reading it. The count was always 1. On top of that <code>boot_count_telem.cpp</code> was still calling into the old library whose init I had already commented out, so the telemetry value was just 0. Wiring the telemetry getter to <code>lfs_stm32_boot_count_get()</code> and removing the unconditional reset fixed both. The cached count now goes out in every TM frame, and watching it tick up over a long session is one of those small but oddly satisfying things.</p>
 
       <h2 data-addr="0x0230">Image downlink</h2>
       <p>Camera payloads need to send compressed frames over the same packet pipe as telemetry. The whole image lives in an 8 KB SRAM buffer. A real camera would write into that buffer. For bench testing I wrote a small Python script that converts a JPEG into a C array at compile time and embeds it directly in the firmware, which is enough to exercise the downlink path without a sensor connected.</p>
@@ -573,7 +592,14 @@ const DETAILS = {
       <p>The internal temperature sensor has high output impedance and needs at least 10 microseconds of sample time so the ADC's sample and hold capacitor can actually charge up. <code>analogRead</code> uses a short fixed sampling time tuned for low impedance GPIO pins, and exposes no way to change it. There's also a second gotcha. The <code>TSVREFE</code> bit (bit 23 of <code>ADC_CCR</code>) is what physically connects the sensor to the ADC, and Arduino doesn't guarantee it's set.</p>
       <p>The fix was to drop down to the HAL. <code>HAL_ADC_ConfigChannel</code> with <code>ADC_SAMPLETIME_480CYCLES</code> gives about 23 microseconds at the 21 MHz ADC clock, well above the 10 microsecond minimum. Set <code>TSVREFE</code> explicitly. Run a single blocking conversion. Readings settled to 41 to 42 °C, which is exactly where you'd expect an STM32 die to sit at light load. The telemetry type also had to change from <code>uint8_t</code> to <code>int16_t</code> end to end, all the way from the firmware struct through codegen to the XTCE definition, because the original couldn't represent a negative value in a cold boot scenario.</p>
 
-      <h2 data-addr="0x0250">SLIP in YAMCS, in Java</h2>
+      <h2 data-addr="0x0250">GPS time, or: the clock that reset to the year 2000 every boot</h2>
+      <p>Every telemetry packet carries a GPS timestamp. After the fake-data cleanup, that timestamp came back as the same wrong value on every reboot. 630720000 GPS seconds, which decodes to the start of the year 2000.</p>
+      <p>It took a bit to untangle, because there were two separate things wrong that both pointed at the same symptom. The first was that there is no coin cell on this board. No VBAT means the RTC backup domain resets on every power cycle, so any first-boot-only logic that relied on a backup register was never going to survive a reboot. The previous code had a first-boot check that, without VBAT, simply never set the epoch at all. The second, sneakier one: <code>setEpoch(GPS_EPOCH)</code> tries to set the RTC to January 6, 1980, but the STM32 RTC only supports years 2000 through 2099. Setting it to 1980 fails silently. The RTC stays at its power-on default of January 1, 2000, and the GPS conversion faithfully subtracts the epoch offset from the wrong starting value and hands you the year 2000 forever.</p>
+      <p>The real fix had to be persistence, not just a corrected default. I added two LittleFS helpers, <code>lfs_stm32_save_unix_time()</code> and <code>lfs_stm32_load_unix_time()</code>. On boot, <code>init_time()</code> loads the last saved unix time and restores the RTC to it. The <code>Set_time</code> telecommand writes the new time to flash after setting the clock. So you set the time once after a reflash, and every reboot after that comes back within seconds of the last known value.</p>
+
+      <div class="callout">Persisting the time from inside a FreeRTOS task surfaced two more bugs at once. The 128 KB LFS sector erase can take up to 4 seconds on this chip, which blew straight past the 2 second IWDG window, so I raised <code>WDG_TIMEOUT</code> to 6 seconds. And <code>lfs_file_t</code> plus LittleFS's internal call frames overflowed the command task's 512 byte stack, which hardfaulted, which rebooted, which made COP-1 retransmit the same <code>Set_time</code>, which hardfaulted again. An infinite reboot loop triggered by setting the clock. Quadrupling that task's stack ended it. The boot-count LFS write never hit either problem because it runs in <code>setup()</code> before the scheduler and the watchdog start.</div>
+
+      <h2 data-addr="0x0260">SLIP in YAMCS, in Java</h2>
       <p>The earlier ground side architecture handled SLIP framing in a Python bridge script. TCP from the serial server came in, SLIP decoded UDP went out to YAMCS. It worked, but the bridge was a single point of failure, totally opaque to YAMCS, and didn't show up anywhere in the link statistics the operators were watching.</p>
       <p>I moved SLIP encode and decode into YAMCS itself as two custom Java data link classes extending the stock <code>UdpTmFrameLink</code> and <code>UdpTcFrameLink</code>. The receive side accumulates incoming UDP datagrams in a buffer, since one CCSDS frame can be split across multiple datagrams (or several frames can be packed into one), scans for the <code>0xC0</code> SLIP <code>END</code> markers, handles the <code>0xDB</code> escape sequences from RFC 1055, and passes fully decoded 200 byte frames to <code>handleFrame()</code>. A <code>MAX_ACCUM_SZ</code> safety cap resets the buffer if the stream ever desyncs. The transmit side does the inverse on COP-1 assembled TC frames.</p>
       <p>Two things made this messier than it had any right to be.</p>
@@ -581,35 +607,53 @@ const DETAILS = {
       <p>The second was the link statistics. <code>dataInCount</code> stayed stubbornly at zero in the YAMCS UI even though telemetry was clearly flowing through. The reason: we override <code>run()</code> entirely, so the base class never sees the bytes. In YAMCS 5.12.0 the <code>dataInCount</code> counter is backed by a protected <code>AtomicLong</code> that gets updated through a protected <code>dataIn(count, bytes)</code> method, and subclasses are expected to call it themselves. Earlier YAMCS versions used a <code>LongAdder</code> with a different signature, so the right answer wasn't obvious without reading the 5.12.0 <code>AbstractLink</code> source through <code>javap</code>. The fix was a single line after each successful frame:</p>
       <pre><code>dataIn(1, FRAME_LEN);   // FRAME_LEN = 200</code></pre>
 
-      <h2 data-addr="0x0260">Mission database (XTCE)</h2>
+      <h2 data-addr="0x0270">Mission database (XTCE)</h2>
       <p>YAMCS uses XTCE to describe the binary layout of every TM and TC packet. Most of what I did here was additive. A new <code>BootCount</code> parameter. A new <code>ImagePkt</code> container on APID 131 and VCID 1 with all five image chunk parameters. The signed 16 bit temperature type from above.</p>
       <p>While in there I also caught a latent endianness bug. <code>GPS_Seconds</code> and <code>GPS_Subseconds</code> were missing the <code>byteOrder</code> attribute, which means YAMCS had been defaulting them to big endian. The STM32 is little endian. So the values had been silently byte swapped since day one and nobody had noticed because the GPS field wasn't actively being read anywhere yet. Setting <code>byteOrder="leastSignificantByteFirst"</code> on every multi byte parameter cleared it up.</p>
 
-      <h2 data-addr="0x0270">Image reassembly on the ground</h2>
+      <h2 data-addr="0x0280">The Set_time verifier that took three tries</h2>
+      <p>Commands sent over COP-1 AD service get a clean acknowledgment in the YAMCS command history, because the CLCW comes back and closes the loop. Commands sent as BD bypass do not. <code>Set_time</code> is usually sent as bypass (the reason why is the next section), so in the command history it just showed a dash forever. No ack, no completion, no idea from the UI whether it worked.</p>
+      <p>The answer is an XTCE command verifier that watches telemetry instead of the transport layer. The logic I wanted was simple. After the command is released, check that <code>GPS_Time/seconds</code> climbs above 1,000,000,000 (roughly the year 2011, so any real date clears it while the year-2000 garbage value does not) within a 5 second window.</p>
+      <p>Simple logic, but the verifier was broken across several sessions and always showed a dash, as if it never ran. There were three separate structural problems in the XTCE. The <code>CustomAlgorithm</code> was sitting directly inside <code>VerifierSet</code> with no wrapper element, but XTCE sets the verifier kind from the wrapping element name, so without a <code>CompleteVerifier</code> around it YAMCS silently ignored the whole thing. The <code>CheckWindow</code> was nested in the wrong place and using the wrong time format, where YAMCS wants ISO-8601 durations like <code>timeToStopChecking="PT5S"</code>. And the JavaScript algorithm I had reached for in the first place was unnecessary, because a plain <code>Comparison</code> supports the <code>&gt;=</code> operator just fine. Stripping it back to a comparison-based <code>CompleteVerifier</code> made it work, and now both AD and BD versions of <code>Set_time</code> fire a green completion in the history.</p>
+      <p>One honest caveat I wrote into the docs. Because GPS time now persists in LittleFS, the timestamp may already be above the threshold before <code>Set_time</code> is even sent, so the verifier really confirms "the clock holds a real value" rather than "this specific command changed it." For a bypass command that otherwise gives you nothing, a green check that means "time is sane" is still a lot better than a dash.</p>
+
+      <h2 data-addr="0x0290">COP-1, reboots, and two levers people keep confusing</h2>
+      <p>COP-1 is the reliability layer on the command uplink. The ground side (FOP) tracks a send count V(S), the spacecraft side (FARM) tracks a receive count V(R), and in normal operation they stay equal while the CLCW piggybacks acknowledgments back down in the telemetry stream. It only protects commands. Telemetry is fire and forget.</p>
+      <p>The problem is what happens on a reboot. When the STM32 resets, its FARM resets V(R) to 0, but YAMCS still holds the old V(S). They no longer match, the link goes into lockout, and every subsequent command silently fails to go out. The manual recovery is clicking "Initiate AD" in the web UI, which is fine once but is a terrible story for an automated reset.</p>
+      <p>I wrote a short <code>yamcs-client</code> procedure that does the whole thing unattended. It reads the current <code>BootCount</code>, disables COP-1 at the link level to drop into BD mode, issues the reboot, polls <code>BootCount</code> every 500 ms until it ticks up (so it knows the board actually came back), then re-initialises COP-1 with <code>WITHOUT_CLCW_CHECK</code>. After the LittleFS time persistence work I also had it send <code>Set_time</code> with the host's local clock at the end, so the spacecraft comes back from a reset already knowing what time it is.</p>
+      <p>The deeper thing this surfaced is a trap I kept watching people fall into, including myself early on. "COP-1 is not in effect" (the link FOP being uninitialized or locked out) and "this command is marked Bypass" (a per-command attribute that builds a BD frame) sound like the same idea and are completely orthogonal. An AD command released while the FOP is uninitialized does not silently become a bypass and sneak through. YAMCS just holds it. To actually get a command out in that state you have to mark it Bypass so it is built as a BD frame, which the FARM accepts regardless of FOP state. That is exactly why <code>Set_time</code> goes out as BD after a reboot. It sidesteps the uninitialized FOP instead of waiting for a full resync. I ended up writing that distinction into the docs in big letters because it is the kind of thing that costs you an afternoon every time you forget it.</p>
+
+      <h2 data-addr="0x02A0">Giving bypass commands actual priority</h2>
+      <p>BD bypass commands exist to jump the queue. They skip COP-1 sequence control precisely so a recovery command can be acted on right now instead of waiting its turn. Except they weren't actually jumping anything. The enqueue path for BD frames fell through to the same FreeRTOS queue the normal AD commands used, and FreeRTOS queues are FIFO with no real front-insert, so a "priority" bypass command just sat behind whatever AD commands were already waiting.</p>
+      <p>The clean fix is not to fight the queue API but to add a second queue. I added <code>bd_tc_rx_queue</code> alongside the normal <code>tc_rx_queue</code>, routed BD frames onto it (the FARM layer already told them apart, returning a priority enqueue code for bypass frames, so the producer side was mostly there), and changed the consumer task to always drain the BD queue first with a zero timeout before blocking on the normal one. That ordering is the whole trick. Worst case a BD command waits about 100 ms, if the consumer happened to be mid-wait on the AD queue when it arrived, which is fine given the 6 second watchdog window and how rare these commands are.</p>
+      <p>One thing worth being precise about: this is receive-side priority only. It does not give BD commands a COP-1 acknowledgment, because by CCSDS design bypass service doesn't have one. A bypass <code>Set_time</code> will execute promptly but won't produce the CLCW-based ack an AD command does. If you want end-to-end confirmation of a bypass command, that is what the telemetry verifier from a couple sections back is for.</p>
+
+      <h2 data-addr="0x02B0">Hardware: Brainbox → Lantronix UDS2100</h2>
+      <p>The original serial to Ethernet device was a Brainbox ES-313, which is TCP only. That meant my Python bridge had to keep a long lived TCP connection open, and TCP connections have this great habit of dying quietly. The Brainbox would silently drop the link on an idle timeout. The Python side wouldn't notice because <code>recv()</code> with no timeout will just sit there forever waiting on a socket that to it still looks <code>ESTABLISHED</code>. No exception, no log, no telemetry, just silence.</p>
+      <p>The temporary fix was a 10 second socket timeout, a reconnect loop, and a buffer flush in <code>finally</code> so stale partial frame bytes from a dropped session wouldn't leak into the next one. That kept us moving but it was clearly a workaround.</p>
+      <p>The permanent fix was switching hardware. The Lantronix UDS2100 was the only serial to Ethernet box we evaluated that supports native UDP serial tunnelling, has two RS-422 ports, and accepts the 9 to 30 V input the CubeSat bus actually runs on. With the UDS2100 the bridge script just disappears. TM goes from the spacecraft over RS-422 to the UDS2100 to a UDP datagram into YAMCS. TC takes the reverse path. SLIP framing stays where it belongs, in the Java data links.</p>
+      <p>Configuring it was fiddly enough (different serial and connection settings for flashing the STM32 versus normal operation) that I wrote the whole procedure into the project docs so the next person doesn't have to rediscover it.</p>
+
+      <h2 data-addr="0x02C0">Image reassembly on the ground</h2>
       <p>A small Python client subscribes to the five image chunk parameters on the <code>tm_zump</code> stream over the YAMCS WebSocket API and accumulates chunks in a dict keyed by image_id. When the received chunk count matches the announced <code>total_chunks</code>, it concatenates everything in order, trims to <code>ImageTotalSize</code> (the last chunk is zero padded), writes the JPEG locally, and uploads it to the YAMCS <code>images</code> bucket so operators can see the image directly in the web UI.</p>
-      <p>One bug took an embarrassing amount of time to find. <code>YAMCS_HOST</code> was hardcoded to <code>192.168.1.100</code> from a previous lab subnet, so on a freshly cloned machine the script would just time out with <code>WinError 10060</code> and give no useful error. Defaulted it to <code>localhost</code> and moved on with my life.</p>
 
       <figure>
         <img src="images/experience/lzh/02-yamcs.png" alt="YAMCS web UI" onerror="imgFallback(this)"/>
         <figcaption>fig 02 — YAMCS web UI with live TM parameters and a downlinked image rendered from the bucket.</figcaption>
       </figure>
 
-      <h2 data-addr="0x0280">Hardware: Brainbox → Lantronix UDS2100</h2>
-      <p>The original serial to Ethernet device was a Brainbox ES-313, which is TCP only. That meant my Python bridge had to keep a long lived TCP connection open, and TCP connections have this great habit of dying quietly. The Brainbox would silently drop the link on an idle timeout. The Python side wouldn't notice because <code>recv()</code> with no timeout will just sit there forever waiting on a socket that to it still looks <code>ESTABLISHED</code>. No exception, no log, no telemetry, just silence.</p>
-      <p>The temporary fix was a 10 second socket timeout, a reconnect loop, and a buffer flush in <code>finally</code> so stale partial frame bytes from a dropped session wouldn't leak into the next one. That kept us moving but it was clearly a workaround.</p>
-      <p>The permanent fix was switching hardware. The Lantronix UDS2100 was the only serial to Ethernet box we evaluated that supports native UDP serial tunnelling, has two RS-422 ports, and accepts the 9 to 30 V input the CubeSat bus actually runs on. With the UDS2100 the bridge script just disappears. TM goes from the spacecraft over RS-422 to the UDS2100 to a UDP datagram into YAMCS on port 10017. TC takes the reverse path. SLIP framing stays where it belongs, in the Java data links.</p>
-      <p>Configuring it was its own adventure. The Lantronix discovery tool can't find the device until it already has an IP, so the first IP assignment has to happen over a serial setup menu. There's also a separate config dance for flashing the STM32 (TCP mode, 8E1 parity for the ROM bootloader, virtual COM port through the Lantronix CPR driver) versus normal operation (UDP, 8N1). I wrote the whole thing down in the project docs so the next person doesn't have to figure it out from scratch.</p>
+      <h2 data-addr="0x02D0">A real camera on the ground</h2>
+      <p>Late in the internship I wired up an actual camera. Not a flight camera, there is no onboard camera on this mission and there never will be, but a ground Basler GigE unit for test and hardware-in-the-loop work. The goal was just to get real frames showing up in YAMCS.</p>
+      <p>There were two ways to do it. I could emulate the spacecraft, push the frames through a real VCID-1 TM data link, and let the existing reassembler put them back together, which exercises the genuine flight downlink path and is the most faithful option. Or I could grab the frame on the ground and upload the finished JPEG straight to the YAMCS images bucket over the HTTP API, skipping CCSDS and the data link and the reassembler entirely. Since the Basler is ground only, the only thing worth proving was "images appear in YAMCS," and the bucket route was about 30 lines versus reimplementing the whole packetizer. It is effectively the tail end of the flight path, the same <code>bucket.upload_object</code> the reassembler ends on, with the entire CCSDS middle removed.</p>
+      <p>The snag worth mentioning was the link. A full res 1936×1216 RGB frame is about 7 MB and overran the 100 Mbps link it shared with comms, giving "buffer incompletely grabbed" packet loss on the image stream while the control channel stayed fine. Dropping to a 640×480 grab with a generous inter-packet delay made it reliable, and for a test still that resolution is plenty. The one nice surprise was the software side: pypylon's pip wheel bundles the whole pylon runtime, so I never had to install the 1.4 GB Basler software suite. <code>python ground_camera.py</code> grabs a live frame, JPEG-encodes it, and drops it in the bucket.</p>
 
-      <h2 data-addr="0x0290">Two small but representative fixes</h2>
-      <p><strong>The LED command did nothing.</strong> <code>LED_ON</code> and <code>LED_OFF</code> would update a software <code>led_state</code> variable and dutifully return <code>CMD_OK</code>, and telemetry would faithfully report the new state. But <code>pinMode</code> was never called and <code>digitalWrite</code> was commented out, so the physical pin was never actually driven. The bug was invisible from the YAMCS side because the round trip looked perfect. LED 2 was also being ignored entirely thanks to a pin equality check that only matched <code>LED_PIN1</code>. The whole fix was four lines.</p>
-      <p><strong>The reboot command didn't reboot.</strong> The <code>RESET</code> command was registered, returned <code>CMD_OK</code>, and changed exactly nothing, because <code>NVIC_SystemReset()</code> was commented out. Even worse, after a real reboot YAMCS COP-1 AD mode would get stuck. The spacecraft's FARM resets <code>V(R)</code> to 0 on boot, but YAMCS holds onto the old <code>V(S)</code>, so the next telecommand goes out and never gets acknowledged. The manual recovery is clicking "Initiate AD" in the web UI, which is fine once but not a great story for an automated reset. I wrote a short <code>yamcs-client</code> Python procedure that disables COP-1 at the link level (BD mode), issues the reboot, polls <code>BootCount</code> every 500 ms until it ticks up, then re-initialises COP-1 with <code>WITHOUT_CLCW_CHECK</code>. The whole reset is now unattended.</p>
-
-      <h2 data-addr="0x02A0">Validation</h2>
-      <p>Before any of this touched real flight hardware I built a PyQt6 payload simulator that produces the same packet stream the spacecraft would, plus a small Python TCP to UDP bridge for routing between debug tools and the YAMCS link. Catching SLIP edge cases and XTCE endianness bugs against a simulator is orders of magnitude cheaper than catching them with a radio in the loop. Alongside the code I also wrote architecture documentation. A <code>brain_map.txt</code> that walks through every FreeRTOS task, the packet layering (SPP inside TM transfer frames), and the full data flows. A short Java primer for the next embedded C person who has to inherit the YAMCS extensions and is going to have questions.</p>
+      <h2 data-addr="0x02E0">Validation and docs</h2>
+      <p>Before any of this touched real flight hardware I built a PyQt6 payload simulator that produces the same packet stream the spacecraft would, plus a small Python TCP to UDP bridge for routing between debug tools and the YAMCS link. Catching SLIP edge cases and XTCE endianness bugs against a simulator is orders of magnitude cheaper than catching them with a radio in the loop.</p>
+      <p>I also left a fair amount of documentation behind, since the codebase gets inherited by whoever comes next. A FreeRTOS deep dive, a COP-1 reference, a Java primer for the next embedded C person who has to touch the YAMCS extensions, and a <code>brain_map.txt</code> tying the whole system together.</p>
 
       <div class="callout">All flight code is held by LZH. What's in this writeup is architecture and war stories, not source. Happy to walk through specifics in conversation.</div>
 
-      <h2 data-addr="0x02B0">Bonus: lab surveillance rig</h2>
+      <h2 data-addr="0x02F0">Bonus: lab surveillance rig</h2>
       <p>Aside from the main project, I built a 4 camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland. 704 × 576 PAL streams composited into a 1440 × 1080 quad, with autostart and a watchdog so it self recovers from camera drop outs. Not flight related, but it lives in the same room.</p>
 
       <figure>
@@ -618,7 +662,7 @@ const DETAILS = {
       </figure>
     `,
   },
-
+  
   'exp/sharang': {
     type:'exp',
     addr:'0x0600',
@@ -1432,12 +1476,25 @@ FSM1_state1_done:
   setActiveSection(0);
   routeFromHash();
 
-  const TICKER = [
+  // residency progress (Jan 5 to Jul 31 2026)
+  (function(){
+    var S=new Date(2026,0,25),E=new Date(2026,6,10),W=20,now=new Date();
+    var total=Math.round((E-S)/86400000);
+    var dayN=Math.max(0,Math.min(total,Math.round((now-S)/86400000)));
+    var pct=Math.round((dayN/total)*100);
+    var filled=Math.round((pct/100)*W);
+    var bar='['+'█'.repeat(filled)+'·'.repeat(W-filled)+']';
+    document.querySelectorAll('[data-termlog="bar"]').forEach(function(el){el.textContent=bar;});
+    document.querySelectorAll('[data-termlog="day"]').forEach(function(el){el.textContent='day '+dayN+'/'+total;});
+    document.querySelectorAll('[data-termlog="pct"]').forEach(function(el){el.textContent=pct;});
+  })();
+
+    const TICKER = [
     ['DEBUGGING', 'a watchdog race on flash erase'],
     //['LISTENING', 'sturgill simpson, cuttin\u2019 grass'],
     //['READING',   'tinker tailor soldier spy'],
     //['PLAYING',   'elden ring NG+'],
-    ['WATCHING',  'real madrid vs whoever, 6am CET'],
+    ['WATCHING',  'real madrid vs whoever, 9pm CET'],
     ['BUILDING',  'something that shouldn\u2019t exist on a Pi'],
   ];
   const tkK = document.getElementById('tk-k');
