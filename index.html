@@ -378,7 +378,7 @@
               <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS</div>
               <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2027</div>
                             <!-- Option C: terminal log -->
-<div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">CURRENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">BUILDING</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar 3D printing payload</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">DEPLOYED</span><span class="tl-bar" data-termlog="bar">[····················]</span>  <span data-termlog="day">day …/…</span>  <span class="tl-at">JAN 25th ⟶ JUL 12th</span></span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>looking for 4 or 8 months internships · September 2026</span></div>              <div class="links">
+<div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RECENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">BUILT</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar 3D printing payload</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">DEPLOYED</span><span class="tl-bar">[████████████████████]</span>  <span>166 days · <span class="tl-hi">COMPLETE</span></span>  <span class="tl-at">JAN 25th ⟶ JUL 12th</span></span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>looking for a 4 or 8 month co-op · available from September 2026</span></div>              <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
                 <a href="mailto:monilarora2003@gmail.com">email</a>
                 <!-- <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a> -->
@@ -447,7 +447,7 @@
 
         <!-- EDUCATION -->
         <div class="section" id="sec-education" data-name=".education" data-struct="degree_t[1]">
-          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1] + course_t[4]</span></div>
+          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1] + course_t[6]</span></div>
           <div class="edu-list">
             <div class="edu">
               <div class="edu-top"><h3>University of British Columbia — BASc Electrical Engineering</h3><span class="when">Expected 2027</span></div>
@@ -480,6 +480,20 @@
                   <span class="body">
                     <span class="nm">Systems and Control</span>
                     <span class="top">Modelling continuous-time systems with transfer functions and state-space, then designing feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">CPEN&nbsp;355</span>
+                  <span class="body">
+                    <span class="nm">Machine Learning</span>
+                    <span class="top">Building models from data end to end: linear classification and gradient-based optimisation, feature maps and kernels, regularisation and validation, ensembles, and neural networks.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">ELEC&nbsp;402</span>
+                  <span class="body">
+                    <span class="nm">Introduction to VLSI Systems</span>
+                    <span class="top">Designing CMOS integrated circuits from the transistor up: static logic and inverter delay, SRAM arrays, sequential timing, power and energy, and physical layout through the full VLSI toolchain.</span>
                   </span>
                 </div>
               </div>
@@ -1476,18 +1490,6 @@ FSM1_state1_done:
   setActiveSection(0);
   routeFromHash();
 
-  // residency progress (Jan 5 to Jul 31 2026)
-  (function(){
-    var S=new Date(2026,0,25),E=new Date(2026,6,10),W=20,now=new Date();
-    var total=Math.round((E-S)/86400000);
-    var dayN=Math.max(0,Math.min(total,Math.round((now-S)/86400000)));
-    var pct=Math.round((dayN/total)*100);
-    var filled=Math.round((pct/100)*W);
-    var bar='['+'█'.repeat(filled)+'·'.repeat(W-filled)+']';
-    document.querySelectorAll('[data-termlog="bar"]').forEach(function(el){el.textContent=bar;});
-    document.querySelectorAll('[data-termlog="day"]').forEach(function(el){el.textContent='day '+dayN+'/'+total;});
-    document.querySelectorAll('[data-termlog="pct"]').forEach(function(el){el.textContent=pct;});
-  })();
 
     const TICKER = [
     ['DEBUGGING', 'a watchdog race on flash erase'],
