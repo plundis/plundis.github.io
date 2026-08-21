@@ -41,7 +41,7 @@ open the repo's commit history and revert. Nothing you do here is permanent.
 | Your name / tagline / "UBC BASc..." line   | `<h1>Monil Arora</h1>`                           | list card |
 | The green "Open to ... roles" pill         | `class="status-pill"`                            | list card |
 | The CURRENT / BUILDING / DEPLOYED / NEXT box | `class="termlog"`                              | list card |
-| The DEPLOYED progress bar dates            | `var S=new Date(`                                | script |
+| The DEPLOYED bar / dates                   | `class="termlog"`                                | list card |
 | resume / email / linkedin buttons          | `class="links"`                                  | list card |
 | An **experience** card (short version)     | `data-detail="exp/lzh"`                          | list card |
 | A **project** card (short version)         | `data-detail="proj/self-balancing-robot"`        | list card |
@@ -78,20 +78,21 @@ Find `class="termlog"`. It's one long line. The four rows each start with a
 `<span class="tl-k">LABEL</span>` — the text right after each label is what
 shows. For example, to change what you're looking for next, find:
 ```
-<span class="tl-k">NEXT</span>looking for 4 or 8 months internships · September 2026
+<span class="tl-k">NEXT</span>looking for a 4 or 8 month co-op · available from September 2026
 ```
 and edit that trailing text. Same pattern for `CURRENT`, `BUILDING`, `DEPLOYED`.
 
-### The DEPLOYED progress bar (day X/Y)
-The bar fills itself in automatically from two dates in the script. Find:
+### The DEPLOYED bar (day X/Y)
+This used to fill itself in from a script that counted days between two dates.
+The LZH internship finished on 12 Jul 2026, so the bar is now **static text**
+inside the `termlog` line and the script has been deleted. To change it, edit
+the line directly:
 ```
-var S=new Date(2026,0,25),E=new Date(2026,6,10),
+<span class="tl-bar">[████████████████████]</span>  <span>166 days · <span class="tl-hi">COMPLETE</span></span>
 ```
-`S` is the start, `E` is the end. **Months are 0-based** in this format, so
-`0` = January, `6` = July. `new Date(2026,0,25)` = 25 Jan 2026,
-`new Date(2026,6,10)` = 10 Jul 2026. Change these and the bar recomputes.
-(The human-readable "JAN 25th ⟶ JUL 12th" text is separate — it's in the
-`termlog` line, edit it there to match.)
+The bar is just 20 characters between brackets — use `█` for filled and `·` for
+empty (e.g. 15 filled + 5 dots = 75%). The "JAN 25th ⟶ JUL 12th" text sits right
+after it in the same line.
 
 ### resume / email / linkedin buttons
 Find `class="links"`:
