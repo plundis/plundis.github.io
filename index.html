@@ -408,9 +408,14 @@
         </div>
 
         <!-- PROJECTS -->
-        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[4]">
-          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[4]</span></div>
+        <div class="section" id="sec-projects" data-name=".projects" data-struct="project_t[5]">
+          <div class="section-title"><span>Selected Projects</span><span class="addr">0x1000 — project_t[5]</span></div>
           <div class="proj-grid">
+            <div class="proj" data-detail="proj/vlsi-mac-accelerator">
+              <div class="proj-top"><h3>45 nm Dot-Product Accelerator</h3><span class="when">Sep – Dec 2025</span></div>
+              <div class="tag">SystemVerilog · Cadence Genus · Innovus · GPDK45</div>
+              <p>Four-element MAC engine taken from SystemVerilog to a routed 45 nm layout: Virtuoso inverter characterisation, Genus synthesis with activity-annotated power from gate-level SAIF, then full place and route in Innovus with clock tree synthesis, timing signoff and physical verification. 236 × 235 µm die, 13,293 cells, 104 ps clock skew.</p>
+            </div>
             <div class="proj" data-detail="proj/self-balancing-robot">
               <div class="proj-top"><h3>Self-Balancing Robot</h3><span class="when">Jan – Apr 2025</span></div>
               <div class="tag">Arduino Nano 33 · ESP32 · BLE · IMU</div>
@@ -439,7 +444,7 @@
           <div class="section-title"><span>Skills</span><span class="addr">0x3000 — skillset_t</span></div>
           <div class="skills-grid">
             <div class="skbucket"><h4>Languages</h4><div class="sk-list"><span class="sk">C</span><span class="sk">C++</span><span class="sk">Java</span><span class="sk">Python</span><span class="sk">Assembly</span><span class="sk">Verilog</span><span class="sk">VHDL</span></div></div>
-            <div class="skbucket"><h4>Tools</h4><div class="sk-list"><span class="sk">YAMCS</span><span class="sk">FreeRTOS</span><span class="sk">PlatformIO</span><span class="sk">Maven</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">CrossIDE</span><span class="sk">Cadence</span><span class="sk">MATLAB</span><span class="sk">LTspice</span><span class="sk">Git</span><span class="sk">VS Code</span></div></div>
+            <div class="skbucket"><h4>Tools</h4><div class="sk-list"><span class="sk">YAMCS</span><span class="sk">FreeRTOS</span><span class="sk">PlatformIO</span><span class="sk">Maven</span><span class="sk">Quartus</span><span class="sk">ModelSim</span><span class="sk">CrossIDE</span><span class="sk">Cadence</span><span class="sk">Virtuoso</span><span class="sk">Genus</span><span class="sk">Innovus</span><span class="sk">MATLAB</span><span class="sk">LTspice</span><span class="sk">Git</span><span class="sk">VS Code</span></div></div>
             <div class="skbucket"><h4>Hardware</h4><div class="sk-list"><span class="sk">STM32</span><span class="sk">ESP32</span><span class="sk">EFM8</span><span class="sk">Arduino</span><span class="sk">DE1-SoC</span><span class="sk">Raspberry Pi</span><span class="sk">IMU Sensors</span><span class="sk">Motor Drivers</span></div></div>
             <div class="skbucket"><h4>Protocols</h4><div class="sk-list"><span class="sk">CCSDS SPP</span><span class="sk">COP-1</span><span class="sk">SLIP</span><span class="sk">RS-422</span><span class="sk">UART · SPI · I²C</span><span class="sk">TCP/UDP</span><span class="sk">BLE</span></div></div>
           </div>
@@ -737,6 +742,109 @@ for i in range(half_points):
       <p>How to read a mixed-signal datasheet. The AD9910 datasheet is 64 pages and most of it only makes sense once you have done the corresponding thing on the bench. I came in skimming it. I left able to find the right register table for whatever I needed in under a minute.</p>
       <p>How analog things actually behave on the bench. Phase noise plots in a datasheet look like nice clean lines. Phase noise on a spectrum analyser is a smear, and reading it accurately depends on the resolution bandwidth setting, which the datasheet quietly assumes you have got right. Same story for jitter, same for harmonics.</p>
       <p>And the bench-supply lesson from the first week, which I have not forgotten since. Power is the first thing you check.</p>
+    `,
+  },
+
+  'proj/vlsi-mac-accelerator': {
+    type:'proj',
+    addr:'0x0C00',
+    struct:'project_t',
+    badge:'PROJECT',
+    title:'45 nm Dot-Product Accelerator',
+    sub:'Four-element MAC engine, SystemVerilog to routed layout',
+    meta:[
+      {k:'duration', v:'Sep – Dec 2025'},
+      {k:'course',   v:'ELEC 402'},
+      {k:'process',  v:'GPDK45 / gsclib045'},
+    ],
+    stack:['SystemVerilog','Cadence Virtuoso','Genus','Innovus','ModelSim','GPDK45','SAIF Power','CTS','STA','DRC / LVS'],
+    body:`
+      <h2 data-addr="0x0C10">The Brief</h2>
+      <p>Three projects across one term that stack into a single chip. Project 1 characterises a CMOS inverter at the transistor level. Project 2 synthesises a 16-bit multiplier and measures what it actually burns. Project 3 wraps four of those multipliers into a dot-product engine and takes it all the way down to a routed 45 nm layout with timing signoff and physical verification.</p>
+      <p>The maths is the same maths I had already put on an FPGA in the <strong>Deep Neural Network Accelerator</strong> project, a multiply-accumulate over a vector of activations and weights. That one was RTL on a soft-core SoC. This one is silicon. Being able to hold the two side by side, the same operation costed once in logic elements and once in square micrometres of standard cells, is the most useful thing I got out of the course.</p>
+
+      <h2 data-addr="0x0C20">Starting At One Transistor</h2>
+      <p>Project 1 is a single inverter in Cadence Virtuoso on the GPDK045 kit, one NMOS and one PMOS sharing a gate. Holes are slower than electrons, so a symmetric inverter is not a matched inverter. The PMOS has to be wider than the NMOS or the output rises more slowly than it falls. I ended up at Wn = 120 nm and Wp = 168 nm on 45 nm channels at a 1 V supply, and the transient run confirmed it landed close to balanced.</p>
+
+      <figure>
+        <img src="images/projects/vlsi-mac-accelerator/01-inverter-transient.png"
+             alt="Virtuoso ADE transient response showing input square wave in orange and inverted output in yellow, with a scalar outputs box listing tpHL, tpLH and tpd_avg"
+             onerror="imgFallback(this)">
+        <figcaption>fig 01 — transient response with a 10 ps edge stimulus. tpHL = 119.5 ps, tpLH = 122.9 ps, tpd_avg = 121.2 ps. the output never squares up the way the input does, and that soft exponential tail is the load capacitance charging through the finite on-resistance of the device</figcaption>
+      </figure>
+
+      <p>The 3 ps gap between the two propagation delays is the whole lesson. Sizing is a knob, and every turn of it trades area against delay, which is why the testbench also computes an area times delay figure of merit. A faster inverter that costs twice the area is not automatically the better cell.</p>
+
+      <h2 data-addr="0x0C30">The Multiplier, And What Synthesis Actually Costs</h2>
+      <p>Project 2 is a pipelined 16 x 16 multiplier feeding a 64-entry buffer, written in SystemVerilog with a small FILL, FULL, READ state machine. Operands latch on the first stage, the product registers on the second, and the write-valid follows a cycle later. The buffer is a two-port register array with a registered read, so every value comes back one cycle after you ask for it.</p>
+      <p>I synthesised the same RTL twice in Genus, once at 400 MHz and once at 800 MHz, against the slow corner at 0.9 V and 125 degrees C. The results are the reason I stopped treating a clock constraint as a wish:</p>
+      <pre><code>                        400 MHz (2.5 ns)   800 MHz (1.25 ns)
+  total cell area         10945.7 um2         11944.9 um2
+  cell count                   2498                3280
+  timing                     closed         FAILS by -90.6 ps</code></pre>
+      <p class="figcap">// fig 02 — same source, two constraints. the 800 MHz run bought 9 percent more area and 780 extra cells and still missed.</p>
+      <p>Asking for twice the frequency made the tool duplicate logic, upsize drivers and rebalance what it could, and the extra silicon still was not enough. The constraint has to be reachable by the architecture. No amount of effort in the mapper fixes a pipeline that is one stage too shallow.</p>
+
+      <h2 data-addr="0x0C40">Power Is A Guess Until You Measure Switching</h2>
+      <p>The interesting part came after synthesis. Genus will happily give you a power number straight out of the mapper, and it reported 1.36 mW at 400 MHz. That estimate assumes a generic toggle rate on every net, because at that point nothing has told the tool what the design is doing.</p>
+      <p>So I ran the mapped netlist in ModelSim against the real testbench with the back-annotated SDF delays, dumped a VCD of every transition, converted a window of it to SAIF, and fed that activity back in. Annotated with what the circuit actually does during read-out, the same design reports <strong>68.7 uW</strong>. Roughly twenty times lower than the estimate. Registers account for about 86 percent of it, which makes sense once you notice the clock never stops toggling while the datapath mostly sits still.</p>
+
+      <figure>
+        <img src="images/projects/vlsi-mac-accelerator/02-multiplier-gls-read.png"
+             alt="ModelSim gate-level waveform showing the state signal moving from FULL to READ, EN_blockRead pulsing, and memVal_data streaming the values 3, 10, 21, 36, 55, 78, 105"
+             onerror="imgFallback(this)">
+        <figcaption>fig 03 — gate-level simulation of the read-out phase. state goes FULL to READ, readMem_addr walks the buffer and memVal_data streams out one cycle behind it. this run is where the VCD comes from, and it also proves the mapped netlist is still correct: all 64 outputs matched, zero errors</figcaption>
+      </figure>
+
+      <div class="callout">
+        Two numbers for the same circuit, twenty times apart, and neither one is wrong. The difference is entirely in what you told the tool about activity. Any power figure quoted without a switching source attached to it is a placeholder.
+      </div>
+
+      <h2 data-addr="0x0C50">Four Multipliers And An Adder Tree</h2>
+      <p>Project 3 is the accelerator itself. Four unsigned 16 x 16 multipliers run in parallel, each one splitting the operands into sixteen partial products and summing them over four pipeline stages. Their four 32-bit results feed a two-level adder tree, two adders then one, and summing four 32-bit values needs two extra bits of headroom, so the accumulator and the memory behind it are 34 bits wide.</p>
+      <p>The wrapper adds its own flow control. It only accepts a new MAC command while the buffer has room for everything already in flight, which matters because the multiplier pipeline is four stages deep and the answers land long after the command was issued. Once 64 results are stored the machine flips to read-out and streams them back.</p>
+
+      <figure>
+        <img src="images/projects/vlsi-mac-accelerator/03-mac-rtl-fill.png"
+             alt="ModelSim RTL waveform showing EN_mac and EN_writeMem toggling while writeMem_addr counts 58, 59, 60, 61, 62, 63 then wraps to 0 as RDY_mac drops"
+             onerror="imgFallback(this)">
+        <figcaption>fig 04 — the end of the fill phase. writeMem_addr walks up to 63, and the cycle it wraps, RDY_mac drops and the engine stops accepting work. the gap between EN_mac going quiet and the last write landing is the multiplier pipeline draining</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0C60">Turning A Netlist Into Layout</h2>
+      <p>Synthesis at a 2 ns clock gave 24,110 um2 of cells, 13,293 instances of which 1,320 are flops, and 11.7 ps of positive slack. That netlist then goes into Innovus for the physical flow: floorplan at 45 percent target utilisation, power rings on Metal8 and Metal7 with stripes on Metal6, IO pins placed on Metal3, placement, clock tree synthesis, routing up to Metal10, filler and decap cells, then DRC and connectivity checks. The finished die is 236 x 235 um.</p>
+
+      <figure>
+        <img src="images/projects/vlsi-mac-accelerator/04-placement.png"
+             alt="Innovus placement view with routing layers hidden, showing dense grey standard cell rows crossed by blue flight lines"
+             onerror="imgFallback(this)">
+        <figcaption>fig 05 — placement with the routing turned off. grey is standard cell rows, blue is the flight lines for nets that have not been routed yet. the dense blue knot through the middle is the adder tree pulling four multipliers toward one point</figcaption>
+      </figure>
+
+      <p>Clock tree synthesis is the step that made the abstraction feel real. 1,320 flops all need their edge at the same instant, and getting it to them takes 448 buffers and about 11.2 mm of clock wire. The tree lands with 104 ps of skew and an insertion delay between 0.430 ns and 0.534 ns. On a 2 ns clock that skew is five percent of the entire period, spent on nothing but distribution.</p>
+
+      <figure>
+        <img src="images/projects/vlsi-mac-accelerator/05-clocktree.png"
+             alt="Innovus routed layout on the left and the CCOpt clock tree debugger on the right showing a fanout tree of buffers with sink arrival times spread between 0.43 and 0.53 ns"
+             onerror="imgFallback(this)">
+        <figcaption>fig 06 — the routed layout beside the clock tree debugger. the vertical axis on the right is arrival time, the red marks at the bottom are the flops, and the vertical spread between them is the 104 ps of skew</figcaption>
+      </figure>
+
+      <h2 data-addr="0x0C70">Where It Closed And Where It Did Not</h2>
+      <p>The honest version. Register to register paths meet setup at every stage of the flow and finish at +63 ps, so the logic and the clock tree are fine. The negative worst slack in the final report, -0.776 ns, sits entirely on input to register paths, and those are constrained by an input delay set to a quarter of the clock period on a virtual clock. That is an assumption I chose rather than a path the design has to run, and it is still a real number in the report, so I would rather show it than quietly drop it.</p>
+      <pre><code>  stage       setup WNS (all / reg2reg)   density
+  prePlace         +0.009 / +0.009          50.0 %
+  preCTS           -1.070 / +0.003          65.9 %
+  postCTS          -1.492 / -0.006          94.9 %
+  postRoute        -0.777 / +0.066          94.8 %
+  final            -0.776 / +0.063          94.8 %</code></pre>
+      <p class="figcap">// fig 07 — worst negative slack through the flow, in nanoseconds. the reg2reg column is the design. the all column is the design plus my input delay assumption.</p>
+      <p>Hold does not close. It settles at -200 ps on register to register paths and stays there through routing, because I never ran a hold fixing pass before signoff. Physical verification came back with zero connectivity violations and no filler gaps, and 384 DRC violations, mostly shorts and cells sitting past the die edge. Final density is 94.8 percent, which is almost certainly the cause. At that utilisation the router runs out of room to get around things.</p>
+
+      <h2 data-addr="0x0C80">What I Would Do Differently</h2>
+      <p>Floorplan looser. Starting at 45 percent utilisation sounds conservative and still finished at 94.8 percent density, because clock tree synthesis dropped 448 buffers into a design that was already placed. Giving the router more room would have taken most of those DRC violations with it.</p>
+      <p>Budget the IO properly. A quarter of the period against a virtual clock is a defensible default and it dominated the worst slack for the entire run, which meant every timing report needed a paragraph of explanation. Registering the inputs at the boundary would have made the reports say what I actually wanted them to say.</p>
+      <p>Fix hold before signoff instead of after reading the summary. And annotate power over the multiply window as well as the read-out window. I only measured the read-out phase, which is the quiet half of the workload, so the number I have is the floor rather than the interesting case.</p>
     `,
   },
 
