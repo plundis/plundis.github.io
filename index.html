@@ -176,9 +176,9 @@
   .notes .ping{display:block;margin-top:14px;font-style:italic;color:var(--paper-dim);}
   @media(max-width:600px){.notes{font-size:11.5px;}.notes table td.k{padding-right:10px;}}
 
-  .dump-end{margin:60px 0 0;padding-bottom:60vh;display:flex;align-items:center;gap:14px;color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.7;}
+  .dump-end{margin:60px 0 0;padding-bottom:28px;display:flex;align-items:center;gap:14px;color:var(--paper-dim);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.7;}
   .dump-end::before,.dump-end::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--paper-dim) 30%,var(--paper-dim) 70%,transparent);}
-  @media(max-width:900px){.dump-end{margin-top:40px;padding-bottom:50vh;font-size:9px;gap:10px;}}
+  @media(max-width:900px){.dump-end{margin-top:40px;padding-bottom:24px;font-size:9px;gap:10px;}}
 
   .dv-bar{position:sticky;top:0;z-index:10;background:var(--paper-bg2);border-bottom:1px solid var(--paper-line);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--paper-dim);text-transform:uppercase;}
   .dv-bar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
@@ -384,7 +384,7 @@
               <div class="tagline">Embedded firmware enthusiast</div>
               <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2028</div>
                             <!-- Option C: terminal log -->
-<div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RECENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">BUILT</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar 3D printing payload</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">DEPLOYED</span><span class="tl-bar">[████████████████████]</span>  <span class="tl-hi">COMPLETED</span></span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>looking for a 4 or 8 month co-op · available from January 2027</span></div>              <div class="links">
+<div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RECENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover e.V.</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">BUILT</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar 3D printing payload</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">DEPLOYED</span><span class="tl-bar">[████████████████████]</span>  <span class="tl-hi">COMPLETED</span></span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>looking for a 4 or 8 month co-op · available from January 2027</span></div>              <div class="links">
                 <a class="pri" href="resume.pdf" target="_blank" rel="noopener">resume.pdf ↗</a>
                 <a href="mailto:monilarora2003@gmail.com">email</a>
                 <!-- <a href="https://github.com/plundis" target="_blank" rel="noopener">github</a> -->
@@ -400,7 +400,7 @@
 
 
           <div class="exp" data-detail="exp/lzh">
-            <div class="exp-top"><h3>Laser Zentrum Hannover (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
+            <div class="exp-top"><h3>Laser Zentrum Hannover e.V. (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
             <div class="role">MOONRISE · Hannover, Germany</div>
             <p>3D printing on the Moon with nothing but lunar soil and a laser. That's the goal of Moonrise, the LZH mission I worked on. I developed the firmware for its payload controller in C/C++ and FreeRTOS, and the mission control ground station that commands it and receives its telemetry and images.</p>
             <div class="chips"><span class="chip">STM32</span><span class="chip">C/C++</span><span class="chip">FreeRTOS</span><span class="chip">LittleFS</span><span class="chip">YAMCS</span><span class="chip">Java</span><span class="chip">Python</span><span class="chip">CCSDS</span><span class="chip">COP-1</span><span class="chip">RS-422</span></div>
@@ -476,7 +476,7 @@
 
         <!-- EDUCATION -->
         <div class="section" id="sec-education" data-name=".education" data-struct="degree_t[1]">
-          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1] + course_t[6]</span></div>
+          <div class="section-title"><span>Education</span><span class="addr">0x3800 — degree_t[1] + course_t[7]</span></div>
           <div class="edu-list">
             <div class="edu">
               <div class="edu-top"><h3>University of British Columbia — BASc Electrical Engineering</h3><span class="when">Expected 2028</span></div>
@@ -484,31 +484,17 @@
               <p style="margin-top:14px;">Relevant coursework:</p>
               <div class="courses">
                 <div class="course">
-                  <span class="code">CPEN&nbsp;311</span>
+                  <span class="code">ELEC&nbsp;402</span>
                   <span class="body">
-                    <span class="nm">Digital Systems Design</span>
-                    <span class="top">I learned to design combinational and sequential hardware in Verilog/VHDL and synthesise it onto FPGAs, from arithmetic and datapath circuits up to pipelined processors and GPU architecture.</span>
+                    <span class="nm">Introduction to VLSI Systems</span>
+                    <span class="top">I learned to design CMOS integrated circuits from the transistor up: static logic and inverter delay, SRAM arrays, sequential timing, power and energy, and physical layout through the full VLSI toolchain.</span>
                   </span>
                 </div>
                 <div class="course">
-                  <span class="code">CPEN&nbsp;211</span>
+                  <span class="code">ELEC&nbsp;401</span>
                   <span class="body">
-                    <span class="nm">Computing Systems I</span>
-                    <span class="top">I learned how a microcomputer actually works, from Boolean algebra and logic gates up through instruction sets, memory addressing, assembly programming and I/O interfacing.</span>
-                  </span>
-                </div>
-                <div class="course">
-                  <span class="code">ELEC&nbsp;221</span>
-                  <span class="body">
-                    <span class="nm">Signals and Systems</span>
-                    <span class="top">I learned to analyse LTI systems in the time and frequency domains with convolution and the Fourier, Laplace and z-transforms, and to apply them to sampling, filtering and modulation.</span>
-                  </span>
-                </div>
-                <div class="course">
-                  <span class="code">ELEC&nbsp;341</span>
-                  <span class="body">
-                    <span class="nm">Systems and Control</span>
-                    <span class="top">I'm learning to model continuous-time systems with transfer functions and state-space, then design feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
+                    <span class="nm">Analog CMOS Integrated Circuit Design</span>
+                    <span class="top">I'm learning transistor-level analog design: MOSFET models, small-signal analysis and single-stage amplifiers (common-source, source follower, common-gate, cascode) in Cadence.</span>
                   </span>
                 </div>
                 <div class="course">
@@ -519,10 +505,31 @@
                   </span>
                 </div>
                 <div class="course">
-                  <span class="code">ELEC&nbsp;402</span>
+                  <span class="code">ELEC&nbsp;341</span>
                   <span class="body">
-                    <span class="nm">Introduction to VLSI Systems</span>
-                    <span class="top">I learned to design CMOS integrated circuits from the transistor up: static logic and inverter delay, SRAM arrays, sequential timing, power and energy, and physical layout through the full VLSI toolchain.</span>
+                    <span class="nm">Systems and Control</span>
+                    <span class="top">I'm learning to model continuous-time systems with transfer functions and state-space, then design feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">CPEN&nbsp;311</span>
+                  <span class="body">
+                    <span class="nm">Digital Systems Design</span>
+                    <span class="top">I learned to design combinational and sequential hardware in Verilog/VHDL and synthesise it onto FPGAs, from arithmetic and datapath circuits up to pipelined processors and GPU architecture.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">ELEC&nbsp;221</span>
+                  <span class="body">
+                    <span class="nm">Signals and Systems</span>
+                    <span class="top">I learned to analyse LTI systems in the time and frequency domains with convolution and the Fourier, Laplace and z-transforms, and to apply them to sampling, filtering and modulation.</span>
+                  </span>
+                </div>
+                <div class="course">
+                  <span class="code">CPEN&nbsp;211</span>
+                  <span class="body">
+                    <span class="nm">Computing Systems I</span>
+                    <span class="top">I learned how a microcomputer actually works, from Boolean algebra and logic gates up through instruction sets, memory addressing, assembly programming and I/O interfacing.</span>
                   </span>
                 </div>
               </div>
@@ -593,7 +600,7 @@ const DETAILS = {
     addr:'0x0200',
     struct:'role_t',
     badge:'EXPERIENCE',
-    title:'Laser Zentrum Hannover — Research Intern',
+    title:'Laser Zentrum Hannover e.V. (LZH) — Research Intern',
     sub:'CubeSat ground station for the Moonrise mission',
     meta:[
       {k:'duration', v:'Jan – Jul 2026'},
@@ -1514,6 +1521,7 @@ FSM1_state1_done:
 
   let currentIdx=0;
   let lockedIdx=null;
+  let navIdx=null; // last section picked from the sidebar, kept until the user scrolls by hand
   let inDetail=false;
 
   function setActiveSection(i){
@@ -1534,9 +1542,13 @@ FSM1_state1_done:
     for(let i=0;i<sections.length;i++){
       if(sections[i].offsetTop<=probe) best=i;
     }
+    // The last sections are too short to scroll to the top, so at the very bottom
+    // highlight the section picked from the sidebar, or the last one.
+    if(body.scrollHeight>body.clientHeight+4&&top+body.clientHeight>=body.scrollHeight-4) best=(navIdx!==null)?navIdx:sections.length-1;
     setActiveSection(best);
   }
   body.addEventListener('scroll',()=>requestAnimationFrame(detectFromScroll));
+  ['wheel','touchstart'].forEach(ev=>body.addEventListener(ev,()=>{navIdx=null;},{passive:true}));
 
   function navigateToSection(i){
     if(inDetail){closeDetail(false);}
@@ -1544,6 +1556,7 @@ FSM1_state1_done:
     if(!t)return;
     const target=(i===0)?0:t.offsetTop-8;
     lockedIdx=i;
+    navIdx=i;
     setActiveSection(i);
     body.scrollTo({top:target,behavior:'smooth'});
     clearTimeout(window.__navUnlock);
