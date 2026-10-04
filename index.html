@@ -325,7 +325,7 @@
       <div class="tb-logo">◆</div>
       <div>
         <div class="tb-title">monil_arora.bin <small>firmware dump · rev 2026.05</small></div>
-        <div class="tb-meta">embedded engineer &nbsp;·&nbsp; ubc ee 2028 &nbsp;·&nbsp; hannover, de</div>
+        <div class="tb-meta">embedded firmware enthusiast &nbsp;·&nbsp; ubc ee 2028 &nbsp;·&nbsp; hannover, de</div>
       </div>
     </div>
     <div class="tb-right">
@@ -338,10 +338,11 @@
 
   <main class="main">
     <aside class="regions">
-      <div class="reg-hd"><span>REGIONS &nbsp; [6]</span><span class="sz">8 KB</span></div>
+      <div class="reg-hd"><span>REGIONS &nbsp; [7]</span><span class="sz">8 KB</span></div>
       <div class="reg-list" id="reg-list">
         <a class="reg on" data-target="sec-about" href="#sec-about"><span class="addr">0x0000</span><span class="nm">.about_me</span><span class="sz">512 B</span></a>
         <a class="reg" data-target="sec-experience" href="#sec-experience"><span class="addr">0x0200</span><span class="nm">.experience</span><span class="sz">2.0 K</span></a>
+        <a class="reg" data-target="sec-design" href="#sec-design"><span class="addr">0x0800</span><span class="nm">.design_team</span><span class="sz">512 B</span></a>
         <a class="reg" data-target="sec-projects" href="#sec-projects"><span class="addr">0x1000</span><span class="nm">.projects</span><span class="sz">8.0 K</span></a>
         <a class="reg" data-target="sec-skills" href="#sec-skills"><span class="addr">0x3000</span><span class="nm">.skills</span><span class="sz">2.0 K</span></a>
         <a class="reg" data-target="sec-education" href="#sec-education"><span class="addr">0x3800</span><span class="nm">.education</span><span class="sz">2.0 K</span></a>
@@ -352,6 +353,7 @@
         <div class="bar">
           <div class="seg" style="flex:1;background:#5ad1ff" title=".about_me"></div>
           <div class="seg" style="flex:7;background:#f0b64a" title=".experience"></div>
+          <div class="seg" style="flex:2;background:#ff8a5a" title=".design_team"></div>
           <div class="seg" style="flex:16;background:#7cf58a" title=".projects"></div>
           <div class="seg" style="flex:4;background:#b0a7ff" title=".skills"></div>
           <div class="seg" style="flex:4;background:#ff5aa8" title=".education"></div>
@@ -379,7 +381,7 @@
             <div class="hero-body">
               <div class="status-pill"><span class="dot"></span>Open to embedded / hardware roles</div>
               <h1>Monil Arora</h1>
-              <div class="tagline">Embedded firmware engineer · STM32/FreeRTOS · Verilog · YAMCS</div>
+              <div class="tagline">Embedded firmware enthusiast</div>
               <div class="tagline" style="opacity:.7;margin-top:1px;">UBC BASc Electrical Engineering · Expected 2028</div>
                             <!-- Option C: terminal log -->
 <div class="termlog" aria-label="Current status"><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">RECENT</span>Research intern <span class="tl-at">@</span> <a href="https://www.lzh.de/en" target="_blank" rel="noopener">Laser Zentrum Hannover</a> · Hannover, DE</span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">BUILT</span><span class="tl-hi">Moonrise</span> — ground-station comms for a lunar 3D printing payload</span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">DEPLOYED</span><span class="tl-bar">[████████████████████]</span>  <span class="tl-hi">COMPLETED</span></span><span class="tl-sep"></span><span class="tl-line"><span class="tl-p">&gt;</span><span class="tl-k">NEXT</span>looking for a 4 or 8 month co-op · available from January 2027</span></div>              <div class="links">
@@ -393,28 +395,34 @@
         </div>
 
         <!-- EXPERIENCE -->
-        <div class="section" id="sec-experience" data-name=".experience" data-struct="role_t[3]">
-          <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[3]</span></div>
+        <div class="section" id="sec-experience" data-name=".experience" data-struct="role_t[2]">
+          <div class="section-title"><span>Experience</span><span class="addr">0x0200 — role_t[2]</span></div>
 
-          <div class="exp static">
-            <div class="exp-top"><h3>UBC Orbit — AOCS Hardware &amp; Test Engineering Member</h3><span class="when">Sep 2026 – Present</span></div>
-            <div class="role">ALEASAT CubeSat · Vancouver, Canada</div>
-            <p>UBC Orbit is a student design team building ALEASAT, a small satellite (CubeSat). I'm on the attitude and orbit control (AOCS) team, the part that keeps the satellite pointed the right way. I'm building a bridge between the team's simulation and the satellite's processor, so the control software can be tested on the real processor against a simulated satellite (hardware-in-the-loop testing).</p>
-            <div class="chips"><span class="chip">HIL Testing</span><span class="chip">AOCS</span><span class="chip">CubeSat</span></div>
-          </div>
 
           <div class="exp" data-detail="exp/lzh">
             <div class="exp-top"><h3>Laser Zentrum Hannover (LZH) — Research Intern</h3><span class="when">Jan – Jul 2026</span></div>
             <div class="role">MOONRISE · Hannover, Germany</div>
-            <p>Moonrise is an LZH mission that aims to 3D-print on the Moon by melting lunar soil with a laser. I worked on the payload firmware (C/C++ and FreeRTOS on STM32) and on the ground station that commands it. I added a small file system so the board keeps its clock and boot count through restarts, freed enough RAM to fit the laser feature on a 20 KB chip, and fixed a watchdog reset that was killing image downloads. On the ground side I extended the YAMCS mission control software with custom Java links, including one that triggers a lab camera and stores the photos with their metadata.</p>
+            <p>3D printing on the Moon with nothing but lunar soil and a laser. That's the goal of Moonrise, the LZH mission I worked on. I developed the firmware for its payload controller in C/C++ and FreeRTOS, and the mission control ground station that commands it and receives its telemetry and images.</p>
             <div class="chips"><span class="chip">STM32</span><span class="chip">C/C++</span><span class="chip">FreeRTOS</span><span class="chip">LittleFS</span><span class="chip">YAMCS</span><span class="chip">Java</span><span class="chip">Python</span><span class="chip">CCSDS</span><span class="chip">COP-1</span><span class="chip">RS-422</span></div>
           </div>
 
           <div class="exp" data-detail="exp/sharang">
             <div class="exp-top"><h3>Sharang Shakti Pvt Ltd — Embedded Signal Processing Intern</h3><span class="when">May – Jun 2024</span></div>
             <div class="role">Radar digitalization · Gurugram, India</div>
-            <p>The company was converting an older analog radar to digital. I brought up an AD9910 evaluation board, a chip that builds signals digitally (a DDS), to generate the radar's transmit waveforms. I produced them three ways: preset profiles, playback of stored samples from the chip's memory, and its built-in ramp generator. I wrote Python to build the 14-bit sample tables for playback, and fitted the missing loop filter so the board's clock (PLL) would lock.</p>
+            <p>Old analog radars are hard to change. Sharang Shakti was making one digital, so its signals could be reprogrammed in software. I brought up the signal generator board that creates the radar's transmit waveforms, and wrote the Python that builds custom waveforms for it to play.</p>
             <div class="chips"><span class="chip">AD9910 DDS</span><span class="chip">Python</span><span class="chip">PLL</span><span class="chip">Radar</span><span class="chip">Signal Processing</span></div>
+          </div>
+        </div>
+
+        <!-- DESIGN TEAM -->
+        <div class="section" id="sec-design" data-name=".design_team" data-struct="team_t[1]">
+          <div class="section-title"><span>Design Team</span><span class="addr">0x0800 — team_t[1]</span></div>
+
+          <div class="exp static">
+            <div class="exp-top"><h3>UBC Orbit — AOCS Hardware &amp; Test Engineering Member</h3><span class="when">Sep 2026 – Present</span></div>
+            <div class="role">ALEASAT CubeSat · Vancouver, Canada</div>
+            <p>Students at UBC Orbit are building ALEASAT, a small satellite, and I'm on the team that keeps it pointed the right way. I'm building the bridge that lets our flight software run on the real processor against a simulated satellite, so we can test it long before it flies.</p>
+            <div class="chips"><span class="chip">HIL Testing</span><span class="chip">AOCS</span><span class="chip">CubeSat</span></div>
           </div>
         </div>
 
@@ -425,32 +433,32 @@
             <div class="proj" data-detail="proj/vlsi-mac-accelerator">
               <div class="proj-top"><h3>45 nm Dot-Product Accelerator</h3><span class="when">Sep – Dec 2025</span></div>
               <div class="tag">SystemVerilog · Cadence Genus · Innovus · GPDK45</div>
-              <p>A small piece of chip hardware for the core math in neural networks: it multiplies four pairs of numbers and adds them up (a dot product). I wrote it in SystemVerilog and took it through the full chip design flow in a 45 nm process, from synthesis to a placed and routed layout, with a clock tree that holds skew to 104 ps across 1,320 flip-flops. On an earlier multiplier design, using real switching activity from simulation corrected the power estimate from 1.36 mW to 68.7 µW.</p>
+              <p>Every neural network runs on dot products, so I designed a chip block that computes them. I wrote it in SystemVerilog and took it through the full chip design flow in a 45 nm process, all the way to a placed and routed layout.</p>
             </div>
             <div class="proj" data-detail="proj/self-balancing-robot">
               <div class="proj-top"><h3>Self-Balancing Robot</h3><span class="when">Jan – Apr 2025</span></div>
               <div class="tag">Arduino Nano 33 · ESP32 · BLE · IMU</div>
-              <p>A two-wheeled robot that balances itself upright. An Arduino estimates the tilt by blending gyroscope and accelerometer readings (a complementary filter) and corrects it with a PID control loop, tuned first in MATLAB/Simulink. Running two motor drivers in parallel cut the duty cycle needed to get the motors moving from 15–20% to 10%, for finer control. An ESP32 Bluetooth remote drives it and shows live readings on an LCD.</p>
+              <p>A robot that balances on two wheels and refuses to fall over. My team and I built it on an Arduino that reads a motion sensor and constantly corrects the motors with a PID control loop. A Bluetooth remote drives it and shows live data.</p>
             </div>
             <div class="proj" data-detail="proj/dnn-accelerator">
               <div class="proj-top"><h3>Deep Neural Network Accelerator</h3><span class="when">Nov – Dec 2024</span></div>
               <div class="tag">SystemVerilog · Nios II · DE1-SoC · Q16.16</div>
-              <p>A neural network that reads handwritten digits (MNIST), running on an FPGA board. A Nios II processor built inside the FPGA runs the network, and a custom dot-product accelerator on the Avalon bus does the heavy math, about 1.79 million multiply-adds per image. The 7.2 MB of weights don't fit in the FPGA's 0.5 MB of on-chip memory, so they stream in from off-chip SDRAM, with a shifted clock to keep those reads reliable.</p>
+              <p>Can an FPGA read handwriting? We ran a neural network that recognizes handwritten digits on a processor built inside an FPGA, with custom hardware to speed up its math and weights streamed in from external memory.</p>
             </div>
             <div class="proj" data-detail="proj/arc4-cracker">
               <div class="proj-top"><h3>ARC4 Decryption Cracker</h3><span class="when">Oct – Nov 2024</span></div>
               <div class="tag">SystemVerilog · DE1-SoC · ModelSim</div>
-              <p>ARC4 is a classic stream cipher. As a lab team we built it in hardware on an FPGA, then wrapped it in a cracker that tries 24-bit keys one after another (up to 16.7 million) until the decrypted message comes out as readable text. It all fits in 437 logic blocks (ALMs) and 4 on-chip RAM blocks, with state machines built around the RAM's read delay. Checked with RTL testbenches in ModelSim.</p>
+              <p>16.7 million possible keys and one hidden message. My lab partner and I built the ARC4 cipher in hardware on an FPGA, then a cracker that tries every key in turn until the message comes out as readable text.</p>
             </div>
             <div class="proj" data-detail="proj/metal-detector-robot">
               <div class="proj-top"><h3>Metal Detector Robot</h3><span class="when">Mar – Apr 2024</span></div>
               <div class="tag">STM32 · EFM8 · JDY-40 radio · LCD</div>
-              <p>A remote-controlled robot that finds metal. A handheld remote with a joystick (EFM8 microcontroller) drives the robot over a 2.4 GHz radio link. The robot (STM32) senses metal with a coil-based oscillator whose frequency shifts near metal, sorts the shift into five strength levels, and sends the reading back to the remote's LCD and buzzer. Both directions share one radio, so the two sides take turns on a timed schedule.</p>
+              <p>Drive it over metal and the remote starts beeping. My team and I built a robot that hunts for metal, steered by a joystick remote over a 2.4 GHz radio, and reporting how strong the signal is back to the remote's screen.</p>
             </div>
             <div class="proj" data-detail="proj/reflow-oven-controller">
               <div class="proj-top"><h3>Reflow Oven Controller</h3><span class="when">Jan – Feb 2024</span></div>
               <div class="tag">N76E003 (8051) · Assembly · Python</div>
-              <p>A controller that runs a small oven through the temperature profile used to solder circuit boards. Written entirely in assembly for an 8051 microcontroller, it steps through six stages (off, ramp to soak, soak, ramp to reflow, reflow, cooling), moving between them based on temperature and time. If the oven is still below 50 °C after 60 seconds it cuts the heater, and a stop button works in every stage. A Python program plots the live temperature sent over UART.</p>
+              <p>Soldering a circuit board in an oven takes a carefully timed heat profile. My team and I built the controller that runs it, written entirely in 8051 assembly, with safety checks and live temperature plots on a PC.</p>
             </div>
           </div>
         </div>
@@ -479,42 +487,42 @@
                   <span class="code">CPEN&nbsp;311</span>
                   <span class="body">
                     <span class="nm">Digital Systems Design</span>
-                    <span class="top">Designing combinational and sequential hardware in Verilog/VHDL, synthesised onto FPGAs: from arithmetic and datapath circuits up to pipelined processors and GPU architecture.</span>
+                    <span class="top">I learned to design combinational and sequential hardware in Verilog/VHDL and synthesise it onto FPGAs, from arithmetic and datapath circuits up to pipelined processors and GPU architecture.</span>
                   </span>
                 </div>
                 <div class="course">
                   <span class="code">CPEN&nbsp;211</span>
                   <span class="body">
                     <span class="nm">Computing Systems I</span>
-                    <span class="top">How a microcomputer actually works, from Boolean algebra and logic gates up through instruction sets, memory addressing, assembly programming, and I/O interfacing.</span>
+                    <span class="top">I learned how a microcomputer actually works, from Boolean algebra and logic gates up through instruction sets, memory addressing, assembly programming and I/O interfacing.</span>
                   </span>
                 </div>
                 <div class="course">
                   <span class="code">ELEC&nbsp;221</span>
                   <span class="body">
                     <span class="nm">Signals and Systems</span>
-                    <span class="top">Analysing LTI systems in time and frequency domains using convolution and the Fourier, Laplace, and z-transforms, with applications to sampling, filtering, and modulation.</span>
+                    <span class="top">I learned to analyse LTI systems in the time and frequency domains with convolution and the Fourier, Laplace and z-transforms, and to apply them to sampling, filtering and modulation.</span>
                   </span>
                 </div>
                 <div class="course">
                   <span class="code">ELEC&nbsp;341</span>
                   <span class="body">
                     <span class="nm">Systems and Control</span>
-                    <span class="top">Modelling continuous-time systems with transfer functions and state-space, then designing feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
+                    <span class="top">I'm learning to model continuous-time systems with transfer functions and state-space, then design feedback controllers (PID, root locus, Nyquist) for stability and performance.</span>
                   </span>
                 </div>
                 <div class="course">
                   <span class="code">CPEN&nbsp;355</span>
                   <span class="body">
                     <span class="nm">Machine Learning</span>
-                    <span class="top">Building models from data end to end: linear classification and gradient-based optimisation, feature maps and kernels, regularisation and validation, ensembles, and neural networks.</span>
+                    <span class="top">I learned to build models from data end to end: linear classification and gradient-based optimisation, feature maps and kernels, regularisation and validation, ensembles and neural networks.</span>
                   </span>
                 </div>
                 <div class="course">
                   <span class="code">ELEC&nbsp;402</span>
                   <span class="body">
                     <span class="nm">Introduction to VLSI Systems</span>
-                    <span class="top">Designing CMOS integrated circuits from the transistor up: static logic and inverter delay, SRAM arrays, sequential timing, power and energy, and physical layout through the full VLSI toolchain.</span>
+                    <span class="top">I learned to design CMOS integrated circuits from the transistor up: static logic and inverter delay, SRAM arrays, sequential timing, power and energy, and physical layout through the full VLSI toolchain.</span>
                   </span>
                 </div>
               </div>
@@ -873,6 +881,7 @@ for i in range(half_points):
       {k:'team',     v:'Team of 3'},
     ],
     stack:['Arduino Nano 33','ESP32','BLE','BMI270 IMU','DRV8833','HC-SR04','C'],
+    links:[{label:'GitHub ↗', url:'https://github.com/plundis/ELEC-391', primary:true}],
     //hero:'images/projects/self-balancing-robot/01-robot.png',
     body:`
       <h2 data-addr="0x1010">The brief</h2>
@@ -1125,6 +1134,7 @@ end</code></pre>
     sub:'Battery-powered, remote-controlled',
     meta:[{k:'duration',v:'Mar – Apr 2024'},{k:'course',v:'ELEC 291'},{k:'team',v:'Team of 7'}],
     stack:['STM32L051','EFM8LB1','JDY-40','H-Bridge','C'],
+    links:[{label:'GitHub ↗', url:'https://github.com/plundis/metal-detector-robot', primary:true}],
     hero:'images/projects/metal-detector-robot/01-hero.png',
     body:`
       <h2 data-addr="0x1810">What It Is</h2>
@@ -1321,6 +1331,7 @@ return 0xffffff - SysTick->VAL;</code></pre>
       {k:'team',     v:'7 people'},
     ],
     stack:['8051 Assembly','N76E003','Python','HD44780 LCD','K-type Thermocouple','OP07 Op-Amp','TC7660S','SSR','PWM','FSM'],
+    links:[{label:'GitHub ↗', url:'https://github.com/plundis/reflow-oven-controller', primary:true}],
     //hero:'images/projects/reflow-oven-controller/01-hero.jpg',
     body:`
       <h2 data-addr="0x1C10">The Job</h2>
