@@ -960,7 +960,7 @@ for i in range(half_points):
       </figure>
 
       <h2 data-addr="0x1080">BLE architecture and joystick mapping</h2>
-      <p>The Arduino is the BLE server. One service with three characteristics. A control characteristic where the ESP32 writes 2-byte packets encoding button state and direction code every 50ms. A telemetry characteristic where the Arduino notifies the ESP32 with the current tilt angle as a 4-byte float every 300ms. A sensor characteristic with two distance floats packed into 8 bytes. The joystick maps to nine direction codes with a deadzone of 400 ADC counts around the calibrated centre to filter resting noise.</p>
+      <p>The Arduino is the BLE server. One service with three characteristics. A control characteristic where the ESP32 writes 2-byte packets encoding button state and direction code every 50ms. A telemetry characteristic where the Arduino notifies the ESP32 with the current tilt angle as a 4-byte float every 250ms. A sensor characteristic with two distance floats packed into 8 bytes. The joystick maps to nine direction codes with a deadzone of 400 ADC counts around the calibrated centre to filter resting noise.</p>
 
       <figure>
         <img src="images/projects/self-balancing-robot/06-joystick-map.png" alt="Joystick direction mapping" onerror="imgFallback(this)"/>
