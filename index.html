@@ -602,19 +602,19 @@ const DETAILS = {
     struct:'role_t',
     badge:'EXPERIENCE',
     title:'Laser Zentrum Hannover e.V. (LZH) — Research Intern',
-    sub:'CubeSat ground station for the Moonrise mission',
+    sub:'Payload firmware and ground station for the Moonrise mission',
     meta:[
       {k:'duration', v:'Jan – Jul 2026'},
       {k:'location', v:'Hannover, DE'},
     ],
-    stack:['STM32F401CC','C++','FreeRTOS','HAL','LittleFS','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','PyQt6','Python'],
+    stack:['STM32F401 / F103','C++','FreeRTOS','HAL','LittleFS','CCSDS SPP','YAMCS 5.12','Java','XTCE','COP-1','SLIP / RS-422','Python'],
     links:[
       {label:'lzh.de ↗', url:'https://www.lzh.de/en', primary:false},
     ],
     //hero:'images/experience/lzh/hero.jpg',
     body:`
       <h2 data-addr="0x0210">The brief</h2>
-      <p>I joined LZH in January for a seven month internship primarily working on ground software for the Moonrise project. When I got there a previous intern had already put down the bones of the firmware. FreeRTOS tasks were set up, the command system worked, basic telemetry packetization was in place. There was also a YAMCS instance running with stock components. What the mission actually needed before payload integration was a working end to end pipeline. Image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that wouldn't die quietly when a TCP socket went idle.</p>
+      <p>I joined LZH in January for a seven month internship primarily working on ground software for the Moonrise project. When I got there a previous intern had already put down the bones of the firmware. FreeRTOS tasks were set up, the command system worked, basic telemetry packetization was in place. There was also a YAMCS instance running with stock components. What the mission actually needed before payload integration was a working end to end pipeline. Image downlink, persistent state across reboots, real sensors instead of placeholder values, and a link layer that wouldn't die quietly when a TCP socket went idle. In my last few weeks I carried that work over to the real mission board as well.</p>
       <p>Most of the interesting work ended up sitting at the seams. Between firmware and ground, between stock YAMCS and the parts we had to write ourselves, and pretty often between what the docs said would work and what the bench actually did.</p>
 
       <figure>
@@ -696,14 +696,42 @@ const DETAILS = {
       <p>Late in the internship I wired up an actual camera. Not a flight camera, there is no onboard camera on this mission and there never will be, but a ground Basler GigE unit for test and hardware-in-the-loop work. The goal was just to get real frames showing up in YAMCS.</p>
       <p>There were two ways to do it. I could emulate the spacecraft, push the frames through a real VCID-1 TM data link, and let the existing reassembler put them back together, which exercises the genuine flight downlink path and is the most faithful option. Or I could grab the frame on the ground and upload the finished JPEG straight to the YAMCS images bucket over the HTTP API, skipping CCSDS and the data link and the reassembler entirely. Since the Basler is ground only, the only thing worth proving was "images appear in YAMCS," and the bucket route was about 30 lines versus reimplementing the whole packetizer. It is effectively the tail end of the flight path, the same <code>bucket.upload_object</code> the reassembler ends on, with the entire CCSDS middle removed.</p>
       <p>The snag worth mentioning was the link. A full res 1936×1216 RGB frame is about 7 MB and overran the 100 Mbps link it shared with comms, giving "buffer incompletely grabbed" packet loss on the image stream while the control channel stayed fine. Dropping to a 640×480 grab with a generous inter-packet delay made it reliable, and for a test still that resolution is plenty. The one nice surprise was the software side: pypylon's pip wheel bundles the whole pylon runtime, so I never had to install the 1.4 GB Basler software suite. <code>python ground_camera.py</code> grabs a live frame, JPEG-encodes it, and drops it in the bucket.</p>
+      <p>After that I wanted the grab to be a real button in YAMCS instead of a script on the console. That sounds small. Every command in YAMCS goes through one releaser that frames it for COP-1 and sends it up to the STM32, and a ground camera command must never reach the spacecraft. So I wrote a custom command releaser in Java that peels <code>Grab_Ground_Image</code> off onto its own stream, plus a ground-only TC link that runs the grab script and acks the command when it finishes. Everything else still goes up the normal path. The first thing I checked after deploying was that <code>LED_ON</code> still reached the board. It did.</p>
+      <p>The metadata was the sneaky part. Each image went up with its capture time, the camera settings, the command that triggered it and an operator note, and none of it showed in the UI. The View metadata button just stayed grey. Decompiling yamcs-core showed why. Filesystem-backed buckets ignore the metadata completely, because a file on disk is only bytes and a name. Only RocksDB-backed buckets keep it. I added a second, RocksDB bucket for ground images and left the old one alone, so nothing that already existed broke. Later I also read the camera's real exposure, gain, bit depth and white balance back while it was still open and stored those too, so an auto-exposed frame records what the camera actually settled on.</p>
 
-      <h2 data-addr="0x02E0">Validation and docs</h2>
-      <p>Before any of this touched real flight hardware I built a PyQt6 payload simulator that produces the same packet stream the spacecraft would, plus a small Python TCP to UDP bridge for routing between debug tools and the YAMCS link. Catching SLIP edge cases and XTCE endianness bugs against a simulator is orders of magnitude cheaper than catching them with a radio in the loop.</p>
+      <h2 data-addr="0x02E0">Moving to the real mission board</h2>
+      <p>Everything above ran on a dev board. The flight hardware is a different PCB with an STM32F103, 64 KB of flash and only 20 KB of RAM, and its own codebase written by the LZH team in STM32CubeIDE. It still spoke a custom 0xAA byte protocol, and a Python bridge sat in the middle doing everything. It hunted for telemetry frames, translated every command from CCSDS into 0xAA bytes, decoded the acknowledgements and flashed new firmware.</p>
+      <p>In my last few weeks I brought the dev board's link layer over to this board one feature at a time, each on its own branch. The goal was to retire that bridge completely and let the firmware and YAMCS talk CCSDS directly.</p>
+
+      <h2 data-addr="0x02F0">SLIP again, with a twist</h2>
+      <p>The PCB sent 276 byte telemetry frames with no start or end marker, mixed on the same line with short 0xAA command replies. The bridge found frames by sliding a 276 byte window forward one byte at a time until the CRC matched. Slow, and one lost byte threw it off.</p>
+      <p>The dev board's SLIP link couldn't just be dropped in. If only the telemetry got a 0xC0 marker, a 0xC0 inside an acknowledgement would look like a frame boundary and cut the stream in the wrong place. So every message had to be fenced. Telemetry and acknowledgements both leave the firmware through one function, <code>send_binary</code>, so one change there marked everything. On the ground I ported the Java SLIP link to the new frame length and had it drop anything starting with 0xAA. Telemetry now went from the Lantronix straight into YAMCS with no bridge.</p>
+
+      <h2 data-addr="0x0300">Native commands and COP-1 on 20 KB</h2>
+      <p>Commands were the last job keeping the bridge alive. I ported the CCSDS TC receive path and the FARM half of COP-1 from the dev board, stripped out its Arduino and command-system dependencies, and fed accepted commands into the board's existing command queue. The team's dispatch switch stayed exactly as it was, so the change only swapped who fills the queue. Each command sits directly in the TC frame as a command ID plus its payload, with no Space Packet wrapper. The TC frame and COP-1 already handle framing, sequencing and the CRC, and skipping the wrapper meant no heap allocations on a chip this small.</p>
+      <p>The CLCW rides back down in a 4 byte field on every telemetry frame, which grew the frame from 276 to 280 bytes. The first time I ran it, no telemetry reached YAMCS at all. Watching the raw bytes showed clean 280 byte frames on the wire. The firmware and the Lantronix were fine. Only the ground's frame length was stale.</p>
+
+      <h2 data-addr="0x0310">784 bytes over</h2>
+      <p>Then the build stopped fitting. Once the team's laser code was linked in on top of COP-1, the firmware needed 784 bytes more RAM than the chip has. Luckily I had already added a small diagnostic block to the telemetry that reports free heap, its low-water mark and each task's stack high-water mark. It used 12 spare bytes of the existing packet, so it cost nothing.</p>
+      <p>The numbers said the laser task was using about 37 words of a 320 word stack. I cut it to 128 words, 60% less, and trimmed the FreeRTOS heap from 10 KB to 9 KB. The build fit with 240 bytes to spare.</p>
+
+      <h2 data-addr="0x0320">The laser that looked stuck at 50%</h2>
+      <p>I wired the laser into the new command path and changed <code>LaserOn</code> to take an intensity from 0 to 100% instead of raw timer counts. On the bench the scope kept reading about 50% duty. Rather than guess, I added two temporary telemetry fields that read the timer's mode and compare registers straight off the chip. The timer was in the right PWM mode and the compare value tracked the command exactly at every setting. The firmware was right. The probe was on the output of a NOR gate and RC filter, which is a smoothed DC level, not a square wave, so reading a duty cycle there meant nothing.</p>
+
+      <h2 data-addr="0x0330">When stopping the stream stops the acks</h2>
+      <p>The first COP-1 bench run turned up something I hadn't expected. The CLCW only travels inside the data-stream telemetry. Send <code>StopStream</code> and the acknowledgement for that very command never comes back, so YAMCS keeps retransmitting and suspends the link, even though the board ran the command. Sending <code>StartStream</code> as a bypass command revived the stream and the held acks caught up. I also switched <code>EnterBootloader</code> and the automatic time sync to bypass frames, because both were knocking COP-1 out of sync on their own. The proper fix is a heartbeat that sends the CLCW without the stream, and I left that as the next step.</p>
+      <p>The Python ground GUI got a COP-1 panel too. The Python client has no COP-1 support, so the panel calls the YAMCS REST API directly to show the link state and reinitialise it after a reset.</p>
+
+      <h2 data-addr="0x0340">Flashing from YAMCS</h2>
+      <p>Reflashing used to mean leaving the ops tool and running a script by hand. I turned it into a <code>Flash</code> command in YAMCS. A custom Java link sends <code>EnterBootloader</code> over the real uplink, waits for the board to reset into its ROM bootloader, then runs the flasher over the Lantronix's second serial channel and acks or fails the command on the result. The command and its routing work, but at handover the flasher still exited with an error and nothing had been written. The link only logged the exit code, and logging the flasher's own output is the first thing I would add.</p>
+
+      <h2 data-addr="0x0350">Validation and docs</h2>
+      <p>Before any of this touched real flight hardware, it ran against a PyQt6 payload simulator the previous intern had built, which produces the same packet stream the spacecraft would. I added a small Python TCP to UDP bridge for routing between debug tools and the YAMCS link. Catching SLIP edge cases and XTCE endianness bugs against a simulator is orders of magnitude cheaper than catching them with a radio in the loop.</p>
       <p>I also left a fair amount of documentation behind, since the codebase gets inherited by whoever comes next. A FreeRTOS deep dive, a COP-1 reference, a Java primer for the next embedded C person who has to touch the YAMCS extensions, and a <code>brain_map.txt</code> tying the whole system together.</p>
 
       <div class="callout">All flight code is held by LZH. What's in this writeup is architecture and war stories, not source. Happy to walk through specifics in conversation.</div>
 
-      <h2 data-addr="0x02F0">Bonus: lab surveillance rig</h2>
+      <h2 data-addr="0x0360">Bonus: lab surveillance rig</h2>
       <p>Aside from the main project, I built a 4 camera RTSP surveillance display for the lab on a Raspberry Pi 5 running GStreamer on Wayland. 704 × 576 PAL streams composited into a 1440 × 1080 quad, with autostart and a watchdog so it self recovers from camera drop outs. Not flight related, but it lives in the same room.</p>
 
       <figure>
