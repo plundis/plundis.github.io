@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 372" width="800" height="372">
+  <title>ARC4 cracker block diagram</title>
+  <style>
+    text{font-family:'JetBrains Mono',ui-monospace,Consolas,Menlo,monospace;fill:#0e0f10;text-anchor:middle}
+    .t{font-size:13px;font-weight:700}
+    .s{font-size:11px;fill:#4a4937}
+    .k{font-size:12px;font-weight:700}
+    .lbl{font-size:11px;font-weight:700;fill:#4a4937;letter-spacing:.08em;text-anchor:start}
+    .box{fill:#ffffff;stroke:#0e0f10;stroke-width:1.3}
+    .mem{fill:#f8f2e0;stroke:#0e0f10;stroke-width:1.3}
+    .grp{fill:none;stroke:#4a4937;stroke-width:1;stroke-dasharray:5 4}
+    .ln{fill:none;stroke:#0e0f10;stroke-width:1.3}
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0e0f10"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="372" fill="#ffffff"/>
+
+  <!-- ciphertext memory, outside the cracker -->
+  <rect class="mem" x="370" y="14" width="200" height="46"/>
+  <text class="t" x="470" y="33">ct_mem</text>
+  <text class="s" x="470" y="50">ciphertext, length-prefixed</text>
+
+  <!-- crack and arc4 groups -->
+  <rect class="grp" x="16" y="76" width="768" height="284"/>
+  <text class="lbl" x="28" y="95">CRACK</text>
+  <rect class="grp" x="36" y="108" width="564" height="172"/>
+  <text class="lbl" x="48" y="127">ARC4</text>
+
+  <!-- the three passes -->
+  <rect class="box" x="60" y="140" width="140" height="54"/>
+  <text class="t" x="130" y="162">init</text>
+  <text class="s" x="130" y="180">S[i] = i</text>
+
+  <rect class="box" x="230" y="140" width="140" height="54"/>
+  <text class="t" x="300" y="162">ksa</text>
+  <text class="s" x="300" y="180">shuffle S with key</text>
+
+  <rect class="box" x="400" y="140" width="140" height="54"/>
+  <text class="t" x="470" y="162">prga</text>
+  <text class="s" x="470" y="180">keystream XOR ct</text>
+
+  <line class="ln" x1="200" y1="167" x2="228" y2="167" marker-end="url(#a)"/>
+  <line class="ln" x1="370" y1="167" x2="398" y2="167" marker-end="url(#a)"/>
+
+  <!-- shared S memory -->
+  <rect class="mem" x="200" y="222" width="200" height="40"/>
+  <text x="300" y="246"><tspan class="t">s_mem</tspan><tspan class="s"> · 256 × 8</tspan></text>
+  <line class="ln" x1="130" y1="194" x2="240" y2="222"/>
+  <line class="ln" x1="300" y1="194" x2="300" y2="222"/>
+  <line class="ln" x1="470" y1="194" x2="360" y2="222"/>
+
+  <!-- ciphertext in, plaintext out -->
+  <line class="ln" x1="470" y1="60" x2="470" y2="138" marker-end="url(#a)"/>
+  <rect class="mem" x="630" y="140" width="120" height="54"/>
+  <text class="t" x="690" y="162">pt_mem</text>
+  <text class="s" x="690" y="180">plaintext</text>
+  <line class="ln" x1="540" y1="167" x2="628" y2="167" marker-end="url(#a)"/>
+
+  <!-- printable check -->
+  <rect class="box" x="620" y="224" width="140" height="58"/>
+  <text class="t" x="690" y="248">printable?</text>
+  <text class="s" x="690" y="267">every byte 0x20–0x7E</text>
+  <line class="ln" x1="690" y1="194" x2="690" y2="222" marker-end="url(#a)"/>
+
+  <!-- no: next key -->
+  <polyline class="ln" points="650,282 650,322 402,322" marker-end="url(#a)"/>
+  <text class="lbl" x="658" y="306">no</text>
+  <rect class="box" x="200" y="302" width="200" height="40"/>
+  <text class="k" x="300" y="327">key + 1, reset arc4</text>
+  <line class="ln" x1="300" y1="302" x2="300" y2="282" marker-end="url(#a)"/>
+
+  <!-- yes: done -->
+  <line class="ln" x1="730" y1="282" x2="730" y2="308" marker-end="url(#a)"/>
+  <text class="s" x="730" y="324">yes: key_valid</text>
+  <text class="s" x="730" y="340">key on HEX0–5</text>
+</svg>
